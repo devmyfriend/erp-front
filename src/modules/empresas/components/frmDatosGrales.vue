@@ -17,9 +17,6 @@
                     <select class="pais" name="pais" id="idPais" v-model="pais">
                         <option selected value=""></option>
                         <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
-                        <!-- <option value="MEX">Mexico</option>
-                        <option value="USA">Estados Unidos</option>
-                        <option value="CAN">Canada</option> -->
                     </select>
                </fieldset>
                <fieldset>
@@ -47,9 +44,6 @@
                     <select class="claveRegimenFiscal" name="claveRegimenFiscal" id="idClaveRegimenFiscal">
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
-                        <!-- <option value="">Régimen General de Ley para las personas morales</option>
-                        <option value="">Régimen General de ley para las personas fisicas con activadad empresarial</option>
-                        <option value="">Sin obligaciones</option> -->
                     </select>
                </fieldset>
                <fieldset>
@@ -63,6 +57,8 @@
 
 <script>
 import { ref, watch, computed, onMounted } from 'vue'
+
+const  { useEmpresa } = require( '../store/empresa')
 
 export default {
 
@@ -84,7 +80,7 @@ export default {
     
     setup( props ){
 
-        const esextrangejo    = ref( false )
+        const esextranjejo    = ref( false )
         const idempresa       = ref('')
         const listaregimenes  = ref( [])
         const nombrecomercial = ref( '' )
@@ -95,22 +91,24 @@ export default {
         const regimenfiscal   = ref( '' )
         const rfc             = ref('')
         const taxid           = ref( '' )
+        const ListaPaises     = ref( [] )
 
 
-        const ListaPaises = [
-            {
-                ClavePais: 'MEX',
-                Descripcion: 'México'
-            },
-            {
-                ClavePais: 'USA',
-                Descripcion: 'Estados Unidos'
-            },
-            {
-                ClavePais: 'CAN',
-                Descripcion: 'Canada'
-            }
-        ]
+        // const ListaPaises = [
+        //     {
+        //         ClavePais: 'MEX',
+        //         Descripcion: 'México'
+        //     },
+        //     {
+        //         ClavePais: 'USA',
+        //         Descripcion: 'Estados Unidos'
+        //     },
+        //     {
+        //         ClavePais: 'CAN',
+        //         Descripcion: 'Canada'
+        //     }
+        // ]
+
 
         const ListaRegimenFiscales = [
             {
@@ -133,9 +131,26 @@ export default {
             },
         ]
 
+        const store = useEmpresa()
+
         onMounted(()=>{
-            listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 1)
-        })    
+            //listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 1)
+
+            
+            store.cargarPaises().then(()=>{
+                ListaPaises.value = store.listapaises
+                
+            })
+
+            store.cargarRegimenes().then( ()=>{
+                listaregimenes.value = store.listaPFisica
+
+            })
+            
+            
+        })   
+        
+        
 
         const PersonaSelecionada = (valor)=>{
             personafisica.value = valor
@@ -154,14 +169,16 @@ export default {
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
-                listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 1)
+                // listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 1)
+                listaregimenes.value = store.listaPFisica
             }else{
-                listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 0)
+                //listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 0)
+                listaregimenes.value = store.listaPMoral
             }
         })
         
         return{
-            esextrangejo,
+            esextranjejo,
             idempresa,
             ListaPaises,
             listaregimenes,
