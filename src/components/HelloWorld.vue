@@ -1,12 +1,10 @@
 <template>
-  <div class="hello">
     <frmDatosGrales></frmDatosGrales>
-  </div>
 </template>
 
 <script>
 
-import frmDatosGrales from '../modules/empresas/components/frmDatosGrales.vue'
+import frmDatosGrales from '../modules/empresas/views/empresa.vue'
 
 export default {
   name: 'HelloWorld',

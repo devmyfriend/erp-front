@@ -38,7 +38,7 @@
                            :value="personamoral"
                            
                     >
-                    <input v-if="esextrangejo" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
+                    <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
                     <select class="claveRegimenFiscal" name="claveRegimenFiscal" id="idClaveRegimenFiscal">
@@ -64,72 +64,39 @@ export default {
 
     name: 'frmDatosGrenerales',
     props:{
-        esnuevo:         Boolean,
-        idEmpresa:       String,
-        nombrecomercial: String,        
-        nombreoficial:   String,
-        pais:            String,
-        personafisca:    Boolean,
-        personamoral:    Boolean,
-        regimenfiscal:   String,
-        rfc:             String,
-        taxid:           String,
+        descripcionregimen: String,
+        esextranjero:       Boolean,
+        esnuevo:            Boolean,
+        idEmpresa:          String,
+        nombrecomercial:    String,        
+        nombreoficial:      String,
+        pais:               String,
+        paisnombre:         String,
+        personafisca:       Boolean,
+        personamoral:       Boolean,
+        regimenfiscal:      String,
+        rfc:                String,
+        taxid:              String,
     },
 
     
     
     setup( props ){
 
-        const esextranjejo    = ref( false )
-        const idempresa       = ref('')
-        const listaregimenes  = ref( [])
-        const nombrecomercial = ref( '' )
-        const nombreoficial   =  ref('')
-        const pais            = ref('')
-        const personafisica   = ref( true )
-        const personamoral    = ref( false )
-        const regimenfiscal   = ref( '' )
-        const rfc             = ref('')
-        const taxid           = ref( '' )
-        const ListaPaises     = ref( [] )
-
-
-        // const ListaPaises = [
-        //     {
-        //         ClavePais: 'MEX',
-        //         Descripcion: 'México'
-        //     },
-        //     {
-        //         ClavePais: 'USA',
-        //         Descripcion: 'Estados Unidos'
-        //     },
-        //     {
-        //         ClavePais: 'CAN',
-        //         Descripcion: 'Canada'
-        //     }
-        // ]
-
-
-        const ListaRegimenFiscales = [
-            {
-                ClaveRegimenFiscal: '601',
-                Descripcion:'General de Ley Personas Morales',
-                Fisica: 0,
-                Moral: 1
-            },
-            {
-                ClaveRegimenFiscal: '612',
-                Descripcion:'Personas Físicas con Actividades Empresariales y Profesionales',
-                Fisica: 1,
-                Moral: 0
-            },
-            {
-                ClaveRegimenFiscal: '616',
-                Descripcion:'Sin obligaciones fiscales',
-                Fisica: 1,
-                Moral: 0
-            },
-        ]
+        const descripcionregimen = ref( props.descripcionregimen )
+        const esextranjero       = ref( props.esextranjero )
+        const idempresa          = ref( props.idEmpresa )
+        const ListaPaises        = ref( [] )
+        const listaregimenes     = ref( [])
+        const nombrecomercial    = ref( props.nombrecomercial )
+        const nombreoficial      =  ref( props.nombreoficial )
+        const pais               = ref( props.pais )
+        const paisnombre         = ref( props.nombrepais )
+        const personafisica      = ref( props.personafisca )
+        const personamoral       = ref( props.personamoral )
+        const regimenfiscal      = ref( props.regimenfiscal )
+        const rfc                = ref( props.rfc )
+        const taxid              = ref( props.taxid )
 
         const store = useEmpresa()
 
@@ -159,9 +126,9 @@ export default {
         }
 
         watch( pais, ( pais ) => {
-            esextrangejo.value = false
+            esextranjero.value = false
             if( pais.length>0 && pais!=='MEX' ){
-                esextrangejo.value = !esextrangejo.value
+                esextranjero.value = !esextranjero.value
                 personafisica.value = true
             }
         })
@@ -169,16 +136,14 @@ export default {
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
-                // listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 1)
                 listaregimenes.value = store.listaPFisica
             }else{
-                //listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 0)
                 listaregimenes.value = store.listaPMoral
             }
         })
         
         return{
-            esextranjejo,
+            esextranjero,
             idempresa,
             ListaPaises,
             listaregimenes,
@@ -207,7 +172,7 @@ export default {
 
 .frame{
     align-items: left;
-    background-color: $panel;
+    // background-color: $panel;
     height: 43.5rem;
     padding: 1.5rem 1.5rem 0rem 1.5rem;
     text-align: left;
