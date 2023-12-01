@@ -39,7 +39,7 @@
                            :value="personamoral"
                            
                     >
-                    <input v-if="esextrangejo" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
+                    <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
                     <select class="claveRegimenFiscal" name="claveRegimenFiscal" id="idClaveRegimenFiscal">
@@ -117,77 +117,40 @@ function validateFile(event) {
 export default {
 
     name: 'frmDatosGrenerales',
-    props: {
-        esnuevo: Boolean,
-        idEmpresa: String,
-        nombrecomercial: String,
-        nombreoficial: String,
-        pais: String,
-        personafisca: Boolean,
-        personamoral: Boolean,
-        regimenfiscal: String,
-        rfc: String,
-        taxid: String,
+    props:{
+        descripcionregimen: String,
+        esextranjero:       Boolean,
+        esnuevo:            Boolean,
+        idEmpresa:          String,
+        nombrecomercial:    String,        
+        nombreoficial:      String,
+        pais:               String,
+        paisnombre:         String,
+        personafisca:       Boolean,
+        personamoral:       Boolean,
+        regimenfiscal:      String,
+        rfc:                String,
+        taxid:              String,
     },
 
+    
+    
+    setup( props ){
 
-
-
-
-    setup(props) {
-
-        const esextranjejo = ref(false)
-        const idempresa = ref('')
-        const listaregimenes = ref([])
-        const nombrecomercial = ref('')
-        const nombreoficial = ref('')
-        const pais = ref('')
-        const personafisica = ref(true)
-        const personamoral = ref(false)
-        const regimenfiscal = ref('')
-        const rfc = ref('')
-        const taxid = ref('')
-        const ListaPaises = ref([])
-
-
-        // const ListaPaises = [
-        //     {
-        //         ClavePais: 'MEX',
-        //         Descripcion: 'México'
-        //     },
-        //     {
-        //         ClavePais: 'USA',
-        //         Descripcion: 'Estados Unidos'
-        //     },
-        //     {
-        //         ClavePais: 'CAN',
-        //         Descripcion: 'Canada'
-        //     }
-        // ]
-
-
-
-
-        const ListaRegimenFiscales = [
-            {
-                ClaveRegimenFiscal: '601',
-                Descripcion: 'General de Ley Personas Morales',
-                Fisica: 0,
-                Moral: 1
-            },
-            {
-                ClaveRegimenFiscal: '612',
-                Descripcion: 'Personas Físicas con Actividades Empresariales y Profesionales',
-                Fisica: 1,
-                Moral: 0
-            },
-            {
-                ClaveRegimenFiscal: '616',
-                Descripcion: 'Sin obligaciones fiscales',
-                Fisica: 1,
-                Moral: 0
-            },
-        ]
+        const descripcionregimen = ref( props.descripcionregimen )
+        const esextranjero       = ref( props.esextranjero )
+        const idempresa          = ref( props.idEmpresa )
+        const ListaPaises        = ref( [] )
+        const listaregimenes     = ref( [])
+        const nombrecomercial    = ref( props.nombrecomercial )
+        const nombreoficial      =  ref( props.nombreoficial )
+        const pais               = ref( props.pais )
+        const paisnombre         = ref( props.nombrepais )
+        const personafisica      = ref( props.personafisca )
+        const personamoral       = ref( props.personamoral )
+        const regimenfiscal      = ref( props.regimenfiscal )
+        const rfc                = ref( props.rfc )
+        const taxid              = ref( props.taxid )
 
         const store = useEmpresa()
 
@@ -216,27 +179,25 @@ export default {
 
         }
 
-        watch(pais, (pais) => {
-            esextrangejo.value = false
-            if (pais.length > 0 && pais !== 'MEX') {
-                esextrangejo.value = !esextrangejo.value
+        watch( pais, ( pais ) => {
+            esextranjero.value = false
+            if( pais.length>0 && pais!=='MEX' ){
+                esextranjero.value = !esextranjero.value
                 personafisica.value = true
             }
         })
 
-        watch(personafisica, (fisica) => {
-
-            if (fisica) {
-                // listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 1)
+        watch( personafisica, ( fisica )=>{
+            
+            if(fisica){
                 listaregimenes.value = store.listaPFisica
-            } else {
-                //listaregimenes.value = ListaRegimenFiscales.filter( regimen => regimen.Fisica === 0)
+            }else{
                 listaregimenes.value = store.listaPMoral
             }
         })
-
-        return {
-            esextranjejo,
+        
+        return{
+            esextranjero,
             idempresa,
             ListaPaises,
             listaregimenes,
@@ -266,7 +227,7 @@ export default {
 
 .frame {
     align-items: left;
-    background-color: $panel;
+    // background-color: $panel;
     height: 43.5rem;
     padding: 1.5rem 1.5rem 0rem 1.5rem;
     text-align: left;
@@ -367,6 +328,123 @@ fieldset {
     margin-right: .5rem;
     padding: $padding-input;
     width: 36.55rem;
+    color:#999999
+}
+
+.nombreComercial{
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 36.55rem;
+    color:#999999
+}
+
+.calleDomicilio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 19.125rem;
+    color: #999999
+}
+
+.numExtDomicilio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 8.0625rem;
+    color: #999999
+}
+
+.labelEstados {
+    font-size: 1.125rem;
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+
+.claveEstado {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 22.72rem;
+    color: #999999
+}
+
+.numIntDomicilio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 8.0625rem;
+    color: #999999
+}
+
+.codigoPostal {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    padding: $padding-input;
+    width: 9.0625rem;
+    color: #999999
+}
+
+.labelMunicipio {
+    font-size: 1.125rem;
+    margin-right: 0.65rem;
+}
+
+.municipio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 26.80rem;
+    color: #999999
+}
+
+.labelCiudad {
+    font-size: 1.125rem;
+    margin-right: 5.4rem;
+}
+
+.ciudad {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 26.80rem;
+    color: #999999
+}
+
+.labelColonia {
+    font-size: 1.125rem;
+    margin-right: 5.2rem;
+}
+
+.colonia {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 26.80rem;
+    color: #999999
+}
+
+select{
     color: #999999
 }
 
