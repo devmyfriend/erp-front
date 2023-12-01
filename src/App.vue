@@ -1,18 +1,15 @@
 <template>
-  <!-- <layout></layout> --> 
   <router-view/>
 </template>
 
 <script>
-import layout from '@/modules/dashboard/layout/layout.vue'
-
 export default {
   name: 'App',
   components: {
-    layout,
   }
 }
 </script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
