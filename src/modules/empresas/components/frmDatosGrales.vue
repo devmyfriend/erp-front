@@ -49,6 +49,45 @@
                <fieldset>
                     <input class="nombreComercial" type="text" name="nombreComercial" id="idNombreComercial" placeholder="Nombre comercial">
                </fieldset>
+
+               <hr>
+               <h1>Domicilio</h1>
+               <fieldset>
+               <input v-model="idempresa" class="calleDomicilio" type="text" name="calleDomicilio" id="calleDomicilio" placeholder="Calle">
+               <input v-model="numExtDomicilio" class="numExtDomicilio" type="text" name="numExtDomicilio" id="numExtDomicilio" placeholder="No. Ext." required/>
+               <input v-model="numIntDomicilio" class="numIntDomicilio" type="text" name="numIntDomicilio" id="numIntdomicilio" placeholder="No. Int." required/>
+               </fieldset>
+               <fieldset>
+               <input v-model="codigoPostal" class="codigoPostal" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal"/>
+               <label class="labelEstados" for="estado">Estado</label>
+               <select class="claveEstado" name="estado" id="idEstado" v-model="estado">
+                        <option selected value="">Estado</option>
+                        <option v-for="optEstado in ListaEstados" :key="optEstado.ClaveEstado" :value="optEstado.ClaveEstado">{{optEstado.Descripcion}}</option>
+                    </select>
+            </fieldset>
+
+                <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
+                <select class="municipio" name="municipio" id="municipio">
+                    <option selected value="">Municipio</option>
+                    <option v-for="optMunicipio in ListaMunicipios" :key="optMunicipio.claveMunicipio" :value="optMunicipio.claveMunicipio">{{optMunicipio.Descripcion}}</option>
+                </select>
+
+               <fieldset>
+                <label class="labelCiudad" for="ciudad">Ciudad</label>
+                <select class="ciudad" name="ciudad" id="ciudad">
+                <option selected value=""></option>
+                <option value=""></option>
+            </select>
+               </fieldset>
+
+               <fieldset>
+                <label class="labelColonia" for="colonia">Colonia</label>
+                <select class="colonia" name="colonia" id="colonia">
+                <option selected value=""></option>
+                <option value=""></option>
+            </select>
+               </fieldset>
+
             </form>
         </div>
     </div>
@@ -277,6 +316,109 @@ fieldset{
     padding: $padding-input;
     width: 36.55rem;
     color:#999999
+}
+
+.calleDomicilio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 19.125rem;
+    color: #999999
+}
+
+.numExtDomicilio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 8.0625rem;
+    color: #999999
+}
+
+.labelEstados {
+    font-size: 1.125rem;
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+
+.claveEstado {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 22.72rem;
+    color: #999999
+}
+
+.numIntDomicilio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 8.0625rem;
+    color: #999999
+}
+
+.codigoPostal {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    padding: $padding-input;
+    width: 9.0625rem;
+    color: #999999
+}
+
+.labelMunicipio {
+    font-size: 1.125rem;
+    margin-right: 0.65rem;
+}
+
+.municipio {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 26.80rem;
+    color: #999999
+}
+
+.labelCiudad {
+    font-size: 1.125rem;
+    margin-right: 5.4rem;
+}
+
+.ciudad {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 26.80rem;
+    color: #999999
+}
+
+.labelColonia {
+    font-size: 1.125rem;
+    margin-right: 5.2rem;
+}
+
+.colonia {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 26.80rem;
+    color: #999999
 }
 
 select{
