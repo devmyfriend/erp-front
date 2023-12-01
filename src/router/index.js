@@ -1,21 +1,28 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import buscador from '@/shared/txtbuscador.vue'
+
+import login from '@/modules/login/components/login.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'login',
+    component: login
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import(/* webpackChunkName: "dashboard" */'@/modules/dashboard/layout/layout.vue')
   },
   {
-    path: '/eduardo',
-    name: 'eduardo',
-    component: () => import(/* webpackChunkName: "eduardo" */ '../shared/EduardoView.vue')
+    path:'/dashboard/empresas',   //Ruta hija, se tiene que actuaizar 
+    name:'moduloempresa',
+    component: () => import(/* webpackChunkName: "modulempresa" */'@/modules/dashboard/views/listEmpresas.vue')
+  },{
+    path:'/paginador',
+    name:'paginador',
+    component: buscador
+  }
 ]
 
 const router = createRouter({

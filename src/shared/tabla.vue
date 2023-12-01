@@ -3,8 +3,11 @@
     <h1 class="mb-4 text-start">
       {{ tablaNombre }}
     </h1>    
+
     <div class="tablaGeneral py-4" style="background-color: #D9D9D9;">
-      <table class="table table-bordered border-2 border-dark rounded text-start mx-auto" >
+
+      <txtbuscador></txtbuscador>
+      <table class="table table-bordered border-2 border-dark rounded text-start ms-3" >
             <thead>
                 <tr>
                   <th>ID</th>
@@ -23,34 +26,25 @@
                     <td >{{ item.direccion }}</td>
                     <td >{{ item.telefono }}</td>
                     <td class="Acciones text-center"> 
-                      <a href="#/tabla" class="mx-2"><img src="@/assets/edit.svg" alt="Editar"></a>
-                      <a href="#/tabla" class="mx-2" ><img src="@/assets/trash.svg" alt="Borrar"></a>
+                      <a href="#/tabla" class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
+                      <a href="#/tabla" class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                     </td>
             </tr>
             </tbody>
         </table>
-  
-        <div class="paginacion d-flex align-items-center justify-content-center mx-auto mt-4" style="width: 44rem; height: 1.5rem; font-size: 0.75rem;">
-          <img class="h-100 mx-3 bg-light px-3 py-1 rounded" src="@/assets/firstIco.svg" alt="Primera página">
-          <img class="h-100 ms-2 me-4 bg-light px-3 py-1 rounded" src="@/assets/prevIco.svg" alt="Página anterior">
-          <div class="inp d-flex" style="max-width: 10rem;">
-            <input class="w-50 ms-1 bg-light text-center border-0 text-decoration-underline rounded" type="number" value="1" active>
-            <img class="h-100 mx-3 px-0 py-1" src="@/assets/midIco.svg" alt="separador">
-            <input class="w-50 ms-1 bg-light text-center border-0 text-decoration-underline rounded" type="number" value="2">
-          </div>
-          <img class="h-100 ms-4 me-2 bg-light px-3 py-1 rounded" src="@/assets/nxtIco.svg" alt="Página siguiente">
-          <img class="h-100 mx-3 bg-light px-3 py-1 rounded" src="@/assets/lastIco.svg" alt="Última página">
-        </div>
-  
+      <Paginador />
     </div>
+
+
+
     </div>
   </template>
     
   <script>
-  import { ref, computed } from 'vue';
-  let pagAct = ref(1);
-  let pagMax = 3;
-  
+  import { ref} from 'vue';
+  import txtbuscador from '@/shared/txtbuscador.vue';
+  import Paginador from '@/shared/paginador.vue';
+
   export default {
     name: 'tablaGeneral',
     setup() {
@@ -92,11 +86,15 @@
         }
       ]);
       let tablaNombre = ref('Empresas');
-  
+
       return {
         data,
         tablaNombre,
       };
+    },
+    components: {
+      txtbuscador,
+      Paginador,
     },
   };
   </script>
@@ -104,6 +102,7 @@
   <style lang="scss" scoped>
     table{
       width: 96%;
+      margin: 0 1rem;
     }
   
     th{
