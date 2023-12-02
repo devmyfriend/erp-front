@@ -1,20 +1,20 @@
 <template>
   <div class="hello">
-    <frmDatosGrales></frmDatosGrales>
+    <!-- <listEmpresas></listEmpresas> -->
   </div>
 </template>
 
 <script>
 
-import frmDatosGrales from '../modules/empresas/components/frmDatosGrales.vue'
-
+/* import listEmpresas from '@/modules/dashboard/views/listEmpresas.vue'
+ */
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
   components:{
-    frmDatosGrales
+    /* listEmpresas */
   },
   setup(){
     return{
