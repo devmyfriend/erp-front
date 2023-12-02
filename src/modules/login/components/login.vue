@@ -14,7 +14,9 @@
         <div class="form-group">
           <input type="password" id="password" v-model="password" class="form-control" required placeholder="Contraseña">
         </div>
-        <button type="submit" class="btn btn-primary" @click="login()">Iniciar sesión</button>
+        <router-link to="/empresas">
+          <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+        </router-link>
       </form>
       <div class="recPassw">
           <a href="#" > ¿Olvidaste tu contraseña? Haz click aquí</a>

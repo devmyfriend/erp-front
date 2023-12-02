@@ -6,7 +6,11 @@
 
     <div class="tablaGeneral py-4" style="background-color: #D9D9D9;">
 
-      <txtbuscador></txtbuscador>
+      <div class="w-100 d-flex">
+        <txtbuscador></txtbuscador>
+        <btNuevo class="me-4"></btNuevo>
+      </div>
+
       <table class="table table-bordered border-2 border-dark rounded text-start ms-3" >
             <thead>
                 <tr>
@@ -44,6 +48,7 @@
   import { ref} from 'vue';
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
+  import btNuevo from '@/shared/btNuevo.vue';
 
   export default {
     name: 'tablaGeneral',
@@ -95,6 +100,7 @@
     components: {
       txtbuscador,
       Paginador,
+      btNuevo,
     },
   };
   </script>

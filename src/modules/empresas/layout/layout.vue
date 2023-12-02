@@ -5,23 +5,25 @@
                 <a href="#" class="empLogo mx-auto mb-4 mw-100 mh-100">
                     <img src="@/assets/img/imgEmpresa.svg" class="w-100">
                 </a>
-                <a  class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                <a class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                    <router-link to="/empresas/listado" >
                     <img src="@/assets/img/orgIco.svg" class="w-25">
-                    <span class="section-title">Organización</span>
+                    <span class="section-title" >Organización</span>
+                    </router-link>
                 </a>
-                <a href="#" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                <a class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
                     <img src="@/assets/img/ventaIco.svg" class="w-50">
                     <span class="section-title">Ventas</span>
                 </a>
-                <a href="#" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                <a href="" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
                     <img src="@/assets/img/compraIco.svg" class="w-50">
                     <span class="section-title">Compras</span>
                 </a>
-                <a href="#" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                <a href="" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
                     <img src="@/assets/img/catIco.svg" class="w-25">
                     <span class="section-title">Catálogo</span>
                 </a>
-                <a href="#" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                <a href="" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
                     <img src="@/assets/img/cfgIco.svg" class="w-25">
                     <span class="section-title">Configuración</span>
                 </a>            
@@ -67,6 +69,9 @@ export default defineComponent({
 </script>
 
 <style>
+.moduloSide{
+    cursor: pointer;
+}
 .body{
     margin: 0px;
     padding: 0px;
