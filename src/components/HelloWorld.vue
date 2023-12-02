@@ -1,13 +1,11 @@
 <template>
-  <div class="hello">
-    <!-- <listEmpresas></listEmpresas> -->
-  </div>
+    <frmDatosGrales></frmDatosGrales>
 </template>
 
 <script>
 
-/* import listEmpresas from '@/modules/dashboard/views/listEmpresas.vue'
- */
+import frmDatosGrales from '../modules/empresas/views/empresa.vue'
+
 export default {
   name: 'HelloWorld',
   props: {

@@ -29,7 +29,7 @@ export const useEmpresa = defineStore( 'empresa', {
             return state.ListaRegimenes.filter( regimen=>regimen.Fisica === true )
         },
         listaPMoral ( state ){
-            return state.ListaRegimenes.filter( regimen=>regimen.Fisica === false )
+            return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
         }
     },
     actions:{
