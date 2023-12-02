@@ -37,7 +37,8 @@
                 <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
             </div>
 
-            <div class="container contNegro w-100 position-absolute">
+            <div class="container contNegro w-100 col-12">
+            <!-- <div class="container contNegro w-100 position-absolute"> -->
                 <div class="container contAzul w-100">
                     
                     <div class="container contRojo">
