@@ -12,7 +12,7 @@ export default {
     msg: String
   },
   components:{
-    frmDatosGrales
+    /* listEmpresas */
   },
   setup(){
     return{
