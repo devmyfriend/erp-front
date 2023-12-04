@@ -1,17 +1,24 @@
 <template>
-    <div class="container m-4 p-0">
+    <div class=" m-4 p-0">
     <h1 class="mb-4 text-start">
       {{ tablaNombre }}
     </h1>    
 
     <div class="tablaGeneral py-4" style="background-color: #D9D9D9;">
 
-      <div class="w-100 d-flex">
+<!--   Original    <div class="w-100 d-flex">
         <txtbuscador></txtbuscador>
         <btNuevo class="me-4"></btNuevo>
+      </div> -->
+
+      <!-- Fake -->
+      <div class="w-100 d-flex justify-content-between align-items-center me-3">
+        <txtbuscador></txtbuscador>
+        <btNuevo class="btNuevo"></btNuevo>
       </div>
 
-      <table class="table table-bordered border-2 border-dark rounded text-start ms-3" >
+      <div class="table-responsive">  
+      <table class="table table-bordered border-2 border-dark rounded text-start">
             <thead>
                 <tr>
                   <th>ID</th>
@@ -36,6 +43,7 @@
             </tr>
             </tbody>
         </table>
+      </div>
       <Paginador />
     </div>
 
@@ -106,10 +114,20 @@
   </script>
     
   <style lang="scss" scoped>
-    table{
-      width: 96%;
-      margin: 0 1rem;
+    .btNuevo{
+      margin-right: 1rem;
     }
+
+    table{
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }   
   
     th{
       background-color: #999999 !important;
