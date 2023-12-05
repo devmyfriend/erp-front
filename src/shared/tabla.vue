@@ -3,7 +3,7 @@
     {{ tablaNombre }}
   </h1>    
   
-  <div class="contComp p-0">
+  <div class="contComp p-0 pb-4">
       <div class="w-100 d-flex justify-content-between pt-4">
         <txtbuscador></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
@@ -36,7 +36,7 @@
             </tbody>
         </table>
       </div>
-      <Paginador class="mb-4"/>
+      <Paginador/>
     </div>
   </template>
     
@@ -44,7 +44,7 @@
   import { ref} from 'vue';
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
-  import btNuevo from '@/shared/btNuevo.vue';
+  import  btNuevo from '@/shared/btNuevo.vue';
 
   export default {
     name: 'tablaGeneral',
@@ -90,64 +90,7 @@
           rfc: 'ECI150510',
           direccion: 'Direccion 01',
           telefono: '9982334455',
-        }, 
-/*         {
-          id: 7,
-          nombre: 'Consultoría Digital Avanzada S.A.P.I. de C.V.',
-          rfc: 'CDA120928',
-          direccion: 'Direccion 02',
-          telefono: '9987293648',
-        },
-        {
-          id: 8,
-          nombre: 'Distribuidora de Tecnología Integral S. de R.L. de C.V.',
-          rfc: 'DTI180203',
-          direccion: 'Direccion 03',
-          telefono: '9945678901',
-        },
-        {
-          id: 9,
-          nombre: 'Servicios Médicos Especializados Global Health S.A. de C.V.',
-          rfc: 'SME100715',
-          direccion: 'Direccion 04',
-          telefono: '9982674562',
-        },
-        {
-          id: 10,
-          nombre: 'Comercializadora de Productos Innovadores S.A. de C.V.',
-          rfc: 'CPI161220',
-          direccion: 'Direccion 05',
-          telefono: '9983764521',
-        },        {
-          id: 11,
-          nombre: 'Consultoría Digital Avanzada S.A.P.I. de C.V.',
-          rfc: 'CDA120928',
-          direccion: 'Direccion 02',
-          telefono: '9987293648',
-        },
-        {
-          id: 12,
-          nombre: 'Distribuidora de Tecnología Integral S. de R.L. de C.V.',
-          rfc: 'DTI180203',
-          direccion: 'Direccion 03',
-          telefono: '9945678901',
-        },
-        {
-          id: 13,
-          nombre: 'Servicios Médicos Especializados Global Health S.A. de C.V.',
-          rfc: 'SME100715',
-          direccion: 'Direccion 04',
-          telefono: '9982674562',
-        },
-        {
-          id: 14,
-          nombre: 'Comercializadora de Productos Innovadores S.A. de C.V.',
-          rfc: 'CPI161220',
-          direccion: 'Direccion 05',
-          telefono: '9983764521',
-        } */
-
-
+        }
       ]);
       let tablaNombre = ref('Empresas');
 
@@ -166,10 +109,6 @@
     
   <style lang="scss" scoped>
   .contComp{
-    background-color: #D9D9D9;
-    border : 2px solid blue;
-  }
-  .tablaGeneral{
     background-color: #D9D9D9;
   }
     .btNuevo{
