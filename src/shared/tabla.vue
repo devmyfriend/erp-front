@@ -1,18 +1,10 @@
 <template>
-    <div class=" m-4 p-0">
-    <h1 class="mb-4 text-start">
-      {{ tablaNombre }}
-    </h1>    
-
-    <div class="tablaGeneral py-4" style="background-color: #D9D9D9;">
-
-<!--   Original    <div class="w-100 d-flex">
-        <txtbuscador></txtbuscador>
-        <btNuevo class="me-4"></btNuevo>
-      </div> -->
-
-      <!-- Fake -->
-      <div class="w-100 d-flex justify-content-between align-items-center me-3">
+  <h1 class="mb-4 text-start">
+    {{ tablaNombre }}
+  </h1>    
+  
+  <div class="contComp p-0">
+      <div class="w-100 d-flex justify-content-between pt-4">
         <txtbuscador></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
       </div>
@@ -44,11 +36,7 @@
             </tbody>
         </table>
       </div>
-      <Paginador />
-    </div>
-
-
-
+      <Paginador class="mb-4"/>
     </div>
   </template>
     
@@ -96,7 +84,70 @@
           rfc: 'CPI161220',
           direccion: 'Direccion 05',
           telefono: '9983764521',
-        }
+        },{
+          id: 6,  
+          nombre: 'Empresa Constructora Innovadora S.A. de C.V.',
+          rfc: 'ECI150510',
+          direccion: 'Direccion 01',
+          telefono: '9982334455',
+        }, 
+/*         {
+          id: 7,
+          nombre: 'Consultoría Digital Avanzada S.A.P.I. de C.V.',
+          rfc: 'CDA120928',
+          direccion: 'Direccion 02',
+          telefono: '9987293648',
+        },
+        {
+          id: 8,
+          nombre: 'Distribuidora de Tecnología Integral S. de R.L. de C.V.',
+          rfc: 'DTI180203',
+          direccion: 'Direccion 03',
+          telefono: '9945678901',
+        },
+        {
+          id: 9,
+          nombre: 'Servicios Médicos Especializados Global Health S.A. de C.V.',
+          rfc: 'SME100715',
+          direccion: 'Direccion 04',
+          telefono: '9982674562',
+        },
+        {
+          id: 10,
+          nombre: 'Comercializadora de Productos Innovadores S.A. de C.V.',
+          rfc: 'CPI161220',
+          direccion: 'Direccion 05',
+          telefono: '9983764521',
+        },        {
+          id: 11,
+          nombre: 'Consultoría Digital Avanzada S.A.P.I. de C.V.',
+          rfc: 'CDA120928',
+          direccion: 'Direccion 02',
+          telefono: '9987293648',
+        },
+        {
+          id: 12,
+          nombre: 'Distribuidora de Tecnología Integral S. de R.L. de C.V.',
+          rfc: 'DTI180203',
+          direccion: 'Direccion 03',
+          telefono: '9945678901',
+        },
+        {
+          id: 13,
+          nombre: 'Servicios Médicos Especializados Global Health S.A. de C.V.',
+          rfc: 'SME100715',
+          direccion: 'Direccion 04',
+          telefono: '9982674562',
+        },
+        {
+          id: 14,
+          nombre: 'Comercializadora de Productos Innovadores S.A. de C.V.',
+          rfc: 'CPI161220',
+          direccion: 'Direccion 05',
+          telefono: '9983764521',
+        } */
+
+
       ]);
       let tablaNombre = ref('Empresas');
 
@@ -114,6 +165,13 @@
   </script>
     
   <style lang="scss" scoped>
+  .contComp{
+    background-color: #D9D9D9;
+    border : 2px solid blue;
+  }
+  .tablaGeneral{
+    background-color: #D9D9D9;
+  }
     .btNuevo{
       margin-right: 1rem;
     }
@@ -126,16 +184,24 @@
     .table-responsive {
       overflow-x: auto;
       margin-left: 1rem;
-      margin-right: 1rem;
+      margin-right: 1rem;   
     }   
-  
+    th, td{
+      padding: 0.25rem 0.5rem; 
+    }
     th{
       background-color: #999999 !important;
-      color: #FFFFFF !important;  }
+      color: #FFFFFF !important;
+      height: 2.1875rem;
+      font-size: 0.75rem;
+      font-weight: normal; 
+    }
     td{
       background-color: #FFFFFF !important;
       color: #CBCBCB !important;
       font-size: 0.75rem !important;
+      font-size: 0.75rem;
+      height: 2.1875rem;
     }
     .paginacion{
       width: 40%;

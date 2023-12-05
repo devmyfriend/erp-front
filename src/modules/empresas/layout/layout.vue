@@ -37,7 +37,9 @@
                 <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
                 <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
             </div>
-            <router-view />
+            <div class="contenedorContenido">
+              <router-view class="contenido"/>
+            </div>
         </div>
     </div>
 </template>
@@ -59,6 +61,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.contenedorContenido{
+  margin: 1.5rem;
+  width: auto;
+  height: auto;
+}
+.contenido{
+}
 .barraLateral{
   height: 100vh;
   background-color: #343A40;
@@ -92,10 +101,13 @@ export default defineComponent({
   margin-top: 0.75rem;
 }
 .salida{
-  margin-top: 35vh;
+  margin-top: 32vh;
   font-size: 0.5rem;
   @media screen and (max-height: 820px) {
     margin-top: 13rem;
+  }
+  @media screen and (max-height: 768px) {
+    margin-top: 7rem;
   }
   @media screen and (max-height: 620px) {
     margin-top: 2rem;

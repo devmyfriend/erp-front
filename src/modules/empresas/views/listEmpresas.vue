@@ -1,6 +1,8 @@
+ListadoEmpresa
+
 <template>
   <div class="viewListEmpresas">
-    <Tabla />
+    <Tabla style="margin: 0px; padding: 0px;"/>
   </div>
 </template>
 
