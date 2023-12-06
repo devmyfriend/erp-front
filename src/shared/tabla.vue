@@ -29,8 +29,8 @@
                     <td >{{ item.direccion }}</td>
                     <td >{{ item.telefono }}</td>
                     <td class="Acciones text-center"> 
-                      <a href="#/tabla" class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                      <a href="#/tabla" class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
+                      <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
+                      <a class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                     </td>
             </tr>
             </tbody>

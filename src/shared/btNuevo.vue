@@ -22,4 +22,12 @@ button{
     color: #FFFFFF;
     width: 9.375rem;
 }
+button:hover{
+    background-color: #696969;
+    color: #D9D9D9;
+}
+button:active{
+    background-color: #343A40 !important;
+    color: #D9D9D9 !important; 
+}
 </style>
