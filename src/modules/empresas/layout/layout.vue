@@ -1,7 +1,7 @@
 <template>
-    <div class="mainContainer main d-flex flex-row vh-100">
+<div class="mainContainer main d-flex flex-row vh-100">
 
-        <div class="barraLateral">
+  <div class="barraLateral">
     <div class="imgEmpresa">
       <img src="@/assets/img/imgEmpresa.svg" alt="Empresa">
     </div>
@@ -32,16 +32,16 @@
     </div>
   </div>
 
-        <div class="w-100">
-            <div class="navMain d-flex justify-content-between align-items-center px-2 py-1">
-                <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
-                <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
-            </div>
-            <div class="contenedorContenido">
-              <router-view class="contenido"/>
-            </div>
-        </div>
-    </div>
+  <div class="w-100">
+      <div class="navMain d-flex justify-content-between align-items-center px-2 py-1">
+          <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
+          <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
+      </div>
+      <div class="contenedorContenido">
+        <router-view class="contenido"/>
+      </div>
+  </div>
+</div>
 </template>
 
 <script>

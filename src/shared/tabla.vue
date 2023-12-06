@@ -37,14 +37,22 @@
         </table>
       </div>
       <Paginador/>
+
+      <div class="botones">
+        <button class="btn btn-save me-4"> Guardar</button>
+        <button class="btn btn-danger me-4">Cancelar</button>
+      </div>
+    
     </div>
   </template>
     
   <script>
-  import { ref} from 'vue';
+  import { ref, computed, onMounted } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
+
+    
 
   export default {
     name: 'tablaGeneral',
@@ -114,7 +122,9 @@
     .btNuevo{
       margin-right: 1rem;
     }
-
+    .botones{
+      margin-top: 2rem;
+    }
     table{
       max-width: 100%;
       margin: 0;
