@@ -27,8 +27,10 @@
       
     </div>
     <div class="salida">
-      <img src="@/assets/img/logoutIco.svg" alt="Empresa">
-      <p>Logout</p>
+      <router-link to="/">
+        <img src="@/assets/img/logoutIco.svg" alt="Empresa">
+        <p>Logout</p>
+      </router-link>
     </div>
   </div>
 
@@ -38,7 +40,7 @@
           <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
       </div>
       <div class="contenedorContenido">
-        <router-view class="contenido"/>
+        <router-view/>
       </div>
   </div>
 </div>
@@ -66,8 +68,6 @@ export default defineComponent({
   width: auto;
   height: auto;
 }
-.contenido{
-}
 .barraLateral{
   height: 100vh;
   background-color: #343A40;
@@ -81,7 +81,7 @@ export default defineComponent({
   align-items: center;
   text-align: center;
 }
-.modulosBarraLateral a{
+.modulosBarraLateral a, .salida a{
   text-decoration: none;
   color: #CBCBCB;
 }

@@ -2,9 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/modules/login/components/login.vue'
 import empresasRouter from '@/modules/empresas/routes/index'
 
-/* Pruebas Lalo */
-import testLalo2 from '@/shared/tabla.vue'
-import testLalo from '@/modules/empresas/views/empresa.vue'
+import testLalo from '@/modules/empresas/layout/testLalo.vue'
 
 const routes = [
   {
@@ -25,10 +23,6 @@ const routes = [
     path: '/testLalo',
     name: 'testLalo',
     component: testLalo
-  },{
-    path: '/testLalo2',
-    name: 'testLalo2',
-    component: testLalo2
   }
 ]
 

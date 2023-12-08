@@ -22,12 +22,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in data" :key="item.id">
-                    <td >{{ item.id }}</td>
-                    <td >{{ item.nombre }}</td>
-                    <td >{{ item.rfc }}</td>
-                    <td >{{ item.direccion }}</td>
-                    <td >{{ item.telefono }}</td>
+                <tr v-for="item in listaEmpresas" :key="item.EntidadNegocioId">
+                    <td >{{ item.EntidadNegocioId }}</td>
+                    <td >{{ item.NombreOficial }}</td>
+                    <td >{{ item.RFC }}</td>
+                    <td >{{ item.Direccion }}</td>
+                    <td >{{ item.NumeroTelefonico }}</td>
                     <td class="Acciones text-center"> 
                       <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                       <a class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
@@ -45,76 +45,48 @@
     
     </div>
   </template>
-    
+        
   <script>
   import { ref, computed, onMounted } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
-
-    
-
+  
+  const { useEmpresa } = require('../modules/empresas/store/empresa')
+  
   export default {
-    name: 'tablaGeneral',
-    setup() {
-      let data = ref([
-        {
-          id: 1,  
-          nombre: 'Empresa Constructora Innovadora S.A. de C.V.',
-          rfc: 'ECI150510',
-          direccion: 'Direccion 01',
-          telefono: '9982334455',
-        }, 
-        {
-          id: 2,
-          nombre: 'Consultoría Digital Avanzada S.A.P.I. de C.V.',
-          rfc: 'CDA120928',
-          direccion: 'Direccion 02',
-          telefono: '9987293648',
-        },
-        {
-          id: 3,
-          nombre: 'Distribuidora de Tecnología Integral S. de R.L. de C.V.',
-          rfc: 'DTI180203',
-          direccion: 'Direccion 03',
-          telefono: '9945678901',
-        },
-        {
-          id: 4,
-          nombre: 'Servicios Médicos Especializados Global Health S.A. de C.V.',
-          rfc: 'SME100715',
-          direccion: 'Direccion 04',
-          telefono: '9982674562',
-        },
-        {
-          id: 5,
-          nombre: 'Comercializadora de Productos Innovadores S.A. de C.V.',
-          rfc: 'CPI161220',
-          direccion: 'Direccion 05',
-          telefono: '9983764521',
-        },{
-          id: 6,  
-          nombre: 'Empresa Constructora Innovadora S.A. de C.V.',
-          rfc: 'ECI150510',
-          direccion: 'Direccion 01',
-          telefono: '9982334455',
-        }
-      ]);
+  
+    name: 'frmDatosGrenerales',
+  
+    setup( props ){
+      const listaEmpresas      = ref( [] )
       let tablaNombre = ref('Empresas');
 
-      return {
-        data,
-        tablaNombre,
-      };
+      
+        const store = useEmpresa()
+  
+        onMounted(() => {
+            store.cargarListadoEmpresas().then(() => {
+              listaEmpresas.value = store.listaListadoEmpresas
+            })
+        })
+  
+        return{
+            listaEmpresas,
+            tablaNombre,
+        }
+  
     },
     components: {
       txtbuscador,
       Paginador,
       btNuevo,
     },
-  };
+  
+  }
+  
   </script>
-    
+
   <style lang="scss" scoped>
   .contComp{
     background-color: #D9D9D9;
