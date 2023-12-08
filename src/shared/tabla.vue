@@ -36,7 +36,7 @@
             </tbody>
         </table>
       </div>
-      <Paginador/>
+      <Paginador :registros="listaEmpresas"/>
 
       <div class="botones">
         <button class="btn btn-save me-4"> Guardar</button>
@@ -56,7 +56,7 @@
   
   export default {
   
-    name: 'frmDatosGrenerales',
+    name: 'tabla',
   
     setup( props ){
       const listaEmpresas      = ref( [] )

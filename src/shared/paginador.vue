@@ -50,7 +50,7 @@ const redPag = () => {
 };
 
 export default {
-    name: 'NombreDelComponente',
+    name: 'Paginador',
     setup() {
        
         return {
