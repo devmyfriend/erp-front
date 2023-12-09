@@ -56,7 +56,7 @@ export const useEmpresa = defineStore( 'empresa', {
         },
        async cargarListadoEmpresas(){
             try{
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/viewListadoEmpresas/` )
+                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/vistaListado/` )
                 console.log("Datos de Listado Empresas \n", datos.data)
                 const { ListadoEmpresas } = datos.data
 
