@@ -2,7 +2,7 @@ ListadoEmpresa
 
 <template>
   <div class="viewListEmpresas">
-    <Tabla style="margin: 0px; padding: 0px;"/>
+    <Tabla/>
   </div>
 </template>
 

@@ -36,7 +36,7 @@
             </tbody>
         </table>
       </div>
-      <Paginador :registros="listaEmpresas" :pagAtual="pagActual" :pagMax="pagMax"/>
+      <Paginador :registros="listaEmpresas"/>
 
       <div class="botones">
         <button class="btn btn-save me-4"> Guardar</button>
@@ -52,7 +52,7 @@
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
   
-  const { useEmpresas } = require('../modules/empresas/store/empresas')
+  const { useEmpresa } = require('../modules/empresas/store/empresa')
   
   export default {
   
@@ -61,10 +61,9 @@
     setup( props ){
       const listaEmpresas      = ref( [] )
       let tablaNombre = ref('Empresas');
-      let pagActual = ref(1);
-      let pagMax = ref(3);
+
       
-        const store = useEmpresas()
+        const store = useEmpresa()
   
         onMounted(() => {
             store.cargarListadoEmpresas().then(() => {
@@ -75,8 +74,6 @@
         return{
             listaEmpresas,
             tablaNombre,
-            pagActual,
-            pagMax,
         }
   
     },

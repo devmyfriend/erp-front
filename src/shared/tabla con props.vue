@@ -10,7 +10,7 @@
       </div>
 
       <div class="table-responsive">  
-      <table class="table table-bordered border-2 border-dark rounded text-start">
+<!--       <table class="table table-bordered border-2 border-dark rounded text-start">
             <thead>
                 <tr>
                   <th>ID</th>
@@ -22,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in listaEmpresas" :key="item.EntidadNegocioId">
+                <tr v-for="item in pagina" :key="item.EntidadNegocioId">
                     <td >{{ item.EntidadNegocioId }}</td>
                     <td >{{ item.NombreOficial }}</td>
                     <td >{{ item.RFC }}</td>
@@ -34,12 +34,29 @@
                     </td>
             </tr>
             </tbody>
+        </table> -->
+        <table class="table table-bordered border-2 border-dark rounded text-start">
+            <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Edad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in testin" :key="item.id">
+                    <td >{{ item.id }}</td>
+                    <td >{{ item.nombre }}</td>
+                    <td >{{ item.edad }}</td>
+                </tr>
+            </tbody>
         </table>
       </div>
-      <Paginador :registros="listaEmpresas" :pagAtual="pagActual" :pagMax="pagMax"/>
+      <!-- <Paginador :registros="listaEmpresas"/> -->
+      <Paginador :registros="listaEmpresas" @paginasActualizadas="actualizarPaginas"/>
 
       <div class="botones">
-        <button class="btn btn-save me-4"> Guardar</button>
+        <button class="btn btn-save me-4" @click="despachar"> Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>
       </div>
     
@@ -52,19 +69,29 @@
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
   
-  const { useEmpresas } = require('../modules/empresas/store/empresas')
+  const { useEmpresa } = require('../modules/empresas/store/empresa')
   
   export default {
   
     name: 'tabla',
   
     setup( props ){
-      const listaEmpresas      = ref( [] )
+      const listaEmpresas = ref( [] )
       let tablaNombre = ref('Empresas');
-      let pagActual = ref(1);
-      let pagMax = ref(3);
+      let pagina = computed(() => listaEmpresas.value.slice(0, 2));
+      let testin = ref([
+        {id: 1, nombre: 'Juan', edad: 20},
+        {id: 2, nombre: 'Pedro', edad: 30},
+        {id: 3, nombre: 'Maria', edad: 40},
+        {id: 4, nombre: 'Luis', edad: 50}]);
+
       
-        const store = useEmpresas()
+        function despachar(){
+          testin.value = testin.value.slice(2,4);
+          alert('despachado: ' + testin.value.length);
+        }
+      
+        const store = useEmpresa()
   
         onMounted(() => {
             store.cargarListadoEmpresas().then(() => {
@@ -73,10 +100,11 @@
         })
   
         return{
-            listaEmpresas,
+            listaEmpresas, 
             tablaNombre,
-            pagActual,
-            pagMax,
+            pagina,
+            testin,
+            despachar
         }
   
     },
@@ -85,9 +113,14 @@
       Paginador,
       btNuevo,
     },
-  
-  }
-  
+    methods: {
+      actualizarPaginas(paginas){
+        this.pagina = paginas;
+        console.log('Pagina actualizada: ' + this.pagina);
+      }
+    }
+  };
+
   </script>
 
   <style lang="scss" scoped>
