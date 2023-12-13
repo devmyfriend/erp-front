@@ -22,7 +22,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in listaEmpresas" :key="item.EntidadNegocioId">
+                <tr v-for="item in lista" :key="item.EntidadNegocioId">
+                <!-- <tr v-for="item in lista.slice(4,6)" :key="item.EntidadNegocioId"> -->
                     <td >{{ item.EntidadNegocioId }}</td>
                     <td >{{ item.NombreOficial }}</td>
                     <td >{{ item.RFC }}</td>
@@ -36,18 +37,18 @@
             </tbody>
         </table>
       </div>
-      <Paginador :registros="listaEmpresas" :pagAtual="pagActual" :pagMax="pagMax"/>
-
+      <Paginador :registros="lista" :pagina="pagina"/>
+      <!-- <Paginador :registros="lista" :pagina="pagina" @devolver-pagina="cambioPagina" /> -->
       <div class="botones">
-        <button class="btn btn-save me-4"> Guardar</button>
-        <button class="btn btn-danger me-4">Cancelar</button>
+        <button class="btn btn-save me-4"   @click="mensaje" >Guardar</button>
+        <button class="btn btn-danger me-4" @click="mensaje" >Cancelar</button>
       </div>
     
     </div>
   </template>
         
   <script>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, onMounted } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
@@ -57,35 +58,40 @@
   export default {
   
     name: 'tabla',
-  
     setup( props ){
-      const listaEmpresas      = ref( [] )
       let tablaNombre = ref('Empresas');
-      let pagActual = ref(1);
-      let pagMax = ref(3);
+      let lista = ref( [] );
+      let pagina = ref( [] );
       
-        const store = useEmpresas()
-  
-        onMounted(() => {
-            store.cargarListadoEmpresas().then(() => {
-              listaEmpresas.value = store.listaListadoEmpresas
-            })
-        })
-  
-        return{
-            listaEmpresas,
-            tablaNombre,
-            pagActual,
-            pagMax,
-        }
-  
+      const store = useEmpresas();
+
+      function mensaje(){
+        console.log("Desde front Padre: Datos: \n \n" + "Pagina actual: " + pagina.value.pagAct + "\n" + "Cantidad: " + pagina.value.cantidad +
+          "\n" + "Pagina maxima: " + pagina.value.pagMax + "\n" + "Longitud: " + pagina.value.longitud + "\n" );
+      }
+
+      onMounted(() => {
+          store.cargarListado().then(() => {
+            lista.value = store.getListado;
+            pagina.value.pagAct = store.getPaginas.pagAct;
+            pagina.value.pagMax = store.getPaginas.pagMax;
+            pagina.value.cantidad = store.getPaginas.cantidad;
+            pagina.value.longitud = store.getPaginas.longitud;
+          })
+      })
+
+      return{
+        tablaNombre,
+          lista,
+          pagina,
+          mensaje
+      }
     },
     components: {
       txtbuscador,
       Paginador,
       btNuevo,
     },
-  
   }
   
   </script>
