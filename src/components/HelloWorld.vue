@@ -1,5 +1,6 @@
 <template>
     <frmDatosGrales></frmDatosGrales>
+    
 </template>
 
 <script>
@@ -13,6 +14,7 @@ export default {
   },
   components:{
     /* listEmpresas */
+    frmDatosGrales
   },
   setup(){
     return{
