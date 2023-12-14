@@ -23,7 +23,6 @@
             </thead>
             <tbody>
                 <tr v-for="item in lista" :key="item.EntidadNegocioId">
-                <!-- <tr v-for="item in lista.slice(4,6)" :key="item.EntidadNegocioId"> -->
                     <td >{{ item.EntidadNegocioId }}</td>
                     <td >{{ item.NombreOficial }}</td>
                     <td >{{ item.RFC }}</td>
@@ -37,13 +36,11 @@
             </tbody>
         </table>
       </div>
-      <Paginador :registros="lista" :pagina="pagina"/>
-      <!-- <Paginador :registros="lista" :pagina="pagina" @devolver-pagina="cambioPagina" /> -->
+      <Paginador :pagina="pagina" :lista="lista" @nuevaPagina="nuevaPagina" @nuevaLista="nuevaLista"/>
       <div class="botones">
-        <button class="btn btn-save me-4"   @click="mensaje" >Guardar</button>
-        <button class="btn btn-danger me-4" @click="mensaje" >Cancelar</button>
+        <button class="btn btn-save me-4">Guardar</button>
+        <button class="btn btn-danger me-4">Cancelar</button>
       </div>
-    
     </div>
   </template>
         
@@ -64,12 +61,6 @@
       let pagina = ref( [] );
       
       const store = useEmpresas();
-
-      function mensaje(){
-        console.log("Desde front Padre: Datos: \n \n" + "Pagina actual: " + pagina.value.pagAct + "\n" + "Cantidad: " + pagina.value.cantidad +
-          "\n" + "Pagina maxima: " + pagina.value.pagMax + "\n" + "Longitud: " + pagina.value.longitud + "\n" );
-      }
-
       onMounted(() => {
           store.cargarListado().then(() => {
             lista.value = store.getListado;
@@ -79,12 +70,10 @@
             pagina.value.longitud = store.getPaginas.longitud;
           })
       })
-
       return{
         tablaNombre,
-          lista,
-          pagina,
-          mensaje
+        lista,
+        pagina
       }
     },
     components: {
@@ -92,8 +81,15 @@
       Paginador,
       btNuevo,
     },
+    methods: {
+      nuevaPagina(pagina){
+        this.pagina.pagAct = pagina;
+      },
+      nuevaLista(lista){
+        this.lista = lista;
+      }
+    }
   }
-  
   </script>
 
   <style lang="scss" scoped>
@@ -144,4 +140,3 @@
     }
   
   </style>
-    
