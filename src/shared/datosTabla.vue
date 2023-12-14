@@ -72,7 +72,7 @@
             <td>{{ correo.correo }}</td>
             <td>
               <span>
-                <img @click="abrirModalEdit('telefono', index, tel.telefono)" class="icono" src="../assets/img/edit-icon.png" />
+                <img @click="abrirModalEdit('correo', index, correo.correo)" class="icono" src="../assets/img/edit-icon.png" />
               </span>
               <span>
                 <img @click="eliminarTeloCorreo('correo')" class="icono" src="../assets/img/remove-icon.png" />
@@ -100,7 +100,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button @click="editarTeloCorreo('correo')" type="button" class="btn btn-primary">Guardar</button>
+          <button @click="editarTeloCorreo" type="button" class="btn btn-primary">Guardar</button>
         </div>
       </div>
     </div>
@@ -182,6 +182,8 @@ export default {
 
 
     const editarTeloCorreo = () => {
+      console.log('tipoEdit',tipoEdit.valie);
+    
       if (tipoEdit.value === 'telefono') {
         props.Lista[tempIndex.value].telefono = tempValor.value;
         modalObj2.hide();
@@ -234,5 +236,8 @@ export default {
 .alerta{
   color:red;
   font-weight: 600;
+}
+h5,p{
+  color:black;
 }
 </style>

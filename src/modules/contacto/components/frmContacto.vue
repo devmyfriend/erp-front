@@ -54,16 +54,10 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-auto mb-3">
-          <input type="text" class="form-control" placeholder="Télefono" />
-          
-        </div>
-        <div class="col-auto mb-3 align-self-center">
-            <span>
-              <img class="icono" src="../assets/plus.png" />
-            </span>
-          </div>
+       
         <div class="col-12">
+          <datosTabla :Lista="ListaTelefonos" :tipoTabla="'telefono'"/> 
+       <!-- 
           <table class="table">
             <thead>
               <tr>
@@ -87,20 +81,18 @@
               </tr>
             </tbody>
           </table>
+       
+        -->
+        
         </div>
       </div>
       <div class="row">
-        <div class="col-auto mb-3">
-          <input type="text" class="form-control" placeholder="Correo " />
-         
-        </div>
-        <div class="col-auto mb-3 align-self-center">
-            <span>
-              <img class="icono" src="../assets/plus.png" />
-            </span>
-          </div>
+      
         <div class="col-12">
-          <table class="table">
+          
+          
+           <datosTabla :Lista="ListaCorreos" :tipoTabla="'correo'"/>  
+     <!--           <table class="table">
             <thead>
               <tr>
                 <th scope="col">id de Correo.</th>
@@ -123,6 +115,8 @@
               </tr>
             </tbody>
           </table>
+      -->
+
         </div>
       </div>
     </div>
@@ -184,25 +178,7 @@
         </div>
       </div>
     </div>
-    <!--Modal editar -->
-    <div class=" modal modal-dialog modal-sm" id="m_editTelefono" tabindex="-1" aria-labelledby="m_edit_telefono" aria-hidden="true" ref ="modal_edit">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>Nuevo .</p>
-            <input v-model="tempValor" type="text" class="form-control mb-3" />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button @click="editarTeloCorreo" type="button" class="btn btn-primary">Guardar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
 
 
 </template>
@@ -243,15 +219,12 @@ export default {
         const BorradoEn = null
         const Telefonos = ref([])
         const Correos = ref([])
-        const tempIndex = ref(0) // servira para guardar el index a editar en el telofono o correo
-        const tempValor = ref('');
-        const tipoEdit = ref('')
-        const correo_invalido = ref(false);
-        const telefono_invalido = ref(false);
+
+      
         let modalEle = ref(null)
-        let modal_edit = ref(null)
+      
         let modalObj = null
-        let modalObj2 = null
+     
 
 
         const store = useContacto();
@@ -293,53 +266,9 @@ export default {
     
     }
     //CRUD Telefono
-    const anadirTelefono = () => {
-        console.log(Telefonos.value)
-        const regexTelefono = /^\d{10}$/;
-        if(regexTelefono.test(numTelefono.value)){
-            Telefonos.value.push({"telefono":numTelefono.value})
-            telefono_invalido.value = false
-        }
-        else
-        {
-            console.log("telefono invalido");
-            telefono_invalido.value = true
-        }
 
-     
-    }
 
-    const eliminarTelefono = (index)=>{
-        Telefonos.value.splice(index,1)
-    }
-
-    const abrirModalEdit = (tipoEdicion,index,nuevoValor) =>{
-
-        tipoEdit.value = tipoEdicion
    
-        modalObj2.show();
-        tempValor.value = nuevoValor;
-        tempIndex.value= index;
-    }
-    
-    const editarTeloCorreo = ()=>{
-        console.log(tempValor.value);
-      
-        if(tipoEdit.value === "telefono"){
-            console.log(Telefonos.value[tempIndex.value]);
-            console.log(tempValor.value);
-            console.log( Telefonos.value[tempIndex.value]);
-            Telefonos.value[tempIndex.value].telefono = tempValor.value
-            
-            modalObj2.hide();
-        }
-        if(tipoEdit.value === "correo"){
-            Correos.value[tempIndex.value].correo = tempValor.value
-            modalObj2.hide();
-        }
-
-        }
-
 
 
         const obtenerTelefonoCorreo = (idContacto)=>{
@@ -352,29 +281,7 @@ export default {
             console.log(ListaTelefonos.value);
             console.log(ListaCorreos.value);
         }
-       
-    //CRUD Correo
-    const anadirCorreo = () =>{
-        console.log(Correos.value);
-        const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(regexCorreo.test(correo.value)){
-            Correos.value.push({"correo":correo.value})
-            correo_invalido.value=false
-        }
-        else{
-            console.log("Correo no valido")
-            correo_invalido.value=true
-        }
-    }
-
-
-    const eliminarCorreo = (index)=>{
-        Correos.value.splice(index,1)
-    }
-
-    const editarCorreo = (nuevoValor)=>{
-        Correos.value[tempIndex.value] = nuevoValor
-    }
+ 
     //Carga de informacion
 
         onMounted(()=>{
@@ -386,7 +293,7 @@ export default {
     
             });
             modalObj = new Modal(modalEle.value) 
-            modalObj2 = new Modal(modal_edit.value)
+          
         });
     
         return{
@@ -404,26 +311,17 @@ export default {
             BorradoPor,
             BorradoEn,
             modalEle, //modal
-            modal_edit, //modal
-            correo_invalido,
-            telefono_invalido,
+           
+         
             ModalAgregarContacto, //funcion
             Telefonos,
             Correos,
-            tempIndex,
-            tempValor,
-            tipoEdit,
+           
+         
+         
             ListaTelefonos,
             ListaCorreos,
-            guardarContacto, //funcion
-            anadirTelefono, //funcion
-            anadirCorreo, //funcion
-            eliminarTelefono, //funcion
-            eliminarCorreo, // funcion
-            abrirModalEdit, //funcion
-            editarTeloCorreo,//funcion
-            editarCorreo,//funcion
-           eliminarContacto, //funcion
+           //funcion
            obtenerTelefonoCorreo //funcion
         }
    

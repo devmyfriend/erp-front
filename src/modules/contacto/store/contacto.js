@@ -115,11 +115,27 @@ actions:{
     const {telefono} = datos.data  
     
     if(datos.status === 200 && datos.statusText === "OK"){
-    
-      this.ListaTelefonos = telefono
-      this.ListaCorreos = email
+      let L_telefono = []
+      let L_correo = []
+      for(let tel of telefono){
+        L_telefono.push({
+          "telefono":tel.NumeroTelefonico
+        })
+
+      }
+      for(let correo of email){
+        L_correo.push({
+          "correo":correo.Email
+        })
+
+      }
+      this.ListaTelefonos = L_telefono
+      this.ListaCorreos = L_correo
+      /*
       console.log(this.ListaTelefonos)
       console.log(this.ListaCorreos)
+      */
+ 
     }
     
     
