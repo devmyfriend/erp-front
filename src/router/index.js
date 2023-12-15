@@ -3,7 +3,7 @@ import Login from '@/modules/login/components/login.vue'
 
 import empresasRouter from '@/modules/empresas/routes/index'
 
-import testLalo from '@/shared/layout2'
+
 
 const routes = [
   {
@@ -20,10 +20,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
-  },{
-    path: '/testLalo',
-    name: 'testLalo',
-    component: testLalo
   }
 ]
 

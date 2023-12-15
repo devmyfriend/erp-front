@@ -42,7 +42,6 @@
               </div>
               <div class="contenedor-Contenido">
                       <router-view/>
-                    
               </div>
           </div>
       </div>
@@ -58,7 +57,6 @@
    width: 100vw;   
   }
   .layout-background{
-      background-color: aquamarine;
       height: 100vh;
       width: 100vw;
   }
@@ -117,14 +115,5 @@
       height: 40.5rem;
       max-height: 40.5rem;
       min-height: 40.5rem;
-  }
-  .titulo-Contenido{
-      text-align: start;
-  }
-  .contenedor-Componente{
-      padding: 0rem;
-      margin: 0px;
-      border: red 1px dotted;
-      width: 100%;
   }
 </style>
