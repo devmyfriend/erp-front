@@ -15,7 +15,16 @@ export const useEmpresa = defineStore( 'empresa', {
         RegimenFiscal:   '',
         NombreComercial: '',
         ListaPaises :    [],
-        ListaRegimenes:  []
+        ListaRegimenes:  [],
+
+        Calle: '',
+        NoInt: '',
+        NoExt: '',
+        Colonia: '',
+        Estado: '',
+        Municipio: '',
+        Ciudad: '',
+        CodigoPostal: ''
     }),
     getters: {
         listapaises( state ){

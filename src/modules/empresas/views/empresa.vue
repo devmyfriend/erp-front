@@ -119,8 +119,6 @@
                     :municipionombre="municipionombre"    
                     :noext="noext"              
                     :noint="noint"
-                    :ListaPaises="ListaPaises"
-                    :listaregimenes="listaregimenes"
                     @actualizarValores="actualizarValoresComponenteHijo"              
                 />
                 <div class="sucursales">
@@ -147,105 +145,7 @@
                 </div>
             </div>
             <div class="datosContactos">
-                <h1>Contacto</h1>
-                <form>
-                    <fieldset class="container">
-                        <input type="text" class="inputCorreo" placeholder="Contacto">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 25 20" fill="none">
-<path d="M24.375 8.125H21.875V5.625C21.875 5.28125 21.5938 5 21.25 5H20C19.6562 5 19.375 5.28125 19.375 5.625V8.125H16.875C16.5312 8.125 16.25 8.40625 16.25 8.75V10C16.25 10.3438 16.5312 10.625 16.875 10.625H19.375V13.125C19.375 13.4688 19.6562 13.75 20 13.75H21.25C21.5938 13.75 21.875 13.4688 21.875 13.125V10.625H24.375C24.7188 10.625 25 10.3438 25 10V8.75C25 8.40625 24.7188 8.125 24.375 8.125ZM8.75 10C11.5117 10 13.75 7.76172 13.75 5C13.75 2.23828 11.5117 0 8.75 0C5.98828 0 3.75 2.23828 3.75 5C3.75 7.76172 5.98828 10 8.75 10ZM12.25 11.25H11.5977C10.7305 11.6484 9.76562 11.875 8.75 11.875C7.73438 11.875 6.77344 11.6484 5.90234 11.25H5.25C2.35156 11.25 0 13.6016 0 16.5V18.125C0 19.1602 0.839844 20 1.875 20H15.625C16.6602 20 17.5 19.1602 17.5 18.125V16.5C17.5 13.6016 15.1484 11.25 12.25 11.25Z" fill="#999999"/>
-</svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
-                            <path
-                                d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
-                                fill="#999999" />
-                            <path
-                                d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
-                                fill="white" />
-                        </svg>
-                    </fieldset>
-                    <div class="container">
-                        <table class="table table-primary" style="font-size: 13px; width: 36.55rem; margin-left: .4rem;">
-                            <thead>
-                                <tr>
-                                    <th class="p-3 mb-2 bg-primary text-white">Id Contacto</th>
-                                    <th class="p-3 mb-2 bg-primary text-white">Contacto</th>
-                                    <th class="p-3 mb-2 bg-primary text-white">Puesto</th>
-                                </tr>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Nombre</td>
-                                    <td>Puesto</td>
-                                </tr>
-                            </tbody>
-                            </thead>
-                        </table>
-                    </div>
-
-                    <fieldset class="container">
-                        <input type="text" class="inputTelefono" placeholder="Telefono">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
-                            <path
-                                d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
-                                fill="#999999" />
-                            <path
-                                d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
-                                fill="white" />
-                        </svg>
-                    </fieldset>
-
-                    <div class="container">
-                        <table class="table table-secondary" style="font-size: 13px; width: 36.55rem; margin-left: .4rem;">
-                            <thead>
-                                <tr>
-                                    <th class="p-3 mb-2 bg-primary text-white">Id del Tel</th>
-                                    <th class="p-3 mb-2 bg-primary text-white">Numero Telefonico</th>
-                                    <th class="p-3 mb-2 bg-primary text-white">Acciones</th>
-                                </tr>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Nombre</td>
-                                    <td>Puesto</td>
-                                </tr>
-                            </tbody>
-                            </thead>
-                        </table>
-                    </div>
-
-                    <fieldset class="container">
-                        <input type="text" class="inputCorreo" placeholder="Correo Electronico">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
-                            <path
-                                d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
-                                fill="#999999" />
-                            <path
-                                d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
-                                fill="white" />
-                        </svg>
-                    </fieldset>
-
-                    <div class="container">
-                        <table class="table table-secondary" style="font-size: 13px; width: 36.55rem; margin-left: .4rem;">
-                            <thead>
-                                <tr>
-                                    <th class="p-3 mb-2 bg-primary text-white">Id Contacto</th>
-                                    <th class="p-3 mb-2 bg-primary text-white">Contacto</th>
-                                    <th class="p-3 mb-2 bg-primary text-white">Puesto</th>
-                                </tr>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Nombre</td>
-                                    <td>Puesto</td>
-
-                                </tr>
-                            </tbody>
-                            </thead>
-                        </table>
-                    </div>
-
-                </form>
+                <Contacto></Contacto>
             </div>
         </div>
         <div class="botones">
@@ -264,17 +164,20 @@ import DatosSucursal from '../components/sucursal.vue'
 import Modal from '../components/modal.vue'
 import ModalSucursal from '../components/modalSucursal.vue'
 import Sucursal from '../components/sucursal.vue'
+import Contacto from '../../contacto/components/frmContacto.vue'
 
 
 import { useEmpresa } from '../store/empresa'
+import { useDomicilioSAT } from '../store/domiciliosat';
 
 export default {
     components: {
+        Contacto,
         DatosEmpresa,
         DatosSucursal,
         Modal,
         ModalSucursal,
-        Sucursal
+        Sucursal,
     },
 
     setup(){
@@ -307,19 +210,23 @@ export default {
         const noext              = ref( '' )
         const noint              = ref( '' )
 
+        const listaestado    = ref( [] )
+        const listamunicipio    = ref( [] )
+        const listalocalidad    = ref( [] )
+        const listacolonia    = ref( [] )
+
         const haySucursal = ref ( false )
         const seEditaSucursal = ref ( false )
 
         const store = useEmpresa()
+        // const storeDomicilio = useDomicilioSAT()
 
-        onMounted( ()=>{
-            store.cargarPaises().then( ()=>{
-                ListaPaises.value = store.listapaises
-            })
+        onMounted( async ()=>{
+            
+            await store.cargarPaises()
+            await store.cargarRegimenes()
 
-            store.cargarRegimenes().then( ()=>{
-                listaregimenes.value = store.listaPFisica
-            })
+            // await storeDomicilio.cargaDatos()
         })
 
         const abrircerrarSucursal= ()=> { 

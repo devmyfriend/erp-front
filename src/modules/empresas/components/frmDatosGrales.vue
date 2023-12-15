@@ -162,6 +162,17 @@
                     <option value="3">Colonia 3</option>
                     <option value="4">Colonia 4</option>
                 </select>
+                <a href="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
+                        <path
+                            d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
+                            fill="#999999" />
+                        <path
+                            d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
+                            fill="white" />
+                    </svg>
+
+                </a>
                </fieldset>
             </form>
         </div>
@@ -173,7 +184,7 @@
 import { ref, watch, computed, onMounted, effect } from 'vue'
 
 
-// const { useEmpresa } = require('../store/empresa')
+const { useEmpresa } = require('../store/empresa')
 
 function validateFile(event) {
     const file = event.target.files[0];
@@ -240,8 +251,8 @@ export default {
         const descripcionregimen = ref( props.descripcionregimen )
         const esextranjero       = ref( props.esextranjero )
         const idempresa          = ref( props.idempresa )
-        const ListaPaises        = ref( props.ListaPaises )
-        const listaregimenes     = ref( props.listaregimenes )
+        const ListaPaises        = ref( [])
+        const listaregimenes     = ref( [] )
         const nombrecomercial    = ref( props.nombrecomercial )
         const nombreoficial      =  ref( props.nombreoficial )
         const pais               = ref( props.pais )
@@ -268,23 +279,28 @@ export default {
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
 
-        // const store = useEmpresa()
+        const store = useEmpresa()
 
-        // onMounted(() => {
-        //     store.cargarPaises().then(() => {
-        //         ListaPaises.value = store.listapaises
-        //     })
+        onMounted(() => {
+            // store.cargarPaises().then(() => {
+            //     ListaPaises.value = store.listapaises
+            // })
 
-        //     store.cargarRegimenes().then(() => {
-        //         listaregimenes.value = store.listaPFisica
-        //     })
+            // store.cargarRegimenes().then(() => {
+            //     listaregimenes.value = store.listaPFisica
+            // })
 
-        //     if( pais.value === 'MEX' ){
-        //         esextranjero.value = false
-        //     }
+            if( pais.value === 'MEX' ){
+                esextranjero.value = false
+            }
+            ListaPaises.value = store.listapaises
+            listaregimenes.value = store.listaPFisica
 
 
-        // })
+        })
+
+        const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
+        const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
 
 
 
@@ -731,7 +747,7 @@ select{
     margin-left: 8px;
     margin-right: 8px;
     padding: $padding-input;
-    width: 26.80rem;
+    width: 24.431875rem;
     color: #999999
 }
 

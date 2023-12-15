@@ -41,16 +41,61 @@
                     </select>
                 </div>
             </fieldset>
+            <fieldset>
+                <Telefonos
+                    :Lista="listatelfonos"
+                    :tipoTabla="tablatelfono"
+                ></Telefonos>
+            </fieldset>
+            <fieldset>
+                <Emails
+                    :Lista="listaemails"
+                    :tipoTabla="tablaemail"
+                >
+                </Emails>
+            </fieldset>
         </form>
     </div>
 </template>
 
 <script>
-export default {
-    setup () {
-        
+import { ref } from 'vue'
+import Telefonos from '@/shared/datosTabla.vue'
+import Emails from '@/shared/datosTabla.vue'
 
-        return {}
+export default {
+    components:{
+        Emails,
+        Telefonos,
+    },
+    
+    setup () {
+
+        const listaemails = ref( [] )
+        const listatelfonos     = ref( [] )
+        const tablaemail = ref('correo')
+        const tablatelfono = ref( 'telefono' )
+        
+        
+        listatelfonos.value=[{
+            index    : 1,
+            telefono : '998809203'}
+        ]
+
+        listaemails.value=[{
+            index:1,
+            email:'horaciohdez@gmail.com'
+        }]
+
+        return {
+
+            listaemails,
+            listatelfonos,
+            tablaemail,
+            tablatelfono,
+            
+
+        }
     }
 }
 </script>
