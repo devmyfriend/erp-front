@@ -41,7 +41,7 @@
                   <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
               </div>
               <div class="contenedor-Contenido">
-                      <router-view @setTitulo="setTitulo"/>
+                      <router-view/>
                     
               </div>
           </div>
