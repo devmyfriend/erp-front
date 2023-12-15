@@ -52,7 +52,7 @@
           </div>
           <div class="modal-footer">
            <div v-if="modo == 'guardar'">  <button @click="h_guardarContacto" type="button" class="btn btn-primary">Guardar</button> </div>
-           <div v-if="modo == 'actualizar'">  <button @click="actualizarContacto" type="button" class="btn btn-primary">Actualizar</button> </div>
+           <div v-if="modo == 'actualizar'">  <button @click="h_actualizarContacto" type="button" class="btn btn-primary">Actualizar</button> </div>
           
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
@@ -85,6 +85,11 @@ import { onMounted,ref } from 'vue';
         },
         ActualizadoPor:{
             type:Number
+        },
+        ContactoId:{
+          type:Number,
+          default:0
+
         },
       ApellidoPaterno:{
         type:String,
@@ -130,15 +135,26 @@ import { onMounted,ref } from 'vue';
     setup(props,context){
         let modalEle = ref(null)
         const apellidoPaterno = ref('')
-        const apellidoMaterno = ref('')
-        const nombres = ref('')
-        const departamento = ref('')
-        const puesto = ref('')
+         const apellidoMaterno = ref('')
+          const nombres = ref('')
+          const departamento = ref('')
+          const puesto = ref('')
         const telefonos = ref([])
         const correos = ref([])
+        
         let modalObj = null
+        if(props.modo == 'actualizar'){
+           apellidoPaterno.value = props.ApellidoPaterno
+           apellidoMaterno.value = props.ApellidoMaterno
+           nombres.value = props.Nombres 
+           departamento.value = props.Departamento
+           puesto.value = props.Puesto
+        }
+
+        
    
         const h_guardarContacto = () =>{
+          console.log("entre guardar");
             const datos = {
                 SucursalId:props.SucursalId,
                 ApellidoPaterno: apellidoPaterno.value,
@@ -151,6 +167,26 @@ import { onMounted,ref } from 'vue';
             }
             console.log(datos)
             context.emit('guardar-contacto',datos,telefonos.value,correos.value)
+            modalObj.hide()
+
+        }
+
+        const h_actualizarContacto = () =>{
+            
+          console.log("entre actualizar");
+          const datos = {
+                SucursalId:props.SucursalId,
+                ApellidoPaterno: apellidoPaterno.value,
+                ApellidoMaterno:apellidoMaterno.value,  
+                Nombres:nombres.value,
+                Departamento:departamento.value,
+                Puesto:puesto.value,
+                CreadoPor:props.CreadoPor,
+                ActualizadoPor:props.ActualizadoPor,
+                ContactoId:props.ContactoId
+            }
+            console.log(datos)
+            context.emit('actualizar-contacto',datos,telefonos.value,correos.value)
             modalObj.hide()
 
         }
@@ -172,7 +208,8 @@ import { onMounted,ref } from 'vue';
          puesto ,
          telefonos,
         correos,
-            h_guardarContacto
+        h_guardarContacto,
+        h_actualizarContacto
         }
 
     }
