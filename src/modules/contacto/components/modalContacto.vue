@@ -1,0 +1,191 @@
+<template>
+    <!-- Modal agregar contacto -->
+    <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modalEle">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Añadir contacto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <h4>Añadir datos del contacto {{ modo }}</h4>
+                </div>
+              </div>
+              <div class="row">
+                <form>
+                  <div class="row mb-3">
+                    <div class="col-4">
+                      <input type="text" v-model="apellidoPaterno" placeholder="Apellido Paterno" class="form-control" />
+                    </div>
+                    <div class="col-4">
+                      <input type="text" v-model="apellidoMaterno" placeholder="Apellido Materno" class="form-control" />
+                    </div>
+                    <div class="col-4">
+                      <input type="text" v-model="nombres" placeholder="Nombre(s)" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-4">
+                      <input type="text" v-model="departamento" placeholder="Departamento" class="form-control" />
+                    </div>
+                    <div class="col-8">
+                      <input type="text" v-model="puesto" placeholder="Puesto" class="form-control" />
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <div class="col-6">
+                      <datosTabla :Lista="telefonos" :tipoTabla ="'telefono'"/>
+                    
+                    </div>
+                    <div class="col-6">
+                      <datosTabla :Lista="correos" :tipoTabla ="'correo'"/>
+                 
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+           <div v-if="modo == 'guardar'">  <button @click="h_guardarContacto" type="button" class="btn btn-primary">Guardar</button> </div>
+           <div v-if="modo == 'actualizar'">  <button @click="actualizarContacto" type="button" class="btn btn-primary">Actualizar</button> </div>
+          
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+</template>
+
+<script>
+    import datosTabla from '@/shared/datosTabla.vue';
+    import {Modal} from 'bootstrap'
+import { onMounted,ref } from 'vue';
+  export default {
+    components:{
+
+        datosTabla
+    },
+    props:{
+        SucursalId:{
+            type:Number
+
+        },
+        CreadoPor:{
+            type:Number
+
+        },
+        ActualizadoPor:{
+            type:Number
+        },
+      ApellidoPaterno:{
+        type:String,
+        default:''
+    
+    },
+      ApellidoMaterno:{
+
+          type: String,
+          default:''
+
+      },
+      
+      Nombres:{
+        type:String,
+        default:''
+
+    },
+    Departamento:
+      {
+        type:String,
+        default:''
+    },
+      Puesto:
+      {
+        type:String,
+        default:''
+    },
+      Telefonos:{
+        type:Array,
+        default:[]
+        
+    },
+      Correos:{
+        type:Array,
+        default:[]
+      },
+      modo:{
+        type:String
+      }
+
+    },
+    setup(props,context){
+        let modalEle = ref(null)
+        const apellidoPaterno = ref('')
+        const apellidoMaterno = ref('')
+        const nombres = ref('')
+        const departamento = ref('')
+        const puesto = ref('')
+        const telefonos = ref([])
+        const correos = ref([])
+        let modalObj = null
+   
+        const h_guardarContacto = () =>{
+            const datos = {
+                SucursalId:props.SucursalId,
+                ApellidoPaterno: apellidoPaterno.value,
+                ApellidoMaterno:apellidoMaterno.value,  
+                Nombres:nombres.value,
+                Departamento:departamento.value,
+                Puesto:puesto.value,
+                CreadoPor:props.CreadoPor,
+                ActualizadoPor:props.ActualizadoPor
+            }
+            console.log(datos)
+            context.emit('guardar-contacto',datos,telefonos.value,correos.value)
+            modalObj.hide()
+
+        }
+        onMounted(()=>{
+           
+            
+            modalObj = new Modal(modalEle.value) 
+            modalObj.show()
+
+        });
+
+        return{
+
+            modalEle,
+            apellidoPaterno ,
+         apellidoMaterno ,
+         nombres ,
+         departamento ,
+         puesto ,
+         telefonos,
+        correos,
+            h_guardarContacto
+        }
+
+    }
+
+  }
+
+
+
+
+</script>
+
+<style scoped>
+    h4,h5{
+        color:black;
+    }
+</style>

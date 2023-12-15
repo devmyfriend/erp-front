@@ -120,6 +120,12 @@
         </div>
       </div>
     </div>
+
+    <div v-if="mostrarModalContacto">
+      <modalContacto :SucursalId="1010" :CreadoPor ="123" :ActualizadoPor ="0" :modo="modo" @guardar-contacto = "guardarContacto"/>
+
+    </div>
+   
     <!-- Modal agregar contacto -->
     <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modalEle">
       <div class="modal-dialog">
@@ -187,6 +193,7 @@
 
 import { ref, watch, computed, onMounted } from 'vue'
 import datosTabla from '../../../shared/datosTabla.vue'
+import modalContacto from './modalContacto.vue'
 import {Modal} from 'bootstrap'
 
 const  { useContacto } = require( '../store/contacto')
@@ -195,7 +202,8 @@ const  { useContacto } = require( '../store/contacto')
 export default {
   components: {
   
-    datosTabla
+    datosTabla,
+    modalContacto
   
   },
   name: 'frmContacto',
@@ -220,25 +228,27 @@ export default {
         const Telefonos = ref([])
         const Correos = ref([])
 
-      
+        const modo = ref('')
         let modalEle = ref(null)
       
         let modalObj = null
      
-
+        let mostrarModalContacto = ref(false)
 
         const store = useContacto();
        //Abrir modal
         const ModalAgregarContacto = () => {
-            modalObj.show()
-        
+            //modalObj.show()
+            modo.value='guardar'
+            console.log(modo.value);
+          mostrarModalContacto.value =true;
         }
     
        
    //CRUD CONTACTO 
-    const guardarContacto = () => {
+    const guardarContacto = (datos,telefonos,correos) => {
 
-        let datos = {
+        /*let datos = {
 
         SucursalId: idSucursal.value,
         ApellidoPaterno: ApellidoPaterno.value,
@@ -251,13 +261,15 @@ export default {
         BorradoPor: BorradoPor,
         BorradoEn: BorradoEn
         
-        }
+        }*/
 
-    
+        console.log(datos);
+        console.log(telefonos)
+        console.log(correos)
 
-      store.guardarContactos(datos,Telefonos.value,Correos.value);
+    store.guardarContactos(datos,telefonos,correos);
 
-      modalObj.hide()
+     // modalObj.hide()
     }
 
     const eliminarContacto = (idContacto) => {
@@ -311,18 +323,19 @@ export default {
             BorradoPor,
             BorradoEn,
             modalEle, //modal
-           
-         
-            ModalAgregarContacto, //funcion
             Telefonos,
             Correos,
-           
-         
-         
             ListaTelefonos,
             ListaCorreos,
-           //funcion
-           obtenerTelefonoCorreo //funcion
+            mostrarModalContacto,
+            modo,
+         
+            ModalAgregarContacto, //funcion
+          
+           guardarContacto,//funcion
+           obtenerTelefonoCorreo, //funcion
+           eliminarContacto
+
         }
    
     }

@@ -119,7 +119,7 @@ export default {
   },
 
   setup(props) {
-    const tempIndex = ref(0);
+    const tempIndex = ref(0); //index del arreglo
     const tempValor = ref('');
     const tipoEdit = ref('');
     let modalObj2 = null;
@@ -182,7 +182,7 @@ export default {
 
 
     const editarTeloCorreo = () => {
-      console.log('tipoEdit',tipoEdit.valie);
+      console.log('tipoEdit',tipoEdit.value);
     
       if (tipoEdit.value === 'telefono') {
         props.Lista[tempIndex.value].telefono = tempValor.value;
