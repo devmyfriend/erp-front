@@ -114,6 +114,10 @@ import { Modal } from 'bootstrap';
 
 export default {
   props: {
+    idEmpresa:{
+      type:Number,
+      default:0
+      },
     Lista: Array,
     tipoTabla: String,
   },
