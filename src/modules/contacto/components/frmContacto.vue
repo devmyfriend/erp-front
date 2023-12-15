@@ -13,12 +13,12 @@
         </div>
         <div class="col-auto mb-3 align-self-center">
           <span>
-            <img @click="ModalAgregarContacto" class="icono" src="../assets/user-add-icon.png" />
+            <img @click="ModalAgregarContacto" class="icono" src="@/assets/img/user-add-icon.png" />
           </span>
         </div>
         <div class="col-auto mb-3 align-self-center">
           <span>
-            <img class="icono" src="../assets/plus.png" />
+            <img class="icono" src="@/assets/img/plus.png" />
           </span>
         </div>
       </div>
@@ -41,10 +41,10 @@
               <td>{{ lc.Puesto }}</td>
               <td>
                 <span>
-                  <img @click="m_actualizarContacto(lc.ContactoId)" class="icono " src="../assets/edit-icon.png" />
+                  <img @click="m_actualizarContacto(lc.ContactoId)" class="icono " src="@/assets/img/edit-icon.png" />
                 </span>
                 <span>
-                  <img @click="eliminarContacto(lc.ContactoId)" class="icono ms-3" src="../assets/remove-icon.png" />
+                  <img @click="eliminarContacto(lc.ContactoId)" class="icono ms-3" src="@/assets/img/remove-icon.png" />
                 </span>
               </td>
             </tr>
@@ -91,30 +91,7 @@
 
 
         <datosTabla :Lista="ListaCorreos" :tipoTabla="'correo'" />
-        <!--           <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">id de Correo.</th>
-                <th scope="col"> Correo </th>
-                <th scope="col"> Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="correo in ListaCorreos" :key="correo.EmailId">
-                <td>{{ correo.EmailId }}</td>
-                <td>{{ correo.Email }}</td>
-                <td>
-                  <span>
-                                <img  class="icono" src="../assets/edit-icon.png" />
-                              </span>
-                              <span>
-                                <img class="icono" src="../assets/remove-icon.png" />
-                              </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-      -->
+
 
       </div>
     </div>
@@ -137,72 +114,12 @@
 
   </div>
 
-  <!-- Modal agregar contacto
-    <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modalEle">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Añadir contacto</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-12">
-                  <h4>Añadir datos del contacto</h4>
-                </div>
-              </div>
-              <div class="row">
-                <form>
-                  <div class="row mb-3">
-                    <div class="col-4">
-                      <input type="text" v-model="ApellidoPaterno" placeholder="Apellido Paterno" class="form-control" />
-                    </div>
-                    <div class="col-4">
-                      <input type="text" v-model="ApellidoMaterno" placeholder="Apellido Materno" class="form-control" />
-                    </div>
-                    <div class="col-4">
-                      <input type="text" v-model="Nombres" placeholder="Nombre(s)" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-4">
-                      <input type="text" v-model="Departamento" placeholder="Departamento" class="form-control" />
-                    </div>
-                    <div class="col-8">
-                      <input type="text" v-model="Puesto" placeholder="Puesto" class="form-control" />
-                    </div>
-                  </div>
-                
-                  <div class="row">
-                    <div class="col-6">
-                      <datosTabla :Lista="Telefonos" :tipoTabla ="'telefono'"/>
-                    
-                    </div>
-                    <div class="col-6">
-                      <datosTabla :Lista="Correos" :tipoTabla ="'correo'"/>
-                 
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button @click="guardarContacto" type="button" class="btn btn-primary">Guardar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
- -->
 </template>
 
 <script >
 
-import { ref, watch, computed, onMounted } from 'vue'
-import datosTabla from '../../../shared/datosTabla.vue'
+import { ref,  onMounted } from 'vue'
+import datosTabla from '@/shared/datosTabla.vue'
 import modalContacto from './modalContacto.vue'
 
 

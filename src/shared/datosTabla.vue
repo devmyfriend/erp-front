@@ -8,7 +8,7 @@
     <div class="row align-items-center">
       <div class="col-auto">
     
-        <input type="text" v-model="valor" :placeholder="placeholder" class="form-control" />
+        <input type="text" v-model="valor" :placeholder="placeholder" class="form-control " />
         <div v-if="invalido == true" :class="{'alerta':invalido}" > 
           
           <div v-if ="tipoTabla == 'telefono'">
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <img @click="anadir(tipoTabla)" class="icono" src="../assets/img/plus.png" />
+        <img @click="anadir(tipoTabla)" class="icono " src="../assets/img/plus.png" />
       </div>
     </div>
     <div v-if="tipoTabla == 'telefono'">
@@ -243,5 +243,14 @@ export default {
 }
 h5,p{
   color:black;
+}
+table{
+  width:75%;
+}
+input,img{
+  margin-bottom: 0.5rem;
+}
+input{
+  width:18.75rem;
 }
 </style>
