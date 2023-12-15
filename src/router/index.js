@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/modules/login/components/login.vue'
+
 import empresasRouter from '@/modules/empresas/routes/index'
 
-import testLalo from '@/modules/empresas/layout/testLalo.vue'
+import testLalo from '@/shared/layout2'
 
 const routes = [
   {

@@ -26,7 +26,7 @@
                     <td >{{ item.EntidadNegocioId }}</td>
                     <td >{{ item.NombreOficial }}</td>
                     <td >{{ item.RFC }}</td>
-                    <td >{{ item.Direccion }}</td>
+                    <td style="word-break: break-all;" >{{ item.Direccion }}</td>
                     <td >{{ item.NumeroTelefonico }}</td>
                     <td class="Acciones text-center"> 
                       <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
