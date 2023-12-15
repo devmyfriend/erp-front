@@ -93,6 +93,27 @@
                 <Sucursal></Sucursal>
             </template>
         </Modal>
+        <Modal>
+            <template v-slot:header>
+                <div class="headerSucursal">
+                    <div class="tituloSucursal">
+                        <h2>Sucursal</h2>
+                    </div>
+                    <div class="cerrarSucursal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="35" viewBox="0 0 42 35" fill="none"  @click="abrircerrarSucursal">
+                            <path
+                                d="M38.0625 0H3.9375C1.76367 0 0 1.67969 0 3.75V31.25C0 33.3203 1.76367 35 3.9375 35H38.0625C40.2363 35 42 33.3203 42 31.25V3.75C42 1.67969 40.2363 0 38.0625 0ZM31.2047 22.6953C31.5984 23.0703 31.5984 23.6797 31.2047 24.0547L27.8824 27.2188C27.4887 27.5938 26.8488 27.5938 26.4551 27.2188L21 21.9766L15.5449 27.2188C15.1512 27.5938 14.5113 27.5938 14.1176 27.2188L10.7953 24.0547C10.4016 23.6797 10.4016 23.0703 10.7953 22.6953L16.2996 17.5L10.7953 12.3047C10.4016 11.9297 10.4016 11.3203 10.7953 10.9453L14.1176 7.78125C14.5113 7.40625 15.1512 7.40625 15.5449 7.78125L21 13.0234L26.4551 7.78125C26.8488 7.40625 27.4887 7.40625 27.8824 7.78125L31.2047 10.9453C31.5984 11.3203 31.5984 11.9297 31.2047 12.3047L25.7004 17.5L31.2047 22.6953Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </template>
+            <template v-slot:body>
+                <div>
+                </div>
+                <Sucursales></Sucursales>
+            </template>
+        </Modal>
         <div class="contenedor">
             <div class="datosEmpresa">
                 <DatosEmpresa 
@@ -145,7 +166,7 @@
                 </div>
             </div>
             <div class="datosContactos">
-                <Contacto></Contacto>
+                <!-- <Contacto></Contacto> -->
             </div>
         </div>
         <div class="botones">
@@ -165,6 +186,7 @@ import Modal from '../components/modal.vue'
 import ModalSucursal from '../components/modalSucursal.vue'
 import Sucursal from '../components/sucursal.vue'
 import Contacto from '../../contacto/components/frmContacto.vue'
+import Sucursales from '../components/sucursales.vue'
 
 
 import { useEmpresa } from '../store/empresa'
@@ -178,6 +200,7 @@ export default {
         Modal,
         ModalSucursal,
         Sucursal,
+        Sucursales
     },
 
     setup(){
