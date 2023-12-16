@@ -112,6 +112,8 @@
       margin-left: 1rem;
       margin-right: 1rem;   
     }   
+
+    
     th, td{
       padding: 0.25rem 0.5rem; 
     }
@@ -126,8 +128,24 @@
       background-color: #FFFFFF !important;
       color: #CBCBCB !important;
       font-size: 0.75rem !important;
-      font-size: 0.75rem;
       height: 2.1875rem;
+    }
+
+    /* Ancho de las columnas */
+    th:first-child,
+    td:first-child {
+        width: 2rem !important; 
+        max-width: 2rem !important; 
+      }
+      
+    th:not(:first-child),
+    td:not(:first-child) {
+        width: 4rem !important; 
+        max-width: 4rem !important; 
+    }
+    .Acciones {
+      width: 2rem !important;
+      max-width: 2rem !important; 
     }
     .paginacion{
       width: 40%;
