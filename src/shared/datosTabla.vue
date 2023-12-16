@@ -8,7 +8,7 @@
     <div class="row align-items-center">
       <div class="col-auto">
     
-        <input type="text" v-model="valor" :placeholder="placeholder" class="form-control" />
+        <input type="text" v-model="valor" :placeholder="placeholder" class="form-control " />
         <div v-if="invalido == true" :class="{'alerta':invalido}" > 
           
           <div v-if ="tipoTabla == 'telefono'">
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <img @click="anadir(tipoTabla)" class="icono" src="@/assets/img/plus.png" />
+        <img @click="anadir(tipoTabla)" class="icono " src="../assets/img/plus.png" />
       </div>
     </div>
     <div v-if="tipoTabla == 'telefono'">
@@ -45,10 +45,10 @@
             <td>{{ tel.telefono }}</td>
             <td>
               <span>
-                <img @click="abrirModalEdit('telefono', index, tel.telefono)" class="icono" src="@/assets/img/edit-icon.png" />
+                <img @click="abrirModalEdit('telefono', index, tel.telefono)" class="icono" src="../assets/img/edit-icon.png" />
               </span>
               <span>
-                <img @click="eliminarTeloCorreo('telefono')" class="icono" src="@/assets/img/remove-icon.png" />
+                <img @click="eliminarTeloCorreo('telefono')" class="icono" src="../assets/img/remove-icon.png" />
               </span>
             </td>
           </tr>
@@ -114,12 +114,16 @@ import { Modal } from 'bootstrap';
 
 export default {
   props: {
+    idEmpresa:{
+      type:Number,
+      default:0
+      },
     Lista: Array,
     tipoTabla: String,
   },
 
   setup(props) {
-    const tempIndex = ref(0);
+    const tempIndex = ref(0); //index del arreglo
     const tempValor = ref('');
     const tipoEdit = ref('');
     let modalObj2 = null;
@@ -182,7 +186,7 @@ export default {
 
 
     const editarTeloCorreo = () => {
-      console.log('tipoEdit',tipoEdit.valie);
+      console.log('tipoEdit',tipoEdit.value);
     
       if (tipoEdit.value === 'telefono') {
         props.Lista[tempIndex.value].telefono = tempValor.value;
@@ -239,5 +243,14 @@ export default {
 }
 h5,p{
   color:black;
+}
+table{
+  width:75%;
+}
+input,img{
+  margin-bottom: 0.5rem;
+}
+input{
+  width:18.75rem;
 }
 </style>
