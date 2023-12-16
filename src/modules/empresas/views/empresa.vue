@@ -93,7 +93,7 @@
                 <Sucursal></Sucursal>
             </template>
         </Modal>
-        <Modal>
+        <!-- <Modal>
             <template v-slot:header>
                 <div class="headerSucursal">
                     <div class="tituloSucursal">
@@ -113,7 +113,7 @@
                 </div>
                 <Sucursales></Sucursales>
             </template>
-        </Modal>
+        </Modal> -->
         <div class="contenedor">
             <div class="datosEmpresa">
                 <DatosEmpresa 
@@ -242,12 +242,13 @@ export default {
         const seEditaSucursal = ref ( false )
 
         const store = useEmpresa()
-        // const storeDomicilio = useDomicilioSAT()
+        const storeDomicilio = useDomicilioSAT()
 
         onMounted( async ()=>{
             
             await store.cargarPaises()
             await store.cargarRegimenes()
+            await storeDomicilio.cargaDatos()
 
             // await storeDomicilio.cargaDatos()
         })

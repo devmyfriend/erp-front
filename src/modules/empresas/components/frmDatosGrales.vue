@@ -185,6 +185,7 @@ import { ref, watch, computed, onMounted, effect } from 'vue'
 
 
 const { useEmpresa } = require('../store/empresa')
+const { useDomicilioSAT } = require('../store/domiciliosat')
 
 function validateFile(event) {
     const file = event.target.files[0];
@@ -274,12 +275,15 @@ export default {
         const municipio          = ref(props.municipio)          
         const municipionombre    = ref(props.municipionombre)    
         const noext              = ref(props.noext)              
-        const noint              = ref(props.noint)              
+        const noint              = ref(props.noint)   
+        
+        const listadoestado      = ref( [] )
 
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
 
         const store = useEmpresa()
+        const storeDomicilio = useDomicilioSAT()
 
         onMounted(() => {
             // store.cargarPaises().then(() => {
@@ -293,8 +297,10 @@ export default {
             if( pais.value === 'MEX' ){
                 esextranjero.value = false
             }
+
             ListaPaises.value = store.listapaises
             listaregimenes.value = store.listaPFisica
+            listadoestado.value = storeDomicilio.listadoestado
 
 
         })
@@ -401,6 +407,8 @@ export default {
             municipionombre,    
             noext,              
             noint,              
+
+            listadoestado,
 
             actualizarValores,
             PersonaSelecionada,

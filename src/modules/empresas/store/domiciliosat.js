@@ -10,6 +10,9 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
 
     }),
     getters:{
+        listadoestado(){
+            return this.listadoEstado
+        },
         listamunicipios( state, claveEstado ){
             return state.ListaMunicipios.filter( municipio => municipio.ClaveEstado === claveEstado )
         },
@@ -21,33 +24,33 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
         async cargaDatos(){
             try{
                 
-                /*TODO: 
-                    validar el consumo de estos endpoints por que no resuelven municipio y localidad
-                */
-                const [ datosEstados, datosMunicipios, datosCiudades ] = await Promise.all([
-                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/estado/` ),
-                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/municipio` ),
-                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/localidad/` ),
+                const [ datosEstados, datosMunicipios, datosCiudades, datosColonias ] = await Promise.all([
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/estado` ),
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/municipio` ),
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/localidad` ),
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/colonias` ),
                 ])
-
                 
-                console.log(datosEstados)
-                console.log(datosMunicipios)
-                console.log(datosCiudades)
-
                 if( datosEstados.status === 200  && datosEstados.statusText === "OK" ){
                     const { listadoEstado } = datosEstados.data
                     this.ListaEstados = listadoEstado
                 }
 
                 if( datosMunicipios.status === 200  && datosMunicipios.statusText === "OK" ){
-                    const { listadoMunicipios } = datosMunicipios.data
-                    this.ListaMunicipios = listadoMunicipios
+
+                    const { listadoMunicipio } = datosMunicipios.data
+                    console.log(listadoMunicipio)
+                    this.ListaMunicipios = listadoMunicipio
                 }
 
                 if( datosCiudades.status === 200  && datosCiudades.statusText === "OK" ){
-                    const { listadoCiudades } = datosCiudades.data
-                    this.ListaCiudades = listadoCiudades
+                    const { listadoLocalidad } = datosCiudades.data
+                    this.ListaCiudades = listadoLocalidad
+                }
+
+                if( datosColonias.status === 200  && datosColonias.statusText === "OK" ){
+                    const { listadoColonias } = datosColonias.data
+                    this.ListaColonia = listadoColonias
                 }
 
             }catch( error ){
