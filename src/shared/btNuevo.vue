@@ -1,6 +1,6 @@
 <template>
     <router-link to="/empresas/formulario" >
-        <button class="btn text-light" style="background-color: #264F78;"> NUEVO </button>
+        <button class="btn"> NUEVO </button>
     </router-link>
 </template>
 
@@ -17,5 +17,17 @@ export default {
 </script>
 
 <style scoped>
-
+button{
+    background-color: #999999;
+    color: #FFFFFF;
+    width: 9.375rem;
+}
+button:hover{
+    background-color: #696969;
+    color: #D9D9D9;
+}
+button:active{
+    background-color: #343A40 !important;
+    color: #D9D9D9 !important; 
+}
 </style>

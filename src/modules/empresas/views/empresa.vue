@@ -271,11 +271,8 @@ export default {
                 estadonombre.value    = valores.estadonombre       
                 idempresa.value       = valores.idempresa
                 municipio.value       = valores.municipio          
-                municipionombre.value = valores.municipionombre     
                 noext.value           = valores.noext
                 noint.value           = valores.noint         
-                nombrecomercial.value = valores.nombrecomercial
-                nombreoficial.value   = valores.nombreoficial
                 pais.value            = valores.pais
                 paisnombre.value      = valores.paisnombre
                 personafisica.value   = valores.personafisica
@@ -533,7 +530,6 @@ select {
     margin-top: 1.5rem;
     margin-left: 1.5rem;
     padding: 0;
-    text-align: left;
     width: 50%;
 }
 
@@ -552,8 +548,6 @@ select {
     font-size: 1.125rem;
     margin-left: .5rem;
     margin-right: 33.2rem;
-}
-
 .contacto {
     border-radius: $radius;
     border: none;
