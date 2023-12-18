@@ -18,7 +18,7 @@ export default {
         txtPlaceHolder.value = 'Buscando...';
       } else{
         txtPlaceHolder.value = 'Buscar';
-      }
+      } 
     }
 
     function startFocus() {
