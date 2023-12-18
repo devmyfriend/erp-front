@@ -23,11 +23,11 @@
             </thead>
             <tbody>
                 <tr v-for="item in lista" :key="item.EntidadNegocioId">
-                    <td >{{ item.EntidadNegocioId }}</td>
-                    <td >{{ item.NombreOficial }}</td>
-                    <td >{{ item.RFC }}</td>
-                    <td style="word-break: break-all;" >{{ item.Direccion }}</td>
-                    <td >{{ item.NumeroTelefonico }}</td>
+                    <td class="fila1">{{ item.EntidadNegocioId }}</td>
+                    <td class="fila2">{{ item.NombreOficial }}</td>
+                    <td clasS="fila3">{{ item.RFC }}</td>
+                    <td class="fila4">{{ item.Direccion }}</td>
+                    <td class="fila5" >{{ item.NumeroTelefonico }}</td>
                     <td class="Acciones text-center"> 
                       <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                       <a class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
@@ -116,6 +116,7 @@
     
     th, td{
       padding: 0.25rem 0.5rem; 
+      word-break: break-all;
     }
     th{
       background-color: #999999 !important;
@@ -130,23 +131,22 @@
       font-size: 0.75rem !important;
       height: 2.1875rem;
     }
+    .fila1{
+      width: 5%;
+    }
+    .fila2{
+      width: 30%;
+    }
+    .fila3{
+      width: 10%;
+    }
+    .fila4{
+      width: 35%;
+    }
+    .fila5, .Acciones{
+      width: 10%;
+    }
 
-    /* Ancho de las columnas */
-    th:first-child,
-    td:first-child {
-        width: 2rem !important; 
-        max-width: 2rem !important; 
-      }
-      
-    th:not(:first-child),
-    td:not(:first-child) {
-        width: 4rem !important; 
-        max-width: 4rem !important; 
-    }
-    .Acciones {
-      width: 2rem !important;
-      max-width: 2rem !important; 
-    }
     .paginacion{
       width: 40%;
     }
