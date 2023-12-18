@@ -326,7 +326,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../styles/variables.scss';
+    @import '../../../styles/variables.scss';
 
 
 h1 {
@@ -548,6 +548,7 @@ select {
     font-size: 1.125rem;
     margin-left: .5rem;
     margin-right: 33.2rem;
+}
 .contacto {
     border-radius: $radius;
     border: none;
