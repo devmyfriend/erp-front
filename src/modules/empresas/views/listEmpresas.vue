@@ -1,5 +1,3 @@
-ListadoEmpresa
-
 <template>
   <div class="viewListEmpresas">
     <Tabla/>
