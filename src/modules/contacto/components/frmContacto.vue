@@ -25,6 +25,8 @@
     </div>
     <div class="row align-items-center">
       <div class="col-12">
+             <tablaInfinita :Lista="ListaContactos"/>
+  <!-- 
         <table class="table">
           <thead>
             <tr>
@@ -35,6 +37,9 @@
             </tr>
           </thead>
           <tbody>
+
+       
+   
             <tr v-for="lc in ListaContactos" :key="lc.ContactoId" @click="obtenerTelefonoCorreo(lc.ContactoId)">
               <td>{{ lc.ContactoId }}</td>
               <td>{{ lc.Nombres }}</td>
@@ -48,14 +53,15 @@
                 </span>
               </td>
             </tr>
+
           </tbody>
-        </table>
+        </table> -->
       </div>
     </div>
     <div class="row">
 
       <div class="col-12">
-        <datosTabla :Lista="ListaTelefonos" :tipoTabla="'telefono'" />
+       <datosTabla :Lista="ListaTelefonos" :tipoTabla="'telefono'" /> 
         <!-- 
           <table class="table">
             <thead>
@@ -98,7 +104,7 @@
   </div>
 
   <div v-if="mostrarModalContacto">
-    
+
     <div v-if="modo == 'guardar'">
 
       <modalContacto :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0" :modo="modo"
@@ -113,15 +119,14 @@
     </div>
 
   </div>
-
 </template>
 
 <script >
 
-import { ref,  onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import datosTabla from '@/shared/datosTabla.vue'
 import modalContacto from './modalContacto.vue'
-
+import tablaInfinita from './tablaInfinita.vue'
 
 const { useContacto } = require('../store/contacto')
 
@@ -130,7 +135,8 @@ export default {
   components: {
 
     datosTabla,
-    modalContacto
+    modalContacto,
+    tablaInfinita
 
   },
   name: 'frmContacto',
@@ -157,6 +163,8 @@ export default {
     const Correos = ref([])
 
     const modo = ref('')
+
+//SCROLL infinito
 
 
     let mostrarModalContacto = ref(false)
@@ -208,7 +216,7 @@ export default {
 
     const actualizarContacto = (datos, telefonos, correos) => {
       console.log("Actualizar contactos")
-      store.actualizaContactos(datos,telefonos,correos)
+      store.actualizaContactos(datos, telefonos, correos)
 
     }
     //CRUD Telefono
@@ -231,11 +239,11 @@ export default {
       store.cargarContactos().then(() => {
         ListaContactos.value = store.listaContacto
 
-
+       
 
       });
       // modalObj = new Modal(modalEle.value) 
-      console.log(ListaContactos.value);
+     
     });
 
     return {

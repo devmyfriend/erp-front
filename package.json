@@ -8,6 +8,8 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@vueuse/components": "^10.7.0",
+    "@vueuse/core": "^10.7.0",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
     "core-js": "^3.8.3",

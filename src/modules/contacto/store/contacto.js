@@ -40,6 +40,7 @@ actions:{
            const contacto = datos.data
             if (datos.status === 200 && datos.statusText === "OK") {
               this.ListaContactos = contacto;
+         
             }
           }
 
