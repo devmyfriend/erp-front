@@ -45,7 +45,7 @@
   </template>
         
   <script>
-  import { ref, onMounted } from 'vue'
+  import { ref, onBeforeMount } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
@@ -61,7 +61,7 @@
       let pagina = ref( [] );
       
       const store = useEmpresas();
-      onMounted(() => {
+      onBeforeMount(() => {
           store.cargarListado().then(() => {
             lista.value = store.getListado;
             pagina.value.pagAct = store.getPaginas.pagAct;

@@ -1,3 +1,4 @@
+//Establecer @change en el input de pagAct y lógica para cambiar página al cambiar directamente el input (Es necesario un cambio en la lógica del paginador en back)
 <template>
     <div class="paginador">
         <div class="paginacion d-flex align-items-center justify-content-center mx-auto mt-4" style="width: 44rem; height: 1.5rem; font-size: 0.75rem;">
@@ -15,7 +16,7 @@
 </template>
 
 <script>
-import { defineProps, defineEmits , ref, onUpdated } from 'vue';
+import { defineProps, defineEmits , ref, onUpdated, computed } from 'vue';
 const { useEmpresas } = require('../modules/empresas/store/empresas')
 
 export default {
@@ -37,9 +38,13 @@ export default {
         let pagAct = ref(1);
         let pagMax = ref(1);
         let lista = ref( [] );
-        onUpdated(() => {
+
+        computed(() => {
             lista.value = props.lista;
             pagAct.value = props.pagina.pagAct;
+
+        })
+        onUpdated(() => {
             pagMax.value = props.pagina.pagMax;
         })
         function cambio(opcion){
