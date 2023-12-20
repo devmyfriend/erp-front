@@ -25,7 +25,7 @@
     </div>
     <div class="row align-items-center">
       <div class="col-12">
-             <tablaInfinita :Lista="ListaContactos"/>
+             <tablaInfinita :Lista="ListaContactos" :obtenerTelefonoCorreo="obtenerTelefonoCorreo" :m_actualizarContacto="m_actualizarContacto" :eliminarContacto="eliminarContacto"/>
   <!-- 
         <table class="table">
           <thead>
@@ -195,8 +195,7 @@ export default {
     }
     const m_actualizarContacto = (idContacto) => {
 
-      console.log(ModalAgregarContacto.value)
-      console.log("entre actualizar contacto");
+      
       modo.value = 'actualizar'
       mostrarModalContacto.value = true;
       let Contacto = ListaContactos.value.filter(contacto => contacto.ContactoId === idContacto)
@@ -215,7 +214,7 @@ export default {
     }
 
     const actualizarContacto = (datos, telefonos, correos) => {
-      console.log("Actualizar contactos")
+      
       store.actualizaContactos(datos, telefonos, correos)
 
     }
@@ -228,8 +227,7 @@ export default {
       })
 
 
-      console.log(ListaTelefonos.value);
-      console.log(ListaCorreos.value);
+      
     }
 
     //Carga de informacion
