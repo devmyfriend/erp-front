@@ -12,6 +12,7 @@
                         id="idEmpresa" 
                         placeholder="Id Empresa"
                         @input="actualizarValores"
+
                     />
                    <span class="logotipo">Logotipo</span>
                     <input 
@@ -44,6 +45,7 @@
                         name="nombreOficial" 
                         id="idRazonSocial" 
                         placeholder="Razón Social"
+                        required
                         @input="actualizarValores"
                     />
                </fieldset>
@@ -132,38 +134,32 @@
                 <label class="labelEstados" for="estado">Estado</label>
                 <select class="claveEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
                     <option selected value="{{estado}}">{{estadonombre}}</option>
-                    <!-- <option v-for="optEstado in ListaEstados" :key="optEstado.ClaveEstado" :value="optEstado.ClaveEstado">{{optEstado.Descripcion}}</option> -->
+                    <option v-for="item in listadoestado" :key="item.ClaveEstado" :value="item.ClaveEstado">{{ item.Nombre }}</option>
                 </select>
                </fieldset>
                <fieldset>
                    <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
                    <select class="municipio" name="municipio" id="municipio" v-model="municipio" @change="actualizarValores">
                        <option selected value="{{municipio}}">{{municipionombre}}</option>
-                       <!-- <option v-for="optMunicipio in ListaMunicipios" :key="optMunicipio.claveMunicipio" :value="optMunicipio.claveMunicipio">{{optMunicipio.Descripcion}}</option> -->
+                       <option v-for="item in listamunicipio" :key="item.ClaveMunicipio" :value="item.ClaveMunicipio">{{item.Nombre}}</option>
                    </select>   
                </fieldset>
                <fieldset>
                 <label class="labelCiudad" for="ciudad">Ciudad</label>
                 <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
                     <option selected value="{{ciudad}}">{{ciudadnombre}}</option>
-                    <option value="1">Cancun</option>
-                    <option value="2">Chetumal</option>
-                    <option value="3">Playa del Carmne</option>
-                    <option value="4">Cozumel</option>
+                    <option v-for="item in listalocalidad" :key="item.ClaveLocalidad" :value="item.ClaveLocalidad"> {{item.Nombre}} </option>
                 </select>
                </fieldset>
 
-               <fieldset>
+               <fieldset v-if="!nuevaColonia">
                 <label class="labelColonia" for="colonia">Colonia</label>
                 <select class="colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
                     <option selected value="{{colonia}}">{{colonianombre}}</option>
-                    <option value="1">Colonia 1</option>
-                    <option value="2">Colonia 2</option>
-                    <option value="3">Colonia 3</option>
-                    <option value="4">Colonia 4</option>
+                    <option v-for="item in listacolonias" :key="item.ClaveColonia" :value="item.ClaveColonia">{{item.nombre}}</option>
                 </select>
-                <a href="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
+                <a @click="nuevacolonia()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none" >
                         <path
                             d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
                             fill="#999999" />
@@ -172,6 +168,20 @@
                             fill="white" />
                     </svg>
 
+                </a> 
+               </fieldset>
+               <fieldset v-else>
+                <label class="labelColonia" for="colonia">Colonia</label>
+                <input type="text" class="coloniaEditable">
+                
+                <svg class="btnColonia" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" >
+                    <path d="M21.1885 4.78228L17.0927 0.686475C16.6532 0.246935 16.057 3.25037e-06 15.4354 0H2.34375C1.04932 0 0 1.04932 0 2.34375V19.5312C0 20.8257 1.04932 21.875 2.34375 21.875H19.5312C20.8257 21.875 21.875 20.8257 21.875 19.5312V6.43955C21.875 5.81795 21.6281 5.22181 21.1885 4.78228ZM10.9375 18.75C9.21162 18.75 7.8125 17.3509 7.8125 15.625C7.8125 13.8991 9.21162 12.5 10.9375 12.5C12.6634 12.5 14.0625 13.8991 14.0625 15.625C14.0625 17.3509 12.6634 18.75 10.9375 18.75ZM15.625 3.88086V8.78906C15.625 9.11265 15.3626 9.375 15.0391 9.375H3.71094C3.38735 9.375 3.125 9.11265 3.125 8.78906V3.71094C3.125 3.38735 3.38735 3.125 3.71094 3.125H14.8691C15.0246 3.125 15.1736 3.18672 15.2834 3.29663L15.4534 3.46655C15.5078 3.52095 15.551 3.58554 15.5804 3.65663C15.6099 3.72772 15.625 3.80391 15.625 3.88086Z" fill="#999999"/>
+                </svg>
+
+                <a @click="cerrarcolonia()">
+                    <svg class="btnColonia" xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none">
+                        <path d="M22.6562 0H2.34375C1.0498 0 0 1.0498 0 2.34375V19.5312C0 20.8252 1.0498 21.875 2.34375 21.875H22.6562C23.9502 21.875 25 20.8252 25 19.5312V2.34375C25 1.0498 23.9502 0 22.6562 0ZM18.5742 14.1846C18.8086 14.4189 18.8086 14.7998 18.5742 15.0342L16.5967 17.0117C16.3623 17.2461 15.9814 17.2461 15.7471 17.0117L12.5 13.7354L9.25293 17.0117C9.01855 17.2461 8.6377 17.2461 8.40332 17.0117L6.42578 15.0342C6.19141 14.7998 6.19141 14.4189 6.42578 14.1846L9.70215 10.9375L6.42578 7.69043C6.19141 7.45605 6.19141 7.0752 6.42578 6.84082L8.40332 4.86328C8.6377 4.62891 9.01855 4.62891 9.25293 4.86328L12.5 8.13965L15.7471 4.86328C15.9814 4.62891 16.3623 4.62891 16.5967 4.86328L18.5742 6.84082C18.8086 7.0752 18.8086 7.45605 18.5742 7.69043L15.2979 10.9375L18.5742 14.1846Z" fill="#999999"/>
+                    </svg>
                 </a>
                </fieldset>
             </form>
@@ -182,24 +192,25 @@
 
 <script>
 import { ref, watch, computed, onMounted, effect } from 'vue'
+import { storeToRefs } from 'pinia';
 
 
 const { useEmpresa } = require('../store/empresa')
 const { useDomicilioSAT } = require('../store/domiciliosat')
 
-function validateFile(event) {
-    const file = event.target.files[0];
-    const fileTypeError = document.getElementById('fileTypeError');
+// function validateFile(event) {
+//     const file = event.target.files[0];
+//     const fileTypeError = document.getElementById('fileTypeError');
 
-    if (file) {
-        if (!['image/jpeg', 'image/png'].includes(file.type)) {
-            fileTypeError.style.display = 'block';
-            event.target.value = '';
-        } else {
-            fileTypeError.style.display = 'none';
-        }
-    }
-}
+//     if (file) {
+//         if (!['image/jpeg', 'image/png'].includes(file.type)) {
+//             fileTypeError.style.display = 'block';
+//             event.target.value = '';
+//         } else {
+//             fileTypeError.style.display = 'none';
+//         }
+//     }
+// }
 
 export default {
 
@@ -241,6 +252,8 @@ export default {
         noint:              String,
         ListaPaises:        Array,
         listaregimenes:     Array,
+
+        listaestados:       Array,
     },
     emits:[
         'actualizarValores'
@@ -252,8 +265,8 @@ export default {
         const descripcionregimen = ref( props.descripcionregimen )
         const esextranjero       = ref( props.esextranjero )
         const idempresa          = ref( props.idempresa )
-        const ListaPaises        = ref( [])
-        const listaregimenes     = ref( [] )
+        const ListaPaises        = ref( [] )
+        const listaregimenes     = ref( props.listaregimenes )
         const nombrecomercial    = ref( props.nombrecomercial )
         const nombreoficial      =  ref( props.nombreoficial )
         const pais               = ref( props.pais )
@@ -277,37 +290,56 @@ export default {
         const noext              = ref(props.noext)              
         const noint              = ref(props.noint)   
         
-        const listadoestado      = ref( [] )
+        const listadoestado      = ref( props.listaestados )
+        const listamunicipio     = ref( [] )
+        const listalocalidad     = ref( [] )
+        const listacolonias      = ref( [] )
+
+        const nuevaColonia       = ref( false )
 
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
 
-        const store = useEmpresa()
+        const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
 
-        onMounted(() => {
-            // store.cargarPaises().then(() => {
-            //     ListaPaises.value = store.listapaises
-            // })
+        const { Estado } = storeToRefs( storeDomicilio ) 
 
-            // store.cargarRegimenes().then(() => {
-            //     listaregimenes.value = store.listaPFisica
-            // })
+        // const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
+        // const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
 
-            if( pais.value === 'MEX' ){
-                esextranjero.value = false
-            }
+        // onMounted(() => {
 
-            ListaPaises.value = store.listapaises
-            listaregimenes.value = store.listaPFisica
-            listadoestado.value = storeDomicilio.listadoestado
+        //     if( pais.value === 'MEX' ){
+        //         esextranjero.value = false
+        //     }
+
+        //     // ListaPaises.value = store.listapaises
+        //     // listaregimenes.value = store.listaPFisica
+        //     // listadoestado.value = storeDomicilio.Estado( pais.value )  
+
+        //     // console.log(listadoestado)
+
+        //     cargarPaises()
+        //     cargarRegimenes()
 
 
+        // })
+
+        onMounted(()=>{
+            cargarPaises()
         })
+        
+        const cargarPaises = ()=>{
+            ListaPaises.value = storeEmpresa.listapaises
+            console.log('se cargo paises')
+            console.log(ListaPaises.value)
+        }
 
-        const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
-        const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
-
+        const cargarEstados= ()=>{
+            listadoestado.value = storeDomicilio.Estado( pais.value )
+        }
+        
 
 
         const PersonaSelecionada = (valor) => {
@@ -315,11 +347,20 @@ export default {
             personamoral.value = !personafisica.value
         }
 
+        const nuevacolonia = ()=>{
+            nuevaColonia.value = true
+        }
+
+        const cerrarcolonia = ()=>{
+            nuevaColonia.value = false
+        }
+
         watch( pais, ( pais ) => {
             esextranjero.value = false
             if( pais.length>0 && pais!=='MEX' ){
                 esextranjero.value = !esextranjero.value
                 personafisica.value = true
+                // listadoestado.value = Estado( pais ) 
             }
         })
 
@@ -331,6 +372,29 @@ export default {
                 listaregimenes.value = store.listaPMoral
             }
         })
+
+        watch(estado,( estado )=>{
+            
+            if( estado.length > 0 &&  estado != '' ){
+                storeDomicilio.cargarMunicipio( estado ).then(()=>{
+                    listamunicipio.value = storeDomicilio.listaMunicipios 
+                })
+    
+                storeDomicilio.cargarLocalidad( estado ).then(()=>{
+                    listalocalidad.value = storeDomicilio.listadoLocalidades 
+                })
+            }
+
+        })
+
+        watch( codigopostal, ( codigopostal )=>{
+            if( codigopostal.length === 5 ){ 
+                storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
+                    listacolonias.value = storeDomicilio.listadoColonias
+                })
+            }
+        })
+
 
         const actualizarValores = ()=>{
             emit('actualizarValores',{
@@ -360,25 +424,33 @@ export default {
             })
         }
 
-
-        
-        
-
-        // function validarArchivo( event ) {
-        //     const archivo = event.target.files[0];
-        //     const fileTypeError = document.getElementById('fileTypeError');
-        //     console.log(fileTypeError)
-
-        //     fileTypeError.style.display = 'none';
-
-        //     if ( archivo ) {
-        //         if (![ 'image/jpeg', 'image/png' ].includes( archivo.type ) ) {
-        //             fileTypeError.style.display = 'block';
-        //             event.target.value = '';
+        // const guardar= ()=>{
+        //     const datos = {
+        //         Entidad:{
+                    
+        //             ClavePais:          pais.value,
+        //             ClaveRegimenFiscal: regimenfiscal.value,
+        //             NombreComercial:    nombrecomercial.value,
+        //             NombreOficial:      nombreoficial.value,
+        //             PersonaFisica:      personafisica.value,
+        //             PersonaMoral:       personamoral.value,
+        //             RFC:                rfc.value,
+        //         },
+        //         Domicilio:{
+        //             Calle: calle.value,
+        //             ClaveColonia: colonia.value,
+        //             ClaveEstado: estado.value,
+        //             ClaveLocalidad: ciudad.value,
+        //             ClaveMunicipio: municipio.value,
+        //             CodigoPostal: codigopostal.value,
+        //             NumeroExt: noext.value,
+        //             NumeroInt: noint.value,
+        //             Pais: pais.value,
         //         }
         //     }
-        // }
 
+        //     storeEmpresa.crearEmpresa( datos )
+        // }
         
         return{
             esextranjero,
@@ -409,6 +481,14 @@ export default {
             noint,              
 
             listadoestado,
+            listamunicipio,
+            listalocalidad,
+            listacolonias,
+
+            nuevaColonia,
+            nuevacolonia,
+            cerrarcolonia,
+             
 
             actualizarValores,
             PersonaSelecionada,
@@ -758,6 +838,16 @@ select{
     width: 24.431875rem;
     color: #999999
 }
+.coloniaEditable {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 21.431875rem;
+    color: #999999
+}
 
 select {
     color: #999999
@@ -765,5 +855,21 @@ select {
 
 option {
     color: #999999;
+}
+
+.btnColonia{
+    margin-left: .5rem;
+    margin-right: .5rem;
+    cursor: pointer;
+    color: #999999;
+    fill: #999999;
+}
+
+.btnColonia:hover{
+    margin-left: .5rem;
+    margin-right: .5rem;
+    fill: #fff;
+    color: #fff;
+    cursor:pointer
 }
 </style>

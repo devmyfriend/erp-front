@@ -137,8 +137,6 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-/* import Swal from 'sweetalert2' */
 
 
 import DatosEmpresa from '../components/frmDatosGrales.vue'
@@ -206,45 +204,14 @@ export default {
         const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
 
-//Zona de recibimiento de props del URL
-        const router = useRoute()
-        espropietaria.value = router.params.esPropietaria
-        idempresa.value = router.params.id
-
-
-        alert( "Los datos son: Propiedad: " + espropietaria.value + " y el id es " + idempresa.value)
-
-        const validarEsNuevo = ()=>{
-            if(router.params.id && router.params.id > 0){
-                esnuevo.value = false 
-                idempresa.value  = router.params.id
-                alert("NO soy nuevo ");
-            }else{
-                alert("Soy nuevo ");
-            }
-        }
-//Zona de recibimiento de props del URL
-
         onMounted( async ()=>{
-            validarEsNuevo()            //Function para validar si el ID es 0 (Nuevo) o existente (Editar)
-            enlistarPaises()
-            enlistarEstados( pais.value )
+            
+            await store.cargarPaises()
+            await store.cargarRegimenes()
+            await storeDomicilio.cargaDatos()
 
+            // await storeDomicilio.cargaDatos()
         })
-
-        const enlistarPaises =()=>{
-            storeEmpresa.cargarPaises().then(()=>{
-                ListaPaises.value = storeEmpresa.listapaises
-                console.log('enlistar')
-                console.log(ListaPaises.value)
-            })
-        }
-
-        const enlistarEstados = ( clavepais )=>{
-            storeDomicilio.cargarEstado().then(()=>{
-                listaestado.value = storeDomicilio.Estado( clavepais )
-            })
-        }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
