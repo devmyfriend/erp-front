@@ -59,6 +59,7 @@
       let tablaNombre = ref('Empresas');
       let lista = ref( [] );
       let pagina = ref( [] );
+      let empPropietarias = ref( true );
       
       const store = useEmpresas();
       onBeforeMount(() => {
@@ -73,7 +74,8 @@
       return{
         tablaNombre,
         lista,
-        pagina
+        pagina,
+        empPropietarias
       }
     },
     components: {

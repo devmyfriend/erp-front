@@ -7,9 +7,10 @@ export const useEmpresas = defineStore( 'empresas', {
         paginas: {
             pagAct: 1,
             pagMax: 1,
-            cantidad: 2,    //Cambiar a 5
+            cantidad: 5,    //Cambiar a 5
             longitud: 0
         },
+        propietaria: false
     }),
     getters:{
         getListado( state ){
@@ -22,8 +23,9 @@ export const useEmpresas = defineStore( 'empresas', {
     actions:{
         async cargarListado(){
             try{
-                const long = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/viewLongitudListado` )
-                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/spListado?offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }`)
+                const long = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresas/longitud?propiedad=${this.propietaria}`)
+                console.log ("La longitud es \n" + JSON.stringify(long.data.LongitudListado))
+                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado?offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
                 const { ListadoEmpresas } = datos.data
                 if( datos.status === 200 && datos.statusText==="OK"){
                     this.lista = ListadoEmpresas
@@ -55,7 +57,7 @@ export const useEmpresas = defineStore( 'empresas', {
                     }
                 }
                 if(oldPag !== this.paginas.pagAct){
-                    const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/spListado?offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }`)
+                    const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado?offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
                     const { ListadoEmpresas } = datos.data
         
                     if( datos.status === 200 && datos.statusText==="OK"){
