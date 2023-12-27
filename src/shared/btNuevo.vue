@@ -1,5 +1,5 @@
 <template>
-    <router-link to="/empresas/formulario" >
+    <router-link :to="{ name: 'formulario', params: { esPropietaria: true, id: 5 } }">
         <button class="btn"> NUEVO </button>
     </router-link>
 </template>
