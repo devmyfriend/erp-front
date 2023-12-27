@@ -6,25 +6,25 @@
                   <img src="@/assets/img/imgEmpresa.svg" alt="Empresa">
               </div>            
               <div class="modulos-sideNav">
-                  <router-link to="/empresas/listado">
+                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
                       <img src="@/assets/img/orgIco.svg" alt="Empresa">
                       <p>Organización</p>
                   </router-link>
 
-                  <router-link to="/empresas/listado">
+                  <router-link :to="{ name: 'listado', params: { esPropietaria: true } }">
                       <img src="@/assets/img/ventaIco.svg" alt="Empresa">
                       <p>Ventas</p>
                   </router-link>
 
-                  <router-link to="/empresas/listado">
+                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
                       <img src="@/assets/img/compraIco.svg" alt="Empresa">
                       <p>Compras</p>
                   </router-link>
-                  <router-link to="/empresas/listado">
+                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
                       <img src="@/assets/img/catIco.svg" alt="Empresa">
                       <p>Catálogo</p>
                   </router-link>
-                  <router-link to="/empresas/listado">
+                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
                       <img src="@/assets/img/cfgIco.svg" alt="Empresa">
                       <p>Configuración</p>
                   </router-link>

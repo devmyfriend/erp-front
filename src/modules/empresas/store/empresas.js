@@ -68,7 +68,9 @@ export const useEmpresas = defineStore( 'empresas', {
                 console.log( error )
                 throw new Error( error )
             }
+        },
+        setPropietaria( propiedad ){
+            this.propietaria = propiedad
         }
-
     }
 })

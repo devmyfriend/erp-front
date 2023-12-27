@@ -45,7 +45,7 @@
   </template>
         
   <script>
-  import { ref, onBeforeMount } from 'vue'
+  import { ref, onBeforeMount, getCurrentInstance } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
@@ -55,27 +55,42 @@
   export default {
   
     name: 'tabla',
-    setup( props ){
+    props: {
+      esPropietaria: {
+        type: Boolean,
+        required: true
+      }
+    },
+    setup( props, { root } ){
       let tablaNombre = ref('Empresas');
       let lista = ref( [] );
       let pagina = ref( [] );
-      let empPropietarias = ref( true );
-      
+
       const store = useEmpresas();
+
       onBeforeMount(() => {
-          store.cargarListado().then(() => {
+
+        const instance = getCurrentInstance();
+        const router = instance.appContext.config.globalProperties.$router;
+        const esPropietaria = router.currentRoute.value.params.esPropietaria === 'true';
+        console.log('Es propietaria:', esPropietaria);
+        store.setPropietaria(esPropietaria);
+
+        store.cargarListado().then(() => {
             lista.value = store.getListado;
             pagina.value.pagAct = store.getPaginas.pagAct;
             pagina.value.pagMax = store.getPaginas.pagMax;
             pagina.value.cantidad = store.getPaginas.cantidad;
             pagina.value.longitud = store.getPaginas.longitud;
           })
+        
+        
       })
       return{
         tablaNombre,
         lista,
         pagina,
-        empPropietarias
+        
       }
     },
     components: {
