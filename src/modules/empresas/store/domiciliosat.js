@@ -5,102 +5,58 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
     state: ()=>({
         ListaEstados:      [],
         ListaMunicipios:   [],
-        Localidades:       [],
+        ListaCiudades:     [],
         ListaColonia:      [],
 
     }),
     getters:{
-        listaEstados( state ){
-            return state.ListaEstados.filter( estado => estado.ClavePais === 'MEX' )
-            // return state.ListaEstados
+        listadoestado(){
+            return this.listadoEstado
         },
-
-        Estado: ( state ) => {
-            return ( clavepais )=>state.ListaEstados.filter( estado => estado.ClavePais === clavepais )
+        listamunicipios( state, claveEstado ){
+            return state.ListaMunicipios.filter( municipio => municipio.ClaveEstado === claveEstado )
         },
-
-        listaMunicipios( state ){
-            return state.ListaMunicipios
-        },
-
-        listadoLocalidades( state ){
-            return state.Localidades
-        },
-
-        listadoColonias ( state ){
-            return state.ListaColonia
+        listaciudades( state, claveEstado ){
+            return state.ListaCiudades.filter( ciudad => ciudad.ClaveEstado === claveEstado )
         }
-        
     },
     actions:{
-        
-        async cargarEstado(){
+        async cargaDatos(){
             try{
                 
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/estado` )
-
-                if( datos.status === 200  && datos.statusText === "OK" ){
-                    const { listadoEstado } = datos.data
+                const [ datosEstados, datosMunicipios, datosCiudades, datosColonias ] = await Promise.all([
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/estado` ),
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/municipio` ),
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/localidad` ),
+                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/sat/colonias` ),
+                ])
+                
+                if( datosEstados.status === 200  && datosEstados.statusText === "OK" ){
+                    const { listadoEstado } = datosEstados.data
                     this.ListaEstados = listadoEstado
                 }
 
-            }catch ( error){
-                console.log( error )
-                throw new Error( error )
-            }
-        },
-        
-        async cargarMunicipio( claveestado ){
-            try{
-                
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/municipio/${ claveestado }` )
-                
-                if( datos.status === 200  && datos.statusText === "OK" ){
-                    const { listadoMunicipios } = datos.data
-                    this.ListaMunicipios = listadoMunicipios
+                if( datosMunicipios.status === 200  && datosMunicipios.statusText === "OK" ){
+
+                    const { listadoMunicipio } = datosMunicipios.data
+                    console.log(listadoMunicipio)
+                    this.ListaMunicipios = listadoMunicipio
                 }
 
-            }catch ( error){
-                console.log( error )
-                throw new Error( error )
-            }
-        },
-
-        async cargarLocalidad( claveestado ){
-
-            try{
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/localidad/${ claveestado }` )
-
-                if( datos.status === 200  && datos.statusText === "OK" ){
-                    console.log(datos.data)
-                    const { listadoLocalidades } = datos.data
-                    this.Localidades = listadoLocalidades
+                if( datosCiudades.status === 200  && datosCiudades.statusText === "OK" ){
+                    const { listadoLocalidad } = datosCiudades.data
+                    this.ListaCiudades = listadoLocalidad
                 }
 
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
-            }
-
-        },
-
-        async cargarColonia( codigopostal ){
-            try{
-               
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/${ codigopostal }` )
-
-                if( datos.status === 200  && datos.statusText === "OK" ){
-                    console.log(datos.data)
-                    const { listadoColonias } = datos.data
+                if( datosColonias.status === 200  && datosColonias.statusText === "OK" ){
+                    const { listadoColonias } = datosColonias.data
                     this.ListaColonia = listadoColonias
                 }
 
             }catch( error ){
                 console.log( error )
-                throw new Error( error )
+                throw new Error ( error )
             }
-
         }
-
     }
 })
