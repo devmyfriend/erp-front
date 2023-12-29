@@ -7,7 +7,7 @@ export const useEmpresas = defineStore( 'empresas', {
         paginas: {
             pagAct: 1,
             pagMax: 1,
-            cantidad: 5,    //Cambiar a 5
+            cantidad: 5,
             longitud: 0
         },
         propietaria: false
@@ -23,16 +23,15 @@ export const useEmpresas = defineStore( 'empresas', {
     actions:{
         async cargarListado(){
             try{
-                const long = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresas/longitud?propiedad=${this.propietaria}`)
-                console.log ("La longitud es \n" + JSON.stringify(long.data.LongitudListado))
-                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado?offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
-                const { ListadoEmpresas } = datos.data
+                const long = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresas/longitud/propiedad=${this.propietaria}`)
+                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado/offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
+                
                 if( datos.status === 200 && datos.statusText==="OK"){
-                    this.lista = ListadoEmpresas
+                    this.lista = datos.data.resultado
                 }                
 
                 if (long.status === 200 && long.statusText === "OK") {
-                    this.paginas.longitud = long.data.LongitudListado
+                    this.paginas.longitud = long.data.resultado
                     this.paginas.pagMax = Math.ceil( this.paginas.longitud / this.paginas.cantidad )   
                 }
             }catch( error ){
@@ -57,11 +56,10 @@ export const useEmpresas = defineStore( 'empresas', {
                     }
                 }
                 if(oldPag !== this.paginas.pagAct){
-                    const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado?offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
-                    const { ListadoEmpresas } = datos.data
+                    const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado/offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
         
                     if( datos.status === 200 && datos.statusText==="OK"){
-                        this.lista = ListadoEmpresas
+                        this.lista = datos.data.resultado
                     }      
                 }
             }catch( error ){
