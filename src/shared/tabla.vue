@@ -29,8 +29,10 @@
                     <td class="fila4">{{ item.Direccion }}</td>
                     <td class="fila5" >{{ item.NumeroTelefonico }}</td>
                     <td class="Acciones text-center"> 
-                      <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                      <a class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
+                      <router-link :to="{ name: 'formulario', params: { esPropietaria: true, id: item.EntidadNegocioId } }" class="mx-2"> <img src="@/assets/img/edit.svg" alt="Editar"> </router-link>
+                      <router-link :to="{ name: 'formulario', params: { esPropietaria: true, id: item.EntidadNegocioId } }" class="mx-2"> <img src="@/assets/img/trash.svg" alt="Borrar"> </router-link>
+<!--                       <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
+                      <a class="mx-2"><img src="@/assets/img/trash.svg" alt="Borrar"></a> -->
                     </td>
             </tr>
             </tbody>
