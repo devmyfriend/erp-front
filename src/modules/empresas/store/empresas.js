@@ -39,7 +39,7 @@ export const useEmpresas = defineStore( 'empresas', {
                 throw new Error( error )
             }
         },
-        async paginador(opcion){
+        async paginador(opcion, customPag){
             try{
                 const oldPag = this.paginas.pagAct
                 if(this.paginas.pagAct <= 1 && (opcion === 1 || opcion === 0)){
@@ -53,6 +53,13 @@ export const useEmpresas = defineStore( 'empresas', {
                         this.paginas.pagAct += 1
                     }else if (opcion === 3){
                         this.paginas.pagAct = this.paginas.pagMax
+                    }else if (opcion === -1){
+                        if( customPag > 1 && customPag <= this.paginas.pagMax){
+                            this.paginas.pagAct = customPag
+                        }else{
+                            this.paginas.pagAct = 1
+                            alert("La página ingresada no existe");
+                        }
                     }
                 }
                 if(oldPag !== this.paginas.pagAct){
