@@ -1,39 +1,60 @@
 <template>
   <div class="buscador text-start mb-4">
-    <input type="text" :placeholder="txtPlaceHolder" class="inputBuscador" @mouseenter="endFocus" @mouseleave="startFocus">
-    <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar">
+    <input type="text" class="inputBuscador" v-model="txtBusqueda" >
+    <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
 </div>
 </template>
   
 <script>
-import { ref } from 'vue';
+import { ref, defineProps, defineEmits, computed} from 'vue';
+const { useEmpresas } = require('../modules/empresas/store/empresas');
 
 export default {
   name: 'txtbuscador',
-  setup() {
+  emits: ['nuevaPagina', 'nuevaLista', 'nuevaPagMax', 'nuevoTexto'],
+  props: {
+    pagina: {
+      type: Array,
+      required: true,
+    },
+    lista: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  setup(props, { emit }) {
+    const store = useEmpresas();
+    let pagAct = ref(1);
+    let pagMax = ref(1);
+    let lista = ref([]);
+    let txtBusqueda = ref('');
+
     let txtPlaceHolder = ref('Buscar');
 
-    function buscar() {
-      if (txtPlaceHolder.value === 'Buscar') {
-        txtPlaceHolder.value = 'Buscando...';
-      } else{
-        txtPlaceHolder.value = 'Buscar';
-      } 
-    }
+    computed(() => {
+      lista.value = props.lista;
+      pagAct.value = props.pagina.pagAct;
 
-    function startFocus() {
-      txtPlaceHolder.value = 'Buscar';
-    }
+    })
 
-    function endFocus() {
-      txtPlaceHolder.value = '';
+    function buscar(text) {
+      store.setTexto(text);
+      emit('nuevoTexto', text)
+      store.setPagAct(1);
+        store.cargarListado().then(() => {
+          lista.value = store.getListado;
+          pagMax.value = store.getPaginas.pagMax;
+          emit('nuevaPagina', pagAct.value);
+          emit('nuevaPagMax', pagMax.value);
+          emit('nuevaLista', lista.value);
+        })
     }
 
     return {
       txtPlaceHolder,
       buscar,
-      startFocus,
-      endFocus,
+      txtBusqueda
     };
   },
 };

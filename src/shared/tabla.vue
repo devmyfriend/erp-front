@@ -5,10 +5,9 @@
   
   <div class="contComp p-0 pb-4">
       <div class="w-100 d-flex justify-content-between pt-4">
-        <txtbuscador></txtbuscador>
+        <txtbuscador :pagina="pagina" :lista="lista" @nuevaPagina="nuevaPagina" @nuevaLista="nuevaLista" @nuevaPagMax="nuevaPagMax" @nuevoTexto="nuevoTexto"></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
-      </div>
-
+      </div>      
       <div class="table-responsive">  
       <table class="table table-bordered border-2 border-dark rounded text-start">
             <thead>
@@ -36,7 +35,7 @@
             </tbody>
         </table>
       </div>
-      <Paginador :pagina="pagina" :lista="lista" @nuevaPagina="nuevaPagina" @nuevaLista="nuevaLista"/>
+      <Paginador :pagina="pagina" :lista="lista" @nuevaPagina="nuevaPagina" @nuevaLista="nuevaLista" @nuevaPagMax="nuevaPagMax" :txtBusqueda="txtBusqueda"/>
       <div class="botones">
         <button class="btn btn-save me-4">Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>
@@ -45,7 +44,7 @@
   </template>
         
   <script>
-  import { ref, onBeforeMount, getCurrentInstance } from 'vue'
+  import { ref, onBeforeMount, getCurrentInstance, watch } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
   import Paginador from '@/shared/paginador.vue';
   import  btNuevo from '@/shared/btNuevo.vue';
@@ -65,15 +64,14 @@
       let tablaNombre = ref('Empresas');
       let lista = ref( [] );
       let pagina = ref( [] );
+      let txtBusqueda = ref('');
 
       const store = useEmpresas();
 
       onBeforeMount(() => {
-
         const instance = getCurrentInstance();
         const router = instance.appContext.config.globalProperties.$router;
         const esPropietaria = router.currentRoute.value.params.esPropietaria === 'true';
-        console.log('Es propietaria:', esPropietaria);
         store.setPropietaria(esPropietaria);
 
         store.cargarListado().then(() => {
@@ -84,13 +82,13 @@
             pagina.value.longitud = store.getPaginas.longitud;
           })
         
-        
       })
+
       return{
         tablaNombre,
         lista,
         pagina,
-        
+        txtBusqueda
       }
     },
     components: {
@@ -104,6 +102,12 @@
       },
       nuevaLista(lista){
         this.lista = lista;
+      },
+      nuevaPagMax(pagMax){
+        this.pagina.pagMax = pagMax;
+      },
+      nuevoTexto(texto){
+        this.txtBusqueda = texto;
       }
     }
   }
