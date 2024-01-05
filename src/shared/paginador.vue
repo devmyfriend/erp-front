@@ -4,7 +4,7 @@
             <img class="btPag h-100 mx-3 bg-light px-3 py-1 rounded" src="@/assets/img/firstIco.svg" alt="Primera página" @click="cambio(0)">
             <img class="btPag h-100 ms-2 me-4 bg-light px-3 py-1 rounded" src="@/assets/img/prevIco.svg" alt="Página anterior" @click="cambio(1)">
             <div class="inp d-flex" style="max-width: 10rem;">
-                <input class="w-50 ms-1 bg-light text-center border-0 text-decoration-underline rounded" type="number"  v-model="pagAct">
+                <input class="w-50 ms-1 bg-light text-center border-0 text-decoration-underline rounded" type="number"  v-model="pagAct" >
                 <img class="h-100 mx-3 px-0 py-1" src="@/assets/img/midIco.svg" alt="separador">
                 <input class="w-50 ms-1 bg-light text-center border-0 text-decoration-underline rounded" type="number" v-model="pagMax" disabled>
             </div>
@@ -55,14 +55,14 @@ export default {
             pagAct.value = props.pagina.pagAct;
         })
         function cambio(opcion){
-                store.paginador(opcion, pagAct.value).then(() => {
-                    lista.value = store.getListado;
-                    pagAct.value = store.getPaginas.pagAct;
-                    pagMax.value = store.getPaginas.pagMax;
-                    emit('nuevaPagMax', pagMax.value);
-                    emit('nuevaPagina', pagAct.value);
-                    emit('nuevaLista', lista.value);
-                })
+            store.paginador(opcion, pagAct.value).then(() => {
+                lista.value = store.getListado;
+                pagAct.value = store.getPaginas.pagAct;
+                pagMax.value = store.getPaginas.pagMax;
+                emit('nuevaPagMax', pagMax.value);
+                emit('nuevaPagina', pagAct.value);
+                emit('nuevaLista', lista.value);
+            })
         }
         return {
             pagAct,

@@ -1,6 +1,6 @@
 <template>
   <div class="buscador text-start mb-4">
-    <input type="text" class="inputBuscador" v-model="txtBusqueda" >
+    <input type="text" class="inputBuscador" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)">
     <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
 </div>
 </template>
