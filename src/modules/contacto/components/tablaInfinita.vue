@@ -1,72 +1,8 @@
 
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import ScrollInfinito from './ScrollInfinito.vue'
-
-const { Lista, obtenerTelefonoCorreo, m_actualizarContacto, eliminarContacto } = defineProps({
-  Lista: Array,
-
-  obtenerTelefonoCorreo: Function,
-  m_actualizarContacto: Function,
-  eliminarContacto: Function
-
-})
-let items = ref([])
-let limit = ref(7)
-let offset = ref(0)
-
-console.log("Lista", Lista)
-//Seccion temporal en lo que se realiza el back de obtener contacto paginaddod
-
-
-const generaContacto = (limit, offset, delay = 1000) => {
-  const parte = Lista.slice(offset.value, offset.value + limit.value)
-  offset.value = offset.value + limit.value
-
-  return parte
-}
-const loadItems = async () => {
-
-  
-  if (limit.value <= Lista.length) {
-
-    const newItems = await generaContacto(limit, offset)
-    
-    items.value = [...items.value, ...newItems];
-    
-
-
-  }
-  if (offset.value >= Lista.length) {
-    
-    return;
-  }
-
-}
-
-//funciones padre invocadas en el hijo
-const  obtenerTelefonoCorreoHijo = (idContacto) =>{
-    obtenerTelefonoCorreo(idContacto)
-
-}
-
-const m_actualizarContactoHijo = (idContacto) =>{
-  m_actualizarContacto(idContacto)
-
-}
-
-const eliminarContactoHijo=(idContacto)=>{
-
-  eliminarContacto(idContacto)
-
-}
-
-
-
-
-
-</script>
 <template>
+
+
+
   <table class="table">
     <thead>
 
@@ -99,6 +35,79 @@ const eliminarContactoHijo=(idContacto)=>{
   </table>
 </template>
 
+<script setup>
+import { ref,defineProps, onMounted,watch,toRefs } from 'vue';
+import ScrollInfinito from './ScrollInfinito.vue'
+
+const { Lista, obtenerTelefonoCorreo, m_actualizarContacto, eliminarContacto } = defineProps({
+  Lista: Array,
+
+  obtenerTelefonoCorreo: Function,
+  m_actualizarContacto: Function,
+  eliminarContacto: Function
+
+})
+/*let items = ref([])
+let limit = ref(7)
+let offset = ref(0)
+*/
+console.log("Lista desde hijo", Lista)
+//Seccion temporal en lo que se realiza el back ded obtener contacto paginadoo
+
+const { items, limit, offset } = toRefs({
+  items: ref([]),
+  limit: ref(7),
+  offset: ref(0)
+});
+
+const generaContacto = (limit, offset) => {
+  const parte = Lista.slice(offset.value, offset.value + limit.value)
+  offset.value = offset.value + limit.value
+
+  return parte
+}
+const loadItems = async () => {
+
+  
+  if (limit.value <= Lista.length) {
+
+    const newItems = await generaContacto(limit, offset)
+    
+    items.value = [...items.value, ...newItems];
+    
+
+
+  }
+  if (offset.value >= Lista.length) {
+    
+    return;
+  }
+
+}
+
+//funciones padre invocadas en el hijoo
+const  obtenerTelefonoCorreoHijo = (idContacto) =>{
+    obtenerTelefonoCorreo(idContacto)
+
+}
+
+const m_actualizarContactoHijo = (idContacto) =>{
+  m_actualizarContacto(idContacto)
+
+}
+
+const eliminarContactoHijo=(idContacto)=>{
+
+  eliminarContacto(idContacto)
+
+}
+watch(Lista,(nuevaLista,antiguaLista)=>{
+  console.log("Observando...")
+  console.log(nuevaLista)
+})
+
+
+</script>
 <style lang="scss" scoped>
 @import '../../../styles/variables.scss';
 

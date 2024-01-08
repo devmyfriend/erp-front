@@ -29,8 +29,9 @@
         <img @click="anadir(tipoTabla)" class="icono " src="../assets/img/plus.png" />
       </div>
     </div>
-    <div v-if="tipoTabla == 'telefono'">
 
+    <div v-if="tipoTabla == 'telefono'">
+      
       <table class="table">
         <thead>
           <tr>
@@ -112,6 +113,7 @@
 import { ref, onMounted, reactive } from 'vue';
 import { Modal } from 'bootstrap';
 
+
 export default {
   props: {
     idEmpresa:{
@@ -154,12 +156,13 @@ export default {
 
     const anadir = (tipoEdicion) => {
       tipoEdit.value = tipoEdicion
-      console.log(props.Lista);
+      
       const regexTelefono = /^\d{10}$/;
       if (tipoEdit.value === 'telefono') {
         console.log("estoy en telefono");
         if (regexTelefono.test(valor.value)) {
           props.Lista.push({ "telefono": valor.value });
+          console.log("añadir",props.Lista[0].telefono);
 
           console.log(props.Lista);
           invalido.value = false
