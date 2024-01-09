@@ -1,4 +1,4 @@
-<template lang="">
+<template lang="es">
     <div>
         <div class="frame">
             <h1>Datos generales</h1>
@@ -153,7 +153,7 @@
                 </select>
                </fieldset>
 
-               <fieldset>
+<!--                <fieldset>
                 <label class="labelColonia" for="colonia">Colonia</label>
                 <select class="colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
                     <option selected value="{{colonia}}">{{colonianombre}}</option>
@@ -162,7 +162,7 @@
                     <option value="3">Colonia 3</option>
                     <option value="4">Colonia 4</option>
                 </select>
-                <a href="">
+                <a class="BtAgregarColonia">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
                         <path
                             d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
@@ -171,9 +171,36 @@
                             d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
                             fill="white" />
                     </svg>
-
                 </a>
-               </fieldset>
+               </fieldset> -->
+
+                <fieldset class="fsColonias">
+                    
+                    <label class="labelColonia" for="colonia">Colonia</label>
+                    <div v-if="!MostrarColoniaNueva">
+                        <select class="selectColonias colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
+                            <option v-for="opcion in optColonia" :key="opcion">{{ opcion.nombre }}</option>
+                        </select>
+                        <a class="BtAgregarColonia" @click="MostrarColoniaNueva = true;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
+                                <path
+                                    d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
+                                    fill="#999999" />
+                                <path
+                                    d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
+                                    fill="white" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div v-else class="frmNuevaColonia">
+                        <input class="inpColonia" v-model="nuevaColonia" type="text" placeholder="Nueva colonia" >
+                        <button @click="GuardarColonia" class="btAgregarColonias">Guardar</button>
+                        <button @click="MostrarColoniaNueva = false;" class="btCancelarColonias">Cancelar</button>
+                    </div>
+
+                </fieldset>
+
             </form>
         </div>
     </div>
@@ -279,12 +306,36 @@ export default {
         
         const listadoestado      = ref( [] )
 
+        const nuevaColonia       = ref('')
+        const optColonia         = ref( [] )
+        const listadoCP          = ref( [] )
+        const MostrarColoniaNueva = ref(false)
+
+        function GuardarColonia(){
+            if (nuevaColonia.value != "" && MostrarColoniaNueva.value == true){
+                const stringCP = codigopostal.value.toString()
+                const body = {
+                    CodigoPostal: stringCP,
+                    Nombre: nuevaColonia.value
+                }
+                
+                store.crearColonia(body).then(() => {
+                    optColonia.value = store.listaColonias
+                })
+                
+                MostrarColoniaNueva.value = false;
+                nuevaColonia.value = "";
+            }else{
+                alert("Error: No se puede agregar una colonia vacia");
+                console.log(MostrarColoniaNueva.value);
+            }
+        }
+
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
 
         const store = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
-
         onMounted(() => {
             // store.cargarPaises().then(() => {
             //     ListaPaises.value = store.listapaises
@@ -302,13 +353,13 @@ export default {
             listaregimenes.value = store.listaPFisica
             listadoestado.value = storeDomicilio.listadoestado
 
-
+            store.cargarCP().then(() => {
+                listadoCP.value = storeDomicilio.listadoCP
+            })
         })
 
         const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
         const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
-
-
 
         const PersonaSelecionada = (valor) => {
             personafisica.value = valor
@@ -329,6 +380,22 @@ export default {
                 listaregimenes.value = store.listaPFisica
             }else{
                 listaregimenes.value = store.listaPMoral
+            }
+        })
+
+        watch( colonia, ( opcion )=>{
+            if(opcion === 'Nuevo'){
+                MostrarColoniaNueva.value = true;
+            }else{
+                MostrarColoniaNueva.value = false;
+            }
+        })
+
+        watch (codigopostal, (cp) => {
+            if (cp.length === 5) {
+                store.cargarColoniasPorCP(cp).then(() => {
+                    optColonia.value = store.listaColonias
+                })
             }
         })
 
@@ -413,6 +480,13 @@ export default {
             actualizarValores,
             PersonaSelecionada,
             // validarArchivo,
+            colonia,
+            GuardarColonia,
+            nuevaColonia,
+            optColonia,
+            MostrarColoniaNueva,
+            listadoCP,
+
 
         }
 
@@ -765,5 +839,21 @@ select {
 
 option {
     color: #999999;
+}
+
+.fsColonias{
+    display: flex;
+    align-items: center;
+}
+
+.inpColonia {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 16.431875rem !important;
+    color: #999999
 }
 </style>

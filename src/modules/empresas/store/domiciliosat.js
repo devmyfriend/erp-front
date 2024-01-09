@@ -39,7 +39,7 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
                 if( datosMunicipios.status === 200  && datosMunicipios.statusText === "OK" ){
 
                     const { listadoMunicipio } = datosMunicipios.data
-                    console.log(listadoMunicipio)
+                    console.log("[ListMunicipios]: " + listadoMunicipio)
                     this.ListaMunicipios = listadoMunicipio
                 }
 

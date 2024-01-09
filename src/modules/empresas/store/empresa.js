@@ -16,6 +16,8 @@ export const useEmpresa = defineStore( 'empresa', {
         NombreComercial: '',
         ListaPaises :    [],
         ListaRegimenes:  [],
+        ListaCP:        [],
+        ListaColonias: [],
 
         Calle: '',
         NoInt: '',
@@ -39,6 +41,12 @@ export const useEmpresa = defineStore( 'empresa', {
         },
         listaPMoral ( state ){
             return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
+        },
+        listaCP( state ){
+            return state.ListaCP
+        },
+        listaColonias( state ){
+            return state.ListaColonias
         }
     },
     actions:{
@@ -71,6 +79,51 @@ export const useEmpresa = defineStore( 'empresa', {
                 }
 
             }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        async cargarCP(){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/codigospostal`)
+                
+                const { listadoCP } = datos.data
+                console.log( listadoCP )
+
+                if( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListaCP = listadoCP
+                }
+            }catch(error){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        async cargarColoniasPorCP( cp ){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/${cp}`)
+                
+                console.log(datos.data.listadoColonias)
+
+                if( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListaColonias = datos.data.listadoColonias
+                }
+
+            }catch(error){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        async crearColonia(body){
+            try{
+                const datos = await axios.post(`${process.env.VUE_APP_PATH_API}v1/colonias/crear`, body)
+                
+
+                if( datos.status === 200 && datos.statusText==="OK"){
+                    console.log("Colonia creada")
+                    this.ListaColonias = datos.data.listadoColonias
+                }
+
+            }catch(error){
                 console.log( error )
                 throw new Error( error )
             }
