@@ -4,13 +4,15 @@ export default{
     component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
     children:[
         {
-            path:'listado',
+            path:'listado/:esPropietaria',
             name: 'listado',
-            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/empresas/views/listEmpresas.vue')
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/empresas/views/listEmpresas.vue'),
+            props: true
         },{
-            path: 'formulario',
+            path: 'formulario/:esPropietaria/:id',
             name: 'formulario',
-            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue')
+            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue'),
+            props: true
         }
     ]
 }

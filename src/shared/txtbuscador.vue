@@ -18,7 +18,7 @@ export default {
         txtPlaceHolder.value = 'Buscando...';
       } else{
         txtPlaceHolder.value = 'Buscar';
-      }
+      } 
     }
 
     function startFocus() {
@@ -41,14 +41,13 @@ export default {
 
 <style lang="scss" scoped>
 .buscador {
-  background-color: #D9D9D9;;
   width: 100%;
 }
 .inputBuscador{
-  width: 16.625rem;
+  width: 29rem;
   height: 2.1875rem;
   padding: 0.5rem;
-  font-size: 1.125re;
+  font-size: 1.125rem;
   font-weight: 100;
   color: #CBCBCB;
   margin-left: 1rem;
@@ -70,10 +69,4 @@ export default {
   margin-bottom: 0.4375rem;
   margin-left: 1rem;
 }
-.iconoBuscador:hover {
-  width: 1.625rem;
-  height: 1.625rem;
-  margin-bottom: 0.3125rem;
-  margin-left: 0.875rem;
-} 
 </style>

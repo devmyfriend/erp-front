@@ -6,7 +6,7 @@
       <img src="@/assets/img/userIco.svg" alt="userIco" class="userIcon">
       <form @submit.prevent="login">
         <div class="form-group">
-          <p class="msjFallo" v-if="failLogin"> El usuario y/o contraseña son incorrectos</p>  
+          <p class="msjFallo" v-if="falloIniciarSesion"> El usuario y/o contraseña son incorrectos</p>  
         </div>
         <div class="form-group">
           <input type="email" id="email" v-model="email" class="form-control" required placeholder="Correo electrónico" >
@@ -32,7 +32,7 @@
       return {
         email: '',
         password: '',
-        failLogin: true
+        falloIniciarSesion: false
       };
     },
     methods: {
@@ -112,7 +112,7 @@
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: #175539;
   }
   .recPassw a {
       color: #000;

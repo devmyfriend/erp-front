@@ -58,7 +58,6 @@ export const useEmpresa = defineStore( 'empresa', {
                 throw new Error( error )
             }
         },
-
         async cargarRegimenes (){
             try{
                 
@@ -75,22 +74,7 @@ export const useEmpresa = defineStore( 'empresa', {
                 console.log( error )
                 throw new Error( error )
             }
-        },
-
-        async crearEmpresa( datos ){
-            try{
-                console.log( datos )
-                /*TODO: falta realizar la conexion para validar que los estatus esten de forma correcta*/
-                // const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/fiscales/empresa/crear`,datos)
-
-                return 'ok'
-
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
-            }
         }
-
     }
 
 })

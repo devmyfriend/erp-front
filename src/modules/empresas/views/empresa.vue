@@ -47,7 +47,7 @@
                 <Sucursal></Sucursal>
             </template>
         </Modal>
-        <!--<Modal>
+        <!-- <Modal>
             <template v-slot:header>
                 <div class="headerSucursal">
                     <div class="tituloSucursal">
@@ -67,7 +67,7 @@
                 </div>
                 <Sucursales></Sucursales>
             </template>
-        </Modal>--> 
+        </Modal> -->
         <div class="contenedor">
             <div class="datosEmpresa">
                 <DatosEmpresa 
@@ -94,12 +94,7 @@
                     :municipionombre="municipionombre"    
                     :noext="noext"              
                     :noint="noint"
-                    :Lista-Paises="ListaPaises"
-                    :listaregimenes="listaregimenes"
-                    :listaestados="listaestado"
-                    
-                    @actualizarValores="actualizarValoresComponenteHijo"  
-
+                    @actualizarValores="actualizarValoresComponenteHijo"              
                 />
                 <div class="sucursales">
                     <h3>Sucursales</h3>
@@ -129,7 +124,7 @@
             </div>
         </div>
         <div class="botones">
-            <button class="btn btn-save" @click="guardar"> Guardar</button>
+            <button class="btn btn-save"> Guardar</button>
             <button class="btn btn-danger">Cancelar</button>
         </div>
     </div>
@@ -137,8 +132,6 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import Swal from 'sweetalert2'
 
 
 import DatosEmpresa from '../components/frmDatosGrales.vue'
@@ -180,7 +173,6 @@ export default {
         const regimenfiscal      = ref( '' )
         const rfc                = ref( '' )
         const taxid              = ref( '' )
-        const espropietaria      = ref( false )
 
         const calle              = ref( '' )
         const ciudad             = ref( '' )
@@ -203,39 +195,17 @@ export default {
         const haySucursal = ref ( false )
         const seEditaSucursal = ref ( false )
 
-        const storeEmpresa = useEmpresa()
+        const store = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
-
-        // const router = useRoute()
-        // espropietaria = router.params.propietaria
-
-        // const validarEsNuevo = ()=>{
-        //     if(router.params.id && router.params.id > 0){
-        //        esnuevo.value = false 
-        //        idempresa.value  = router.params.id
-        //     }
-        // }
 
         onMounted( async ()=>{
             
-            enlistarPaises()
-            enlistarEstados( pais.value )
+            await store.cargarPaises()
+            await store.cargarRegimenes()
+            await storeDomicilio.cargaDatos()
 
+            // await storeDomicilio.cargaDatos()
         })
-
-        const enlistarPaises =()=>{
-            storeEmpresa.cargarPaises().then(()=>{
-                ListaPaises.value = storeEmpresa.listapaises
-                console.log('enlistar')
-                console.log(ListaPaises.value)
-            })
-        }
-
-        const enlistarEstados = ( clavepais )=>{
-            storeDomicilio.cargarEstado().then(()=>{
-                listaestado.value = storeDomicilio.Estado( clavepais )
-            })
-        }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
@@ -268,214 +238,7 @@ export default {
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
         }
-
-        const validarRFC = ()=>{
-            if( rfc.value.length >= 12 && rfc.value.length <= 13 ){
-                return false
-            }else{
-                return true
-            }
-        }
-        
-        const validarNombreOficial = ()=>{
-            if( nombreoficial.value.length >= 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-        const validarCodigoPostal = ()=>{
-            if( codigopostal.value.length === 5 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarPais = ()=>{
-            if( pais.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarRegimen = ()=>{
-            if( regimenfiscal.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarEstado = ()=>{
-            if( estado.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarMunicipio = ()=>{
-            if( municipio.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarLocalidad = ()=>{
-            if( ciudad.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarColonia = ()=>{
-            if( colonia.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-
-
-        const guardar= ()=>{
-
-            const datos = {
-                Entidad:{
-                    
-                    ClavePais:          pais.value,
-                    ClaveRegimenFiscal: regimenfiscal.value,
-                    EsPropietaria:      espropietaria.value,
-                    NombreComercial:    nombrecomercial.value,
-                    NombreOficial:      nombreoficial.value,
-                    PersonaFisica:      personafisica.value,
-                    PersonaMoral:       personamoral.value,
-                    RFC:                rfc.value,
-                },
-                Domicilio:{
-                    Calle:              calle.value,
-                    ClaveColonia:       colonia.value,
-                    ClaveEstado:        estado.value,
-                    ClaveLocalidad:     ciudad.value,
-                    ClaveMunicipio:     municipio.value,
-                    CodigoPostal:       codigopostal.value,
-                    NumeroExt:          noext.value,
-                    NumeroInt:          noint.value,
-                    Pais:               pais.value,
-                }
-            }
-
-            let error = false
-
-            if( validarRFC() ){
-                error = true
-                Swal.fire({
-                    title: 'RFC',
-                    text:  'El R.F.C. no cumple con los requerimientos basicos',
-                    icon:  'error'
-                })
-            }
-
-            if( validarNombreOficial() ){
-                error = true
-                Swal.fire({
-                    title: 'Nombre Oficial',
-                    text:  'El Nombre Oficial no cumple con los requerimientos basicos',
-                    icon:  'error'
-                })
-            }
-
-            if( validarCodigoPostal() ){
-                error = true
-                Swal.fire({
-                    title: 'Código Postal',
-                    text:  'El Código Postal no cumple con los requerimientos basicos',
-                    icon:  'error'
-                })
-            }
-
-            if( validarPais() ){
-                error = true
-                Swal.fire({
-                    title: 'País',
-                    text:  'El País no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarRegimen() ){
-                error = true
-                Swal.fire({
-                    title: 'Régimen Fiscal',
-                    text:  'El Régimen Fiscal no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarEstado() ){
-                error = true
-                Swal.fire({
-                    title: 'Estado',
-                    text:  'El Estado no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarMunicipio() ){
-                error = true
-                Swal.fire({
-                    title: 'Municipio',
-                    text:  'El Municipio no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarLocalidad() ){
-                error = true
-                Swal.fire({
-                    title: 'Localidad',
-                    text:  'La Localidad no fue seleccionada',
-                    icon:  'error'
-                })
-            }
-
-            if( validarColonia() ){
-                error = true
-                Swal.fire({
-                    title: 'Colonia',
-                    text:  'La Colonia no fue seleccionada',
-                    icon:  'error'
-                })
-            }
-
-            if( !error ){
-                storeEmpresa.crearEmpresa( datos ).then( (error, datos)=>{
-                    if(error){
-                        Swal.fire({
-                            title: 'Error',
-                            text:  'No se puedo crear la empresa',
-                            icon:  "error"
-                        })
-                    }
-                    
-                    Swal.fire({
-                        title: 'Empresa Creada',
-                        text:  datos,
-                        icon: 'success'
-                    })
-                })
-                Swal.fire({
-                        title: "The Internet?",
-                        text: "That thing is still around?",
-                        icon: "question"
-                })
-            }
-        }
-        
+       
         
         return{
 
@@ -506,11 +269,6 @@ export default {
             regimenfiscal      ,
             rfc                ,
             taxid              ,
-            espropietaria      ,
-
-            listaestado        ,
-
-            guardar            ,
 
 
             abrircerrarSucursal,
