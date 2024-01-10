@@ -86,12 +86,9 @@ export const useEmpresa = defineStore( 'empresa', {
         async cargarCP(){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/codigospostal`)
-                
-                const { listadoCP } = datos.data
-                console.log( listadoCP )
-
+            
                 if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaCP = listadoCP
+                    this.ListaCP = datos.data.listadocodigos
                 }
             }catch(error){
                 console.log( error )
@@ -101,9 +98,6 @@ export const useEmpresa = defineStore( 'empresa', {
         async cargarColoniasPorCP( cp ){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/${cp}`)
-                
-                console.log(datos.data.listadoColonias)
-
                 if( datos.status === 200 && datos.statusText==="OK"){
                     this.ListaColonias = datos.data.listadoColonias
                 }
@@ -119,7 +113,6 @@ export const useEmpresa = defineStore( 'empresa', {
                 
 
                 if( datos.status === 200 && datos.statusText==="OK"){
-                    console.log("Colonia creada")
                     this.ListaColonias = datos.data.listadoColonias
                 }
 
