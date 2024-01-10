@@ -125,7 +125,7 @@
                 </div>
             </div>
             <div class="datosContactos">
-                <!-- <Contacto></Contacto> -->
+                <Contacto></Contacto>
             </div>
         </div>
         <div class="botones">

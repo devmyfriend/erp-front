@@ -68,7 +68,7 @@
 <script>
     import datosTabla from '@/shared/datosTabla.vue';
     import {Modal} from 'bootstrap'
-import { onMounted,ref } from 'vue';
+import { onMounted,ref, onBeforeUnmount,watch } from 'vue';
   export default {
     components:{
 
@@ -129,8 +129,13 @@ import { onMounted,ref } from 'vue';
       },
       modo:{
         type:String
-      }
+      },
+   
+      trigger:{
+        type:String,
+        default:''
 
+      }
     },
     setup(props,context){
         let modalEle = ref(null)
@@ -139,10 +144,12 @@ import { onMounted,ref } from 'vue';
           const nombres = ref('')
           const departamento = ref('')
           const puesto = ref('')
-        const telefonos = ref([])
-        const correos = ref([])
+        const telefonos = ref(props.Telefonos)
+        const correos = ref(props.Correos)
         
         let modalObj = null
+          
+    
         if(props.modo == 'actualizar'){
            apellidoPaterno.value = props.ApellidoPaterno
            apellidoMaterno.value = props.ApellidoMaterno
@@ -154,7 +161,7 @@ import { onMounted,ref } from 'vue';
         
    
         const h_guardarContacto = () =>{
-          console.log("entre guardar");
+        
             const datos = {
                 SucursalId:props.SucursalId,
                 ApellidoPaterno: apellidoPaterno.value,
@@ -166,6 +173,7 @@ import { onMounted,ref } from 'vue';
                 ActualizadoPor:props.ActualizadoPor
             }
             console.log(datos)
+            
             context.emit('guardar-contacto',datos,telefonos.value,correos.value)
             modalObj.hide()
 
@@ -173,7 +181,7 @@ import { onMounted,ref } from 'vue';
 
         const h_actualizarContacto = () =>{
             
-          console.log("entre actualizar");
+         
           const datos = {
                 SucursalId:props.SucursalId,
                 ApellidoPaterno: apellidoPaterno.value,
@@ -187,17 +195,36 @@ import { onMounted,ref } from 'vue';
             }
             console.log(datos)
             context.emit('actualizar-contacto',datos,telefonos.value,correos.value)
+            
             modalObj.hide()
 
         }
+     
+
         onMounted(()=>{
-           
-            
-            modalObj = new Modal(modalEle.value) 
+           console.log("Montando modal");
+          modalObj = new Modal(modalEle.value) 
+       
+          if(props.modo != ''){
             modalObj.show()
+          }
+         
+
+       
 
         });
-
+    
+        onBeforeUnmount(() => {
+          console.log("modificando modo");
+          context.emit('modificarModo','');
+      // Realizar tareas de limpieza, cancelar suscripciones, liberar recursos, etc.
+    });
+  
+    watch(() => props.modo, (nuevoModo) => {
+      if (nuevoModo !== '') {
+        modalObj.show();
+      }
+    });
         return{
 
             modalEle,
