@@ -2,7 +2,11 @@
     <div class="formularioSucursal">
         <form>
             <fieldset>
-                <label for="">Nombre del responsable</label>
+                <!-- <label for="">Nombre de la sucursal</label> <br> -->
+                <input class="nombreSucursal" type="text" name="txtCalle" id="idCalle" placeholder="Nombre de Sucursal">
+            </fieldset>
+            <fieldset>
+                <!-- <label for="">Nombre del responsable</label> -->
                 <select class="responsableSucursal" name="txtResponsable" id="idResponsable">
                     <option va lue="">Nombre del responsable</option>
                 </select>
@@ -17,11 +21,11 @@
             </fieldset>
             <fieldset>
                 <div class="grupoField">
-                    Código Postal
+                    <!-- Código Postal -->
                     <input class="codigoPostal" type="test" name="txtCodigoPostal" placeholder="Código Postal">
                 </div>
                 <div class="grupoField">
-                    Estado
+                    <!-- Estado -->
                     <select class="estadoSucursal" name="txtEstado" id="idEstado">
                         <option value="">Estado</option>
                     </select>
@@ -29,19 +33,19 @@
             </fieldset>
             <fieldset>
                 <div class="grupoField">
-                    Municipio
+                    <!-- Municipio -->
                     <select class="municipioSucursal" name="txtEstado" id="idEstado">
                         <option value="">Municipio</option>
                     </select>
                 </div>
                 <div class="grupoField">
-                    Localidad
+                    <!-- Localidad -->
                     <select class="ciudadSucursal" name="txtEstado" id="idEstado">
                         <option value="">Ciudad</option>
                     </select>
                 </div>
             </fieldset>
-            <fieldset>
+            <fieldset style="margin-top: 1.5rem;">
                 <Telefonos
                     :Lista="listatelfonos"
                     :tipoTabla="tablatelfono"
@@ -54,12 +58,16 @@
                 >
                 </Emails>
             </fieldset>
+            <div class="botones">
+                <button class="btn btn-save" @click="guardar"> Guardar</button>
+                <button class="btn btn-danger">Cancelar</button>
+            </div>
         </form>
     </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue';
 import Telefonos from '@/shared/datosTabla.vue'
 import Emails from '@/shared/datosTabla.vue'
 
@@ -68,14 +76,17 @@ export default {
         Emails,
         Telefonos,
     },
-    
-    setup () {
+    props:{
+        idempresa: Number,
+    },
+    setup (props) {
 
         const listaemails = ref( [] )
         const listatelfonos     = ref( [] )
         const tablaemail = ref('correo')
         const tablatelfono = ref( 'telefono' )
         
+        const idempresa = ref( props.idempresa )
         
         listatelfonos.value=[{
             index    : 1,
@@ -86,6 +97,14 @@ export default {
             index:1,
             email:'horaciohdez@gmail.com'
         }]
+
+        const guardar = ()=>{
+            const datos ={
+                idempresa,
+                nombresucursal,
+
+            }
+        }
 
         return {
 
@@ -113,6 +132,10 @@ export default {
     padding: 0;
     text-align: left;
     width: 100%;
+}
+
+.nombreSucursal{
+    width: 37.8125rem;
 }
 
 select {
@@ -173,5 +196,21 @@ select {
     width: 17.45rem;
     margin-top: .5rem;
 
+}
+
+.botones {
+    width: 100%;
+    height: 5.75rem;
+    padding-top: 1.8125rem;
+    text-align: center;
+}
+
+button {
+    width: 9.375rem;
+    height: 2.1875rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 </style>
