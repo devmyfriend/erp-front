@@ -6,7 +6,7 @@
                <fieldset>
                    <input 
                         v-model="idempresa" 
-                        class="idEmpresa" 
+                        class="compo_base compo_corto" 
                         type="text" 
                         name="idEmpresa" 
                         id="idEmpresa" 
@@ -27,7 +27,7 @@
                <fieldset>
                    <input 
                         v-model="rfc" 
-                        class="rfc" 
+                        class="compo_base compo_corto" 
                         type="text" 
                         name="RFC" 
                         id="idRFC" 
@@ -39,9 +39,9 @@
                     />
                    <input 
                         v-model="nombreoficial" 
-                        class="nombreOficial" 
+                        class="compo_med" 
                         type="text" 
-                        name="nombreOficial" 
+                        name="compo_med" 
                         id="idRazonSocial" 
                         placeholder="Razón Social"
                         @input="actualizarValores"
@@ -55,15 +55,15 @@
                         <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
                     </select> -->
 
-                    <label class="labelPais" for="pais">País</label>
-                    <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
+                    <label class="label_med" for="pais">País</label>
+                    <select class="compo_med" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
                         <option v-for="opcion in ListaPaises" :key="opcion">{{ opcion.Descripcion }}</option>
                     </select>
 
                </fieldset>
                <fieldset>
-                    <label class="labelPersonas" for="personaFisica">Persona Fisica</label>
-                    <input class="Persona" 
+                    <label class="label_med pFisica" for="personaFisica">Persona Fisica</label>
+                    <input class="radio" 
                            type="radio" 
                            name="persona" 
                            id="idPersonaFisica"
@@ -71,8 +71,8 @@
                            :checked="personafisica"
                            @input="actualizarValores"
                     />
-                    <label class="labelPersonas" for="personaMoral">Persona Moral</label>
-                    <input class="Persona" 
+                    <label class="label_med pMoral" for="personaMoral">Persona Moral</label>
+                    <input class="radio" 
                            type="radio" 
                            name="persona" 
                            id="idPersonaMoral" 
@@ -83,13 +83,13 @@
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
-                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
+                    <select class="compo_lg" name="claveRegimenFiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
                     </select>
                </fieldset>
                <fieldset> 
-                    <input class="nombreComercial" 
+                    <input class="compo_lg" 
                            type="text" 
                            name="nombreComercial" 
                            id="idNombreComercial" 
@@ -101,7 +101,7 @@
                <h1>Domicilio</h1>
                <fieldset>
                <input v-model="calle" 
-                      class="calleDomicilio" 
+                      class="compo_base calle" 
                       type="text" 
                       name="calleDomicilio" 
                       id="calleDomicilio" 
@@ -109,7 +109,7 @@
                       @input="actualizarValores"
                 />
                <input v-model="noext" 
-                      class="numExtDomicilio"
+                      class="compo_base compo_corto noext"
                       type="text"
                       name="numExtDomicilio" 
                       id="numExtDomicilio" 
@@ -118,7 +118,7 @@
                       @input="actualizarValores"
                 />
                <input v-model="noint" 
-                      class="numIntDomicilio"
+                      class="compo_base compo_corto noint"
                       type="text"
                       name="numIntDomicilio" 
                       id="numIntdomicilio" 
@@ -128,8 +128,7 @@
                 />
                </fieldset>
                <fieldset>
-                <input v-model="codigopostal" class="codigoPostal" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal" @input="actualizarValores" />
-
+                <input v-model="codigopostal" class="compo_base compo_corto" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal" @input="actualizarValores, validarCargaColonias( codigopostal, claveMunicipio)" />
 
                 <!-- <label class="labelEstados" for="estado">Estado</label>
                 <select class="claveEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
@@ -138,10 +137,10 @@
                 <!-- </select> -->
 
                 <label class="labelEstados" for="estado">Estado</label>
-                <select class="claveEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
+                <select class="compo_base cEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
                     <option v-for="opcion in listadoestado" :key="opcion">{{ opcion.Nombre }}</option>
                 </select>
-            </fieldset>
+               </fieldset>
                <fieldset>
                    <!-- <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
                    <select class="municipio" name="municipio" id="municipio" v-model="municipio" @change="actualizarValores">
@@ -149,8 +148,8 @@
                     -->    <!-- <option v-for="optMunicipio in ListaMunicipios" :key="optMunicipio.claveMunicipio" :value="optMunicipio.claveMunicipio">{{optMunicipio.Descripcion}}</option> -->
                    <!-- </select>  -->
                    
-                    <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
-                    <select class="municipio" name="municipio" id="idmunicipio" v-model="municipio" @change="actualizarValores">
+                    <label class="label_med" for="municipio">Deleg./Municipio</label>
+                    <select class="compo_med" name="municipio" id="idmunicipio" v-model="municipio" @change="actualizarValores">
                         <option v-for="opcion in listadoMunicipios" :key="opcion">{{ opcion.Nombre}}</option>
                     </select>
                    
@@ -166,8 +165,8 @@
                     <option value="4">Cozumel</option>
                 </select> -->
 
-                <label class="labelCiudad" for="ciudad">Ciudad</label>
-                <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
+                <label class="label_med" for="ciudad">Ciudad</label>
+                <select class="compo_med" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
                     <option v-for="opcion in listadoCiudades" :key="opcion">{{ opcion.Nombre}}</option>
                 </select>
 
@@ -196,12 +195,12 @@
 
                 <fieldset class="fsColonias">
                     
-                    <label class="labelColonia" for="colonia">Colonia</label>
-                    <div v-if="!MostrarColoniaNueva">
-                        <select class="selectColonias colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
+                    <label class="label_med" for="colonia">Colonia</label>
+<!--                     <div v-if="!MostrarColoniaNueva"> -->
+                        <select class="compo_med" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
                             <option v-for="opcion in optColonia" :key="opcion">{{ opcion.nombre }}</option>
                         </select>
-                        <a class="BtAgregarColonia" @click="MostrarColoniaNueva = true;">
+<!--                         <a class="BtAgregarColonia" @click="MostrarColoniaNueva = true;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
                                 <path
                                     d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
@@ -210,14 +209,14 @@
                                     d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
                                     fill="white" />
                             </svg>
-                        </a>
-                    </div>
+                        </a> -->
+<!--                     </div> -->
 
-                    <div v-else class="frmNuevaColonia">
+<!--                     <div v-else class="frmNuevaColonia">
                         <input class="inpColonia" v-model="nuevaColonia" type="text" placeholder="Nueva colonia" >
                         <button @click="GuardarColonia" class="btAgregarColonias">Guardar</button>
                         <button @click="MostrarColoniaNueva = false;" class="btCancelarColonias">Cancelar</button>
-                    </div>
+                    </div> -->
 
                 </fieldset>
 
@@ -299,8 +298,6 @@ export default {
         const descripcionregimen = ref( props.descripcionregimen )
         const esextranjero       = ref( props.esextranjero )
         const idempresa          = ref( props.idempresa )
-        const ListaPaises        = ref( [])
-        const listaregimenes     = ref( [] )
         const nombrecomercial    = ref( props.nombrecomercial )
         const nombreoficial      =  ref( props.nombreoficial )
         const pais               = ref( props.pais )
@@ -324,17 +321,20 @@ export default {
         const noext              = ref(props.noext)              
         const noint              = ref(props.noint)   
         
-        const listadoestado      = ref( [] )
-        const nuevaColonia       = ref('')
-        const optColonia         = ref( [] )
-        const listadoCP          = ref( [] )
-        const listadoMunicipios  = ref( [] )
-        const MostrarColoniaNueva = ref(false)
-        const claveMunicipio     = ref( '' )
-        const claveEstado        = ref( '' )
-        const listadoCiudades    = ref( [] )
+        const listaregimenes     = ref( [] )
+        const ListaPaises        = ref( [])
+        
         const clavePais          = ref( '' )
+        const listadoestado      = ref( [] )
+        const claveEstado        = ref( '' )
+        const listadoMunicipios  = ref( [] )
+        const claveMunicipio     = ref( '' )
+        const listadoCiudades    = ref( [] )
 
+        const optColonia         = ref( [] )
+        const nuevaColonia       = ref('')
+        
+        const MostrarColoniaNueva = ref(false)
         function GuardarColonia(){
             if(codigopostal.value.length === 5){
                 if (nuevaColonia.value != "" && MostrarColoniaNueva.value == true){
@@ -366,8 +366,8 @@ export default {
         const store = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
         onMounted(() => {
-            storeDomicilio.cargarPaises().then(() => {
-                ListaPaises.value = storeDomicilio.listadopais
+            store.cargarPaises().then(() => {
+                ListaPaises.value = store.getPaises
             })
 
             // store.cargarRegimenes().then(() => {
@@ -383,12 +383,24 @@ export default {
             listadoestado.value = storeDomicilio.listadoestado */
         })
 
-        const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
+        /* const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises ) */
         const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
 
         const PersonaSelecionada = (valor) => {
             personafisica.value = valor
             personamoral.value = !personafisica.value
+        }
+
+        function validarCargaColonias(cp, cPais){
+            var regex = /^[0-9]+$/;
+
+            if (cp.length === 5 && (regex.test(cp)) && cPais!== '') {
+                store.cargarColonias(cp, cPais).then(() => {
+                    optColonia.value = store.getColonias
+                })
+            }else{
+                optColonia.value.length = 0;
+            }
         }
 
         watch( pais, ( newPais ) => {
@@ -400,8 +412,8 @@ export default {
             ListaPaises.value.forEach(paisAct => {
                 if (paisAct.Descripcion === newPais) {
                     clavePais.value = paisAct.ClavePais;
-                    storeDomicilio.cargarEstados(clavePais.value).then(() => {
-                        listadoestado.value = storeDomicilio.listadoestado
+                    store.cargarEstados(clavePais.value).then(() => {
+                        listadoestado.value = store.getEstados
                     })
                 }
             });
@@ -424,17 +436,6 @@ export default {
                 MostrarColoniaNueva.value = false;
             }
         })
-
-        watch (codigopostal, (cp) => {
-            if (cp.length === 5) {
-                store.cargarColoniasPorCP(cp).then(() => {
-                    optColonia.value = store.listaColonias
-                })
-            }else{
-                optColonia.value.length = 0;
-            }
-        })
-        
 
         watch( estado, ( newEstado )=>{
             listadoestado.value.forEach(estadoAct => {
@@ -540,12 +541,15 @@ export default {
             nuevaColonia,
             optColonia,
             MostrarColoniaNueva,
-            listadoCP,
             claveEstado,
             claveMunicipio,
             listadoMunicipios,
             listadoCiudades,
             clavePais,
+
+
+            validarCargaColonias,
+
         }
 
     }
@@ -579,13 +583,34 @@ fieldset {
     margin-bottom: .5rem;
 }
 
-.idEmpresa {
+.compo_base{
     border-radius: $radius;
     border: none;
     height: 2.02375rem;
     padding: $padding-input;
+    color: #999999;
+}
+.compo_lg {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-right: .5rem;
+    padding: $padding-input;
+    width: 36.3501rem;
+    color:#999999;
+}
+.compo_corto {
     width: 9.0625rem;
-    color: #999999
+}
+.noext, .noint{
+    margin-right: 8px;
+}
+.cEstado{
+    width: 22.72rem;
+}
+.calle{
+    width: 17.125rem;
+    margin-right: 0.5rem;
 }
 
 .logotipo {
@@ -593,48 +618,6 @@ fieldset {
     margin-left: .5rem;
     margin-right: .5rem;
 }
-
-.rfc {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    padding: $padding-input;
-    width: 9.0625rem;
-    color: #999999
-}
-
-.nombreOficial {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: $padding-input;
-    width: 26.9999rem;
-    color: #999999
-}
-
-.labelPais {
-    font-size: 1.125rem;
-    margin-left: .5rem;
-    margin-right: 6.3125rem;
-}
-
-.pais {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: .5rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 26.9999rem;
-    color: #999999;
-}
-
-.labelPersonas {
-    margin-right: 2.0625rem;
-}
-
 .labelEstados {
     font-size: 1.125rem;
     margin-left: .5rem;
@@ -650,245 +633,33 @@ fieldset {
     color: #999999;
 }
 
-.Persona {
-    margin-right: .5rem;
-    width: 1.01rem;
-}
-
-.claveRegimenFiscal {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 36.55rem;
-    color:#999999
-}
-
-.nombreComercial{
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 36.55rem;
-    color:#999999
-}
-
-.calleDomicilio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 19.125rem;
-    color: #999999
-}
-
-.numExtDomicilio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 8.0625rem;
-    color: #999999
-}
-
 .labelEstados {
     font-size: 1.125rem;
     margin-left: .5rem;
     margin-right: .5rem;
 }
 
-.claveEstado {
+.compo_med {
     border-radius: $radius;
     border: none;
     height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 22.72rem;
-    color: #999999
-}
-
-.numIntDomicilio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 8.0625rem;
-    color: #999999
-}
-
-.codigoPostal {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    padding: $padding-input;
-    width: 9.0625rem;
-    color: #999999
-}
-
-.labelMunicipio {
-    font-size: 1.125rem;
-    margin-right: 0.65rem;
-}
-
-.municipio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     padding: $padding-input;
     width: 26.80rem;
     color: #999999
 }
 
-.labelCiudad {
+.label_med{
     font-size: 1.125rem;
-    margin-right: 5.4rem;
+    width: 9.01543125rem;
 }
 
-.ciudad {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: $padding-input;
-    width: 26.80rem;
-    color: #999999
+.pFisica, .pMoral{
+    margin-right: 0.5rem;
 }
-
-.labelColonia {
-    font-size: 1.125rem;
-    margin-right: 5.2rem;
-}
-
-.colonia {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: $padding-input;
-    width: 26.80rem;
-    color: #999999
-}
-
-select{
-    color: #999999
-}
-
-.claveEstado {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 22.72rem;
-    color: #999999
-}
-
-.nombreComercial {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 36.55rem;
-    color: #999999
-}
-
-.calleDomicilio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 19.125rem;
-    color: #999999
-}
-
-.numExtDomicilio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 8.0625rem;
-    color: #999999
-}
-
-
-
-.numIntDomicilio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-right: .5rem;
-    padding: $padding-input;
-    width: 8.0625rem;
-    color: #999999
-}
-
-.codigoPostal {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    padding: $padding-input;
-    width: 9.0625rem;
-    color: #999999
-}
-
-.labelMunicipio {
-    font-size: 1.125rem;
-    margin-right: 0.65rem;
-}
-
-.municipio {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: $padding-input;
-    width: 26.80rem;
-    color: #999999
-}
-
-.labelCiudad {
-    font-size: 1.125rem;
-    margin-right: 5.4rem;
-}
-
-.ciudad {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: $padding-input;
-    width: 26.80rem;
-    color: #999999
-}
-
-.labelColonia {
-    font-size: 1.125rem;
-    margin-right: 5.2rem;
-}
-
-.colonia {
-    border-radius: $radius;
-    border: none;
-    height: 2.02375rem;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: $padding-input;
-    width: 24.431875rem;
-    color: #999999
+.radio{
+    margin-right: 0.5rem;
 }
 
 select {
