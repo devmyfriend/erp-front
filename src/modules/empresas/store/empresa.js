@@ -14,10 +14,13 @@ export const useEmpresa = defineStore( 'empresa', {
         PersonaMoral:    false,
         RegimenFiscal:   '',
         NombreComercial: '',
+
         ListaPaises :    [],
         ListaRegimenes:  [],
-        ListaCP:        [],
-        ListaColonias: [],
+        ListaEstados:    [],
+        ListaMunicipios: [],
+        ListaCiudades:   [],
+        ListaColonias:   [],
 
         Calle: '',
         NoInt: '',
@@ -29,9 +32,6 @@ export const useEmpresa = defineStore( 'empresa', {
         CodigoPostal: ''
     }),
     getters: {
-        listapaises( state ){
-            return state.ListaPaises
-        },
         listaregimen( state ){
             // console.log( state.ListaRegimenes.filter( regimen, regimen => regimen.Fisica === true ) )
             return state.ListaRegimenes.filter( regimen=>regimen.Fisica === true )
@@ -42,25 +42,30 @@ export const useEmpresa = defineStore( 'empresa', {
         listaPMoral ( state ){
             return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
         },
-        listaCP( state ){
-            return state.ListaCP
+        getPaises ( state ){
+            return state.ListaPaises
         },
-        listaColonias( state ){
+        getEstados ( state ){
+            return state.ListaEstados
+        },
+        getMunicipios ( state ){
+            return state.ListaColonias
+        },
+        getCiudades ( state ){
+            return state.ListaCiudades
+        },
+        getColonias ( state ){
             return state.ListaColonias
         }
     },
     actions:{
         async cargarPaises(){
             try{
-                
                 const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/` )
                 
-                const { listadopais } = datos.data
-                
                 if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaPaises = listadopais
+                    this.ListaPaises = datos.data
                 }
-
             }catch( error ){
                 console.log( error )
                 throw new Error( error )
@@ -83,7 +88,62 @@ export const useEmpresa = defineStore( 'empresa', {
                 throw new Error( error )
             }
         },
-        async cargarCP(){
+
+        async cargarEstados(cPais){
+            try{
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/${cPais}` )
+
+                if ( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListaEstados = datos.data
+                }
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        async cargarMunicipios(cEstado){
+            try{
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/municipios/${cEstado}` )
+
+                if ( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListaMunicipios = datos.data
+                }
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        async cargarCiudades(cMunicipio){
+            try{
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/ciudades/${cMunicipio}` )
+
+                if ( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListaCiudades = datos.data
+                }
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        async cargarColonias( cp, cPais ){
+            try{
+                const body ={
+                        "cp": cp,
+                        "clave_pais": cPais
+                }
+                const datos = await axios.post( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/colonias`, body)
+
+                if ( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListaColonias = datos.data
+                }
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+    }
+        /*
+         async cargarCP(){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/codigospostal`)
             
@@ -120,7 +180,5 @@ export const useEmpresa = defineStore( 'empresa', {
                 console.log( error )
                 throw new Error( error )
             }
-        }
-    }
-
+        } */
 })
