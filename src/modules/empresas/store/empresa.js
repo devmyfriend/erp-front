@@ -49,7 +49,7 @@ export const useEmpresa = defineStore( 'empresa', {
             return state.ListaEstados
         },
         getMunicipios ( state ){
-            return state.ListaColonias
+            return state.ListaMunicipios
         },
         getCiudades ( state ){
             return state.ListaCiudades
@@ -125,16 +125,37 @@ export const useEmpresa = defineStore( 'empresa', {
                 throw new Error( error )
             }
         },
-        async cargarColonias( cp, cPais ){
+        async cargarMunicipiosYColonias( cp, cEstado ){
             try{
                 const body ={
                         "cp": cp,
-                        "clave_pais": cPais
+                        "ClaveEstado": cEstado
                 }
                 const datos = await axios.post( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/colonias`, body)
 
                 if ( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaColonias = datos.data
+                    
+                    this.ListaMunicipios = datos.data.localidades
+                    this.ListaCiudades   = datos.data.localidades
+                    this.ListaColonias = datos.data.colonias
+
+
+                    let Unicos = {};
+                    this.ListaMunicipios = this.ListaMunicipios.filter((elemento) => {
+                        if (!Unicos[elemento.municipio]) {
+                            Unicos[elemento.municipio] = true;
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    this.ListaCiudades = this.ListaCiudades.filter((elemento) => {
+                        if (!Unicos[elemento.localidad]) {
+                            Unicos[elemento.localidad] = true;
+                            return true;
+                        }
+                        return false;
+                    });
                 }
             }catch( error ){
                 console.log( error )

@@ -48,13 +48,6 @@
                     />
                </fieldset>
                <fieldset>
-
-<!--                     <label class="labelPais" for="pais">País</label>
-                    <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
-                        <option selected value=""></option>
-                        <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
-                    </select> -->
-
                     <label class="label_med" for="pais">País</label>
                     <select class="compo_med" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
                         <option v-for="opcion in ListaPaises" :key="opcion">{{ opcion.Descripcion }}</option>
@@ -128,96 +121,33 @@
                 />
                </fieldset>
                <fieldset>
-                <input v-model="codigopostal" class="compo_base compo_corto" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal" @input="actualizarValores, validarCargaColonias( codigopostal, claveMunicipio)" />
-
-                <!-- <label class="labelEstados" for="estado">Estado</label>
-                <select class="claveEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
-                    <option selected value="{{estado}}">{{estadonombre}}</option> -->
-                    <!-- <option v-for="optEstado in ListaEstados" :key="optEstado.ClaveEstado" :value="optEstado.ClaveEstado">{{optEstado.Descripcion}}</option> -->
-                <!-- </select> -->
-
+                <input v-model="codigopostal" class="compo_base compo_corto" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal" @input="actualizarValores; validarCargaColonias;"/>
                 <label class="labelEstados" for="estado">Estado</label>
-                <select class="compo_base cEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
+                <select class="compo_base cEstado" name="estado" id="idEstado" v-model="estado" :disabled="modoEstado" @change="actualizarValores; validarCargaColonias;">
                     <option v-for="opcion in listadoestado" :key="opcion">{{ opcion.Nombre }}</option>
                 </select>
                </fieldset>
                <fieldset>
-                   <!-- <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
-                   <select class="municipio" name="municipio" id="municipio" v-model="municipio" @change="actualizarValores">
-                       <option selected value="{{municipio}}">{{municipionombre}}</option>
-                    -->    <!-- <option v-for="optMunicipio in ListaMunicipios" :key="optMunicipio.claveMunicipio" :value="optMunicipio.claveMunicipio">{{optMunicipio.Descripcion}}</option> -->
-                   <!-- </select>  -->
-                   
                     <label class="label_med" for="municipio">Deleg./Municipio</label>
-                    <select class="compo_med" name="municipio" id="idmunicipio" v-model="municipio" @change="actualizarValores">
-                        <option v-for="opcion in listadoMunicipios" :key="opcion">{{ opcion.Nombre}}</option>
+                    <select class="compo_med" name="municipio" id="idmunicipio" v-model="municipio" :disabled="modoMunicipio" @change="actualizarValores">
+                        <option v-for="opcion in listadoMunicipios" :key="opcion">{{ opcion.municipio}}</option>
                     </select>
                    
                </fieldset>
                
                <fieldset>
-<!--                 <label class="labelCiudad" for="ciudad">Ciudad</label>
-                <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
-                    <option selected value="{{ciudad}}">{{ciudadnombre}}</option>
-                    <option value="1">Cancun</option>
-                    <option value="2">Chetumal</option>
-                    <option value="3">Playa del Carmne</option>
-                    <option value="4">Cozumel</option>
-                </select> -->
-
                 <label class="label_med" for="ciudad">Ciudad</label>
-                <select class="compo_med" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
-                    <option v-for="opcion in listadoCiudades" :key="opcion">{{ opcion.Nombre}}</option>
+                <select class="compo_med" name="ciudad" id="ciudad" v-model="ciudad" :disabled="modoCiudad" @change="actualizarValores">
+                    <option v-for="opcion in listadoCiudades" :key="opcion">{{ opcion.localidad}}</option>
                 </select>
 
                </fieldset>
-
-<!--                <fieldset>
-                <label class="labelColonia" for="colonia">Colonia</label>
-                <select class="colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
-                    <option selected value="{{colonia}}">{{colonianombre}}</option>
-                    <option value="1">Colonia 1</option>
-                    <option value="2">Colonia 2</option>
-                    <option value="3">Colonia 3</option>
-                    <option value="4">Colonia 4</option>
-                </select>
-                <a class="BtAgregarColonia">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
-                        <path
-                            d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
-                            fill="#999999" />
-                        <path
-                            d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
-                            fill="white" />
-                    </svg>
-                </a>
-               </fieldset> -->
-
                 <fieldset class="fsColonias">
                     
                     <label class="label_med" for="colonia">Colonia</label>
-<!--                     <div v-if="!MostrarColoniaNueva"> -->
-                        <select class="compo_med" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
-                            <option v-for="opcion in optColonia" :key="opcion">{{ opcion.nombre }}</option>
+                        <select class="compo_med" name="colonia" id="colonia" v-model="colonia" :disabled="modoColonia" @change="actualizarValores">
+                            <option v-for="opcion in optColonia" :key="opcion">{{ opcion.NombreColonia }}</option>
                         </select>
-<!--                         <a class="BtAgregarColonia" @click="MostrarColoniaNueva = true;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
-                                <path
-                                    d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
-                                    fill="#999999" />
-                                <path
-                                    d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
-                                    fill="white" />
-                            </svg>
-                        </a> -->
-<!--                     </div> -->
-
-<!--                     <div v-else class="frmNuevaColonia">
-                        <input class="inpColonia" v-model="nuevaColonia" type="text" placeholder="Nueva colonia" >
-                        <button @click="GuardarColonia" class="btAgregarColonias">Guardar</button>
-                        <button @click="MostrarColoniaNueva = false;" class="btCancelarColonias">Cancelar</button>
-                    </div> -->
-
                 </fieldset>
 
             </form>
@@ -322,43 +252,24 @@ export default {
         const noint              = ref(props.noint)   
         
         const listaregimenes     = ref( [] )
-        const ListaPaises        = ref( [])
         
+        const ListaPaises        = ref( [])
         const clavePais          = ref( '' )
+
         const listadoestado      = ref( [] )
         const claveEstado        = ref( '' )
+        const modoEstado         = ref( true )
+
         const listadoMunicipios  = ref( [] )
         const claveMunicipio     = ref( '' )
+        const modoMunicipio      = ref( true )
+        
         const listadoCiudades    = ref( [] )
+        const modoCiudad         = ref( true )
 
         const optColonia         = ref( [] )
         const nuevaColonia       = ref('')
-        
-        const MostrarColoniaNueva = ref(false)
-        function GuardarColonia(){
-            if(codigopostal.value.length === 5){
-                if (nuevaColonia.value != "" && MostrarColoniaNueva.value == true){
-                    const stringCP = codigopostal.value.toString()
-                    const body = {
-                        CodigoPostal: stringCP,
-                        Nombre: nuevaColonia.value
-                    }
-                    store.crearColonia(body).then(() => {
-                        store.cargarColoniasPorCP(codigopostal.value).then(() => {
-                            optColonia.value = store.listaColonias
-                        })
-                    })
-                }else{
-                    alert("Error: No se puede agregar una colonia vacia");
-                }
-            }else{
-                alert("Error, el código postal ser un número de 5 digitos")
-                optColonia.value.length = 0;
-            }
-            MostrarColoniaNueva.value = false;
-            nuevaColonia.value = "";
-            colonia.value = "";
-        }
+        const modoColonia        = ref( true )
 
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
@@ -391,18 +302,6 @@ export default {
             personamoral.value = !personafisica.value
         }
 
-        function validarCargaColonias(cp, cPais){
-            var regex = /^[0-9]+$/;
-
-            if (cp.length === 5 && (regex.test(cp)) && cPais!== '') {
-                store.cargarColonias(cp, cPais).then(() => {
-                    optColonia.value = store.getColonias
-                })
-            }else{
-                optColonia.value.length = 0;
-            }
-        }
-
         watch( pais, ( newPais ) => {
 /*             esextranjero.value = false
             if( pais.length>0 && pais!=='MEX' ){
@@ -420,6 +319,15 @@ export default {
 
         })
 
+        watch(codigopostal, (CP) => {
+            if (CP.length === 5) {
+                modoEstado.value = false
+            } else {
+                modoEstado.value = true
+                optColonia.value.length = 0;
+            }
+        })
+
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
@@ -429,31 +337,32 @@ export default {
             }
         })
 
-        watch( colonia, ( opcion )=>{
-            if(opcion === 'Nuevo'){
-                MostrarColoniaNueva.value = true;
-            }else{
-                MostrarColoniaNueva.value = false;
-            }
-        })
-
-        watch( estado, ( newEstado )=>{
+        watch( estado, ( est )=>{
             listadoestado.value.forEach(estadoAct => {
-                if (estadoAct.Nombre === newEstado) {
+                if (estadoAct.Nombre === est) {
                     claveEstado.value = estadoAct.ClaveEstado;
-                    
-                    storeDomicilio.cargarMunicipios(claveEstado.value).then(() => {
-                        listadoMunicipios.value = storeDomicilio.listadomunicipio
-                    })
-
-                    storeDomicilio.cargarLocalidades(claveEstado.value).then(() => {
-                        listadoCiudades.value = storeDomicilio.listadociudad
+                    store.cargarMunicipiosYColonias(codigopostal.value, claveEstado.value).then(() => {
+                        listadoMunicipios.value = store.getMunicipios
+                        listadoCiudades.value = store.getCiudades
                     })
                 }
             });
-
-
+            modoMunicipio.value = false
         })
+
+        watch( municipio, ( mun )=>{
+            modoCiudad.value = false
+        })
+    
+        watch( ciudad , ( ciu )=>{
+            modoColonia.value = false
+            optColonia.value = store.getColonias
+            console.log("[Colonias]: " + JSON.stringify(optColonia.value));
+        })
+
+
+
+
 
         const actualizarValores = ()=>{
             emit('actualizarValores',{
@@ -483,7 +392,20 @@ export default {
             })
         }
 
-
+        const validarCargaColonias = () => { 
+            console.log("No esta entrando aasda: ")
+            var regex = /^[0-9]+$/;
+            if (claveEstado.value!== '') {
+                store.cargarMunicipiosYColonias(codigopostal.value, claveEstado.value).then(() => {
+                    optColonia.value = store.getColonias
+                    listadoMunicipios.value = store.getMunicipios
+                    console.log("[Municipios]: " + JSON.stringify(listadoMunicipios.value))
+                })
+            }else{
+                console.log("No esta entrando")
+                optColonia.value.length = 0;
+            }
+        }
         
         
 
@@ -537,19 +459,19 @@ export default {
             PersonaSelecionada,
             // validarArchivo,
             colonia,
-            GuardarColonia,
             nuevaColonia,
             optColonia,
-            MostrarColoniaNueva,
             claveEstado,
             claveMunicipio,
             listadoMunicipios,
             listadoCiudades,
             clavePais,
 
-
             validarCargaColonias,
-
+            modoEstado,
+            modoMunicipio,
+            modoCiudad,
+            modoColonia,
         }
 
     }
