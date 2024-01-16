@@ -3,12 +3,12 @@ import { defineStore } from "pinia";
 
 export const useEmpresas = defineStore( 'empresas', {
     state: ()=>({
-        lista:  [],
-        paginas: {
-            pagAct: 1,
-            pagMax: 1,
-            cantidad: 5,
-            longitud: 0
+        ListadoEmpresas:  [],
+        Paginacion: {
+            PaginaActual: 1,
+            PaginaMaxima: 1,
+            Paginado: 5,
+            Total: 0
         },
         propietaria: false
     }),
@@ -21,54 +21,52 @@ export const useEmpresas = defineStore( 'empresas', {
         }
     },
     actions:{
-        async cargarListado(){
+        async cargarEmpresas(){
             try{
-                const long = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresas/longitud/propiedad=${this.propietaria}`)
-                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado/offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
-                
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.lista = datos.data.resultado
-                }                
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/empresas/listado`)
 
-                if (long.status === 200 && long.statusText === "OK") {
-                    this.paginas.longitud = long.data.resultado
-                    this.paginas.pagMax = Math.ceil( this.paginas.longitud / this.paginas.cantidad )   
+                if( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListadoEmpresas = datos.data.listado
+                    this.Paginacion.Total = datos.data.total
+                    this.Paginacion.PaginaMaxima = Math.ceil( this.Paginacion.Total / this.Paginacion.Paginado )
                 }
-            }catch( error ){
+            }catch ( error ){
                 console.log( error )
                 throw new Error( error )
             }
         },
-        async paginador(opcion){
-            try{
-                const oldPag = this.paginas.pagAct
-                if(this.paginas.pagAct <= 1 && (opcion === 1 || opcion === 0)){
-                }else if(this.paginas.pagAct >= this.paginas.pagMax && (opcion === 2 || opcion === 3)){
-                }else{
-                    if(opcion === 0){
-                        this.paginas.pagAct = 1
-                    }else if(opcion === 1 && this.paginas.pagAct > 1){
-                        this.paginas.pagAct -= 1
-                    }else if(opcion === 2 && this.paginas.pagAct < this.paginas.pagMax){
-                        this.paginas.pagAct += 1
-                    }else if (opcion === 3){
-                        this.paginas.pagAct = this.paginas.pagMax
+        async paginacion(){
+            const paginaAntigua = this.Paginacion.PaginaActual
+            switch( opcion ){
+                case 0:
+                    this.Paginacion.paginaActual = 1;
+                    break;
+                case 1:
+                    if(this.Paginacion.PaginaActual > 1){
+                        this.Paginacion.PaginaActual -= 1;
                     }
-                }
-                if(oldPag !== this.paginas.pagAct){
-                    const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado/offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
-        
-                    if( datos.status === 200 && datos.statusText==="OK"){
-                        this.lista = datos.data.resultado
-                    }      
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
+                    break;
+                case 2:
+                    if (this.Paginacion.PaginaActual < this.Paginacion.PaginaMaxima) {
+                        this.Paginacion.PaginaActual += 1;
+                    }
+                    break;
+                case 3:
+                    this.Paginacion.PaginaActual = this.Paginacion.PaginaMaxima;
+                    break;
+                default:
+                    console.log("Error en la paginacion");
+                    break;
+            }
+            if (this.Paginacion.PaginaActual != paginaAntigua) {
+                useEmpresas.cargarEmpresas()
             }
         },
-        setPropietaria( propiedad ){
-            this.propietaria = propiedad
+        setPaginado( paginado ){
+            this.Paginacion.Paginado = paginado
+        },
+        setPropietaria( propietaria ){
+            this.propietaria = propietaria
         }
     }
 })
