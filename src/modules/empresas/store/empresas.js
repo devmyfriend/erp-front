@@ -35,36 +35,6 @@ export const useEmpresas = defineStore( 'empresas', {
                 throw new Error( error )
             }
         },
-        async paginacion(){
-            const paginaAntigua = this.Paginacion.PaginaActual
-            switch( opcion ){
-                case 0:
-                    this.Paginacion.paginaActual = 1;
-                    break;
-                case 1:
-                    if(this.Paginacion.PaginaActual > 1){
-                        this.Paginacion.PaginaActual -= 1;
-                    }
-                    break;
-                case 2:
-                    if (this.Paginacion.PaginaActual < this.Paginacion.PaginaMaxima) {
-                        this.Paginacion.PaginaActual += 1;
-                    }
-                    break;
-                case 3:
-                    this.Paginacion.PaginaActual = this.Paginacion.PaginaMaxima;
-                    break;
-                default:
-                    console.log("Error en la paginacion");
-                    break;
-            }
-            if (this.Paginacion.PaginaActual != paginaAntigua) {
-                useEmpresas.cargarEmpresas()
-            }
-        },
-        setPaginado( paginado ){
-            this.Paginacion.Paginado = paginado
-        },
         setPropietaria( propietaria ){
             this.propietaria = propietaria
         }

@@ -36,7 +36,6 @@
             </tbody>
         </table>
       </div>
-      <Paginador :pagina="pagina" :lista="lista" @nuevaPagina="nuevaPagina" @nuevaLista="nuevaLista"/>
       <div class="botones">
         <button class="btn btn-save me-4">Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>
