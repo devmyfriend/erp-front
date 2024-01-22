@@ -8,34 +8,7 @@
         <txtbuscador></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
       </div>
-
-      <div class="table-responsive">  
-      <table class="table table-bordered border-2 border-dark rounded text-start">
-            <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre oficial</th>
-                  <th>RFC</th>
-                  <th>Dirección</th>
-                  <th>Teléfono</th>
-                  <th class="Acciones text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in lista" :key="item.EntidadNegocioId">
-                    <td class="fila1">{{ item.EntidadNegocioId }}</td>
-                    <td class="fila2">{{ item.NombreOficial }}</td>
-                    <td clasS="fila3">{{ item.RFC }}</td>
-                    <td class="fila4">{{ item.Direccion }}</td>
-                    <td class="fila5" >{{ item.NumeroTelefonico }}</td>
-                    <td class="Acciones text-center"> 
-                      <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                      <a class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                    </td>
-            </tr>
-            </tbody>
-        </table>
-      </div>
+          <TablaInfinita :Lista="lista"></TablaInfinita>
       <div class="botones">
         <button class="btn btn-save me-4">Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>
@@ -46,8 +19,8 @@
   <script>
   import { ref, onBeforeMount, getCurrentInstance } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
-  import Paginador from '@/shared/paginador.vue';
-  import  btNuevo from '@/shared/btNuevo.vue';
+  import btNuevo from '@/shared/btNuevo.vue';
+  import TablaInfinita from './tablaInfinita.vue';
   
   const { useEmpresas } = require('../modules/empresas/store/empresas')
   
@@ -72,18 +45,15 @@
         const instance = getCurrentInstance();
         const router = instance.appContext.config.globalProperties.$router;
         const esPropietaria = router.currentRoute.value.params.esPropietaria === 'true';
-        console.log('Es propietaria:', esPropietaria);
         store.setPropietaria(esPropietaria);
 
-        store.cargarListado().then(() => {
+        store.cargarEmpresas().then(() => {
             lista.value = store.getListado;
-            pagina.value.pagAct = store.getPaginas.pagAct;
-            pagina.value.pagMax = store.getPaginas.pagMax;
-            pagina.value.cantidad = store.getPaginas.cantidad;
-            pagina.value.longitud = store.getPaginas.longitud;
-          })
-        
-        
+/*             console.log("lista desde tabla: " + JSON.stringify(lista.value[0].NombreOficial));*/            pagina.value.PaginaActual = store.getPaginas.PaginaActual;
+            pagina.value.PaginaMaxima = store.getPaginas.PaginaMaxima;
+            pagina.value.cantidad = store.getPaginas.Paginado;
+            pagina.value.longitud = store.getPaginas.Total;
+        })  
       })
       return{
         tablaNombre,
@@ -93,18 +63,10 @@
       }
     },
     components: {
-      txtbuscador,
-      Paginador,
-      btNuevo,
-    },
-    methods: {
-      nuevaPagina(pagina){
-        this.pagina.pagAct = pagina;
-      },
-      nuevaLista(lista){
-        this.lista = lista;
-      }
-    }
+    txtbuscador,
+    btNuevo,
+    TablaInfinita,
+}
   }
   </script>
 
