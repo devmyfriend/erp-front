@@ -19,9 +19,9 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
             return ( clavepais )=>state.ListaEstados.filter( estado => estado.ClavePais === clavepais )
         },
 
-        listaMunicipios( state ){
-            return state.ListaMunicipios
-        },
+        // listaMunicipios( state ){
+        //     return state.ListaMunicipios
+        // },
 
         listadoLocalidades( state ){
             return state.Localidades
@@ -34,11 +34,11 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
     },
     actions:{
         
-        async cargarEstado(){
+        async cargarEstado( clavePais ){
             try{
-                
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/estado` )
-
+                console.log( `clave de pais en piña ${ clavePais }` )
+                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/${ clavePais }` )
+                console.log( datos )
                 if( datos.status === 200  && datos.statusText === "OK" ){
                     const { listadoEstado } = datos.data
                     this.ListaEstados = listadoEstado

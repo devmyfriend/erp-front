@@ -3,8 +3,8 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-export const useEmpresa = defineStore( 'empresa', {
-    state:{
+export const useSucursal = defineStore( 'sucursal', {
+    state:()=>({
         Sucursal:{
             Nombre: String,
             EntidadNegocioId: Number,
@@ -21,10 +21,30 @@ export const useEmpresa = defineStore( 'empresa', {
             ClaveColonia:   String,
             ClavePais:      String
         }
-    },
+    }),
+    getters:{},
     actions:{
-        async CrearSucursal( datos ){
-            console.log (datos)
+        async crearSucursal( datos ){
+            // this.Sucursal.Nombre = datos.nombresucursal
+            // this.Sucursal.EntidadNegocioId = datos.idempresa
+            // this.Domicilio.Calle = datos.Calle
+            // this.Domicilio.NumeroExt = datos.noext
+            // this.Domicilio.NumeroInt = datos.noint
+            // this.Domicilio.ClaveColonia = datos.colonia
+            // this.Domicilio.ClaveEstado = datos.estado
+            // this.Domicilio.ClaveMunicipio = datos.municipio
+            // this.Domicilio.ClavePais = datos.pais
+            // this.Domicilio.ClaveLocalidad = datos.ciudad
+            // this.Domicilio.CodigoPostal = datos.codigopostal
+
+            //path /api/v1/sucursal/crear
+
+            const data = await axios.post( `${ process.env.VUE_APP_PATH_API }v1/sucursal/crear`,{
+                datos
+            })
+
+            console.log(data)
+
         }
     }
 })

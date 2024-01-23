@@ -52,7 +52,7 @@
                <fieldset>
                     <label class="labelPais" for="pais">País</label>
                     <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
-                        <option selected value=""></option>
+                        <!-- <option selected value="MEX">México</option> --> 
                         <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
                     </select>
                </fieldset>
@@ -146,10 +146,10 @@
                </fieldset>
                <fieldset>
                 <label class="labelCiudad" for="ciudad">Ciudad</label>
-                <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
+                <!-- <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
                     <option selected value="{{ciudad}}">{{ciudadnombre}}</option>
                     <option v-for="item in listalocalidad" :key="item.ClaveLocalidad" :value="item.ClaveLocalidad"> {{item.Nombre}} </option>
-                </select>
+                </select> -->
                </fieldset>
 
                <fieldset v-if="!nuevaColonia">
@@ -191,7 +191,7 @@
 
 
 <script>
-import { ref, watch, computed, onMounted, effect } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia';
 
 
@@ -262,10 +262,12 @@ export default {
     
     setup( props, { emit } ){
 
+
+        
         const descripcionregimen = ref( props.descripcionregimen )
         const esextranjero       = ref( props.esextranjero )
         const idempresa          = ref( props.idempresa )
-        const ListaPaises        = ref( [] )
+        const ListaPaises        = ref( props.ListaPaises ) 
         const listaregimenes     = ref( props.listaregimenes )
         const nombrecomercial    = ref( props.nombrecomercial )
         const nombreoficial      =  ref( props.nombreoficial )
@@ -308,11 +310,11 @@ export default {
         // const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
         // const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
 
-        // onMounted(() => {
+        // onMounted(() => { 
 
-        //     if( pais.value === 'MEX' ){
-        //         esextranjero.value = false
-        //     }
+            // if( pais.value === 'MEX' ){
+            //     esextranjero.value = false
+            // }
 
         //     // ListaPaises.value = store.listapaises
         //     // listaregimenes.value = store.listaPFisica
@@ -320,7 +322,7 @@ export default {
 
         //     // console.log(listadoestado)
 
-        //     cargarPaises()
+            // cargarPaises()
         //     cargarRegimenes()
 
 
@@ -328,6 +330,7 @@ export default {
 
         onMounted(()=>{
             cargarPaises()
+            // cargarEstados()
         })
         
         const cargarPaises = ()=>{
@@ -337,8 +340,16 @@ export default {
         }
 
         const cargarEstados= ()=>{
+            // console.log(`pais seleccionado ${ pais.value} `)
             listadoestado.value = storeDomicilio.Estado( pais.value )
         }
+
+        // onUnmounted(() => {
+        //     ListaPaises=[]
+        //     listaregimenes=[]
+        //     storeEmpresa.ListaRegimenes = []
+        //     storeEmpresa.ListaPaises = [] 
+        // })
         
 
 
@@ -367,32 +378,36 @@ export default {
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
-                listaregimenes.value = store.listaPFisica
+                // console.log(store.listaPFisica)
+                console.log('persona fisica')
+                listaregimenes.value = storeEmpresa.listaPFisica
+
             }else{
-                listaregimenes.value = store.listaPMoral
+                console.log('persona moral')
+                listaregimenes.value = storeEmpresa.listaPMoral
             }
-        })
+        }) 
 
-        watch(estado,( estado )=>{
+        // watch(estado,( estado )=>{
             
-            if( estado.length > 0 &&  estado != '' ){
-                storeDomicilio.cargarMunicipio( estado ).then(()=>{
-                    listamunicipio.value = storeDomicilio.listaMunicipios 
-                })
+        //     if( estado.length > 0 &&  estado != '' ){
+        //         storeDomicilio.cargarMunicipio( estado ).then(()=>{
+        //             listamunicipio.value = storeDomicilio.listaMunicipios 
+        //         })
     
-                storeDomicilio.cargarLocalidad( estado ).then(()=>{
-                    listalocalidad.value = storeDomicilio.listadoLocalidades 
-                })
-            }
+        //         storeDomicilio.cargarLocalidad( estado ).then(()=>{
+        //             listalocalidad.value = storeDomicilio.listadoLocalidades 
+        //         })
+        //     }
 
-        })
+        // })
 
         watch( codigopostal, ( codigopostal )=>{
             if( codigopostal.length === 5 ){ 
                 storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
                     listacolonias.value = storeDomicilio.listadoColonias
                 })
-            }
+            } 
         })
 
 

@@ -47,10 +47,10 @@ export const useEmpresa = defineStore( 'empresa', {
                 
                 const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/` )
                 
-                const { listadopais } = datos.data
+                const data = datos.data
                 
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaPaises = listadopais
+                if( datos.status === 200 && datos.statusText==="OK"){ 
+                    this.ListaPaises = data
                 }
 
             }catch( error ){
@@ -62,13 +62,16 @@ export const useEmpresa = defineStore( 'empresa', {
         async cargarRegimenes (){
             try{
                 
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/regimen/` )
-                
-                const { listadoregimen } = datos.data
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
 
+                const resultado = datos.data                
+               
+ 
                 if( datos.status === 200 && datos.statusText==="OK"){
-                     this.ListaRegimenes = listadoregimen
+                     this.ListaRegimenes = resultado
 
+                      console.log('carga de regimen')
+                      console.log(this.ListaRegimenes)
                 }
 
             }catch( error ){

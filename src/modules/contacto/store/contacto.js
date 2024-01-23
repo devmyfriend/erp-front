@@ -54,7 +54,7 @@ actions:{
     async guardarContactos(contacto,ListaTelefono,ListaCorreo){
       
       axios.post(`${process.env.VUE_APP_PATH_API }v1/contacto/crear`, contacto).then(function(response){
-        console.log(response.data);
+        
        if(response.status === 200 && response.statusText === "OK"){
             let {ContactoId} = response.data.data
             let datosTelefonoCorreo = {
@@ -70,10 +70,10 @@ actions:{
             console.log(datosTelefonoCorreo);
    
             axios.post(`${process.env.VUE_APP_PATH_API }v1/contacto/crear/datos`,datosTelefonoCorreo).then(function(response){
-              console.log(response);
+              
                if(response.status === 200 && response.statusText === "Created"){
                
-              console.log("Contacto creado exitosamente")
+              
               }
             }).catch(function(error){
                 console.log(error)
@@ -100,9 +100,7 @@ actions:{
      
      
       axios.delete(`${process.env.VUE_APP_PATH_API}v1/contacto/borrar`,{data:datosBorrar}).then(function(response){
-        console.log(response);
-       // window.location.reload();
-
+        
 
       }).catch(function(error){
         console.log(error)
@@ -134,11 +132,7 @@ actions:{
       }
       this.ListaTelefonos = L_telefono
       this.ListaCorreos = L_correo
-      /*
-      console.log(this.ListaTelefonos)
-      console.log(this.ListaCorreos)
-      */
- 
+      
     }
     
     

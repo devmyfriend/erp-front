@@ -90,10 +90,12 @@
                 </div>
             </template> -->
             <template v-slot:body>
-                <Sucursal></Sucursal>
+                <Sucursal 
+                    :idempresa="1"
+                />
             </template>
         </Modal>
-        <!--<Modal>
+        <!-- <Modal>
             <template v-slot:header>
                 <div class="headerSucursal">
                     <div class="tituloSucursal">
@@ -113,7 +115,7 @@
                 </div>
                 <Sucursales></Sucursales>
             </template>
-        </Modal>--> 
+        </Modal>  -->
         <div class="contenedor">
             <div class="datosEmpresa">
                 <DatosEmpresa 
@@ -214,7 +216,7 @@ export default {
         const descripcionregimen = ref( '' )
         const esextranjero       = ref( false )
         const esnuevo            = ref( true )
-        const idempresa          = ref( '' )
+        const idempresa          = ref( 0 )
         const ListaPaises        = ref( [] )
         const listaregimenes     = ref( [] )
         const nombrecomercial    = ref( '' )
@@ -262,7 +264,7 @@ export default {
         //     }
         // }
 
-        onMounted( async ()=>{
+        onMounted( ()=>{
             
             // store.cargarPaises().then( ( error, datos )=>{
             //     if( error ){
@@ -280,10 +282,27 @@ export default {
             // storeEmpresa.cargarPaises().then(()=>{
             //     ListaPaises.value = storeEmpresa.listapaises
             // })
-            // enlistarPaises()
+            enlistarPaises()
+            
+            enlistarRegimenes()
+
             // enlistarEstados( pais.value )
+            
+            // enlistarEstados( pais.value ) 
+
+            
 
         })
+
+        const enlistarRegimenes = ()=>{
+            storeEmpresa.cargarRegimenes().then(()=>{
+                console.log(storeEmpresa.ListaRegimenes)
+                listaregimenes.value = storeEmpresa.listaregimen
+
+                console.log('se cargo la lista de regimenes')
+                console.log(listaregimenes.value) 
+            })
+        }
 
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
@@ -293,9 +312,9 @@ export default {
             })
         }
 
-        const enlistarEstados = ( clavepais )=>{
-            storeDomicilio.cargarEstado().then(()=>{
-                listaestado.value = storeDomicilio.Estado( clavepais )
+        const enlistarEstados = ( )=>{
+            storeDomicilio.cargarEstado(pais.value).then(()=>{
+                listaestado.value = storeDomicilio.Estado( pais.value )
             })
         }
 
