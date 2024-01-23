@@ -1,5 +1,37 @@
 <template>
+  <div>
     <ScrollInfinito class="td" :Lista="Lista" @UpdateScroll="loadItems">
+      <table class="table table-bordered border-2 border-dark rounded text-start">
+        <thead>
+          <tr>
+            <th v-for="(encabezado, indice) in encabezados" :key="indice">
+              {{ encabezado }}
+            </th>
+            <th>
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items" :key="item.EntidadNegocioId">
+            <td v-for="(value, index) in Object.values(item).slice(1)" :key="index" class="fila">{{ value }}</td>
+            <td class="Acciones text-center">
+              <a class="mx-2 icono" @click="console.log('Actualizar ID: ' + item.EntidadNegocioId)">
+                <img src="@/assets/img/edit.svg" alt="Editar">
+              </a>
+              <a class="mx-2 icono" @click="console.log('Borrar ID: ' + item.EntidadNegocioId)">
+                <img src="@/assets/img/trash.svg" alt="Borrar">
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ScrollInfinito>
+  </div>
+</template>
+
+<!-- <template>
+    <ScrollInfinito class="td" @UpdateScroll="loadItems">
     <table class="table table-bordered border-2 border-dark rounded text-start">
       <thead>
         <tr>
@@ -25,290 +57,67 @@
         </tbody>
       </table>
     </ScrollInfinito>
-</template>
+</template> -->
 
 <script setup>
 import ScrollInfinito from './ScrollInfinito.vue';
-import { ref, toRefs, defineProps, onMounted } from 'vue';
+import { ref, defineProps, onMounted, watch } from 'vue';
+const { useEmpresas } = require('../modules/empresas/store/empresas')
+
+const store = useEmpresas();
 
 const encabezados = ref([]);
-/* const { Lista } = defineProps({
-  Lista: Array,
-}); */
+const items = ref([]);
+const limit = ref(7);
+const offset = ref(0);
+const ListadoMostrado = ref([]);
 
-const Lista = ref([
-  {
-    "EntidadNegocioId": "00000000001",
-    "NombreOficial": "The fit gym",
-    "RFC": "string",
-    "esPropietaria": 1,
-    "Telefono": "7854216843",
-    "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-    "EntidadNegocioId": "00000000004",
-    "NombreOficial": "Corporativo MyFriend",
-    "RFC": "1594684534512",
-    "esPropietaria": 1,
-    "Telefono": "7854216843",
-    "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-    "EntidadNegocioId": "00000000005",
-    "NombreOficial": "The Fit Bar",
-    "RFC": "7568491543268",
-    "esPropietaria": 1,
-    "Telefono": "7854216843",
-    "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-    "EntidadNegocioId": "00000000006",
-    "NombreOficial": "Empacadora de Frutos y Jugos",
-    "RFC": "7564891643468",
-    "esPropietaria": 0,
-    "Telefono": "7854216843",
-    "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-    "EntidadNegocioId": "00000000007",
-    "NombreOficial": "Grupo Herdez, S.A.B. de C.V.",
-    "RFC": "8765213496485",
-    "esPropietaria": 0,
-    "Telefono": "7854216843",
-    "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-      "EntidadNegocioId": "00000000008",
-      "NombreOficial": "Active Lifestyle Center",
-      "RFC": "987654321",
-      "esPropietaria": 1,
-      "Telefono": "7854321098",
-      "Direccion": "123 Fitness Street"
-  },
-  {
-      "EntidadNegocioId": "00000000009",
-      "NombreOficial": "Wellness Oasis",
-      "RFC": "123456789",
-      "esPropietaria": 1,
-      "Telefono": "7854765432",
-      "Direccion": "456 Health Avenue"
-  },
-  {
-      "EntidadNegocioId": "00000000010",
-      "NombreOficial": "Revitalize Hub",
-      "RFC": "564738291",
-      "esPropietaria": 0,
-      "Telefono": "7854901234",
-      "Direccion": "789 Vitality Lane"
-  },
-  {
-      "EntidadNegocioId": "00000000011",
-      "NombreOficial": "Purely Fresh",
-      "RFC": "192837465",
-      "esPropietaria": 0,
-      "Telefono": "7854034567",
-      "Direccion": "234 Freshness Boulevard"
-  },
-  {
-      "EntidadNegocioId": "00000000012",
-      "NombreOficial": "Energize Café",
-      "RFC": "394857162",
-      "esPropietaria": 1,
-      "Telefono": "7854678901",
-      "Direccion": "567 Energy Drive"
-  },
-  {
-      "EntidadNegocioId": "00000000013",
-      "NombreOficial": "FitFusion Express",
-      "RFC": "928374651",
-      "esPropietaria": 1,
-      "Telefono": "7854012345",
-      "Direccion": "890 Fitness Plaza"
-  },
-  {
-      "EntidadNegocioId": "00000000014",
-      "NombreOficial": "Organic Squeeze",
-      "RFC": "837465192",
-      "esPropietaria": 0,
-      "Telefono": "7854456789",
-      "Direccion": "123 Organic Avenue"
-  },
-  {
-      "EntidadNegocioId": "00000000015",
-      "NombreOficial": "Vitamin Boost",
-      "RFC": "746192835",
-      "esPropietaria": 0,
-      "Telefono": "7854890123",
-      "Direccion": "456 Vitamin Lane"
-  },
-  {
-      "EntidadNegocioId": "00000000016",
-      "NombreOficial": "Zen Wellness",
-      "RFC": "384756291",
-      "esPropietaria": 1,
-      "Telefono": "7854035678",
-      "Direccion": "789 Serenity Street"
-  },
-  {
-      "EntidadNegocioId": "00000000017",
-      "NombreOficial": "Nature's Bounty",
-      "RFC": "384756291",
-      "esPropietaria": 1,
-      "Telefono": "7854012890",
-      "Direccion": "234 Nature Road"
-  },
-  {
-      "EntidadNegocioId": "00000000001",
-      "NombreOficial": "The fit gym",
-      "RFC": "string",
-      "esPropietaria": 1,
-      "Telefono": "7854216843",
-      "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-      "EntidadNegocioId": "00000000004",
-      "NombreOficial": "Corporativo MyFriend",
-      "RFC": "1594684534512",
-      "esPropietaria": 1,
-      "Telefono": "7854216843",
-      "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-      "EntidadNegocioId": "00000000005",
-      "NombreOficial": "The Fit Bar",
-      "RFC": "7568491543268",
-      "esPropietaria": 1,
-      "Telefono": "7854216843",
-      "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-      "EntidadNegocioId": "00000000006",
-      "NombreOficial": "Empacadora de Frutos y Jugos",
-      "RFC": "7564891643468",
-      "esPropietaria": 0,
-      "Telefono": "7854216843",
-      "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-      "EntidadNegocioId": "00000000007",
-      "NombreOficial": "Grupo Herdez, S.A.B. de C.V.",
-      "RFC": "8765213496485",
-      "esPropietaria": 0,
-      "Telefono": "7854216843",
-      "Direccion": "alksjdalksdj aslñd asñldk aasd"
-  },
-  {
-        "EntidadNegocioId": "00000000008",
-        "NombreOficial": "Active Lifestyle Center",
-        "RFC": "987654321",
-        "esPropietaria": 1,
-        "Telefono": "7854321098",
-        "Direccion": "123 Fitness Street"
-  },
-  {
-        "EntidadNegocioId": "00000000009",
-        "NombreOficial": "Wellness Oasis",
-        "RFC": "123456789",
-        "esPropietaria": 1,
-        "Telefono": "7854765432",
-        "Direccion": "456 Health Avenue"
-  },
-  {
-        "EntidadNegocioId": "00000000010",
-        "NombreOficial": "Revitalize Hub",
-        "RFC": "564738291",
-        "esPropietaria": 0,
-        "Telefono": "7854901234",
-        "Direccion": "789 Vitality Lane"
-  },
-  {
-        "EntidadNegocioId": "00000000011",
-        "NombreOficial": "Purely Fresh",
-        "RFC": "192837465",
-        "esPropietaria": 0,
-        "Telefono": "7854034567",
-        "Direccion": "234 Freshness Boulevard"
-  },
-  {
-        "EntidadNegocioId": "00000000012",
-        "NombreOficial": "Energize Café",
-        "RFC": "394857162",
-        "esPropietaria": 1,
-        "Telefono": "7854678901",
-        "Direccion": "567 Energy Drive"
-  },
-  {
-        "EntidadNegocioId": "00000000013",
-        "NombreOficial": "FitFusion Express",
-        "RFC": "928374651",
-        "esPropietaria": 1,
-        "Telefono": "7854012345",
-        "Direccion": "890 Fitness Plaza"
-  },
-  {
-        "EntidadNegocioId": "00000000014",
-        "NombreOficial": "Organic Squeeze",
-        "RFC": "837465192",
-        "esPropietaria": 0,
-        "Telefono": "7854456789",
-        "Direccion": "123 Organic Avenue"
-  },
-  {
-        "EntidadNegocioId": "00000000015",
-        "NombreOficial": "Vitamin Boost",
-        "RFC": "746192835",
-        "esPropietaria": 0,
-        "Telefono": "7854890123",
-        "Direccion": "456 Vitamin Lane"
-  },
-  {
-        "EntidadNegocioId": "00000000016",
-        "NombreOficial": "Zen Wellness",
-        "RFC": "384756291",
-        "esPropietaria": 1,
-        "Telefono": "7854035678",
-        "Direccion": "789 Serenity Street"
-  },
-  {
-        "EntidadNegocioId": "00000000017",
-        "NombreOficial": "Nature's Bounty",
-        "RFC": "384756291",
-        "esPropietaria": 1,
-        "Telefono": "7854012890",
-        "Direccion": "234 Nature Road"
-  }])
-
-const { items, limit, offset } = toRefs({
-  items: ref([]),
-  limit: ref(7),
-  offset: ref(0),
-});
+const Lista = ref([]);
 
 const getNewData = () => {
-  const parte = Lista.value.slice(offset.value, offset.value + limit.value);
+  const parte = ListadoMostrado.value.slice(offset.value, offset.value + limit.value);
   offset.value = offset.value + limit.value;
   return parte;
 };
 
 const loadItems = async () => {
-  if (limit.value <= Lista.value.length) {
+  console.log('Load items...');
+  if (limit.value <= ListadoMostrado.value.length) {
+    console.log('Cargando datos...');
     const newItems = await getNewData();
     items.value = [...items.value, ...newItems];
   }
-  if (offset.value >= Lista.value.length) {
+  if (offset.value >= ListadoMostrado.value.length) {
+    console.log('No hay más datos');
     return;
   }
-};
-
-const test = () => {
-  loadItems();
+  console.log('limite ' + limit.value + ' y el largo es: ' + ListadoMostrado.value.length );
 };
 
 onMounted(() => {
-  encabezados.value = Object.keys(Lista.value[0]).filter((campo, indice) => indice > 0) || 0;
-  encabezados.value.splice(2,1);
+  store.cargarEmpresas().then(() => {
+    Lista.value = store.getListado;
+  });
 });
 
+watch(Lista, () => {
+  console.log('Lista actualizada: ' + JSON.stringify(Lista.value[0]));
+  ListadoMostrado.value = Lista.value.map((item) =>{
+    const nuevoItem = {
+      EntidadNegocioId: item.EntidadNegocioId,
+      NombreOficial: item.NombreOficial,
+      RFC: item.RFC,
+      Direccion: item.Calle + ', ' + item.NumeroExt + ' y ' + item.NumeroInt + ', '  + item.CodigoPostal + '. ' + item.ClaveEstado + ', ' + item.ClavePais,
+    };
+    return nuevoItem;
+  })
+
+  encabezados.value = Object.keys(ListadoMostrado.value[0]).filter((campo, indice) => indice > 0);
+  
+  console.log('Lista mostrada: ' + JSON.stringify(ListadoMostrado.value));
+  console.log('[Encabezados]: ' + JSON.stringify(encabezados.value));
+  loadItems();
+});
 </script>
 
 <style lang="scss" scoped>

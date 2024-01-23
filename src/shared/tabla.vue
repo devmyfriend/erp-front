@@ -8,7 +8,8 @@
         <txtbuscador></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
       </div>
-          <TablaInfinita :Lista="lista"></TablaInfinita>
+          <!-- <TablaInfinita :Lista="lista"></TablaInfinita> -->
+          <TablaInfinita></TablaInfinita>
       <div class="botones">
         <button class="btn btn-save me-4">Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>

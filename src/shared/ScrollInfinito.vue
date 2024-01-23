@@ -1,20 +1,3 @@
-<!-- <template>
-  <div ref="scroller" class="scroller">
-    <table>
-      <thead>
-        <tr>
-          <slot name="Encabezado"> </slot>
-        </tr>
-      </thead>
-      <tbody>
-        <slot name="ContenidoTabla"></slot>
-        <div ref="endOfScroller">
-        </div>
-      </tbody>
-    </table>
-  </div>
-</template> -->
-
 <template>
   <div ref="scroller" class="scroller">
     <slot></slot>
@@ -25,11 +8,7 @@
 
 
 <script setup>
-import { ref, defineEmits, onMounted, defineProps } from 'vue';
-
-const { Lista } = defineProps({
-  Lista: Array,
-});
+import { ref, defineEmits, onMounted } from 'vue';
 
 const emits = defineEmits(['UpdateScroll']);
 let scroller = ref(null);
@@ -41,7 +20,6 @@ onMounted(() => {
       let entry = entries[0];
       if (entry.isIntersecting) {
         emits('UpdateScroll');
-        console.log('Scroll actuando')
       }
     },
     { root: scroller.value }
