@@ -1,39 +1,32 @@
 <template>
   <div class="buscador text-start mb-4">
-    <input type="text" :placeholder="txtPlaceHolder" class="inputBuscador" @mouseenter="endFocus" @mouseleave="startFocus">
-    <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar">
+    <input type="text" class="inputBuscador" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)">
+    
+    <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
 </div>
 </template>
   
 <script>
-import { ref } from 'vue';
+import { ref, defineProps, defineEmits, computed} from 'vue';
+const { useEmpresas } = require('../modules/empresas/store/empresas');
 
 export default {
   name: 'txtbuscador',
-  setup() {
-    let txtPlaceHolder = ref('Buscar');
+  emits: ['BusquedaRealizada'],
 
-    function buscar() {
-      if (txtPlaceHolder.value === 'Buscar') {
-        txtPlaceHolder.value = 'Buscando...';
-      } else{
-        txtPlaceHolder.value = 'Buscar';
-      } 
-    }
+  setup(props, { emit }) {
+    const store = useEmpresas();
+    const lista = ref([]);
+    const txtBusqueda = ref('');
 
-    function startFocus() {
-      txtPlaceHolder.value = 'Buscar';
-    }
-
-    function endFocus() {
-      txtPlaceHolder.value = '';
+    async function buscar(text) {
+      const data =  await store.busquedaEmpresas(text);
+      emit('BusquedaRealizada');
     }
 
     return {
-      txtPlaceHolder,
       buscar,
-      startFocus,
-      endFocus,
+      txtBusqueda
     };
   },
 };

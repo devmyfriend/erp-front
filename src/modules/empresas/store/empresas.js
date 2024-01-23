@@ -24,7 +24,6 @@ export const useEmpresas = defineStore( 'empresas', {
         async cargarEmpresas(){
             try{
                 const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresa`)
-                //Falta cargar los telefonos de las empresas. v1/empresa/{id}/telefono (?)
 
                 if( datos.status === 200 && datos.statusText==="OK"){
                     this.ListadoEmpresas = datos.data
@@ -32,6 +31,15 @@ export const useEmpresas = defineStore( 'empresas', {
             }catch ( error ){
                 console.log( error )
                 throw new Error( error )
+            }
+        },
+        async busquedaEmpresas(busqueda){
+            try{
+                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresa/nombre/${busqueda}`)
+                    this.ListadoEmpresas = datos.data
+                    return datos.data
+            }catch ( error ){
+                    console.log(error.response.data);                
             }
         },
         setPropietaria( propietaria ){

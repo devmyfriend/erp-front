@@ -5,11 +5,10 @@
   
   <div class="contComp p-0 pb-4">
       <div class="w-100 d-flex justify-content-between pt-4">
-        <txtbuscador></txtbuscador>
+        <txtbuscador @BusquedaRealizada="BusquedaRealizada"></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
       </div>
-          <!-- <TablaInfinita :Lista="lista"></TablaInfinita> -->
-          <TablaInfinita></TablaInfinita>
+          <TablaInfinita :busquedaActiva="busquedaActiva" @DesactivarBusqueda="DesactivarBusqueda"></TablaInfinita>
       <div class="botones">
         <button class="btn btn-save me-4">Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>
@@ -36,8 +35,8 @@
     },
     setup( props, { root } ){
       let tablaNombre = ref('Empresas');
-      let lista = ref( [] );
-      let pagina = ref( [] );
+      const lista = ref( [] );
+      const busquedaActiva = ref(false);
 
       const store = useEmpresas();
 
@@ -48,18 +47,21 @@
         const esPropietaria = router.currentRoute.value.params.esPropietaria === 'true';
         store.setPropietaria(esPropietaria);
 
-        store.cargarEmpresas().then(() => {
-            lista.value = store.getListado;
-/*             console.log("lista desde tabla: " + JSON.stringify(lista.value[0].NombreOficial));*/            pagina.value.PaginaActual = store.getPaginas.PaginaActual;
-            pagina.value.PaginaMaxima = store.getPaginas.PaginaMaxima;
-            pagina.value.cantidad = store.getPaginas.Paginado;
-            pagina.value.longitud = store.getPaginas.Total;
-        })  
       })
+
+      function BusquedaRealizada() {
+        busquedaActiva.value = true;
+      }
+      function DesactivarBusqueda() {
+        busquedaActiva.value = false;
+      }
+
       return{
         tablaNombre,
         lista,
-        pagina,
+        BusquedaRealizada,
+        busquedaActiva,
+        DesactivarBusqueda,
         
       }
     },
