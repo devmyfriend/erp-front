@@ -286,7 +286,7 @@ export default {
             
             enlistarRegimenes()
 
-            // enlistarEstados( pais.value )
+            enlistarEstados( pais.value )
             
             // enlistarEstados( pais.value ) 
 
@@ -307,14 +307,16 @@ export default {
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
                 ListaPaises.value = storeEmpresa.listapaises
-                console.log('enlistar')
-                console.log(ListaPaises.value)
+                // console.log('enlistar')
+                // console.log(ListaPaises.value)
             })
         }
 
         const enlistarEstados = ( )=>{
             storeDomicilio.cargarEstado(pais.value).then(()=>{
                 listaestado.value = storeDomicilio.Estado( pais.value )
+                console.log('enlistar estados')
+                console.log(listaestado.value) 
             })
         }
 

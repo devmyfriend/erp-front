@@ -330,17 +330,19 @@ export default {
 
         onMounted(()=>{
             cargarPaises()
-            // cargarEstados()
+            cargarEstados()
         })
         
         const cargarPaises = ()=>{
             ListaPaises.value = storeEmpresa.listapaises
-            console.log('se cargo paises')
-            console.log(ListaPaises.value)
+            // console.log('se cargo paises')
+            // console.log(ListaPaises.value)
         }
 
         const cargarEstados= ()=>{
             // console.log(`pais seleccionado ${ pais.value} `)
+            // listadoestado.value = storeDomicilio.Estado( pais.value )
+            // listadoestado.value = storeDomicilio.cargarEstado(pais.value)
             listadoestado.value = storeDomicilio.Estado( pais.value )
         }
 

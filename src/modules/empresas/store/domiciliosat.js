@@ -36,12 +36,13 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
         
         async cargarEstado( clavePais ){
             try{
-                console.log( `clave de pais en piña ${ clavePais }` )
                 const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/${ clavePais }` )
-                console.log( datos )
+                // console.log( datos )
                 if( datos.status === 200  && datos.statusText === "OK" ){
-                    const { listadoEstado } = datos.data
-                    this.ListaEstados = listadoEstado
+                     const { data } = datos 
+                    console.log('listado de estados')
+                    console.log(data) 
+                    this.ListaEstados = data
                 }
 
             }catch ( error){
