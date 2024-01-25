@@ -8,7 +8,6 @@ export default{
             path:'listado/',
             name: 'listadoCP',
             component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/codigoPostal/views/listCP.vue'),
-            props: true
         }
     ]
 }
