@@ -6,25 +6,26 @@
                     <img src="@/assets/img/imgEmpresa.svg" alt="Empresa">
                 </div>            
                 <div class="modulos-sideNav">
-                    <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
+<!--                     <router-link :to="{ name: 'listadoEmpresas', params: { esPropietaria: false } }"> -->
+                    <router-link :to="{ name: 'Empresas'}">
                         <img src="@/assets/img/orgIco.svg" alt="Empresa">
                         <p>Organización</p>
                     </router-link>
   
-                    <router-link :to="{ name: 'listado', params: { esPropietaria: true } }">
+                    <router-link :to="{ name: 'codigoPostal'}">
                         <img src="@/assets/img/ventaIco.svg" alt="Empresa">
                         <p>Ventas</p>
                     </router-link>
   
-                    <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
+                    <router-link :to="{ name: 'comprobantes'}">
                         <img src="@/assets/img/compraIco.svg" alt="Empresa">
                         <p>Compras</p>
                     </router-link>
-                    <router-link :to="listCP">
+                    <router-link :to="{ name: 'monedas'}">
                         <img src="@/assets/img/catIco.svg" alt="Empresa">
                         <p>Catálogo</p>
                     </router-link>
-                    <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
+                    <router-link :to="{ name: 'listadoEmpresas' }">
                         <img src="@/assets/img/cfgIco.svg" alt="Empresa">
                         <p>Configuración</p>
                     </router-link>
@@ -49,7 +50,6 @@
   </template>
   
   <script setup>
-  import listCP from '@/modules/codigoPostal/views/listCP.vue';
   </script>
   
   <style>
