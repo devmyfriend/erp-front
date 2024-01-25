@@ -1,6 +1,6 @@
 <template>
     <router-link :to="{ name: 'formularioEmpresas' }">
-        <button class="btn"> NUEVO </button>
+        <button> NUEVO </button>
     </router-link>
 </template>
 
@@ -21,6 +21,8 @@ button{
     background-color: #999999;
     color: #FFFFFF;
     width: 9.375rem;
+    margin: auto;
+    margin-left: 0.5rem;
 }
 button:hover{
     background-color: #696969;

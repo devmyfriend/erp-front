@@ -21,6 +21,7 @@ input {
 .iconoBuscador{
     width: 1.375rem;
     height: 1.375rem;
+    margin: auto;
     margin-left: 0.5rem;
 }
 .fila {
