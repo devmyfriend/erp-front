@@ -1,7 +1,7 @@
 export default{
     name:'codigoPostal',
     path:'/cp',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/codigoPostal/layout/layout.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/shared/layout.vue'),
     redirect: '/cp/listado/',
     children:[
         {

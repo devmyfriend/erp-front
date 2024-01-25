@@ -1,7 +1,7 @@
 <template lang="es">
     <div class="contenedor">
         <header>
-            <h1> Listado CP</h1>
+            <h1> Códigos postales</h1>
         </header>
         <div class="contenido">
             <buscadorCP/>

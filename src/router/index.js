@@ -3,6 +3,8 @@ import Login from '@/modules/login/components/login.vue'
 
 import empresasRouter from '@/modules/empresas/routes/index'
 import cpRouter from '@/modules/codigoPostal/routes/index'
+import monedasRouter from '@/modules/moneda/routes/index'
+import comprobantesRouter from '@/modules/comprobante/routes/index'
 
 const routes = [
   {
@@ -18,6 +20,14 @@ const routes = [
   {
     path: '/cp',
     ...cpRouter
+  },
+  {
+    path: '/monedas',
+    ...monedasRouter
+  },
+  {
+    path: '/comprobantes',
+    ...comprobantesRouter
   },
   {
     path: '/login',
