@@ -14,7 +14,7 @@
         <div class="form-group">
           <input type="password" id="password" v-model="password" class="form-control" required placeholder="Contraseña">
         </div>
-        <router-link to="/empresas">
+        <router-link :to="{ name: 'Empresas'}">
           <button type="submit" class="btn btn-primary">Iniciar sesión</button>
         </router-link>
       </form>
