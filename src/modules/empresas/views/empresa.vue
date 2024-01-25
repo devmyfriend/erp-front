@@ -315,9 +315,9 @@ export default {
         const enlistarEstados = ( )=>{
             storeDomicilio.cargarEstado(pais.value).then(()=>{
                 listaestado.value = storeDomicilio.Estado( pais.value )
-                console.log('enlistar estados')
-                console.log(listaestado.value) 
-            })
+                // console.log('enlistar estados')
+                // console.log(listaestado.value) 
+            }) 
         }
 
         const abrircerrarSucursal= ()=> { 
