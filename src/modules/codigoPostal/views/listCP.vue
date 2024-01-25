@@ -84,7 +84,6 @@ import buscadorCP from '@/modules/codigoPostal/components/buscadorCP.vue'
         text-align: start;
     }
     .contenido{
-        /* background-color:red; */
         width: auto;
         margin: 1rem;
     }
@@ -94,7 +93,4 @@ import buscadorCP from '@/modules/codigoPostal/components/buscadorCP.vue'
         width: 100%;
         background-color: white;
     }
-
-    /* Tabla */
-    
 </style>

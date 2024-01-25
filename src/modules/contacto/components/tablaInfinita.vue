@@ -47,10 +47,6 @@ const { Lista, obtenerTelefonoCorreo, m_actualizarContacto, eliminarContacto } =
   eliminarContacto: Function
 
 })
-/*let items = ref([])
-let limit = ref(7)
-let offset = ref(0)
-*/
 console.log("Lista desde hijo", Lista)
 //Seccion temporal en lo que se realiza el back ded obtener contacto paginadoo
 

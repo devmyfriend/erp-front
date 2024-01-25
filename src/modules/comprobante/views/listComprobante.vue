@@ -125,7 +125,5 @@
     ::placeholder {
         font-style: italic;
         color: #bdbdbdda;
-    }
-    /* Tabla */
-    
+    }    
 </style>

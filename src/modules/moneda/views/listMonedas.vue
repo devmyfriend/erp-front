@@ -113,7 +113,6 @@ import buscadorMonedas from '@/modules/moneda/components/buscadorMonedas.vue'
         text-align: start;
     }
     .contenido{
-        /* background-color:red; */
         width: auto;
         margin: 1rem;
     }
@@ -156,6 +155,5 @@ import buscadorMonedas from '@/modules/moneda/components/buscadorMonedas.vue'
     margin-left: 0.5rem;
     vertical-align: middle;
     }
-    /* Tabla */
     
 </style>
