@@ -20,7 +20,7 @@
                         <img src="@/assets/img/compraIco.svg" alt="Empresa">
                         <p>Compras</p>
                     </router-link>
-                    <router-link :to="{ name: 'listadoCP'}">
+                    <router-link :to="listCP">
                         <img src="@/assets/img/catIco.svg" alt="Empresa">
                         <p>Catálogo</p>
                     </router-link>
@@ -49,6 +49,7 @@
   </template>
   
   <script setup>
+  import listCP from '@/modules/codigoPostal/views/listCP.vue';
   </script>
   
   <style>

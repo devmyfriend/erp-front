@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/modules/login/components/login.vue'
 
 import empresasRouter from '@/modules/empresas/routes/index'
+import cpRouter from '@/modules/codigoPostal/routes/index'
 
 const routes = [
   {
@@ -13,6 +14,10 @@ const routes = [
   {
     path: '/empresas',
     ...empresasRouter
+  },
+  {
+    path: '/cp',
+    ...cpRouter
   },
   {
     path: '/login',

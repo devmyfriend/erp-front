@@ -2,6 +2,7 @@ export default{
     name:'Empresas',
     path:'/empresas',
     component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
+    redirect: '/empresas/listado',
     children:[
         {
             path:'listado',

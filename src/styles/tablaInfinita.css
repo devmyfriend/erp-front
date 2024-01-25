@@ -1,0 +1,51 @@
+/* Para la tabla */
+/* class="table table-bordered border-2 border-dark rounded text-start" */
+table{
+    width: 100%;
+    word-break: break-all;
+    text-align: left;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+ tfoot, tr, td, th{
+    border-width: 0.125rem;
+    border-color: black transparent black transparent;
+    /* border-color: black; */
+    border-style: solid;
+}
+/* td con v-for: */
+/* class="fila" */
+.fila{
+
+}
+/* td con acciones: */
+/* class="Acciones text-center" */
+.Acciones{
+
+}
+/* iconos acciones: */
+/* class="mx-2 icono" */
+.icono{
+
+}
+
+.td tr td {
+    width: 10%;
+}
+th, td{
+    padding: 0.5rem 0.5rem; 
+    word-break: break-all;
+    font-size: 0.75rem;
+    height: 2.1875rem;
+    }
+th{
+    background-color: #999999;
+    color: #FFFFFF;
+    font-weight: normal; 
+    text-align: center;
+    vertical-align: middle;
+}
+td{
+    background-color: #FFFFFF;
+    color: #999999;
+}
