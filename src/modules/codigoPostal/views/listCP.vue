@@ -11,7 +11,6 @@
             <table class="table-bordered">
                 <thead>
                     <tr>
-                        <!-- <th>Pais</th> -->
                         <th>Código Postal</th>
                         <th>Estado</th>
                         <th>Municipio</th>
@@ -63,13 +62,28 @@
                     </tr>                    
                 </tbody>
             </table>
+
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import buscadorCP from '@/modules/codigoPostal/components/buscadorCP.vue'
+
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
+const { useCodigosPostales } = require('../store/codigosPostales')
+const store = useCodigosPostales();
+
+const ListadoCP = ref([]);
+
+onMounted(() => {
+   store.cargarCodigosPostales().then(() => {
+        ListadoCP.value = store.getCodigosPostales
+        console.log("[Front]: " + JSON.stringify(ListadoCP.value));
+   }) 
+});
+
 </script>
 
 <style>
