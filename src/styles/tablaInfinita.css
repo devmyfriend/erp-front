@@ -21,7 +21,7 @@ table{
 /* td con acciones: */
 /* class="Acciones text-center" */
 .Acciones{
-
+    text-align: center;
 }
 /* iconos acciones: */
 /* class="mx-2 icono" */

@@ -25,7 +25,7 @@
                     <tr>
                         <td>I</td>
                         <td>Ingresos</td>
-                        <td class="Acciones text-center">
+                        <td class="Acciones">
                             <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                             <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                         </td>
@@ -33,7 +33,7 @@
                     <tr>
                         <td>E</td>
                         <td>Egresos</td>
-                        <td class="Acciones text-center">
+                        <td class="Acciones">
                             <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                             <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                         </td>
@@ -41,7 +41,7 @@
                     <tr>
                         <td>T</td>
                         <td>Traslado</td>
-                        <td class="Acciones text-center">
+                        <td class="Acciones">
                             <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                             <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                         </td>
@@ -49,7 +49,7 @@
                     <tr>
                         <td>N</td>
                         <td>Nómina</td>
-                        <td class="Acciones text-center">
+                        <td class="Acciones">
                             <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                             <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                         </td>
@@ -57,7 +57,7 @@
                     <tr>
                         <td>P</td>
                         <td>Pago</td>
-                        <td class="Acciones text-center">
+                        <td class="Acciones">
                             <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
                             <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
                         </td>

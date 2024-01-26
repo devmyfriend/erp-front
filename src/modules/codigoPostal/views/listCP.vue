@@ -11,6 +11,7 @@
             <table class="table-bordered">
                 <thead>
                     <tr>
+                        <!-- <th>Pais</th> -->
                         <th>Código Postal</th>
                         <th>Estado</th>
                         <th>Municipio</th>
