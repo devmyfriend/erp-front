@@ -376,7 +376,7 @@ export default {
         }
 
         const validarPais = ()=>{
-            if( pais.value.length === 3 ){
+            if( pais.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -384,7 +384,7 @@ export default {
         }
 
         const validarRegimen = ()=>{
-            if( regimenfiscal.value.length === 3 ){
+            if( regimenfiscal.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -400,7 +400,7 @@ export default {
         }
 
         const validarMunicipio = ()=>{
-            if( municipio.value.length === 3 ){
+            if( municipio.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -408,7 +408,7 @@ export default {
         }
 
         const validarLocalidad = ()=>{
-            if( ciudad.value.length === 3 ){
+            if( ciudad.value.length >0 ){
                 return false
             }else{
                 return true
@@ -416,7 +416,7 @@ export default {
         }
 
         const validarColonia = ()=>{
-            if( colonia.value.length === 3 ){
+            if( colonia.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -439,6 +439,7 @@ export default {
                     PersonaMoral:       personamoral.value,
                     RFC:                rfc.value,
                 },
+                CreadoPor: 1,
                 Domicilio:{
                     Calle:              calle.value,
                     ClaveColonia:       colonia.value,
@@ -545,7 +546,7 @@ export default {
                         })
                     }
                     
-                    Swal.fire({
+                    Swal.fire({ 
                         title: 'Empresa Creada',
                         text:  datos,
                         icon: 'success'
