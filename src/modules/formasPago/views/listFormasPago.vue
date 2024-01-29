@@ -13,7 +13,7 @@
             
             <!-- <tablaInfinita></tablaInfinita> -->
             <!-- En su lugar, se usa una tabla estatica de muestra -->
-
+            <button @click="test"> test </button>
             <table class="table-bordered">
                 <thead>
                     <tr>
@@ -86,8 +86,17 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import buscadorFormasPago from '@/modules/formasPago/components/buscadorFormasPago.vue'
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
+
+onMounted(() => {
+    
+})
+
+function test(){
+    console.log("test")
+}
 </script>
 
 <style>
