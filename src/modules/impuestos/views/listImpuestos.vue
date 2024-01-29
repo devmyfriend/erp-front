@@ -27,7 +27,7 @@
             
             <!-- <tablaInfinita></tablaInfinita> -->
             <!-- En su lugar, se usa una tabla estatica de muestra -->
-
+            <button @click="test"> test </button>
             <table class="table-bordered">
                 <thead>
                     <tr>
@@ -92,7 +92,14 @@
 
 <script setup>
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+
+
+const { useImpuestos } = require('../store/impuestos.js')
+const store = useImpuestos();
+
+const ListadoImpuestos = ref([]);
+
 const LocalFederal = ref(0);
 const LocalFederalSelected = ref(false);
 watch(LocalFederal, (val) => {
@@ -100,6 +107,20 @@ watch(LocalFederal, (val) => {
         LocalFederalSelected.value = true;
     }
 })
+
+onMounted(() => {
+    store.cargarImpuestos().then(() => {
+        ListadoImpuestos.value = store.getImpuestos;
+        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoImpuestos.value));
+    })
+})
+
+function test() {
+    store.buscarImpuestos().then(() => {
+        ListadoImpuestos.value = store.getImpuestos;
+        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoImpuestos.value));
+    })
+}
 </script>
 
 <style>
