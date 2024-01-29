@@ -1,119 +1,92 @@
 <template>
-  <div class="layout-background">
-      <div class="layout-container">
-          <div class="layout-sideNav">
-              <div class="sideNav-logo">
-                  <img src="@/assets/img/imgEmpresa.svg" alt="Empresa">
-              </div>            
-              <div class="modulos-sideNav">
-                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
-                      <img src="@/assets/img/orgIco.svg" alt="Empresa">
-                      <p>Organización</p>
-                  </router-link>
+    <div class="mainContainer main d-flex flex-row vh-100">
+        <div class="sideNav nav col-1 position-relative vh-100" style="min-width: 6.25rem; min-height: 100vh;">
+            <div class="d-flex flex-column align-items-center mx-auto row-gap-3">
+                <a href="#" class="empLogo mx-auto mb-4 mw-100 mh-100">
+                    <img src="@/assets/img/imgEmpresa.svg" class="w-100">
+                </a>
+                <a class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                    <router-link to="/empresas/listado" >
+                    <img src="@/assets/img/orgIco.svg" class="w-25">
+                    <span class="section-title" >Organización</span>
+                    </router-link>
+                </a>
+                <a class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                    <img src="@/assets/img/ventaIco.svg" class="w-50">
+                    <span class="section-title">Ventas</span>
+                </a>
+                <a href="" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                    <img src="@/assets/img/compraIco.svg" class="w-50">
+                    <span class="section-title">Compras</span>
+                </a>
+                <a href="" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                    <img src="@/assets/img/catIco.svg" class="w-25">
+                    <span class="section-title">Catálogo</span>
+                </a>
+                <a href="" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-3">
+                    <img src="@/assets/img/cfgIco.svg" class="w-25">
+                    <span class="section-title">Configuración</span>
+                </a>            
+                <a href="#" class="d-flex flex-column align-items-center text-center text-decoration-none moduloSide mb-0 mt-5">
+                    <img src="@/assets/img/logoutIco.svg" class="w-50 mt-5">
+                    <span class="section-title">Logout</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-11">
+            <div class="navMain d-flex justify-content-between align-items-center px-2 py-1">
+                <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
+                <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
+            </div>
 
-                  <router-link :to="{ name: 'listado', params: { esPropietaria: true } }">
-                      <img src="@/assets/img/ventaIco.svg" alt="Empresa">
-                      <p>Ventas</p>
-                  </router-link>
-
-                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
-                      <img src="@/assets/img/compraIco.svg" alt="Empresa">
-                      <p>Compras</p>
-                  </router-link>
-                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
-                      <img src="@/assets/img/catIco.svg" alt="Empresa">
-                      <p>Catálogo</p>
-                  </router-link>
-                  <router-link :to="{ name: 'listado', params: { esPropietaria: false } }">
-                      <img src="@/assets/img/cfgIco.svg" alt="Empresa">
-                      <p>Configuración</p>
-                  </router-link>
-                  <router-link to="/" class="logout">
-                      <img src="@/assets/img/logoutIco.svg" alt="Empresa">
-                      <p>Logout</p>
-                  </router-link>
-              </div>
-              
-          </div>
-          <div class="w-100">
-              <div class="navegador d-flex justify-content-between align-items-center px-2 py-1">
-                  <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
-                  <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
-              </div>
-              <div class="contenedor-Contenido">
-                      <router-view/>
-              </div>
-          </div>
-      </div>
-  </div>
+            <div class="container contNegro w-100 col-12">
+            <!-- <div class="container contNegro w-100 position-absolute"> -->
+                <div class="container contAzul w-100">
+                    
+                    <div class="container contRojo">
+                        <router-view />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import { ref, defineComponent } from 'vue';
+
+export default defineComponent({
+    setup() {
+
+        return {
+
+        };
+    },
+    components: {
+    },
+  
+});
 </script>
 
 <style>
-  body{
-   height: 100vh;
-   width: 100vw;   
-  }
-  .layout-background{
-      height: 100vh;
-      width: 100vw;
-  }
-  .layout-container{
-      height: 100vh;
-      width: 100vw;
-      background-color: white;
-      margin: auto;
-      display: flex;
-  }
-  .layout-sideNav{
-      height: 100vh;
-      background-color: #343A40;
-      width: 4.0625rem;
-      min-width: 4.0625rem;
-      color: #CBCBCB;;
-  }
-  .sideNav-logo{
-      width: 3.125rem;
-      margin: auto;
-      margin-top: 0.75rem;
-  }
-  .modulos-sideNav {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-  }
-  .modulos-sideNav a{
-      text-decoration: none;
-      color: #CBCBCB;
-      margin-top: 1.5rem;
-  }
-  .modulos-sideNav img {
-      width: 1.5rem;
-  }
-  .modulos-sideNav p{
-      font-size: 0.5rem; 
-      margin-top: 0.5rem;
-  }
-  .logout{
-      position: absolute;
-      bottom: 1.5rem;
-  }
-  .navegador{
-      font-size: 2rem;
-      font-weight: bold;
-      color: #fff;
-      background-color: #D9D9D9;
-  }
-  .contenedor-Contenido{
-      margin: 1.5rem;
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      height: 40.5rem;
-      max-height: 40.5rem;
-      min-height: 40.5rem;
-  }
+.moduloSide{
+    cursor: pointer;
+}
+.body{
+    margin: 0px;
+    padding: 0px;
+}
+.sideNav{
+    background-color: #343A40;
+    color: #CBCBCB;
+}
+.section-title{
+    color: #CBCBCB;
+}
+.navMain{
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #D9D9D9;
+}
 </style>

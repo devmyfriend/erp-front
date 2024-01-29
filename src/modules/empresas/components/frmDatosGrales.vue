@@ -12,6 +12,7 @@
                         id="idEmpresa" 
                         placeholder="Id Empresa"
                         @input="actualizarValores"
+
                     />
                    <span class="logotipo">Logotipo</span>
                     <input 
@@ -44,13 +45,16 @@
                         name="compo_med" 
                         id="idRazonSocial" 
                         placeholder="Razón Social"
+                        required
                         @input="actualizarValores"
                     />
                </fieldset>
                <fieldset>
+
                     <label class="label_med" for="pais">País</label>
                     <select class="compo_med" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
                         <option v-for="opcion in ListaPaises" :key="opcion">{{ opcion.Descripcion }}</option>
+
                     </select>
 
                </fieldset>
@@ -76,7 +80,9 @@
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
+
                     <select class="compo_lg" name="claveRegimenFiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
+
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
                     </select>
@@ -87,6 +93,7 @@
                            name="nombreComercial" 
                            id="idNombreComercial" 
                            placeholder="Nombre comercial" 
+                           v-model="nombrecomercial"
                            @input="actualizarValores"
                     />
                </fieldset>
@@ -123,6 +130,7 @@
                <fieldset>
                 <input v-model="codigopostal" class="compo_base compo_corto" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal" @input="actualizarValores; validarCargaColonias;"/>
                 <label class="labelEstados" for="estado">Estado</label>
+
                 <select class="compo_base cEstado" name="estado" id="idEstado" v-model="estado" :disabled="modoEstado" @change="actualizarValores; validarCargaColonias;">
                     <option v-for="opcion in listadoestado" :key="opcion">{{ opcion.Nombre }}</option>
                 </select>
@@ -133,13 +141,16 @@
                         <option v-for="opcion in listadoMunicipios" :key="opcion">{{ opcion.municipio}}</option>
                     </select>
                    
+
                </fieldset>
                
                <fieldset>
+
                 <label class="label_med" for="ciudad">Ciudad</label>
                 <select class="compo_med" name="ciudad" id="ciudad" v-model="ciudad" :disabled="modoCiudad" @change="actualizarValores">
                     <option v-for="opcion in listadoCiudades" :key="opcion">{{ opcion.localidad}}</option>
                 </select>
+
 
                </fieldset>
                 <fieldset class="fsColonias">
@@ -157,25 +168,26 @@
 
 
 <script>
-import { ref, watch, computed, onMounted, effect } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia';
 
 
 const { useEmpresa } = require('../store/empresa')
 const { useDomicilioSAT } = require('../store/domiciliosat')
 
-function validateFile(event) {
-    const file = event.target.files[0];
-    const fileTypeError = document.getElementById('fileTypeError');
+// function validateFile(event) {
+//     const file = event.target.files[0];
+//     const fileTypeError = document.getElementById('fileTypeError');
 
-    if (file) {
-        if (!['image/jpeg', 'image/png'].includes(file.type)) {
-            fileTypeError.style.display = 'block';
-            event.target.value = '';
-        } else {
-            fileTypeError.style.display = 'none';
-        }
-    }
-}
+//     if (file) {
+//         if (!['image/jpeg', 'image/png'].includes(file.type)) {
+//             fileTypeError.style.display = 'block';
+//             event.target.value = '';
+//         } else {
+//             fileTypeError.style.display = 'none';
+//         }
+//     }
+// }
 
 export default {
 
@@ -217,6 +229,8 @@ export default {
         noint:              String,
         ListaPaises:        Array,
         listaregimenes:     Array,
+
+        listaestados:       Array,
     },
     emits:[
         'actualizarValores'
@@ -225,9 +239,15 @@ export default {
     
     setup( props, { emit } ){
 
+
+        
         const descripcionregimen = ref( props.descripcionregimen )
         const esextranjero       = ref( props.esextranjero )
         const idempresa          = ref( props.idempresa )
+
+        const ListaPaises        = ref( props.ListaPaises ) 
+        const listaregimenes     = ref( props.listaregimenes )
+
         const nombrecomercial    = ref( props.nombrecomercial )
         const nombreoficial      =  ref( props.nombreoficial )
         const pais               = ref( props.pais )
@@ -250,7 +270,7 @@ export default {
         const municipionombre    = ref(props.municipionombre)    
         const noext              = ref(props.noext)              
         const noint              = ref(props.noint)   
-        
+
         const listaregimenes     = ref( [] )
         
         const ListaPaises        = ref( [])
@@ -271,23 +291,24 @@ export default {
         const nuevaColonia       = ref('')
         const modoColonia        = ref( true )
 
+
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
 
-        const store = useEmpresa()
+        const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
+
         onMounted(() => {
             store.cargarPaises().then(() => {
                 ListaPaises.value = store.getPaises
             })
 
-            // store.cargarRegimenes().then(() => {
-            //     listaregimenes.value = store.listaPFisica
-            // })
 
-            if( pais.value === 'MEX' ){
-                esextranjero.value = false
-            }
+        // const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
+        // const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
+
+        // onMounted(() => { 
+
 
 /*             ListaPaises.value = store.listapaises
             listaregimenes.value = store.listaPFisica
@@ -325,17 +346,54 @@ export default {
             } else {
                 modoEstado.value = true
                 optColonia.value.length = 0;
+
             }
         })
 
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
-                listaregimenes.value = store.listaPFisica
+                // console.log(store.listaPFisica)
+                console.log('persona fisica')
+                listaregimenes.value = storeEmpresa.listaPFisica
+
             }else{
-                listaregimenes.value = store.listaPMoral
+                console.log('persona moral')
+                listaregimenes.value = storeEmpresa.listaPMoral
             }
+        }) 
+
+        // watch(estado,( estado )=>{
+            
+        //     if( estado.length > 0 &&  estado != '' ){
+        //         storeDomicilio.cargarMunicipio( estado ).then(()=>{
+        //             listamunicipio.value = storeDomicilio.listaMunicipios 
+        //         })
+    
+        //         storeDomicilio.cargarLocalidad( estado ).then(()=>{
+        //             listalocalidad.value = storeDomicilio.listadoLocalidades 
+        //         })
+        //     }
+
+        // })
+
+        watch( codigopostal, ( codigopostal )=>{
+            // if( codigopostal.length === 5 ){ 
+            //     storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
+            //         listacolonias.value = storeDomicilio.listadoColonias
+            //     })
+            // } 
+                if( codigopostal.length === 5 ){
+                    storeDomicilio.cargarDatosGrales( codigopostal, estado.value).then(()=>{
+                        listamunicipio.value = storeDomicilio.listaMunicipios
+                        listalocalidad.value = storeDomicilio.listadoLocalidades
+                        listacolonias.value = storeDomicilio.listadoColonias
+                        console.log(listacolonias)
+                    })
+                }
+
         })
+
 
         watch( estado, ( est )=>{
             listadoestado.value.forEach(estadoAct => {
@@ -364,13 +422,14 @@ export default {
 
 
 
+
         const actualizarValores = ()=>{
             emit('actualizarValores',{
                 calle           : calle.value,              
                 ciudad          : ciudad.value,              
                 ciudadnombre    : ciudadnombre.value,
                 codigopostal    : codigopostal.value,       
-                colonia         : colonia.value,
+                colonia         : colonia.value, 
                 colonianombre   : colonianombre.value,
                 esextranjero    : esextranjero.value,
                 estado          : estado.value,
@@ -389,8 +448,9 @@ export default {
                 regimenfiscal   : regimenfiscal.value,
                 rfc             : rfc.value,
                 taxid           : taxid.value,
-            })
+            }) 
         }
+
 
         const validarCargaColonias = () => { 
             console.log("No esta entrando aasda: ")
@@ -420,10 +480,12 @@ export default {
         //         if (![ 'image/jpeg', 'image/png' ].includes( archivo.type ) ) {
         //             fileTypeError.style.display = 'block';
         //             event.target.value = '';
+
         //         }
         //     }
-        // }
 
+        //     storeEmpresa.crearEmpresa( datos )
+        // }
         
         return{
             esextranjero,
@@ -454,6 +516,14 @@ export default {
             noint,              
 
             listadoestado,
+            listamunicipio,
+            listalocalidad,
+            listacolonias,
+
+            nuevaColonia,
+            nuevacolonia,
+            cerrarcolonia,
+             
 
             actualizarValores,
             PersonaSelecionada,
@@ -607,4 +677,5 @@ option {
     width: 16.431875rem !important;
     color: #999999
 }
+
 </style>

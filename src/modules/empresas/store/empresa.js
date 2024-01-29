@@ -65,22 +65,27 @@ export const useEmpresa = defineStore( 'empresa', {
                 
                 if( datos.status === 200 && datos.statusText==="OK"){
                     this.ListaPaises = datos.data
+
                 }
             }catch( error ){
                 console.log( error )
                 throw new Error( error )
             }
         },
+
         async cargarRegimenes (){
             try{
                 
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/regimen/` )
-                
-                const { listadoregimen } = datos.data
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
 
+                const resultado = datos.data                
+               
+ 
                 if( datos.status === 200 && datos.statusText==="OK"){
-                     this.ListaRegimenes = listadoregimen
+                     this.ListaRegimenes = resultado
 
+                      console.log('carga de regimen')
+                      console.log(this.ListaRegimenes)
                 }
 
             }catch( error ){
@@ -120,10 +125,12 @@ export const useEmpresa = defineStore( 'empresa', {
                 if ( datos.status === 200 && datos.statusText==="OK"){
                     this.ListaCiudades = datos.data
                 }
+
             }catch( error ){
                 console.log( error )
                 throw new Error( error )
             }
+
         },
         async cargarMunicipiosYColonias( cp, cEstado ){
             try{
@@ -162,6 +169,7 @@ export const useEmpresa = defineStore( 'empresa', {
                 throw new Error( error )
             }
         },
+
     }
         /*
          async cargarCP(){

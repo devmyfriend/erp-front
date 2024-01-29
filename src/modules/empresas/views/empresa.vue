@@ -43,8 +43,56 @@
                     </div>
                 </div>
             </template>
+            <!-- <template v-slot:body>
+                <div class="formularioSucursal">
+                    <form>
+                        <fieldset>
+                            <label for="">Nombre del responsable</label>
+                            <select class="responsableSucursal" name="txtResponsable" id="idResponsable">
+                                <option va lue="">Nombre del responsable</option>
+                            </select>
+                        </fieldset>
+                        <fieldset>
+                            <label for="">Domicilio</label> <br>
+                            <input class="calleSucursal" type="text" name="txtCalle" id="idCalle" placeholder="Calle">
+                            <input class="noextintSucursal" type="text" name="txtNoExt" id="idNoExt" placeholder="No. Ext">
+                            <input class="noextintSucursal" type="text" name="txtNoInt" id="idNoInt" placeholder="No. Int">
+                            <input class="coloniaSucursal" type="text" name="txtColonia" id="idColonia"
+                                placeholder="Colonia"> <br>
+                        </fieldset>
+                        <fieldset>
+                            <div class="grupoField">
+                                Código Postal
+                                <input class="codigoPostal" type="test" name="txtCodigoPostal" placeholder="Código Postal">
+                            </div>
+                            <div class="grupoField">
+                                Estado
+                                <select class="estadoSucursal" name="txtEstado" id="idEstado">
+                                    <option value="">Estado</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="grupoField">
+                                Municipio
+                                <select class="municipioSucursal" name="txtEstado" id="idEstado">
+                                    <option value="">Municipio</option>
+                                </select>
+                            </div>
+                            <div class="grupoField">
+                                Localidad
+                                <select class="ciudadSucursal" name="txtEstado" id="idEstado">
+                                    <option value="">Ciudad</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </template> -->
             <template v-slot:body>
-                <Sucursal></Sucursal>
+                <Sucursal 
+                    :idempresa="1"
+                />
             </template>
         </Modal>
         <!-- <Modal>
@@ -67,7 +115,7 @@
                 </div>
                 <Sucursales></Sucursales>
             </template>
-        </Modal> -->
+        </Modal>  -->
         <div class="contenedor">
             <div class="datosEmpresa">
                 <DatosEmpresa 
@@ -94,7 +142,12 @@
                     :municipionombre="municipionombre"    
                     :noext="noext"              
                     :noint="noint"
-                    @actualizarValores="actualizarValoresComponenteHijo"              
+                    :Lista-Paises="ListaPaises"
+                    :listaregimenes="listaregimenes"
+                    :listaestados="listaestado"
+                    
+                    @actualizarValores="actualizarValoresComponenteHijo"  
+
                 />
                 <div class="sucursales">
                     <h3>Sucursales</h3>
@@ -120,11 +173,11 @@
                 </div>
             </div>
             <div class="datosContactos">
-                <!-- <Contacto></Contacto> -->
+                <Contacto></Contacto>
             </div>
         </div>
         <div class="botones">
-            <button class="btn btn-save"> Guardar</button>
+            <button class="btn btn-save" @click="guardar"> Guardar</button>
             <button class="btn btn-danger">Cancelar</button>
         </div>
     </div>
@@ -132,6 +185,8 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import Swal from 'sweetalert2'
 
 
 import DatosEmpresa from '../components/frmDatosGrales.vue'
@@ -161,7 +216,7 @@ export default {
         const descripcionregimen = ref( '' )
         const esextranjero       = ref( false )
         const esnuevo            = ref( true )
-        const idempresa          = ref( '' )
+        const idempresa          = ref( 0 )
         const ListaPaises        = ref( [] )
         const listaregimenes     = ref( [] )
         const nombrecomercial    = ref( '' )
@@ -173,6 +228,7 @@ export default {
         const regimenfiscal      = ref( '' )
         const rfc                = ref( '' )
         const taxid              = ref( '' )
+        const espropietaria      = ref( false )
 
         const calle              = ref( '' )
         const ciudad             = ref( '' )
@@ -195,17 +251,74 @@ export default {
         const haySucursal = ref ( false )
         const seEditaSucursal = ref ( false )
 
-        const store = useEmpresa()
+        const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
 
-        onMounted( async ()=>{
-            
-            await store.cargarPaises()
-            await store.cargarRegimenes()
-            await storeDomicilio.cargaDatos()
+        // const router = useRoute()
+        // espropietaria = router.params.propietaria
 
+        // const validarEsNuevo = ()=>{
+        //     if(router.params.id && router.params.id > 0){
+        //        esnuevo.value = false 
+        //        idempresa.value  = router.params.id
+        //     }
+        // }
+
+        onMounted( ()=>{
+            
+            // store.cargarPaises().then( ( error, datos )=>{
+            //     if( error ){
+            //         console.log(error)
+            //     }
+            //     console.log(datos)
+            // })
+            // store.cargarRegimenes()
             // await storeDomicilio.cargaDatos()
+
+            // await storeDomicilio.cargarEstado()
+
+            // listaestado.value = storeDomicilio.listaEstados
+            
+            // storeEmpresa.cargarPaises().then(()=>{
+            //     ListaPaises.value = storeEmpresa.listapaises
+            // })
+            enlistarPaises()
+            
+            enlistarRegimenes()
+
+            enlistarEstados( pais.value )
+            
+            // enlistarEstados( pais.value ) 
+
+            
+
         })
+
+        const enlistarRegimenes = ()=>{
+            storeEmpresa.cargarRegimenes().then(()=>{
+                console.log(storeEmpresa.ListaRegimenes)
+                listaregimenes.value = storeEmpresa.listaregimen
+
+                console.log('se cargo la lista de regimenes')
+                console.log(listaregimenes.value) 
+            })
+        }
+
+        const enlistarPaises =()=>{
+            storeEmpresa.cargarPaises().then(()=>{
+                ListaPaises.value = storeEmpresa.listapaises
+                // console.log('enlistar')
+                // console.log(ListaPaises.value)
+            })
+        }
+
+        const enlistarEstados = ( )=>{
+            storeDomicilio.cargarEstado(pais.value).then(()=>{
+                listaestado.value = storeDomicilio.Estado( pais.value )
+                // console.log('enlistar estados')
+                // console.log(listaestado.value) 
+            }) 
+        }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
@@ -238,7 +351,221 @@ export default {
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
         }
-       
+
+        const validarRFC = ()=>{
+            if( rfc.value.length >= 12 && rfc.value.length <= 13 ){
+                return false
+            }else{
+                return true
+            }
+        }
+        
+        const validarNombreOficial = ()=>{
+            if( nombreoficial.value.length >= 3 ){
+                return false
+            }else{
+                return true
+            }
+        }
+        const validarCodigoPostal = ()=>{
+            if( codigopostal.value.length === 5 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+        const validarPais = ()=>{
+            if( pais.value.length > 0 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+        const validarRegimen = ()=>{
+            if( regimenfiscal.value.length > 0 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+        const validarEstado = ()=>{
+            if( estado.value.length === 3 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+        const validarMunicipio = ()=>{
+            if( municipio.value.length > 0 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+        const validarLocalidad = ()=>{
+            if( ciudad.value.length >0 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+        const validarColonia = ()=>{
+            if( colonia.value.length > 0 ){
+                return false
+            }else{
+                return true
+            }
+        }
+
+
+
+        const guardar = ()=>{
+
+            const datos = {
+                entidad:[
+                    {
+                    
+                        ClavePais:          pais.value,
+                        ClaveRegimenFiscal: regimenfiscal.value,
+                        EsPropietaria:      espropietaria.value,
+                        NombreComercial:    nombrecomercial.value,
+                        NombreOficial:      nombreoficial.value,
+                        PersonaFisica:      personafisica.value,
+                        PersonaMoral:       personamoral.value,
+                        RFC:                rfc.value,
+                        Borrado:            0,
+                        logo:               ""
+                    }
+                ],
+                CreadoPor: 1,
+                domicilio:[
+                    {
+                        Calle:              calle.value,
+                        ClaveColonia:       colonia.value,
+                        ClaveEstado:        estado.value,
+                        ClaveLocalidad:     ciudad.value,
+                        ClaveMunicipio:     municipio.value,
+                        CodigoPostal:       codigopostal.value,
+                        NumeroExt:          noext.value,
+                        NumeroInt:          noint.value,
+                        ClavePais:          pais.value,
+                    }
+                ]
+            }
+
+            let error = false
+
+            if( validarRFC() ){
+                error = true
+                Swal.fire({
+                    title: 'RFC',
+                    text:  'El R.F.C. no cumple con los requerimientos basicos',
+                    icon:  'error'
+                })
+            }
+
+            if( validarNombreOficial() ){
+                error = true
+                Swal.fire({
+                    title: 'Nombre Oficial',
+                    text:  'El Nombre Oficial no cumple con los requerimientos basicos',
+                    icon:  'error'
+                })
+            }
+
+            if( validarCodigoPostal() ){
+                error = true
+                Swal.fire({
+                    title: 'Código Postal',
+                    text:  'El Código Postal no cumple con los requerimientos basicos',
+                    icon:  'error'
+                })
+            }
+
+            if( validarPais() ){
+                error = true
+                Swal.fire({
+                    title: 'País',
+                    text:  'El País no fue seleccionado',
+                    icon:  'error'
+                })
+            }
+
+            if( validarRegimen() ){
+                error = true
+                Swal.fire({
+                    title: 'Régimen Fiscal',
+                    text:  'El Régimen Fiscal no fue seleccionado',
+                    icon:  'error'
+                })
+            }
+
+            if( validarEstado() ){
+                error = true
+                Swal.fire({
+                    title: 'Estado',
+                    text:  'El Estado no fue seleccionado',
+                    icon:  'error'
+                })
+            }
+
+            if( validarMunicipio() ){
+                error = true
+                Swal.fire({
+                    title: 'Municipio',
+                    text:  'El Municipio no fue seleccionado',
+                    icon:  'error'
+                })
+            }
+
+            if( validarLocalidad() ){
+                error = true
+                Swal.fire({
+                    title: 'Localidad',
+                    text:  'La Localidad no fue seleccionada',
+                    icon:  'error'
+                })
+            }
+
+            if( validarColonia() ){
+                error = true
+                Swal.fire({
+                    title: 'Colonia',
+                    text:  'La Colonia no fue seleccionada',
+                    icon:  'error'
+                })
+            }
+
+            if( !error ){
+                storeEmpresa.crearEmpresa( datos ).then( (error, datos)=>{
+                    if(error){
+                        Swal.fire({
+                            title: 'Error',
+                            text:  'No se puedo crear la empresa',
+                            icon:  "error"
+                        })
+                    }
+                    
+                    Swal.fire({ 
+                        title: 'Empresa Creada',
+                        text:  datos,
+                        icon: 'success'
+                    })
+                })
+                Swal.fire({
+                        title: "The Internet?",
+                        text: "That thing is still around?",
+                        icon: "question"
+                })
+            }
+        }
+        
         
         return{
 
@@ -269,6 +596,11 @@ export default {
             regimenfiscal      ,
             rfc                ,
             taxid              ,
+            espropietaria,
+
+            listaestado,
+
+            guardar,
 
 
             abrircerrarSucursal,
@@ -393,6 +725,10 @@ button {
 .headerSucursal {
     margin: 0;
     padding: 1.5rem;
+    // padding-top: .5rem;
+    // padding-bottom: .5rem;
+    // padding-left: 1.5rem;
+    // padding-right: 1.5rem;
     width: 100%;
 }
 
