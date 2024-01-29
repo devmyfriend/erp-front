@@ -78,7 +78,7 @@
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
-                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
+                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" v-model="regimenfiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
                     </select>
@@ -89,6 +89,7 @@
                            name="nombreComercial" 
                            id="idNombreComercial" 
                            placeholder="Nombre comercial" 
+                           v-model="nombrecomercial"
                            @input="actualizarValores"
                     />
                </fieldset>
@@ -146,17 +147,18 @@
                </fieldset>
                <fieldset>
                 <label class="labelCiudad" for="ciudad">Ciudad</label>
-                <!-- <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
+                <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
                     <option selected value="{{ciudad}}">{{ciudadnombre}}</option>
-                    <option v-for="item in listalocalidad" :key="item.ClaveLocalidad" :value="item.ClaveLocalidad"> {{item.Nombre}} </option>
-                </select> -->
+                    <option v-for="item in listalocalidad" :key="item.ClaveLocalidad" :value="item.ClaveLocalidad"> {{item.localidad}} </option>
+                </select> 
                </fieldset>
 
                <fieldset v-if="!nuevaColonia">
                 <label class="labelColonia" for="colonia">Colonia</label>
                 <select class="colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
                     <option selected value="{{colonia}}">{{colonianombre}}</option>
-                    <option v-for="item in listacolonias" :key="item.ClaveColonia" :value="item.ClaveColonia">{{item.nombre}}</option>
+                    <option v-for="item in listacolonias" :key="item.ClaveColonia" :value="item.ClaveColonia">{{item.NombreColonia
+}}</option>
                 </select>
                 <a @click="nuevacolonia()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none" >
@@ -340,20 +342,9 @@ export default {
         }
 
         const cargarEstados= ()=>{
-            // console.log(`pais seleccionado ${ pais.value} `)
-            // listadoestado.value = storeDomicilio.Estado( pais.value )
-            // listadoestado.value = storeDomicilio.cargarEstado(pais.value)
             listadoestado.value = storeDomicilio.Estado( pais.value )
         }
-
-        // onUnmounted(() => {
-        //     ListaPaises=[]
-        //     listaregimenes=[]
-        //     storeEmpresa.ListaRegimenes = []
-        //     storeEmpresa.ListaPaises = [] 
-        // })
         
-
 
         const PersonaSelecionada = (valor) => {
             personafisica.value = valor
@@ -405,11 +396,20 @@ export default {
         // })
 
         watch( codigopostal, ( codigopostal )=>{
-            if( codigopostal.length === 5 ){ 
-                storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
-                    listacolonias.value = storeDomicilio.listadoColonias
-                })
-            } 
+            // if( codigopostal.length === 5 ){ 
+            //     storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
+            //         listacolonias.value = storeDomicilio.listadoColonias
+            //     })
+            // } 
+                if( codigopostal.length === 5 ){
+                    storeDomicilio.cargarDatosGrales( codigopostal, estado.value).then(()=>{
+                        listamunicipio.value = storeDomicilio.listaMunicipios
+                        listalocalidad.value = storeDomicilio.listadoLocalidades
+                        listacolonias.value = storeDomicilio.listadoColonias
+                        console.log(listacolonias)
+                    })
+                }
+
         })
 
 
@@ -419,7 +419,7 @@ export default {
                 ciudad          : ciudad.value,              
                 ciudadnombre    : ciudadnombre.value,
                 codigopostal    : codigopostal.value,       
-                colonia         : colonia.value,
+                colonia         : colonia.value, 
                 colonianombre   : colonianombre.value,
                 esextranjero    : esextranjero.value,
                 estado          : estado.value,
@@ -438,7 +438,7 @@ export default {
                 regimenfiscal   : regimenfiscal.value,
                 rfc             : rfc.value,
                 taxid           : taxid.value,
-            })
+            }) 
         }
 
         // const guardar= ()=>{

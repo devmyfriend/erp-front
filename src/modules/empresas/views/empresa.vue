@@ -315,9 +315,9 @@ export default {
         const enlistarEstados = ( )=>{
             storeDomicilio.cargarEstado(pais.value).then(()=>{
                 listaestado.value = storeDomicilio.Estado( pais.value )
-                console.log('enlistar estados')
-                console.log(listaestado.value) 
-            })
+                // console.log('enlistar estados')
+                // console.log(listaestado.value) 
+            }) 
         }
 
         const abrircerrarSucursal= ()=> { 
@@ -376,7 +376,7 @@ export default {
         }
 
         const validarPais = ()=>{
-            if( pais.value.length === 3 ){
+            if( pais.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -384,7 +384,7 @@ export default {
         }
 
         const validarRegimen = ()=>{
-            if( regimenfiscal.value.length === 3 ){
+            if( regimenfiscal.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -400,7 +400,7 @@ export default {
         }
 
         const validarMunicipio = ()=>{
-            if( municipio.value.length === 3 ){
+            if( municipio.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -408,7 +408,7 @@ export default {
         }
 
         const validarLocalidad = ()=>{
-            if( ciudad.value.length === 3 ){
+            if( ciudad.value.length >0 ){
                 return false
             }else{
                 return true
@@ -416,7 +416,7 @@ export default {
         }
 
         const validarColonia = ()=>{
-            if( colonia.value.length === 3 ){
+            if( colonia.value.length > 0 ){
                 return false
             }else{
                 return true
@@ -428,28 +428,35 @@ export default {
         const guardar = ()=>{
 
             const datos = {
-                Entidad:{
+                entidad:[
+                    {
                     
-                    ClavePais:          pais.value,
-                    ClaveRegimenFiscal: regimenfiscal.value,
-                    EsPropietaria:      espropietaria.value,
-                    NombreComercial:    nombrecomercial.value,
-                    NombreOficial:      nombreoficial.value,
-                    PersonaFisica:      personafisica.value,
-                    PersonaMoral:       personamoral.value,
-                    RFC:                rfc.value,
-                },
-                Domicilio:{
-                    Calle:              calle.value,
-                    ClaveColonia:       colonia.value,
-                    ClaveEstado:        estado.value,
-                    ClaveLocalidad:     ciudad.value,
-                    ClaveMunicipio:     municipio.value,
-                    CodigoPostal:       codigopostal.value,
-                    NumeroExt:          noext.value,
-                    NumeroInt:          noint.value,
-                    Pais:               pais.value,
-                }
+                        ClavePais:          pais.value,
+                        ClaveRegimenFiscal: regimenfiscal.value,
+                        EsPropietaria:      espropietaria.value,
+                        NombreComercial:    nombrecomercial.value,
+                        NombreOficial:      nombreoficial.value,
+                        PersonaFisica:      personafisica.value,
+                        PersonaMoral:       personamoral.value,
+                        RFC:                rfc.value,
+                        Borrado:            0,
+                        logo:               ""
+                    }
+                ],
+                CreadoPor: 1,
+                domicilio:[
+                    {
+                        Calle:              calle.value,
+                        ClaveColonia:       colonia.value,
+                        ClaveEstado:        estado.value,
+                        ClaveLocalidad:     ciudad.value,
+                        ClaveMunicipio:     municipio.value,
+                        CodigoPostal:       codigopostal.value,
+                        NumeroExt:          noext.value,
+                        NumeroInt:          noint.value,
+                        ClavePais:          pais.value,
+                    }
+                ]
             }
 
             let error = false
@@ -545,7 +552,7 @@ export default {
                         })
                     }
                     
-                    Swal.fire({
+                    Swal.fire({ 
                         title: 'Empresa Creada',
                         text:  datos,
                         icon: 'success'

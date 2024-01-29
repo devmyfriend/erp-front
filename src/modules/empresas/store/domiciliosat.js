@@ -19,9 +19,9 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
             return ( clavepais )=>state.ListaEstados.filter( estado => estado.ClavePais === clavepais )
         },
 
-        // listaMunicipios( state ){
-        //     return state.ListaMunicipios
-        // },
+        listaMunicipios( state ){
+            return state.ListaMunicipios
+        },
 
         listadoLocalidades( state ){
             return state.Localidades
@@ -30,6 +30,8 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
         listadoColonias ( state ){
             return state.ListaColonia
         }
+
+    
         
     },
     actions:{
@@ -101,7 +103,30 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
                 throw new Error( error )
             }
 
-        }
+        },
 
+        async cargarDatosGrales ( codigopostal, claveestado ){
+            try{
+                if( codigopostal.length >0 && codigopostal && claveestado && claveestado.length >0 ){ 
+                    const data = {
+                        cp: codigopostal,
+                        ClaveEstado: claveestado
+                    }
+
+                    const datos = await axios.post( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/colonias`,data )
+
+                    if( datos.status === 200  && datos.statusText === "OK" ){
+                        const { colonias, localidades, municipios } = datos.data
+                        this.ListaColonia = colonias
+                        this.ListaMunicipios = municipios 
+                        this.Localidades = localidades
+                    }
+                }
+
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        }
     }
 })
