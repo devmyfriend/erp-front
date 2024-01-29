@@ -16,10 +16,22 @@ export const useCodigosPostales = defineStore( 'codigosPostales',{
                 const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/catalogo/cp`);
                 
                 if( datos.status === 200 && datos.statusText === "OK" && datos.data.length > 0){
-                    /* console.log("[Back]: " + JSON.stringify( datos.data )); //Borrar*/
+                    /* console.log("[Back]: " + JSON.stringify( datos.data )); //Borrar */
                     this.ListaCodigosPostales = datos.data;
                 }
             }catch( error ){
+                console.log("[Error]: " + error );
+            }
+        },
+        async buscarCodigosPostales( cp, mun ){
+            try{
+                const datos = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/catalogo/cp/buscar`, { cp: cp, municipio: mun });
+
+                if( datos.status === 200 && datos.statusText === "OK" && datos.data.length > 0){
+                    console.log("[Back]: " + JSON.stringify( datos.data )); //Borrar
+                    this.ListaCodigosPostales = datos.data;
+                }
+            }catch ( error ){
                 console.log("[Error]: " + error );
             }
         }

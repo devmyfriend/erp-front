@@ -7,7 +7,7 @@
             <buscadorCP/>
             <!-- <tablaInfinita></tablaInfinita> -->
             <!-- En su lugar, se usa una tabla estatica de muestra -->
-
+            <button @click="test"> test </button>
             <table class="table-bordered">
                 <thead>
                     <tr>
@@ -81,8 +81,16 @@ onMounted(() => {
    store.cargarCodigosPostales().then(() => {
         ListadoCP.value = store.getCodigosPostales
         console.log("[Front]: " + JSON.stringify(ListadoCP.value));
-   }) 
+   });
 });
+
+function test(){
+    store.buscarCodigosPostales('01000', 'El Llano').then(() => {
+        ListadoCP.value = store.getCodigosPostales
+        console.log("[Front | Buscador]: " + JSON.stringify(ListadoCP.value));
+    })
+
+}
 
 </script>
 
