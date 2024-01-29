@@ -13,7 +13,8 @@
             
             <!-- <tablaInfinita></tablaInfinita> -->
             <!-- En su lugar, se usa una tabla estatica de muestra -->
-
+            
+            <button @click="test"> test </button>
             <table class="table-bordered">
                 <thead>
                     <tr>
@@ -88,6 +89,27 @@
 <script setup>
 import buscadorMonedas from '@/modules/moneda/components/buscadorMonedas.vue'
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
+import { ref, onMounted } from 'vue'
+
+const { useMonedas } = require('../store/moneda.js')
+const store = useMonedas();
+
+const ListadoMonedas = ref([]);
+
+onMounted(() => {
+    store.cargarMonedas().then(() =>{
+        ListadoMonedas.value = store.getMonedas;
+        console.log("[Front | Carga]: " + JSON.stringify(ListadoMonedas.value));
+    })
+});
+
+function test(){
+    store.buscarMonedas('Peso').then(() => {
+        ListadoMonedas.value = store.getMonedas
+        console.log("[Front | Buscador]: " + JSON.stringify(ListadoMonedas.value));
+    })
+}
+
 </script>
 
 <style>

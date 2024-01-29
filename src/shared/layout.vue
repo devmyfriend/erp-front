@@ -6,7 +6,6 @@
                     <img src="@/assets/img/imgEmpresa.svg" alt="Empresa">
                 </div>            
                 <div class="modulos-sideNav">
-<!--                     <router-link :to="{ name: 'listadoEmpresas', params: { esPropietaria: false } }"> -->
                     <router-link :to="{ name: 'Empresas'}">
                         <img src="@/assets/img/orgIco.svg" alt="Empresa">
                         <p>Organización</p>
@@ -35,6 +34,20 @@
                     </router-link>
                 </div>
                 
+
+
+                <!-- Menú temporal de los nuevos módulos -->
+                <div class="modulos-sideNav">
+                    <router-link :to="{ name: 'MenuTemporal'}">
+                        <img src="@/assets/img/imgEmpresa.svg" alt="Menú Temporal">
+                        <p>Menu Temporal</p>
+                    </router-link>
+                </div>
+                <!-- FIN | Menú temporal de los nuevos módulos -->
+
+
+
+
             </div>
             <div class="w-100">
                 <div class="navegador d-flex justify-content-between align-items-center px-2 py-1">

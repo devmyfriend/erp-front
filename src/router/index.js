@@ -10,6 +10,8 @@ import impuestosRouter from '@/modules/impuestos/routes/index'
 import regimenRouter from '@/modules/regimenFiscal/routes/index'
 import formasPagoRouter from '@/modules/formasPago/routes/index'
 
+import menuTemporal from '../shared/menuTemporal.vue'
+
 const routes = [
   {
     path: '/',
@@ -49,6 +51,13 @@ const routes = [
     path: '/formasPago',
     ...formasPagoRouter
   },
+  /* Menú temporal: Vistas de los nuevos módulos*/
+  {
+    path: '/MenuTemporal',
+    name: 'MenuTemporal',
+    component: menuTemporal
+  },
+  /* FIN | Menú temporal */
   {
     path: '/login',
     name: 'login',
