@@ -16,7 +16,7 @@
                 <input v-model="calle" class="calleSucursal" type="text" name="txtCalle" id="idCalle" placeholder="Calle">
                 <input v-model="noext" class="noextintSucursal" type="text" name="txtNoExt" id="idNoExt" placeholder="No. Ext">
                 <input v-model="noint" class="noextintSucursal" type="text" name="txtNoInt" id="idNoInt" placeholder="No. Int">
-                <select v-model="colonia" class="responsableSucursal" name="txtResponsable" id="idResponsable">
+                <!-- <select v-model="colonia" class="responsableSucursal" name="txtResponsable" id="idResponsable">
                     <option value="" selected>Colonia</option>
                     <option value="0215">Supermanzana 24</option>
                     <option value="0216">Supermanzana 25</option>
@@ -25,7 +25,8 @@
                     <option value="0474">Supermanzana 28</option>
                     <option value="0219">Supermanzana 30</option>
                     
-                </select> <br>
+                </select> <br> -->
+                <input class="responsableSucursal" type="text" placeholder="Colonia">
             </fieldset>
             <fieldset>
                 <div class="grupoField">
@@ -34,26 +35,29 @@
                 </div>
                 <div class="grupoField">
                     <!-- Estado -->
-                    <select v-modal="estado" class="estadoSucursal" name="txtEstado" id="idEstado">
+                    <!-- <select v-modal="estado" class="estadoSucursal" name="txtEstado" id="idEstado">
                         <option value="" selected>Estado</option>
                         <option value="ROO">Quintana Roo</option>
-                    </select>
+                    </select> -->
+                    <input class="estadoSucursal" type="text" placeholder="Estado" name="txtEstado" id="estado">
                 </div>
             </fieldset>
             <fieldset>
                 <div class="grupoField">
                     <!-- Municipio -->
-                    <select v-modal="municipio" class="municipioSucursal" name="txtEstado" id="idEstado">
+                    <!-- <select v-modal="municipio" class="municipioSucursal" name="txtEstado" id="idEstado">
                         <option value="" selected>Municipio</option>
                         <option value="005">Benito Juarez</option>
-                    </select>
+                    </select> -->
+                    <input class="municipioSucursal" type="text" placeholder="Municipio" name="txtMunicipio" id="idMunicipio">
                 </div>
                 <div class="grupoField">
                     <!-- Localidad -->
-                    <select v-modal="ciudad" class="ciudadSucursal" name="txtEstado" id="idEstado">
+                    <!-- <select v-modal="ciudad" class="ciudadSucursal" name="txtEstado" id="idEstado">
                         <option value="" selected>Ciudad</option>
                         <option value="01">Cancun</option>
-                    </select>
+                    </select> -->
+                    <input class="ciudadSucursal" type="text" placeholder="Ciudad" name="txtCiudad" id="idCiudad">
                 </div>
             </fieldset>
             <fieldset style="margin-top: 1.5rem;">
