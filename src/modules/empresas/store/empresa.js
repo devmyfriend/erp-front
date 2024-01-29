@@ -84,11 +84,12 @@ export const useEmpresa = defineStore( 'empresa', {
             try{
                 console.log( datos )
                 /*TODO: falta realizar la conexion para validar que los estatus esten de forma correcta /api/v1/empresa/crear*/
-                const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/fiscales/empresa/crear`,datos)
+                // /api/v1/empresa/crear
+                const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`,datos)
 
-                console.log( empresa )  
+                console.log( empresa )   
 
-                return 'ok'
+                return 'ok' 
 
             }catch( error ){
                 console.log( error )

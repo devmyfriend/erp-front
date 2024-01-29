@@ -428,29 +428,35 @@ export default {
         const guardar = ()=>{
 
             const datos = {
-                Entidad:{
+                entidad:[
+                    {
                     
-                    ClavePais:          pais.value,
-                    ClaveRegimenFiscal: regimenfiscal.value,
-                    EsPropietaria:      espropietaria.value,
-                    NombreComercial:    nombrecomercial.value,
-                    NombreOficial:      nombreoficial.value,
-                    PersonaFisica:      personafisica.value,
-                    PersonaMoral:       personamoral.value,
-                    RFC:                rfc.value,
-                },
+                        ClavePais:          pais.value,
+                        ClaveRegimenFiscal: regimenfiscal.value,
+                        EsPropietaria:      espropietaria.value,
+                        NombreComercial:    nombrecomercial.value,
+                        NombreOficial:      nombreoficial.value,
+                        PersonaFisica:      personafisica.value,
+                        PersonaMoral:       personamoral.value,
+                        RFC:                rfc.value,
+                        Borrado:            0,
+                        logo:               ""
+                    }
+                ],
                 CreadoPor: 1,
-                Domicilio:{
-                    Calle:              calle.value,
-                    ClaveColonia:       colonia.value,
-                    ClaveEstado:        estado.value,
-                    ClaveLocalidad:     ciudad.value,
-                    ClaveMunicipio:     municipio.value,
-                    CodigoPostal:       codigopostal.value,
-                    NumeroExt:          noext.value,
-                    NumeroInt:          noint.value,
-                    Pais:               pais.value,
-                }
+                domicilio:[
+                    {
+                        Calle:              calle.value,
+                        ClaveColonia:       colonia.value,
+                        ClaveEstado:        estado.value,
+                        ClaveLocalidad:     ciudad.value,
+                        ClaveMunicipio:     municipio.value,
+                        CodigoPostal:       codigopostal.value,
+                        NumeroExt:          noext.value,
+                        NumeroInt:          noint.value,
+                        ClavePais:          pais.value,
+                    }
+                ]
             }
 
             let error = false

@@ -89,6 +89,7 @@
                            name="nombreComercial" 
                            id="idNombreComercial" 
                            placeholder="Nombre comercial" 
+                           v-model="nombrecomercial"
                            @input="actualizarValores"
                     />
                </fieldset>
