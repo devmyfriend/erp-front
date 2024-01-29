@@ -10,7 +10,7 @@
             </div>
             <!-- <tablaInfinita></tablaInfinita> -->
             <!-- En su lugar, se usa una tabla estatica de muestra -->
-
+            <button @click="test"> test </button>
             <table class="table-bordered">
                 <thead>
                     <tr>
@@ -127,9 +127,29 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import buscadorCFDi from '@/modules/usoCFDi/components/buscadorCFDi.vue'
 import btNuevoCFDi from '@/modules/usoCFDi/components/btNuevoCFDi.vue';
+import { storeToRefs } from 'pinia';
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
+const { useCFDi } = require('../store/CFDi.js')
+const store = useCFDi();
+
+const ListadoCFDi = ref([]);
+
+onMounted(() => {
+    store.cargarCFDi().then(() => {
+        ListadoCFDi.value = store.getCFDi;
+        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoCFDi.value));
+    })
+})
+
+function test () {
+    store.buscarCFDi('G01').then(() => {
+        console.log('[Front] [Busqueda]: ');
+    })
+}
+
 </script>
 
 <style>
