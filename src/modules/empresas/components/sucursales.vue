@@ -11,7 +11,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Id Sucursal</th>
-                        <th scope="col">Contacto</th>
+                        <th scope="col">Nombre</th>
                         <th scope="col">Domicilio</th>
                         <th scope="col">Acciones</th>
                     </tr>
