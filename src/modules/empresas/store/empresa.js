@@ -42,6 +42,9 @@ export const useEmpresa = defineStore( 'empresa', {
         },
         NombrePais ( state ){
             return ( ClavePais )=> state.ListaPaises.find((pais) => pais.ClavePais === ClavePais)
+        },
+        IdEmpresa (state){
+            return state.EmpresaId
         }
     },
     actions:{
@@ -98,7 +101,9 @@ export const useEmpresa = defineStore( 'empresa', {
 
                 const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`, datos )
 
-                // this.EmpresaId = empresa.data.EmpresaId
+                console.log(empresa.data.EmpresaId)
+
+                this.EmpresaId = empresa.data.EmpresaId
                 return empresa.data
 
             }catch( error ){

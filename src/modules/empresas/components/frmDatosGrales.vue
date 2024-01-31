@@ -270,26 +270,7 @@ export default {
 
         const { Estado } = storeToRefs( storeDomicilio ) 
 
-        // const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
-        // const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
-
-        // onMounted(() => { 
-
-            // if( pais.value === 'MEX' ){
-            //     esextranjero.value = false
-            // }
-
-        //     // ListaPaises.value = store.listapaises
-        //     // listaregimenes.value = store.listaPFisica
-        //     // listadoestado.value = storeDomicilio.Estado( pais.value )  
-
-        //     // console.log(listadoestado)
-
-            // cargarPaises()
-        //     cargarRegimenes()
-
-
-        // })
+        
 
         onMounted(()=>{
             cargarPaises()
@@ -298,17 +279,10 @@ export default {
         
         const cargarPaises = ()=>{
             ListaPaises.value = storeEmpresa.listapaises
-            // console.log('se cargo paises')
-            // console.log(ListaPaises.value)
         }
         const cargarListaRegimenFiscal = () => {
             listaregimenes.value = storeEmpresa.listaPFisica
-        }
-
-        // const cargarEstados= ()=>{
-        //     listadoestado.value = storeDomicilio.Estado( pais.value )
-        // }
-        
+        }        
 
         const PersonaSelecionada = (valor) => {
             personafisica.value = valor
@@ -328,7 +302,6 @@ export default {
             if( pais.length>0 && pais!=='MEX' ){
                 esextranjero.value = !esextranjero.value
                 personafisica.value = true
-                // listadoestado.value = Estado( pais ) 
             }
         })
 

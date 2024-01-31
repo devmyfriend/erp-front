@@ -45,7 +45,7 @@
             </template>
             <template v-slot:body>
                 <Sucursal 
-                    :idempresa="1"
+                    :idempresa="idempresa?idempresa:0"
                 />
             </template>
         </Modal>
@@ -228,31 +228,9 @@ export default {
 
         onMounted( ()=>{
             
-            // store.cargarPaises().then( ( error, datos )=>{
-            //     if( error ){
-            //         console.log(error)
-            //     }
-            //     console.log(datos)
-            // })
-            // store.cargarRegimenes()
-            // await storeDomicilio.cargaDatos()
-
-            // await storeDomicilio.cargarEstado()
-
-            // listaestado.value = storeDomicilio.listaEstados
-            
-            // storeEmpresa.cargarPaises().then(()=>{
-            //     ListaPaises.value = storeEmpresa.listapaises
-            // })
             enlistarPaises()
             
             enlistarRegimenes()
-
-            // enlistarEstados( pais.value )
-            
-            // enlistarEstados( pais.value ) 
-
-            
 
         })
 
@@ -274,13 +252,7 @@ export default {
             })
         }
 
-        // const enlistarEstados = ( )=>{
-        //     storeDomicilio.cargarEstado(pais.value).then(()=>{
-        //         listaestado.value = storeDomicilio.Estado( pais.value )
-        //         // console.log('enlistar estados')
-        //         // console.log(listaestado.value) 
-        //     }) 
-        // }
+
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
@@ -312,86 +284,6 @@ export default {
                 regimenfiscal.value   = valores.regimenfiscal
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
-        }
-
-        const validar = ( valor, min, max )=>{
-            if (!valor ){
-                return true
-            }
-            if( valor.length < min || valor.length > max){
-                return true
-            }
-        }
-
-        const validarRFC = ()=>{
-            if( rfc.value.length >= 12 && rfc.value.length <= 13 ){
-                return false
-            }else{
-                return true
-            }
-        }
-        
-        const validarNombreOficial = ()=>{
-            if( nombreoficial.value.length >= 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-        const validarCodigoPostal = ()=>{
-            if( codigopostal.value.length === 5 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarPais = ()=>{
-            if( pais.value.length > 0 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarRegimen = ()=>{
-            if( regimenfiscal.value.length > 0 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarEstado = ()=>{
-            if( estado.value.length === 3 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarMunicipio = ()=>{
-            if( municipio.value.length > 0 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarLocalidad = ()=>{
-            if( ciudad.value.length >0 ){
-                return false
-            }else{
-                return true
-            }
-        }
-
-        const validarColonia = ()=>{
-            if( colonia.value.length > 0 ){
-                return false
-            }else{
-                return true
-            }
         }
 
         const verSucursal = ()=>{
@@ -443,8 +335,8 @@ export default {
             console.log( datos )
 
             const respuesta = await storeEmpresa.crearEmpresa( datos )
-            console.log(respuesta)
-            console.log(respuesta.status)
+            
+            idempresa.value = storeEmpresa.IdEmpresa
 
             Swal.fire({
                 title: respuesta.status === 200? 'Ok':  'Error',
