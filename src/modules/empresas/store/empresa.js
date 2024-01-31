@@ -6,7 +6,7 @@ import { defineStore } from "pinia";
 
 export const useEmpresa = defineStore( 'empresa', {
     state: ()=>({
-        IdEmpresa:       '',
+        EmpresaId:       '',
         RFC:             '',
         RazonSocial:     '',
         Pais:            '',
@@ -39,6 +39,9 @@ export const useEmpresa = defineStore( 'empresa', {
         },
         listaPMoral ( state ){
             return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
+        },
+        NombrePais ( state ){
+            return ( ClavePais )=> state.ListaPaises.find((pais) => pais.ClavePais === ClavePais)
         }
     },
     actions:{
@@ -62,16 +65,26 @@ export const useEmpresa = defineStore( 'empresa', {
         async cargarRegimenes (){
             try{
                 
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
+                // const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/catalogo/sat/cfdi` )
 
-                const resultado = datos.data                
+                const resultado = datos.data.map( ( objecto )=>{
+                    
+
+                    const item ={
+                        ClaveRegimenFiscal : objecto.regimen.ClaveRegimenFiscal,
+                        Descripcion:         objecto.regimen.Descripcion,
+                        Fisica:              objecto.regimen.Fisica,
+                        Moral:               objecto.regimen.Moral
+
+                    }
+
+                    return  item
+
+                })               
                
- 
                 if( datos.status === 200 && datos.statusText==="OK"){
                      this.ListaRegimenes = resultado
-
-                      console.log('carga de regimen')
-                      console.log(this.ListaRegimenes)
                 }
 
             }catch( error ){
@@ -82,21 +95,17 @@ export const useEmpresa = defineStore( 'empresa', {
 
         async crearEmpresa( datos ){
             try{
-                console.log( datos )
-                /*TODO: falta realizar la conexion para validar que los estatus esten de forma correcta /api/v1/empresa/crear*/
-                // /api/v1/empresa/crear
-                const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`,datos)
 
-                console.log( empresa )   
+                const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`, datos )
 
-                return 'ok' 
+                // this.EmpresaId = empresa.data.EmpresaId
+                return empresa.data
 
             }catch( error ){
-                console.log( error )
-                throw new Error( error )
+                return (error.response.data)
             }
         }
-
+ 
     }
 
 })

@@ -133,19 +133,19 @@
                        @input="actualizarValores"
                  />
                 <label class="labelEstados" for="estado">Estado</label>
-                <input class="estado" type="text" name="estasdo" id="estado" placeholder="Estado">
+                <input class="estado" type="text" name="estasdo" id="estado" v-model="estadonombre" placeholder="Estado"  @input="actualizarValores">
                </fieldset>
                <fieldset>
                    <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
-                   <input class="municipio" type="text" name="municipio" id="municipio" placeholder="Municipio">
+                   <input class="municipio" type="text" name="municipio" id="municipio" v-model="municipionombre" placeholder="Municipio"  @input="actualizarValores">
                </fieldset>
                <fieldset>
                 <label class="labelCiudad" for="ciudad">Ciudad</label>
-                <input class="ciudad" type="text" name="ciudad" id="ciudad" placeholder="Ciudad">
+                <input class="ciudad" type="text" name="ciudad" id="ciudad" v-model="ciudadnombre" placeholder="Ciudad"  @input="actualizarValores">
                </fieldset>
-               <fieldset v-if="!nuevaColonia">
+               <fieldset>
                 <label class="labelColonia" for="colonia">Colonia</label>
-                <input class="colonia" type="text" name="colonia" id="colonia" placeholder="Colonia">
+                <input class="colonia" type="text" name="colonia" id="colonia" v-model="colonianombre" placeholder="Colonia"  @input="actualizarValores">
                </fieldset>
             </form>
         </div>
@@ -293,7 +293,7 @@ export default {
 
         onMounted(()=>{
             cargarPaises()
-            cargarEstados()
+            cargarListaRegimenFiscal()
         })
         
         const cargarPaises = ()=>{
@@ -301,10 +301,13 @@ export default {
             // console.log('se cargo paises')
             // console.log(ListaPaises.value)
         }
-
-        const cargarEstados= ()=>{
-            listadoestado.value = storeDomicilio.Estado( pais.value )
+        const cargarListaRegimenFiscal = () => {
+            listaregimenes.value = storeEmpresa.listaPFisica
         }
+
+        // const cargarEstados= ()=>{
+        //     listadoestado.value = storeDomicilio.Estado( pais.value )
+        // }
         
 
         const PersonaSelecionada = (valor) => {
@@ -335,6 +338,7 @@ export default {
                 // console.log(store.listaPFisica)
                 console.log('persona fisica')
                 listaregimenes.value = storeEmpresa.listaPFisica
+                console.log(listaregimenes)
 
             }else{
                 console.log('persona moral')
@@ -357,17 +361,13 @@ export default {
         // })
 
         watch( codigopostal, ( codigopostal )=>{
-            // if( codigopostal.length === 5 ){ 
-            //     storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
-            //         listacolonias.value = storeDomicilio.listadoColonias
-            //     })
-            // } 
                 if( codigopostal.length === 5 ){
-                    storeDomicilio.cargarDatosGrales( codigopostal, estado.value).then(()=>{
-                        listamunicipio.value = storeDomicilio.listaMunicipios
-                        listalocalidad.value = storeDomicilio.listadoLocalidades
-                        listacolonias.value = storeDomicilio.listadoColonias
-                        console.log(listacolonias)
+
+                    storeDomicilio.cargaDatosFederales( codigopostal ).then( ()=>{
+                        estadonombre.value = storeDomicilio.Estado
+                        municipionombre.value = storeDomicilio.Municipio
+                        ciudadnombre.value = storeDomicilio.Localidad
+                        
                     })
                 }
 
@@ -398,7 +398,7 @@ export default {
                 personamoral    : personamoral.value,
                 regimenfiscal   : regimenfiscal.value,
                 rfc             : rfc.value,
-                taxid           : taxid.value,
+                taxid           : taxid.value, 
             }) 
         }
 

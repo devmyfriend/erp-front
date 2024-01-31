@@ -248,7 +248,7 @@ export default {
             
             enlistarRegimenes()
 
-            enlistarEstados( pais.value )
+            // enlistarEstados( pais.value )
             
             // enlistarEstados( pais.value ) 
 
@@ -274,13 +274,13 @@ export default {
             })
         }
 
-        const enlistarEstados = ( )=>{
-            storeDomicilio.cargarEstado(pais.value).then(()=>{
-                listaestado.value = storeDomicilio.Estado( pais.value )
-                // console.log('enlistar estados')
-                // console.log(listaestado.value) 
-            }) 
-        }
+        // const enlistarEstados = ( )=>{
+        //     storeDomicilio.cargarEstado(pais.value).then(()=>{
+        //         listaestado.value = storeDomicilio.Estado( pais.value )
+        //         // console.log('enlistar estados')
+        //         // console.log(listaestado.value) 
+        //     }) 
+        // }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
@@ -312,6 +312,15 @@ export default {
                 regimenfiscal.value   = valores.regimenfiscal
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
+        }
+
+        const validar = ( valor, min, max )=>{
+            if (!valor ){
+                return true
+            }
+            if( valor.length < min || valor.length > max){
+                return true
+            }
         }
 
         const validarRFC = ()=>{
@@ -395,7 +404,9 @@ export default {
 
 
 
-        const guardar = ()=>{
+        const guardar = async ()=>{
+
+            const paisseleccionado = storeEmpresa.NombrePais( pais.value ) 
 
             const datos = {
                 entidad:[
@@ -417,123 +428,31 @@ export default {
                 domicilio:[
                     {
                         Calle:              calle.value,
-                        ClaveColonia:       colonia.value,
-                        ClaveEstado:        estado.value,
-                        ClaveLocalidad:     ciudad.value,
-                        ClaveMunicipio:     municipio.value,
+                        Colonia:            colonianombre.value,
+                        Estado:             estadonombre.value,
+                        Localidad:          ciudadnombre.value,
+                        Municipio:          municipionombre.value,
                         CodigoPostal:       codigopostal.value,
                         NumeroExt:          noext.value,
                         NumeroInt:          noint.value,
-                        ClavePais:          pais.value,
+                        Pais:               paisseleccionado.Descripcion 
                     }
                 ]  
             }
 
-            let error = false
+            console.log( datos )
 
-            if( validarRFC() ){
-                error = true
-                Swal.fire({
-                    title: 'RFC',
-                    text:  'El R.F.C. no cumple con los requerimientos basicos',
-                    icon:  'error'
-                })
-            }
+            const respuesta = await storeEmpresa.crearEmpresa( datos )
+            console.log(respuesta)
+            console.log(respuesta.status)
 
-            if( validarNombreOficial() ){
-                error = true
-                Swal.fire({
-                    title: 'Nombre Oficial',
-                    text:  'El Nombre Oficial no cumple con los requerimientos basicos',
-                    icon:  'error'
-                })
-            }
+            Swal.fire({
+                title: respuesta.status === 200? 'Ok':  'Error',
+                text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
+                icon:  respuesta.status === 200? 'success': 'error',
+            })
 
-            if( validarCodigoPostal() ){
-                error = true
-                Swal.fire({
-                    title: 'Código Postal',
-                    text:  'El Código Postal no cumple con los requerimientos basicos',
-                    icon:  'error'
-                })
-            }
-
-            if( validarPais() ){
-                error = true
-                Swal.fire({
-                    title: 'País',
-                    text:  'El País no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarRegimen() ){
-                error = true
-                Swal.fire({
-                    title: 'Régimen Fiscal',
-                    text:  'El Régimen Fiscal no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarEstado() ){
-                error = true
-                Swal.fire({
-                    title: 'Estado',
-                    text:  'El Estado no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarMunicipio() ){
-                error = true
-                Swal.fire({
-                    title: 'Municipio',
-                    text:  'El Municipio no fue seleccionado',
-                    icon:  'error'
-                })
-            }
-
-            if( validarLocalidad() ){
-                error = true
-                Swal.fire({
-                    title: 'Localidad',
-                    text:  'La Localidad no fue seleccionada',
-                    icon:  'error'
-                })
-            }
-
-            if( validarColonia() ){
-                error = true
-                Swal.fire({
-                    title: 'Colonia',
-                    text:  'La Colonia no fue seleccionada',
-                    icon:  'error'
-                })
-            }
-
-            if( !error ){
-                storeEmpresa.crearEmpresa( datos ).then( (error, datos)=>{
-                    if(error){
-                        Swal.fire({
-                            title: 'Error',
-                            text:  'No se puedo crear la empresa',
-                            icon:  "error"
-                        })
-                    }
-                    
-                    Swal.fire({ 
-                        title: 'Empresa Creada',
-                        text:  datos,
-                        icon: 'success'
-                    })
-                })
-                Swal.fire({
-                        title: "The Internet?",
-                        text: "That thing is still around?",
-                        icon: "question"
-                })
-            }
+            
         }
         
         
