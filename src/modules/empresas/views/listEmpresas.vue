@@ -1,8 +1,6 @@
 <template>
   <div class="viewListEmpresas">
-
-    <Tabla :esPropietaria="false"/>
-
+    <Tabla />
   </div>
 </template>
 
