@@ -14,13 +14,8 @@ export const useEmpresa = defineStore( 'empresa', {
         PersonaMoral:    false,
         RegimenFiscal:   '',
         NombreComercial: '',
-
         ListaPaises :    [],
         ListaRegimenes:  [],
-        ListaEstados:    [],
-        ListaMunicipios: [],
-        ListaCiudades:   [],
-        ListaColonias:   [],
 
         Calle: '',
         NoInt: '',
@@ -32,6 +27,9 @@ export const useEmpresa = defineStore( 'empresa', {
         CodigoPostal: ''
     }),
     getters: {
+        listapaises( state ){
+            return state.ListaPaises
+        },
         listaregimen( state ){
             // console.log( state.ListaRegimenes.filter( regimen, regimen => regimen.Fisica === true ) )
             return state.ListaRegimenes.filter( regimen=>regimen.Fisica === true )
@@ -42,39 +40,25 @@ export const useEmpresa = defineStore( 'empresa', {
         listaPMoral ( state ){
             return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
         },
-
-        getPaises ( state ){
-            return state.ListaPaises
-        },
-        getEstados ( state ){
-            return state.ListaEstados
-        },
-        getMunicipios ( state ){
-            return state.ListaMunicipios
-        },
-        getCiudades ( state ){
-            return state.ListaCiudades
-        },
-        getColonias ( state ){
-            return state.ListaColonias
-
         NombrePais ( state ){
             return ( ClavePais )=> state.ListaPaises.find((pais) => pais.ClavePais === ClavePais)
         },
         IdEmpresa (state){
             return state.EmpresaId
-
         }
     },
     actions:{
         async cargarPaises(){
             try{
+                
                 const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/` )
                 
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaPaises = datos.data
-
+                const data = datos.data
+                
+                if( datos.status === 200 && datos.statusText==="OK"){ 
+                    this.ListaPaises = data
                 }
+
             }catch( error ){
                 console.log( error )
                 throw new Error( error )
@@ -112,20 +96,21 @@ export const useEmpresa = defineStore( 'empresa', {
             }
         },
 
-        async cargarEstados(cPais){
+        async crearEmpresa( datos ){
             try{
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/${cPais}` )
 
-                if ( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaEstados = datos.data
-                }
+                const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`, datos )
+
+                console.log(empresa.data.EmpresaId)
+
+                this.EmpresaId = empresa.data.EmpresaId
+                return empresa.data
+
             }catch( error ){
-                console.log( error )
-                throw new Error( error )
+                return (error.response.data)
             }
-        },
-
-
-    }
+        }
  
+    }
+
 })
