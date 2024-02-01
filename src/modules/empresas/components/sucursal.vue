@@ -7,7 +7,7 @@
             </fieldset>
             <fieldset>
                 <!-- <label for="">Nombre del responsable</label> -->
-                <select v-model="responsable" class="responsableSucursal" name="txtResponsable" id="idResponsable">
+                <select v-model="responsable" class="responsableSucursal" name="txtResponsable" id="idResponsable" v-on:focus="cargarResponsables">
                     <option value="">Nombre del responsable</option>
                 </select>
             </fieldset>
@@ -76,7 +76,7 @@ import { ref, computed, watch } from 'vue';
 import Telefonos from '@/shared/datosTabla.vue'
 import Emails from '@/shared/datosTabla.vue'
 
-import { useSucursal } from '../store/surcursal'
+import { useSucursal } from '../store/sucursal';
 import { useDomicilioSAT } from '../store/domiciliosat';
 
 
@@ -108,6 +108,7 @@ export default {
         const responsable    = ref ('')
 
         const storeDomicilio = useDomicilioSAT()
+        const storeSucursal = useSucursal()
         
         listatelfonos.value=[{
             index    : 1,
@@ -120,6 +121,10 @@ export default {
         }]
 
         const storeScursal = useSucursal()
+
+        const cargarResponsables = async () =>{
+            await storeSucursal.CargarResponsables( idempresa)
+        }
 
         watch( codigopostal, ( codigopostal )=>{
                 if( codigopostal.length === 5 ){
@@ -177,6 +182,7 @@ export default {
             tablatelfono,
             
             guardar,
+            cargarResponsables
 
         }
     }
