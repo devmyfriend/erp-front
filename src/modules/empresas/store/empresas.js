@@ -3,72 +3,47 @@ import { defineStore } from "pinia";
 
 export const useEmpresas = defineStore( 'empresas', {
     state: ()=>({
-        lista:  [],
-        paginas: {
-            pagAct: 1,
-            pagMax: 1,
-            cantidad: 5,
-            longitud: 0
+        ListadoEmpresas:  [],
+        Paginacion: {
+            PaginaActual: 1,
+            PaginaMaxima: 1,
+            Paginado: 5,
+            Total: 0
         },
         propietaria: false
     }),
     getters:{
         getListado( state ){
-            return state.lista
+            return state.ListadoEmpresas
         },
         getPaginas( state ){
-            return state.paginas
+            return state.Paginacion
         }
     },
     actions:{
-        async cargarListado(){
+        async cargarEmpresas(){
             try{
-                const long = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresas/longitud/propiedad=${this.propietaria}`)
-                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado/offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
-                
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.lista = datos.data.resultado
-                }                
+                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresa`)
 
-                if (long.status === 200 && long.statusText === "OK") {
-                    this.paginas.longitud = long.data.resultado
-                    this.paginas.pagMax = Math.ceil( this.paginas.longitud / this.paginas.cantidad )   
+                if( datos.status === 200 && datos.statusText==="OK"){
+                    this.ListadoEmpresas = datos.data
                 }
-            }catch( error ){
+            }catch ( error ){
                 console.log( error )
                 throw new Error( error )
             }
         },
-        async paginador(opcion){
+        async busquedaEmpresas(busqueda){
             try{
-                const oldPag = this.paginas.pagAct
-                if(this.paginas.pagAct <= 1 && (opcion === 1 || opcion === 0)){
-                }else if(this.paginas.pagAct >= this.paginas.pagMax && (opcion === 2 || opcion === 3)){
-                }else{
-                    if(opcion === 0){
-                        this.paginas.pagAct = 1
-                    }else if(opcion === 1 && this.paginas.pagAct > 1){
-                        this.paginas.pagAct -= 1
-                    }else if(opcion === 2 && this.paginas.pagAct < this.paginas.pagMax){
-                        this.paginas.pagAct += 1
-                    }else if (opcion === 3){
-                        this.paginas.pagAct = this.paginas.pagMax
-                    }
-                }
-                if(oldPag !== this.paginas.pagAct){
-                    const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresas/listado/offset=${ (this.paginas.cantidad * (this.paginas.pagAct - 1) ) }&limit=${ this.paginas.cantidad }&propiedad=${this.propietaria}`)
-        
-                    if( datos.status === 200 && datos.statusText==="OK"){
-                        this.lista = datos.data.resultado
-                    }      
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
+                const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresa/nombre/${busqueda}`)
+                    this.ListadoEmpresas = datos.data
+                    return datos.data
+            }catch ( error ){
+                    console.log(error.response.data);                
             }
         },
-        setPropietaria( propiedad ){
-            this.propietaria = propiedad
+        setPropietaria( propietaria ){
+            this.propietaria = propietaria
         }
     }
 })

@@ -5,38 +5,10 @@
   
   <div class="contComp p-0 pb-4">
       <div class="w-100 d-flex justify-content-between pt-4">
-        <txtbuscador></txtbuscador>
+        <txtbuscador @BusquedaRealizada="BusquedaRealizada"></txtbuscador>
         <btNuevo class="btNuevo"></btNuevo>
       </div>
-
-      <div class="table-responsive">  
-      <table class="table table-bordered border-2 border-dark rounded text-start">
-            <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre oficial</th>
-                  <th>RFC</th>
-                  <th>Dirección</th>
-                  <th>Teléfono</th>
-                  <th class="Acciones text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in lista" :key="item.EntidadNegocioId">
-                    <td class="fila1">{{ item.EntidadNegocioId }}</td>
-                    <td class="fila2">{{ item.NombreOficial }}</td>
-                    <td clasS="fila3">{{ item.RFC }}</td>
-                    <td class="fila4">{{ item.Direccion }}</td>
-                    <td class="fila5" >{{ item.NumeroTelefonico }}</td>
-                    <td class="Acciones text-center"> 
-                      <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                      <a class="mx-2" ><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                    </td>
-            </tr>
-            </tbody>
-        </table>
-      </div>
-      <Paginador :pagina="pagina" :lista="lista" @nuevaPagina="nuevaPagina" @nuevaLista="nuevaLista"/>
+          <TablaInfinita :busquedaActiva="busquedaActiva" @DesactivarBusqueda="DesactivarBusqueda"></TablaInfinita>
       <div class="botones">
         <button class="btn btn-save me-4">Guardar</button>
         <button class="btn btn-danger me-4">Cancelar</button>
@@ -47,8 +19,8 @@
   <script>
   import { ref, onBeforeMount, getCurrentInstance } from 'vue'
   import txtbuscador from '@/shared/txtbuscador.vue';
-  import Paginador from '@/shared/paginador.vue';
-  import  btNuevo from '@/shared/btNuevo.vue';
+  import btNuevo from '@/shared/btNuevo.vue';
+  import TablaInfinita from './tablaInfinita.vue';
   
   const { useEmpresas } = require('../modules/empresas/store/empresas')
   
@@ -63,8 +35,8 @@
     },
     setup( props, { root } ){
       let tablaNombre = ref('Empresas');
-      let lista = ref( [] );
-      let pagina = ref( [] );
+      const lista = ref( [] );
+      const busquedaActiva = ref(false);
 
       const store = useEmpresas();
 
@@ -73,39 +45,31 @@
         const instance = getCurrentInstance();
         const router = instance.appContext.config.globalProperties.$router;
         const esPropietaria = router.currentRoute.value.params.esPropietaria === 'true';
-        console.log('Es propietaria:', esPropietaria);
         store.setPropietaria(esPropietaria);
 
-        store.cargarListado().then(() => {
-            lista.value = store.getListado;
-            pagina.value.pagAct = store.getPaginas.pagAct;
-            pagina.value.pagMax = store.getPaginas.pagMax;
-            pagina.value.cantidad = store.getPaginas.cantidad;
-            pagina.value.longitud = store.getPaginas.longitud;
-          })
-        
-        
       })
+
+      function BusquedaRealizada() {
+        busquedaActiva.value = true;
+      }
+      function DesactivarBusqueda() {
+        busquedaActiva.value = false;
+      }
+
       return{
         tablaNombre,
         lista,
-        pagina,
+        BusquedaRealizada,
+        busquedaActiva,
+        DesactivarBusqueda,
         
       }
     },
     components: {
-      txtbuscador,
-      Paginador,
-      btNuevo,
-    },
-    methods: {
-      nuevaPagina(pagina){
-        this.pagina.pagAct = pagina;
-      },
-      nuevaLista(lista){
-        this.lista = lista;
-      }
-    }
+    txtbuscador,
+    btNuevo,
+    TablaInfinita,
+}
   }
   </script>
 

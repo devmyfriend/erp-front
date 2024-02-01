@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useDomicilioSAT = defineStore( 'domicilioSAT', {
     state: ()=>({
+
         // ListaEstados:      [],
         // ListaMunicipios:   [],
         // Localidades:       [],
@@ -32,11 +33,17 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
 
         Localidad( state ){
             return state.localidad
-        },
 
-        // listadoColonias ( state ){
-        //     return state.ListaColonia
-        // }
+        },
+        
+/*         listamunicipios( state, claveEstado ){
+            return state.ListaMunicipios.filter( municipio => municipio.ClaveEstado === claveEstado )
+        }, */
+        listaciudades( state, claveEstado ){
+            return state.ListaCiudades.filter( ciudad => ciudad.ClaveEstado === claveEstado )
+
+        }
+
 
     
         
@@ -76,10 +83,12 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
             }
         },
 
+
         async cargarLocalidad( claveestado ){
 
             try{
                 const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/localidad/${ claveestado }` )
+
 
                 if( datos.status === 200  && datos.statusText === "OK" ){
                     console.log(datos.data)
@@ -136,6 +145,7 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
             }
         },
 
+
         async cargaDatosFederales ( codigopostal ){
             try{
                 const data = {
@@ -161,5 +171,6 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
                 throw new Error( error )
             }
         }
+
     }
 })
