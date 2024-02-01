@@ -3,25 +3,37 @@ import { defineStore } from 'pinia'
 
 export const useDomicilioSAT = defineStore( 'domicilioSAT', {
     state: ()=>({
-        ListaEstados:      [],
-        ListaMunicipios:   [],
-        Localidades:       [],
-        ListaColonia:      [],
-        ListaPaises:       [],
+
+        // ListaEstados:      [],
+        // ListaMunicipios:   [],
+        // Localidades:       [],
+        // ListaColonia:      [],
+
+        pais:          '',
+        codigo_postal: '',
+        estado:        '',
+        localidad:     '',
+        municipio:     '' 
+
+
     }),
     getters:{
+        // listaEstados( state ){
+        //     return state.ListaEstados.filter( estado => estado.ClavePais === 'MEX' )
+        //     // return state.ListaEstados
+        // },
 
-        listadoestado(){
-            return this.ListaEstados
+        Estado: ( state ) => {
+            return state.estado
         },
-        listadomunicipio(){
-            return this.ListaMunicipios
+
+        Municipio( state ){
+            return state.municipio
         },
-        listadociudad(){
-            return this.ListaCiudades
-        },
-        listadopais(){
-            return this.ListaPaises
+
+        Localidad( state ){
+            return state.localidad
+
         },
         
 /*         listamunicipios( state, claveEstado ){
@@ -31,6 +43,7 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
             return state.ListaCiudades.filter( ciudad => ciudad.ClaveEstado === claveEstado )
 
         }
+
 
     
         
@@ -131,53 +144,33 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
                 throw new Error( error )
             }
         },
-        async cargarEstados(pais){
-            try{
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/estado/${pais}` )
 
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaEstados = datos.data.listadoEstados
+
+        async cargaDatosFederales ( codigopostal ){
+            try{
+                const data = {
+                    cp: codigopostal
                 }
+
+                const datos = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/catalogo/cp/buscar`, data )
+
+                
+                if( datos.status === 200 && datos.statusText  === "OK"){
+                    const { codigo_postal, estado, municipio, localidad, pais } = datos.data[0]
+                    this.estado =  estado
+                    this.municipio = municipio
+                    this.localidad = localidad
+                    this.codigo_postal = codigo_postal
+                    this.pais = pais
+                   
+                }
+
+
             }catch( error ){
                 console.log( error )
-                throw new Error ( error )
+                throw new Error( error )
             }
-        },
-        async cargarMunicipios(estado){
-            try{
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/municipio/${estado}` )
+        }
 
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaMunicipios = datos.data.listadoMunicipios
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error ( error )
-            }
-        },
-        async cargarLocalidades(estado){
-            try{
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/localidad/${estado}` )
-
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaCiudades = datos.data.listadoLocalidades
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error ( error )
-            }
-        },
-        async cargarPaises(){
-            try{
-                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/pais` )
-
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaPaises = datos.data.listadoPaises
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error ( error )
-            }
-        },
     }
 })

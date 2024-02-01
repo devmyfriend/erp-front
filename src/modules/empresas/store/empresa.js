@@ -6,7 +6,7 @@ import { defineStore } from "pinia";
 
 export const useEmpresa = defineStore( 'empresa', {
     state: ()=>({
-        IdEmpresa:       '',
+        EmpresaId:       '',
         RFC:             '',
         RazonSocial:     '',
         Pais:            '',
@@ -42,6 +42,7 @@ export const useEmpresa = defineStore( 'empresa', {
         listaPMoral ( state ){
             return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
         },
+
         getPaises ( state ){
             return state.ListaPaises
         },
@@ -56,6 +57,13 @@ export const useEmpresa = defineStore( 'empresa', {
         },
         getColonias ( state ){
             return state.ListaColonias
+
+        NombrePais ( state ){
+            return ( ClavePais )=> state.ListaPaises.find((pais) => pais.ClavePais === ClavePais)
+        },
+        IdEmpresa (state){
+            return state.EmpresaId
+
         }
     },
     actions:{
@@ -76,16 +84,26 @@ export const useEmpresa = defineStore( 'empresa', {
         async cargarRegimenes (){
             try{
                 
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
+                // const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/catalogo/sat/cfdi` )
 
-                const resultado = datos.data                
+                const resultado = datos.data.map( ( objecto )=>{
+                    
+
+                    const item ={
+                        ClaveRegimenFiscal : objecto.regimen.ClaveRegimenFiscal,
+                        Descripcion:         objecto.regimen.Descripcion,
+                        Fisica:              objecto.regimen.Fisica,
+                        Moral:               objecto.regimen.Moral
+
+                    }
+
+                    return  item
+
+                })               
                
- 
                 if( datos.status === 200 && datos.statusText==="OK"){
                      this.ListaRegimenes = resultado
-
-                      console.log('carga de regimen')
-                      console.log(this.ListaRegimenes)
                 }
 
             }catch( error ){
@@ -106,108 +124,8 @@ export const useEmpresa = defineStore( 'empresa', {
                 throw new Error( error )
             }
         },
-        async cargarMunicipios(cEstado){
-            try{
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/municipios/${cEstado}` )
 
-                if ( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaMunicipios = datos.data
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
-            }
-        },
-        async cargarCiudades(cMunicipio){
-            try{
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/ciudades/${cMunicipio}` )
-
-                if ( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaCiudades = datos.data
-                }
-
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
-            }
-
-        },
-        async cargarMunicipiosYColonias( cp, cEstado ){
-            try{
-                const body ={
-                        "cp": cp,
-                        "ClaveEstado": cEstado
-                }
-                const datos = await axios.post( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/colonias`, body)
-
-                if ( datos.status === 200 && datos.statusText==="OK"){
-                    
-                    this.ListaMunicipios = datos.data.localidades
-                    this.ListaCiudades   = datos.data.localidades
-                    this.ListaColonias = datos.data.colonias
-
-
-                    let Unicos = {};
-                    this.ListaMunicipios = this.ListaMunicipios.filter((elemento) => {
-                        if (!Unicos[elemento.municipio]) {
-                            Unicos[elemento.municipio] = true;
-                            return true;
-                        }
-                        return false;
-                    });
-
-                    this.ListaCiudades = this.ListaCiudades.filter((elemento) => {
-                        if (!Unicos[elemento.localidad]) {
-                            Unicos[elemento.localidad] = true;
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-            }catch( error ){
-                console.log( error )
-                throw new Error( error )
-            }
-        },
 
     }
-        /*
-         async cargarCP(){
-            try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/codigospostal`)
-            
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaCP = datos.data.listadocodigos
-                }
-            }catch(error){
-                console.log( error )
-                throw new Error( error )
-            }
-        },
-        async cargarColoniasPorCP( cp ){
-            try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/domicilio/sat/${cp}`)
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaColonias = datos.data.listadoColonias
-                }
-
-            }catch(error){
-                console.log( error )
-                throw new Error( error )
-            }
-        },
-        async crearColonia(body){
-            try{
-                const datos = await axios.post(`${process.env.VUE_APP_PATH_API}v1/colonias/crear`, body)
-                
-
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaColonias = datos.data.listadoColonias
-                }
-
-            }catch(error){
-                console.log( error )
-                throw new Error( error )
-            }
-        } */
+ 
 })

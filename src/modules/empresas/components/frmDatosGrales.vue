@@ -74,7 +74,7 @@
                            name="persona" 
                            id="idPersonaMoral" 
                            v-on:click="PersonaSelecionada(false)"
-                           :value="personamoral"
+                           :value="personamoral" 
                            @input="actualizarValores"
                     />
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
@@ -131,26 +131,22 @@
                 <input v-model="codigopostal" class="compo_base compo_corto" type="text" name="codigoPostal" id="codigoPostal" placeholder="Código Postal" @input="actualizarValores; validarCargaColonias;"/>
                 <label class="labelEstados" for="estado">Estado</label>
 
-                <select class="compo_base cEstado" name="estado" id="idEstado" v-model="estado" :disabled="modoEstado" @change="actualizarValores; validarCargaColonias;">
-                    <option v-for="opcion in listadoestado" :key="opcion">{{ opcion.Nombre }}</option>
-                </select>
+                <input class="estado" type="text" name="estasdo" id="estado" v-model="estadonombre" placeholder="Estado"  @input="actualizarValores">
                </fieldset>
                <fieldset>
-                    <label class="label_med" for="municipio">Deleg./Municipio</label>
-                    <select class="compo_med" name="municipio" id="idmunicipio" v-model="municipio" :disabled="modoMunicipio" @change="actualizarValores">
-                        <option v-for="opcion in listadoMunicipios" :key="opcion">{{ opcion.municipio}}</option>
-                    </select>
-                   
+                   <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
+                   <input class="municipio" type="text" name="municipio" id="municipio" v-model="municipionombre" placeholder="Municipio"  @input="actualizarValores">
 
                </fieldset>
                
                <fieldset>
 
-                <label class="label_med" for="ciudad">Ciudad</label>
-                <select class="compo_med" name="ciudad" id="ciudad" v-model="ciudad" :disabled="modoCiudad" @change="actualizarValores">
-                    <option v-for="opcion in listadoCiudades" :key="opcion">{{ opcion.localidad}}</option>
-                </select>
-
+                <label class="labelCiudad" for="ciudad">Ciudad</label>
+                <input class="ciudad" type="text" name="ciudad" id="ciudad" v-model="ciudadnombre" placeholder="Ciudad"  @input="actualizarValores">
+               </fieldset>
+               <fieldset>
+                <label class="labelColonia" for="colonia">Colonia</label>
+                <input class="colonia" type="text" name="colonia" id="colonia" v-model="colonianombre" placeholder="Colonia"  @input="actualizarValores">
 
                </fieldset>
                 <fieldset class="fsColonias">
@@ -304,19 +300,21 @@ export default {
             })
 
 
-        // const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
-        // const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
 
-        // onMounted(() => { 
+        
 
-
-/*             ListaPaises.value = store.listapaises
-            listaregimenes.value = store.listaPFisica
-            listadoestado.value = storeDomicilio.listadoestado */
+        onMounted(()=>{
+            cargarPaises()
+            cargarListaRegimenFiscal()
         })
+        
+        const cargarPaises = ()=>{
+            ListaPaises.value = storeEmpresa.listapaises
+        }
+        const cargarListaRegimenFiscal = () => {
+            listaregimenes.value = storeEmpresa.listaPFisica
+        }        
 
-        /* const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises ) */
-        const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
 
         const PersonaSelecionada = (valor) => {
             personafisica.value = valor
@@ -328,24 +326,7 @@ export default {
             if( pais.length>0 && pais!=='MEX' ){
                 esextranjero.value = !esextranjero.value
                 personafisica.value = true
-            } */
-            ListaPaises.value.forEach(paisAct => {
-                if (paisAct.Descripcion === newPais) {
-                    clavePais.value = paisAct.ClavePais;
-                    store.cargarEstados(clavePais.value).then(() => {
-                        listadoestado.value = store.getEstados
-                    })
-                }
-            });
 
-        })
-
-        watch(codigopostal, (CP) => {
-            if (CP.length === 5) {
-                modoEstado.value = false
-            } else {
-                modoEstado.value = true
-                optColonia.value.length = 0;
 
             }
         })
@@ -356,6 +337,7 @@ export default {
                 // console.log(store.listaPFisica)
                 console.log('persona fisica')
                 listaregimenes.value = storeEmpresa.listaPFisica
+                console.log(listaregimenes)
 
             }else{
                 console.log('persona moral')
@@ -378,17 +360,13 @@ export default {
         // })
 
         watch( codigopostal, ( codigopostal )=>{
-            // if( codigopostal.length === 5 ){ 
-            //     storeDomicilio.cargarColonia( codigopostal ).then( ()=>{
-            //         listacolonias.value = storeDomicilio.listadoColonias
-            //     })
-            // } 
                 if( codigopostal.length === 5 ){
-                    storeDomicilio.cargarDatosGrales( codigopostal, estado.value).then(()=>{
-                        listamunicipio.value = storeDomicilio.listaMunicipios
-                        listalocalidad.value = storeDomicilio.listadoLocalidades
-                        listacolonias.value = storeDomicilio.listadoColonias
-                        console.log(listacolonias)
+
+                    storeDomicilio.cargaDatosFederales( codigopostal ).then( ()=>{
+                        estadonombre.value = storeDomicilio.Estado
+                        municipionombre.value = storeDomicilio.Municipio
+                        ciudadnombre.value = storeDomicilio.Localidad
+                        
                     })
                 }
 
@@ -447,7 +425,7 @@ export default {
                 personamoral    : personamoral.value,
                 regimenfiscal   : regimenfiscal.value,
                 rfc             : rfc.value,
-                taxid           : taxid.value,
+                taxid           : taxid.value, 
             }) 
         }
 
@@ -667,7 +645,7 @@ option {
     align-items: center;
 }
 
-.inpColonia {
+
     border-radius: $radius;
     border: none;
     height: 2.02375rem;

@@ -4,7 +4,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 
 export const useSucursal = defineStore( 'sucursal', {
-    state:()=>({
+    state: ()=>({
         Sucursal:{
             Nombre: String,
             EntidadNegocioId: Number,
@@ -22,7 +22,6 @@ export const useSucursal = defineStore( 'sucursal', {
             ClavePais:      String
         }
     }),
-    getters:{},
     actions:{
         async crearSucursal( datos ){
             // this.Sucursal.Nombre = datos.nombresucursal
@@ -44,6 +43,23 @@ export const useSucursal = defineStore( 'sucursal', {
             })
 
             console.log(data)
+
+        },
+
+        async cargarResponsables( idempresa ){
+
+            try{
+
+                // /api/v1/empresa/contactos/{id}
+
+                const data = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/contactos/${ idempresa }`)
+
+                console.log( data )
+
+            }catch( error ){
+                console.log( error )
+                
+            }
 
         }
     }
