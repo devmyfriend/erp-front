@@ -6,7 +6,7 @@ import { defineStore } from "pinia";
 
 export const useEmpresa = defineStore( 'empresa', {
     state: ()=>({
-        IdEmpresa:       '',
+        EmpresaId:       '',
         RFC:             '',
         RazonSocial:     '',
         Pais:            '',
@@ -39,6 +39,12 @@ export const useEmpresa = defineStore( 'empresa', {
         },
         listaPMoral ( state ){
             return state.ListaRegimenes.filter( regimen=>regimen.Moral === true )
+        },
+        NombrePais ( state ){
+            return ( ClavePais )=> state.ListaPaises.find((pais) => pais.ClavePais === ClavePais)
+        },
+        IdEmpresa (state){
+            return state.EmpresaId
         }
     },
     actions:{
@@ -47,10 +53,10 @@ export const useEmpresa = defineStore( 'empresa', {
                 
                 const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/` )
                 
-                const { listadopais } = datos.data
+                const data = datos.data
                 
-                if( datos.status === 200 && datos.statusText==="OK"){
-                    this.ListaPaises = listadopais
+                if( datos.status === 200 && datos.statusText==="OK"){ 
+                    this.ListaPaises = data
                 }
 
             }catch( error ){
@@ -58,23 +64,53 @@ export const useEmpresa = defineStore( 'empresa', {
                 throw new Error( error )
             }
         },
+
         async cargarRegimenes (){
             try{
                 
-                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/regimen/` )
-                
-                const { listadoregimen } = datos.data
+                // const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/regimen/listado/` )
+                const  datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/catalogo/sat/cfdi` )
 
+                const resultado = datos.data.map( ( objecto )=>{
+                    
+
+                    const item ={
+                        ClaveRegimenFiscal : objecto.regimen.ClaveRegimenFiscal,
+                        Descripcion:         objecto.regimen.Descripcion,
+                        Fisica:              objecto.regimen.Fisica,
+                        Moral:               objecto.regimen.Moral
+
+                    }
+
+                    return  item
+
+                })               
+               
                 if( datos.status === 200 && datos.statusText==="OK"){
-                     this.ListaRegimenes = listadoregimen
-
+                     this.ListaRegimenes = resultado
                 }
 
             }catch( error ){
                 console.log( error )
                 throw new Error( error )
             }
+        },
+
+        async crearEmpresa( datos ){
+            try{
+
+                const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`, datos )
+
+                console.log(empresa.data.EmpresaId)
+
+                this.EmpresaId = empresa.data.EmpresaId
+                return empresa.data
+
+            }catch( error ){
+                return (error.response.data)
+            }
         }
+ 
     }
 
 })

@@ -3,56 +3,162 @@ import { defineStore } from 'pinia'
 
 export const useDomicilioSAT = defineStore( 'domicilioSAT', {
     state: ()=>({
-        ListaEstados:      [],
-        ListaMunicipios:   [],
-        ListaCiudades:     [],
-        ListaColonia:      [],
+        // ListaEstados:      [],
+        // ListaMunicipios:   [],
+        // Localidades:       [],
+        // ListaColonia:      [],
+
+        pais:          '',
+        codigo_postal: '',
+        estado:        '',
+        localidad:     '',
+        municipio:     '' 
+
 
     }),
     getters:{
-        listamunicipios( state, claveEstado ){
-            return state.ListaMunicipios.filter( municipio => municipio.ClaveEstado === claveEstado )
+        // listaEstados( state ){
+        //     return state.ListaEstados.filter( estado => estado.ClavePais === 'MEX' )
+        //     // return state.ListaEstados
+        // },
+
+        Estado: ( state ) => {
+            return state.estado
         },
-        listaciudades( state, claveEstado ){
-            return state.ListaCiudades.filter( ciudad => ciudad.ClaveEstado === claveEstado )
-        }
+
+        Municipio( state ){
+            return state.municipio
+        },
+
+        Localidad( state ){
+            return state.localidad
+        },
+
+        // listadoColonias ( state ){
+        //     return state.ListaColonia
+        // }
+
+    
+        
     },
     actions:{
-        async cargaDatos(){
+        
+        async cargarEstado( clavePais ){
             try{
-                
-                /*TODO: 
-                    validar el consumo de estos endpoints por que no resuelven municipio y localidad
-                */
-                const [ datosEstados, datosMunicipios, datosCiudades ] = await Promise.all([
-                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/estado/` ),
-                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/municipio` ),
-                    axios.get( `${ process.env.VUE_APP_PATH_API }v1/localidad/` ),
-                ])
-
-                
-                console.log(datosEstados)
-                console.log(datosMunicipios)
-                console.log(datosCiudades)
-
-                if( datosEstados.status === 200  && datosEstados.statusText === "OK" ){
-                    const { listadoEstado } = datosEstados.data
-                    this.ListaEstados = listadoEstado
+                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/${ clavePais }` )
+                // console.log( datos )
+                if( datos.status === 200  && datos.statusText === "OK" ){
+                     const { data } = datos 
+                    console.log('listado de estados')
+                    console.log(data) 
+                    this.ListaEstados = data
                 }
 
-                if( datosMunicipios.status === 200  && datosMunicipios.statusText === "OK" ){
-                    const { listadoMunicipios } = datosMunicipios.data
+            }catch ( error){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+        
+        async cargarMunicipio( claveestado ){
+            try{
+                
+                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/municipio/${ claveestado }` )
+                
+                if( datos.status === 200  && datos.statusText === "OK" ){
+                    const { listadoMunicipios } = datos.data
                     this.ListaMunicipios = listadoMunicipios
                 }
 
-                if( datosCiudades.status === 200  && datosCiudades.statusText === "OK" ){
-                    const { listadoCiudades } = datosCiudades.data
-                    this.ListaCiudades = listadoCiudades
+            }catch ( error){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+
+        async cargarLocalidad( claveestado ){
+
+            try{
+                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/localidad/${ claveestado }` )
+
+                if( datos.status === 200  && datos.statusText === "OK" ){
+                    console.log(datos.data)
+                    const { listadoLocalidades } = datos.data
+                    this.Localidades = listadoLocalidades
                 }
 
             }catch( error ){
                 console.log( error )
-                throw new Error ( error )
+                throw new Error( error )
+            }
+
+        },
+
+        async cargarColonia( codigopostal ){
+            try{
+               
+                const datos = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/domicilio/sat/${ codigopostal }` )
+
+                if( datos.status === 200  && datos.statusText === "OK" ){
+                    console.log(datos.data)
+                    const { listadoColonias } = datos.data
+                    this.ListaColonia = listadoColonias
+                }
+
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+
+        },
+
+        async cargarDatosGrales ( codigopostal, claveestado ){
+            try{
+                if( codigopostal.length >0 && codigopostal && claveestado && claveestado.length >0 ){ 
+                    const data = {
+                        cp: codigopostal,
+                        ClaveEstado: claveestado
+                    }
+
+                    const datos = await axios.post( `${ process.env.VUE_APP_PATH_API }v1/pais/estados/colonias`,data )
+
+                    if( datos.status === 200  && datos.statusText === "OK" ){
+                        const { colonias, localidades, municipios } = datos.data
+                        this.ListaColonia = colonias
+                        this.ListaMunicipios = municipios 
+                        this.Localidades = localidades
+                    }
+                }
+
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+        },
+
+        async cargaDatosFederales ( codigopostal ){
+            try{
+                const data = {
+                    cp: codigopostal
+                }
+
+                const datos = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/catalogo/cp/buscar`, data )
+
+                
+                if( datos.status === 200 && datos.statusText  === "OK"){
+                    const { codigo_postal, estado, municipio, localidad, pais } = datos.data[0]
+                    this.estado =  estado
+                    this.municipio = municipio
+                    this.localidad = localidad
+                    this.codigo_postal = codigo_postal
+                    this.pais = pais
+                   
+                }
+
+
+            }catch( error ){
+                console.log( error )
+                throw new Error( error )
             }
         }
     }

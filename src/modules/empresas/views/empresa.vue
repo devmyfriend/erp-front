@@ -43,58 +43,37 @@
                     </div>
                 </div>
             </template>
-            <!-- <template v-slot:body>
-                <div class="formularioSucursal">
-                    <form>
-                        <fieldset>
-                            <label for="">Nombre del responsable</label>
-                            <select class="responsableSucursal" name="txtResponsable" id="idResponsable">
-                                <option va lue="">Nombre del responsable</option>
-                            </select>
-                        </fieldset>
-                        <fieldset>
-                            <label for="">Domicilio</label> <br>
-                            <input class="calleSucursal" type="text" name="txtCalle" id="idCalle" placeholder="Calle">
-                            <input class="noextintSucursal" type="text" name="txtNoExt" id="idNoExt" placeholder="No. Ext">
-                            <input class="noextintSucursal" type="text" name="txtNoInt" id="idNoInt" placeholder="No. Int">
-                            <input class="coloniaSucursal" type="text" name="txtColonia" id="idColonia"
-                                placeholder="Colonia"> <br>
-                        </fieldset>
-                        <fieldset>
-                            <div class="grupoField">
-                                Código Postal
-                                <input class="codigoPostal" type="test" name="txtCodigoPostal" placeholder="Código Postal">
-                            </div>
-                            <div class="grupoField">
-                                Estado
-                                <select class="estadoSucursal" name="txtEstado" id="idEstado">
-                                    <option value="">Estado</option>
-                                </select>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="grupoField">
-                                Municipio
-                                <select class="municipioSucursal" name="txtEstado" id="idEstado">
-                                    <option value="">Municipio</option>
-                                </select>
-                            </div>
-                            <div class="grupoField">
-                                Localidad
-                                <select class="ciudadSucursal" name="txtEstado" id="idEstado">
-                                    <option value="">Ciudad</option>
-                                </select>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </template> -->
             <template v-slot:body>
-                <Sucursal></Sucursal>
+                <Sucursal 
+                    :idempresa="idempresa?idempresa:0"
+                />
             </template>
         </Modal>
+        <!-- ver listado surcursales -->
+        <Modal v-if="haySucursales">
+            <template v-slot:header>
+                <div class="headerSucursal">
+                    <div class="tituloSucursal">
+                        <h2>Sucursal</h2>
+                    </div>
+                    <div class="cerrarSucursal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="35" viewBox="0 0 42 35" fill="none"  @click="verSucursal">
+                            <path
+                                d="M38.0625 0H3.9375C1.76367 0 0 1.67969 0 3.75V31.25C0 33.3203 1.76367 35 3.9375 35H38.0625C40.2363 35 42 33.3203 42 31.25V3.75C42 1.67969 40.2363 0 38.0625 0ZM31.2047 22.6953C31.5984 23.0703 31.5984 23.6797 31.2047 24.0547L27.8824 27.2188C27.4887 27.5938 26.8488 27.5938 26.4551 27.2188L21 21.9766L15.5449 27.2188C15.1512 27.5938 14.5113 27.5938 14.1176 27.2188L10.7953 24.0547C10.4016 23.6797 10.4016 23.0703 10.7953 22.6953L16.2996 17.5L10.7953 12.3047C10.4016 11.9297 10.4016 11.3203 10.7953 10.9453L14.1176 7.78125C14.5113 7.40625 15.1512 7.40625 15.5449 7.78125L21 13.0234L26.4551 7.78125C26.8488 7.40625 27.4887 7.40625 27.8824 7.78125L31.2047 10.9453C31.5984 11.3203 31.5984 11.9297 31.2047 12.3047L25.7004 17.5L31.2047 22.6953Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </template>
+            <template v-slot:body>
+                <Sucursales></Sucursales>
+            </template>
+        </Modal> 
+        <!-- fin de listado de sucursales -->
+        <!-- botos para acciones con sucursales -->
         <div class="contenedor">
             <div class="datosEmpresa">
+                <!-- formulario general de datos de empresa -->
                 <DatosEmpresa 
                     :esextranjero = "esextranjero" 
                     :esnuevo = "esnuevo" 
@@ -119,8 +98,15 @@
                     :municipionombre="municipionombre"    
                     :noext="noext"              
                     :noint="noint"
-                    @actualizarValores="actualizarValoresComponenteHijo"              
+                    :Lista-Paises="ListaPaises"
+                    :listaregimenes="listaregimenes"
+                    :listaestados="listaestado"
+                    
+                    @actualizarValores="actualizarValoresComponenteHijo"  
+
                 />
+                <!-- fin de formuraio general de datos de empresa -->
+                <!-- acciones de sucursales -->
                 <div class="sucursales">
                     <h3>Sucursales</h3>
                     <a @click="abrircerrarSucursal">
@@ -143,13 +129,16 @@
                         Ver Sucursal
                     </a>
                 </div>
+                <!-- fin de acciones de sucursales -->
             </div>
+            <!-- formualrios de contactos -->
             <div class="datosContactos">
                 <Contacto></Contacto>
             </div>
+            <!-- fin de formulario de contactos -->
         </div>
         <div class="botones">
-            <button class="btn btn-save"> Guardar</button>
+            <button class="btn btn-save" @click="guardar"> Guardar</button>
             <button class="btn btn-danger">Cancelar</button>
         </div>
     </div>
@@ -157,6 +146,8 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import Swal from 'sweetalert2'
 
 
 import DatosEmpresa from '../components/frmDatosGrales.vue'
@@ -165,6 +156,7 @@ import Modal from '../components/modal.vue'
 import ModalSucursal from '../components/modalSucursal.vue'
 import Sucursal from '../components/sucursal.vue'
 import Contacto from '../../contacto/components/frmContacto.vue'
+import Sucursales from '../components/sucursales.vue'
 
 
 import { useEmpresa } from '../store/empresa'
@@ -178,13 +170,14 @@ export default {
         Modal,
         ModalSucursal,
         Sucursal,
+        Sucursales
     },
 
     setup(){
         const descripcionregimen = ref( '' )
         const esextranjero       = ref( false )
         const esnuevo            = ref( true )
-        const idempresa          = ref( '' )
+        const idempresa          = ref( 0 )
         const ListaPaises        = ref( [] )
         const listaregimenes     = ref( [] )
         const nombrecomercial    = ref( '' )
@@ -196,6 +189,7 @@ export default {
         const regimenfiscal      = ref( '' )
         const rfc                = ref( '' )
         const taxid              = ref( '' )
+        const espropietaria      = ref( false )
 
         const calle              = ref( '' )
         const ciudad             = ref( '' )
@@ -217,17 +211,48 @@ export default {
 
         const haySucursal = ref ( false )
         const seEditaSucursal = ref ( false )
+        const haySucursales = ref ( false )
 
-        const store = useEmpresa()
-        // const storeDomicilio = useDomicilioSAT()
+        const storeEmpresa = useEmpresa()
+        const storeDomicilio = useDomicilioSAT()
 
-        onMounted( async ()=>{
+        // const router = useRoute()
+        // espropietaria = router.params.propietaria
+
+        // const validarEsNuevo = ()=>{
+        //     if(router.params.id && router.params.id > 0){
+        //        esnuevo.value = false 
+        //        idempresa.value  = router.params.id
+        //     }
+        // }
+
+        onMounted( ()=>{
             
-            await store.cargarPaises()
-            await store.cargarRegimenes()
+            enlistarPaises()
+            
+            enlistarRegimenes()
 
-            // await storeDomicilio.cargaDatos()
         })
+
+        const enlistarRegimenes = ()=>{
+            storeEmpresa.cargarRegimenes().then(()=>{
+                console.log(storeEmpresa.ListaRegimenes)
+                listaregimenes.value = storeEmpresa.listaregimen
+
+                console.log('se cargo la lista de regimenes')
+                console.log(listaregimenes.value) 
+            })
+        }
+
+        const enlistarPaises =()=>{
+            storeEmpresa.cargarPaises().then(()=>{
+                ListaPaises.value = storeEmpresa.listapaises
+                // console.log('enlistar')
+                // console.log(ListaPaises.value)
+            })
+        }
+
+
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
@@ -260,7 +285,68 @@ export default {
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
         }
-       
+
+        const verSucursal = ()=>{
+            if ( haySucursales.value ) {
+                haySucursales.value = false 
+            }else{
+                haySucursales.value = true
+            }
+        }
+
+
+
+        const guardar = async ()=>{
+
+            const paisseleccionado = storeEmpresa.NombrePais( pais.value ) 
+
+            const datos = {
+                entidad:[
+                    {
+                    
+                        ClavePais:          pais.value,
+                        ClaveRegimenFiscal: regimenfiscal.value,
+                        EsPropietaria:      espropietaria.value,
+                        NombreComercial:    nombrecomercial.value,
+                        NombreOficial:      nombreoficial.value,
+                        PersonaFisica:      personafisica.value,
+                        PersonaMoral:       personamoral.value,
+                        RFC:                rfc.value,
+                        Borrado:            0,
+                        logo:               ""
+                    }
+                ],
+                CreadoPor: 1,
+                domicilio:[
+                    {
+                        Calle:              calle.value,
+                        Colonia:            colonianombre.value,
+                        Estado:             estadonombre.value,
+                        Localidad:          ciudadnombre.value,
+                        Municipio:          municipionombre.value,
+                        CodigoPostal:       codigopostal.value,
+                        NumeroExt:          noext.value,
+                        NumeroInt:          noint.value,
+                        Pais:               paisseleccionado.Descripcion 
+                    }
+                ]  
+            }
+
+            console.log( datos )
+
+            const respuesta = await storeEmpresa.crearEmpresa( datos )
+            
+            idempresa.value = storeEmpresa.IdEmpresa
+
+            Swal.fire({
+                title: respuesta.status === 200? 'Ok':  'Error',
+                text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
+                icon:  respuesta.status === 200? 'success': 'error',
+            })
+
+            
+        }
+        
         
         return{
 
@@ -291,12 +377,19 @@ export default {
             regimenfiscal      ,
             rfc                ,
             taxid              ,
+            espropietaria,
+
+            listaestado,
+
+            guardar,
 
 
             abrircerrarSucursal,
             actualizarValoresComponenteHijo,
             haySucursal,
+            haySucursales,
             seEditaSucursal,
+            verSucursal
         }
     }
 
@@ -415,6 +508,10 @@ button {
 .headerSucursal {
     margin: 0;
     padding: 1.5rem;
+    // padding-top: .5rem;
+    // padding-bottom: .5rem;
+    // padding-left: 1.5rem;
+    // padding-right: 1.5rem;
     width: 100%;
 }
 

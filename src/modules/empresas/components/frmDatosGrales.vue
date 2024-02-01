@@ -12,6 +12,7 @@
                         id="idEmpresa" 
                         placeholder="Id Empresa"
                         @input="actualizarValores"
+
                     />
                    <span class="logotipo">Logotipo</span>
                     <input 
@@ -44,13 +45,14 @@
                         name="nombreOficial" 
                         id="idRazonSocial" 
                         placeholder="Razón Social"
+                        required
                         @input="actualizarValores"
                     />
                </fieldset>
                <fieldset>
                     <label class="labelPais" for="pais">País</label>
                     <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
-                        <option selected value=""></option>
+                        <!-- <option selected value="MEX">México</option> --> 
                         <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
                     </select>
                </fieldset>
@@ -70,13 +72,13 @@
                            name="persona" 
                            id="idPersonaMoral" 
                            v-on:click="PersonaSelecionada(false)"
-                           :value="personamoral"
+                           :value="personamoral" 
                            @input="actualizarValores"
                     />
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
-                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
+                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" v-model="regimenfiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
                     </select>
@@ -87,6 +89,7 @@
                            name="nombreComercial" 
                            id="idNombreComercial" 
                            placeholder="Nombre comercial" 
+                           v-model="nombrecomercial"
                            @input="actualizarValores"
                     />
                </fieldset>
@@ -130,49 +133,19 @@
                        @input="actualizarValores"
                  />
                 <label class="labelEstados" for="estado">Estado</label>
-                <select class="claveEstado" name="estado" id="idEstado" v-model="estado" @change="actualizarValores">
-                    <option selected value="{{estado}}">{{estadonombre}}</option>
-                    <!-- <option v-for="optEstado in ListaEstados" :key="optEstado.ClaveEstado" :value="optEstado.ClaveEstado">{{optEstado.Descripcion}}</option> -->
-                </select>
+                <input class="estado" type="text" name="estasdo" id="estado" v-model="estadonombre" placeholder="Estado"  @input="actualizarValores">
                </fieldset>
                <fieldset>
                    <label class="labelMunicipio" for="municipio">Deleg./Municipio</label>
-                   <select class="municipio" name="municipio" id="municipio" v-model="municipio" @change="actualizarValores">
-                       <option selected value="{{municipio}}">{{municipionombre}}</option>
-                       <!-- <option v-for="optMunicipio in ListaMunicipios" :key="optMunicipio.claveMunicipio" :value="optMunicipio.claveMunicipio">{{optMunicipio.Descripcion}}</option> -->
-                   </select>   
+                   <input class="municipio" type="text" name="municipio" id="municipio" v-model="municipionombre" placeholder="Municipio"  @input="actualizarValores">
                </fieldset>
                <fieldset>
                 <label class="labelCiudad" for="ciudad">Ciudad</label>
-                <select class="ciudad" name="ciudad" id="ciudad" v-model="ciudad" @change="actualizarValores">
-                    <option selected value="{{ciudad}}">{{ciudadnombre}}</option>
-                    <option value="1">Cancun</option>
-                    <option value="2">Chetumal</option>
-                    <option value="3">Playa del Carmne</option>
-                    <option value="4">Cozumel</option>
-                </select>
+                <input class="ciudad" type="text" name="ciudad" id="ciudad" v-model="ciudadnombre" placeholder="Ciudad"  @input="actualizarValores">
                </fieldset>
-
                <fieldset>
                 <label class="labelColonia" for="colonia">Colonia</label>
-                <select class="colonia" name="colonia" id="colonia" v-model="colonia" @change="actualizarValores">
-                    <option selected value="{{colonia}}">{{colonianombre}}</option>
-                    <option value="1">Colonia 1</option>
-                    <option value="2">Colonia 2</option>
-                    <option value="3">Colonia 3</option>
-                    <option value="4">Colonia 4</option>
-                </select>
-                <a href="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
-                        <path
-                            d="M12 0C5.37097 0 0 4.92339 0 11C0 17.0766 5.37097 22 12 22C18.629 22 24 17.0766 24 11C24 4.92339 18.629 0 12 0Z"
-                            fill="#999999" />
-                        <path
-                            d="M19.0179 9.03449H13.4732V3.37168C13.4732 2.67681 12.9214 2.11328 12.2411 2.11328H11.0089C10.3286 2.11328 9.77679 2.67681 9.77679 3.37168V9.03449H4.23214C3.55177 9.03449 3 9.59802 3 10.2929V11.5513C3 12.2462 3.55177 12.8097 4.23214 12.8097H9.77679V18.4725C9.77679 19.1674 10.3286 19.7309 11.0089 19.7309H12.2411C12.9214 19.7309 13.4732 19.1674 13.4732 18.4725V12.8097H19.0179C19.6982 12.8097 20.25 12.2462 20.25 11.5513V10.2929C20.25 9.59802 19.6982 9.03449 19.0179 9.03449Z"
-                            fill="white" />
-                    </svg>
-
-                </a>
+                <input class="colonia" type="text" name="colonia" id="colonia" v-model="colonianombre" placeholder="Colonia"  @input="actualizarValores">
                </fieldset>
             </form>
         </div>
@@ -181,24 +154,26 @@
 
 
 <script>
-import { ref, watch, computed, onMounted, effect } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia';
 
 
 const { useEmpresa } = require('../store/empresa')
+const { useDomicilioSAT } = require('../store/domiciliosat')
 
-function validateFile(event) {
-    const file = event.target.files[0];
-    const fileTypeError = document.getElementById('fileTypeError');
+// function validateFile(event) {
+//     const file = event.target.files[0];
+//     const fileTypeError = document.getElementById('fileTypeError');
 
-    if (file) {
-        if (!['image/jpeg', 'image/png'].includes(file.type)) {
-            fileTypeError.style.display = 'block';
-            event.target.value = '';
-        } else {
-            fileTypeError.style.display = 'none';
-        }
-    }
-}
+//     if (file) {
+//         if (!['image/jpeg', 'image/png'].includes(file.type)) {
+//             fileTypeError.style.display = 'block';
+//             event.target.value = '';
+//         } else {
+//             fileTypeError.style.display = 'none';
+//         }
+//     }
+// }
 
 export default {
 
@@ -240,6 +215,8 @@ export default {
         noint:              String,
         ListaPaises:        Array,
         listaregimenes:     Array,
+
+        listaestados:       Array,
     },
     emits:[
         'actualizarValores'
@@ -248,11 +225,13 @@ export default {
     
     setup( props, { emit } ){
 
+
+        
         const descripcionregimen = ref( props.descripcionregimen )
         const esextranjero       = ref( props.esextranjero )
         const idempresa          = ref( props.idempresa )
-        const ListaPaises        = ref( [])
-        const listaregimenes     = ref( [] )
+        const ListaPaises        = ref( props.ListaPaises ) 
+        const listaregimenes     = ref( props.listaregimenes )
         const nombrecomercial    = ref( props.nombrecomercial )
         const nombreoficial      =  ref( props.nombreoficial )
         const pais               = ref( props.pais )
@@ -274,39 +253,48 @@ export default {
         const municipio          = ref(props.municipio)          
         const municipionombre    = ref(props.municipionombre)    
         const noext              = ref(props.noext)              
-        const noint              = ref(props.noint)              
+        const noint              = ref(props.noint)   
+        
+        const listadoestado      = ref( props.listaestados )
+        const listamunicipio     = ref( [] )
+        const listalocalidad     = ref( [] )
+        const listacolonias      = ref( [] )
+
+        const nuevaColonia       = ref( false )
 
         // [Nota:]
         // Se comento para que el componente padre haga la creacion del store y el llenado
 
-        const store = useEmpresa()
+        const storeEmpresa = useEmpresa()
+        const storeDomicilio = useDomicilioSAT()
 
-        onMounted(() => {
-            // store.cargarPaises().then(() => {
-            //     ListaPaises.value = store.listapaises
-            // })
+        const { Estado } = storeToRefs( storeDomicilio ) 
 
-            // store.cargarRegimenes().then(() => {
-            //     listaregimenes.value = store.listaPFisica
-            // })
+        
 
-            if( pais.value === 'MEX' ){
-                esextranjero.value = false
-            }
-            ListaPaises.value = store.listapaises
-            listaregimenes.value = store.listaPFisica
-
-
+        onMounted(()=>{
+            cargarPaises()
+            cargarListaRegimenFiscal()
         })
-
-        const cargarPaises = computed( ()=> ListaPaises.value = store.listapaises )
-        const cargarRegimenes = computed( ()=> ListaPaises.value = store.listaPFisica )
-
-
+        
+        const cargarPaises = ()=>{
+            ListaPaises.value = storeEmpresa.listapaises
+        }
+        const cargarListaRegimenFiscal = () => {
+            listaregimenes.value = storeEmpresa.listaPFisica
+        }        
 
         const PersonaSelecionada = (valor) => {
             personafisica.value = valor
             personamoral.value = !personafisica.value
+        }
+
+        const nuevacolonia = ()=>{
+            nuevaColonia.value = true
+        }
+
+        const cerrarcolonia = ()=>{
+            nuevaColonia.value = false
         }
 
         watch( pais, ( pais ) => {
@@ -320,11 +308,44 @@ export default {
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
-                listaregimenes.value = store.listaPFisica
+                // console.log(store.listaPFisica)
+                console.log('persona fisica')
+                listaregimenes.value = storeEmpresa.listaPFisica
+                console.log(listaregimenes)
+
             }else{
-                listaregimenes.value = store.listaPMoral
+                console.log('persona moral')
+                listaregimenes.value = storeEmpresa.listaPMoral
             }
+        }) 
+
+        // watch(estado,( estado )=>{
+            
+        //     if( estado.length > 0 &&  estado != '' ){
+        //         storeDomicilio.cargarMunicipio( estado ).then(()=>{
+        //             listamunicipio.value = storeDomicilio.listaMunicipios 
+        //         })
+    
+        //         storeDomicilio.cargarLocalidad( estado ).then(()=>{
+        //             listalocalidad.value = storeDomicilio.listadoLocalidades 
+        //         })
+        //     }
+
+        // })
+
+        watch( codigopostal, ( codigopostal )=>{
+                if( codigopostal.length === 5 ){
+
+                    storeDomicilio.cargaDatosFederales( codigopostal ).then( ()=>{
+                        estadonombre.value = storeDomicilio.Estado
+                        municipionombre.value = storeDomicilio.Municipio
+                        ciudadnombre.value = storeDomicilio.Localidad
+                        
+                    })
+                }
+
         })
+
 
         const actualizarValores = ()=>{
             emit('actualizarValores',{
@@ -332,7 +353,7 @@ export default {
                 ciudad          : ciudad.value,              
                 ciudadnombre    : ciudadnombre.value,
                 codigopostal    : codigopostal.value,       
-                colonia         : colonia.value,
+                colonia         : colonia.value, 
                 colonianombre   : colonianombre.value,
                 esextranjero    : esextranjero.value,
                 estado          : estado.value,
@@ -350,29 +371,37 @@ export default {
                 personamoral    : personamoral.value,
                 regimenfiscal   : regimenfiscal.value,
                 rfc             : rfc.value,
-                taxid           : taxid.value,
-            })
+                taxid           : taxid.value, 
+            }) 
         }
 
-
-        
-        
-
-        // function validarArchivo( event ) {
-        //     const archivo = event.target.files[0];
-        //     const fileTypeError = document.getElementById('fileTypeError');
-        //     console.log(fileTypeError)
-
-        //     fileTypeError.style.display = 'none';
-
-        //     if ( archivo ) {
-        //         if (![ 'image/jpeg', 'image/png' ].includes( archivo.type ) ) {
-        //             fileTypeError.style.display = 'block';
-        //             event.target.value = '';
+        // const guardar= ()=>{
+        //     const datos = {
+        //         Entidad:{
+                    
+        //             ClavePais:          pais.value,
+        //             ClaveRegimenFiscal: regimenfiscal.value,
+        //             NombreComercial:    nombrecomercial.value,
+        //             NombreOficial:      nombreoficial.value,
+        //             PersonaFisica:      personafisica.value,
+        //             PersonaMoral:       personamoral.value,
+        //             RFC:                rfc.value,
+        //         },
+        //         Domicilio:{
+        //             Calle: calle.value,
+        //             ClaveColonia: colonia.value,
+        //             ClaveEstado: estado.value,
+        //             ClaveLocalidad: ciudad.value,
+        //             ClaveMunicipio: municipio.value,
+        //             CodigoPostal: codigopostal.value,
+        //             NumeroExt: noext.value,
+        //             NumeroInt: noint.value,
+        //             Pais: pais.value,
         //         }
         //     }
-        // }
 
+        //     storeEmpresa.crearEmpresa( datos )
+        // }
         
         return{
             esextranjero,
@@ -401,6 +430,16 @@ export default {
             municipionombre,    
             noext,              
             noint,              
+
+            listadoestado,
+            listamunicipio,
+            listalocalidad,
+            listacolonias,
+
+            nuevaColonia,
+            nuevacolonia,
+            cerrarcolonia,
+             
 
             actualizarValores,
             PersonaSelecionada,
@@ -747,7 +786,28 @@ select{
     margin-left: 8px;
     margin-right: 8px;
     padding: $padding-input;
-    width: 24.431875rem;
+    width: 26.80rem;
+    color: #999999
+}
+
+.estado {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 22.2rem;
+    color: #999999
+}
+.coloniaEditable {
+    border-radius: $radius;
+    border: none;
+    height: 2.02375rem;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: $padding-input;
+    width: 21.431875rem;
     color: #999999
 }
 
@@ -757,5 +817,21 @@ select {
 
 option {
     color: #999999;
+}
+
+.btnColonia{
+    margin-left: .5rem;
+    margin-right: .5rem;
+    cursor: pointer;
+    color: #999999;
+    fill: #999999;
+}
+
+.btnColonia:hover{
+    margin-left: .5rem;
+    margin-right: .5rem;
+    fill: #fff;
+    color: #fff;
+    cursor:pointer
 }
 </style>
