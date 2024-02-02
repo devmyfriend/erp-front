@@ -6,21 +6,27 @@
         <thead>
           <tr>
             <th v-for="(header, index) in encabezados" :key="index">{{ header }}</th>
+            <th v-if="acciones != 0"> Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in registrosFinales" :key="index">
             <td v-for="(value, key) in item" :key="key">{{ value }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    La altura es {{ heightTabla }}
+            <td v-if="acciones != 0">
+                <img src="../assets/img/edit.svg"  alt="Editar"   class="me-2"> 
+                <img src="../assets/img/trash.svg" alt="Eliminar" class="ms-2" v-if="acciones == 2"> </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <button @click="fRegistroTemporal"> Generar registro temporal </button>
   </div>
+  {{ registrosFinales }}
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { defineEmits } from 'vue';
 
 const props = defineProps({
   encabezados: {
@@ -49,8 +55,37 @@ const props = defineProps({
   paginado: {
     type: Number,
     default: 3
+  },
+  acciones: {
+    type: Number,
+    default: 0 //0 sin acciones, 1 solo editar, 2 eliminar y editar
+  },
+    /* Flags */
+  pBusqueda: {
+    type: Boolean,
+    default: false
+  },
+  pAccion: {
+    type: Boolean,
+    default: false
+  },
+  pSaveAll: {
+    type: Boolean,
+    default: false
+  },
+    /* Registro temporal x Input */
+  pRegistroNuevo: {
+    type: Object,
+    default: {}
   }
 });
+
+const emit = defineEmits( ['eAccion',
+  'eDesactivarRegistroNuevo',
+  'eDesactivarBusqueda',
+  'eDesactivarAccion',
+  'eDesactivarSaveAll'
+]);
 
 onMounted(() => {
   cargarMas();
@@ -58,13 +93,19 @@ onMounted(() => {
 
 const encabezados = ref( props.encabezados );
 const listadoFinal = ref( props.listadoFinal );
-
 const paginado = ref( props.paginado );
+const acciones = ref( props.acciones );
+
+const pBusqueda = ref( props.pBusqueda );
+const pAccion = ref( props.pAccion );
+const pSaveAll = ref( props.pSaveAll );
+const pRegistroNuevo = ref( props.pRegistroNuevo );
+
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
-const heightTabla = ref( (paginado.value * 32) + 48 ); //Se calcula la altura de la tabla según la cantidad de registros máxima y se le resta 10px para un margen funcional
-/* const heightTabla = ref( ((paginado.value * 32) + 48) - 10 ); //Se calcula la altura de la tabla según la cantidad de registros máxima y se le resta 10px para un margen funcional */
-/* const heightTabla = ref(144); */
+const heightTabla = ref( (paginado.value * 32) + 48 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
+
+const conteoTemporal = ref(0);
 
 const cargarMas = () => {
   const start = (paginaActual.value - 1) * paginado.value;
@@ -82,6 +123,21 @@ const esperarScroll = (event) => {
     console.log('[noLOAD]: Se supone que ' + element.scrollHeight + ' - ' + element.scrollTop + ' <= ' + (element.clientHeight));
   }
 };
+
+const fRegistroTemporal = () => {
+  pRegistroNuevo.value = { nombre: 'Temporal', edad: conteoTemporal.value, pais: 'Temporal' };
+  conteoTemporal.value++;
+  console.log('Registro temporal: ', JSON.stringify(pRegistroNuevo.value) );
+};
+
+watch(() => pRegistroNuevo, (newValue, oldValue) => {
+  if (newValue.value != '') {
+    console.log('Se añade el registro temporal: ', JSON.stringify(newValue.value));
+    registrosFinales.value.push(newValue.value);
+    pRegistroNuevo.value = '';
+  }
+},{deep: true});
+
 </script>
 
 <style scoped>
@@ -93,7 +149,6 @@ const esperarScroll = (event) => {
 
 .tablaContainer {
   overflow-y: auto;
-  /* max-height: 140px; !important //Es la clase que detona el scroll*/ 
   margin-top: 20px;
 }
 
