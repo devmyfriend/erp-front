@@ -8,10 +8,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    redirect: '/tablaInfinita',
-    component: tablaInfinita
-/*     redirect: '/login',
-    component: Login */
+    redirect: '/login',
+    component: Login
   },
   {
     path: '/tablaInfinita',
