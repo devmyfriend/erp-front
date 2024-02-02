@@ -32,7 +32,7 @@
 
 <script setup>
 import ScrollInfinito from './ScrollInfinito.vue';
-import { ref, defineProps, onMounted, watch, toRefs, defineEmits } from 'vue';
+import { ref, onMounted, watch, toRefs } from 'vue';
 const { useEmpresas } = require('../modules/empresas/store/empresas')
 
 const store = useEmpresas();

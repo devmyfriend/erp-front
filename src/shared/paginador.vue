@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { defineProps, defineEmits , ref, onUpdated, computed } from 'vue';
+import { ref, onUpdated, computed } from 'vue';
 const { useEmpresas } = require('../modules/empresas/store/empresas')
 
 export default {
