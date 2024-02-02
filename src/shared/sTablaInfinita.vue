@@ -1,61 +1,112 @@
-<!-- 
-    script setup
-   
-   
-    const props = defineProps({
-  mensaje: {
-    type: String,
-    required: true
-  }
+<template>
+  <div class="tablaInfinita">
+    <h1> TABLA INFINITA | Working in</h1>
+    <div class="tablaContainer" ref="tablaContainer" @scroll="esperarScroll" :style="{ height: heightTabla + 'px' }">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="(header, index) in encabezados" :key="index">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in registrosFinales" :key="index">
+            <td v-for="(value, key) in item" :key="key">{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button @click="cargarMas">Cargar más</button>
+    La altura es {{ heightTabla }}
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+
+onMounted(() => {
+  cargarMas();
 });
 
+const encabezados = ref(['Nombre', 'Edad', 'País']);
+const listadoFinal = ref([
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'María', edad: 30, pais: 'México' },
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'María', edad: 30, pais: 'México' },
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'María', edad: 30, pais: 'México' },
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'María', edad: 30, pais: 'México' },
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'María', edad: 30, pais: 'México' },
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'finalprevio', edad: 30, pais: 'México' },
+  { nombre: 'Juan', edad: 25, pais: 'España' },
+  { nombre: 'final', edad: 30, pais: 'México' },
+]);
 
-import { defineEmits } from 'vue';
-const emit = defineEmits();
-const enviarEvento = () => {
-  emit('evento-enviado', { mensaje: '¡Evento enviado desde el hijo!' });
+const paginado = ref(3);
+const paginaActual = ref(1);
+const registrosFinales = ref([]);
+const heightTabla = ref( (paginado.value * 32) + 48 ); //Se calcula la altura de la tabla según la cantidad de registros máxima y se le resta 10px para un margen funcional
+/* const heightTabla = ref( ((paginado.value * 32) + 48) - 10 ); //Se calcula la altura de la tabla según la cantidad de registros máxima y se le resta 10px para un margen funcional */
+/* const heightTabla = ref(144); */
+
+const cargarMas = () => {
+  const start = (paginaActual.value - 1) * paginado.value;
+  const end = start + paginado.value;
+  registrosFinales.value.push(...listadoFinal.value.slice(start, end));
+  paginaActual.value++;
 };
 
- -->
+const esperarScroll = (event) => {
+  const element = event.target;
+  if (element.scrollHeight - element.scrollTop - 10 <= element.clientHeight) {
+    cargarMas();
+    console.log('[CARGANDO]: ' + element.scrollHeight + ' - ' + element.scrollTop + ' <= ' + element.clientHeight);
+  }else{
+    console.log('[noLOAD]: Se supone que ' + element.scrollHeight + ' - ' + element.scrollTop + ' <= ' + (element.clientHeight));
+  }
+};
+</script>
 
- <!-- props necesarios: -->
-    <!-- 
-    "encabezados": array de objetos
-    "registros": array de objetos
-    "cantidadRegistros": number
-    "acciones": number (0 sin acciones, 1 solo editar, 2 eliminar y editar)
-    "pBusqueda" Bool //Recibe una flag (bool) para que se actualicen los datos de la tabla, cargando los registros desde el state
-    "pAccion" Bool//Recibe una flag (bool) para que se actualicen los datos de la tabla, cargando los registros desde el state
-    "pRegistroNuevo" Object //Recibe un objeto con el registro temporal
-    "pSaveAll" Bool //Recibe una flag (bool) para que se guarden los registros temporales nuevos en la BD (y se borre ese array temporal)
-    -->
+<style scoped>
+.tablaInfinita {
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+}
 
-  <!-- Emits necesarios  -->
-    <!-- 
-        "eAccion" // Emite un evento con: El ID del registro a gestionar, una opcion (int) para decidir si edita o elimina
-        "eDesactivarRegistroNuevo" // Emite un evento para desactivar la flag de registro nuevo
-        "eDesactivarBusqueda" // Emite un evento para desactivar la flag de busqueda
-        "eDesactivarAccion" // Emite un evento para desactivar la flag de accion
-        "eDesactivarSaveAll" // Emite un evento para desactivar la flag de saveAll. Además envía un bool de resultado, si se guardó o no.
-    -->
+.tablaContainer {
+  overflow-y: auto;
+  /* max-height: 140px; !important //Es la clase que detona el scroll*/ 
+  margin-top: 20px;
+}
 
-  <!-- Acciones de la tabla -->
-    
-    <!-- 
-    * Debe pintar los registros y encabezados recibidos
-    * Dependiendo de [cantidadRegistros] debe limitar el scroll infinito
-    * Dependiendo de [acciones] debe pintar botones de editar y/o eliminar
-    * Agregar al [arrayTemporal] los registros nuevos
-    * Fusionar [registros] con [arrayTemporal] para crear [registrosFinales] y pintar este array en la tabla
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
 
-    -->
+td, th {
+  padding: 10px;
+  border: 1px solid #000;
+}
 
+th {
+  background-color: #28198c;
+  color: #fff;
+  height: 3rem;
 
-    <!-- Debe manejar 3 listas de registros:
-        *La original con los registros en BD
-        *El [arrayTemporal] que se pinta en la tabla:
-            *Se compone de:
-                La original (props.registros)
-                Los registros temporales que se agregan o eliminan (arrayTemporal)
-                La lista final con ambos registros (registrosFinales)
-    -->
+}
+td{
+  background-color: #382c8b55;
+  height: 2rem;
+  padding: 0rem 0.5rem 0rem 0.5rem;
+}
+
+button {
+  margin-top: 20px;
+}
+</style>
