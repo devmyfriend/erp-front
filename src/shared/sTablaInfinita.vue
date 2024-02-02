@@ -15,7 +15,6 @@
         </tbody>
       </table>
     </div>
-    <button @click="cargarMas">Cargar más</button>
     La altura es {{ heightTabla }}
   </div>
 </template>
@@ -23,12 +22,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 
-onMounted(() => {
-  cargarMas();
-});
-
-const encabezados = ref(['Nombre', 'Edad', 'País']);
-const listadoFinal = ref([
+const props = defineProps({
+  encabezados: {
+    type: Array,
+    default: ['Nombre', 'Edad', 'País']
+  },
+  listadoFinal: {
+    type: Array,
+    default: [
   { nombre: 'Juan', edad: 25, pais: 'España' },
   { nombre: 'María', edad: 30, pais: 'México' },
   { nombre: 'Juan', edad: 25, pais: 'España' },
@@ -43,9 +44,22 @@ const listadoFinal = ref([
   { nombre: 'finalprevio', edad: 30, pais: 'México' },
   { nombre: 'Juan', edad: 25, pais: 'España' },
   { nombre: 'final', edad: 30, pais: 'México' },
-]);
+    ]
+  },
+  paginado: {
+    type: Number,
+    default: 3
+  }
+});
 
-const paginado = ref(3);
+onMounted(() => {
+  cargarMas();
+});
+
+const encabezados = ref( props.encabezados );
+const listadoFinal = ref( props.listadoFinal );
+
+const paginado = ref( props.paginado );
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
 const heightTabla = ref( (paginado.value * 32) + 48 ); //Se calcula la altura de la tabla según la cantidad de registros máxima y se le resta 10px para un margen funcional
