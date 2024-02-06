@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onUpdated } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 const props = defineProps({
   encabezados: {
@@ -83,12 +83,14 @@ const props = defineProps({
 const emit = defineEmits( ['eAccion', 'eBusqueda']);
 
 onMounted(() => {
-  cargarMas();
+  /* cargarMas(); */
+  tablaContainer.value = ref.tablaContainer;
 });
 const listadoFinal = ref( [] );
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
 const heightTabla = ref( (props.paginado * 32) + 38 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
+const tablaContainer = ref(null);
 
 const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
@@ -109,9 +111,12 @@ watch(() => props.listado, (newValue, oldValue) => {
   if (props.pBusqueda) {
     paginaActual.value = 1;
     emit('eBusqueda', false);
+    tablaContainer.value.scrollTop = 0;
+
   }
   cargarMas();
 },{deep: true});
+
 </script>
 
 <style scoped>

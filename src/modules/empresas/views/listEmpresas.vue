@@ -32,7 +32,6 @@ const pBusqueda = ref(false);
 
 onMounted(() => {
   store.cargarEmpresas().then(() =>{
-    
     ajustarListado();
   })
 });

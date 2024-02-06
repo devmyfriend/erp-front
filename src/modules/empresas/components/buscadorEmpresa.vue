@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+import { Swal } from 'sweetalert2/dist/sweetalert2';
 import { ref } from 'vue';
 const emit = defineEmits('eBusqueda');
 const { useEmpresas } = require('@/modules/empresas/store/empresas.js')
@@ -15,7 +16,18 @@ const txtBusqueda = ref('');
 
 function buscar() {
     store.busquedaEmpresas(txtBusqueda.value).then((res) => {
-        emit ('eBusqueda', true);
+        if (res == []){
+            Swal.fire({
+                title: 'No se encontraron resultados',
+                icon: 'info',
+                confirmButtonText: 'Aceptar'
+            })
+            store.cargarEmpresas().then(() => {
+                emit('eBusqueda', true);
+            })
+        }else if (res != []){
+            emit ('eBusqueda', true);
+        }
     });
 }
 </script>

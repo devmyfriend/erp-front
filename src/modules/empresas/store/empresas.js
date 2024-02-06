@@ -1,5 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import Swal from "sweetalert2";
 
 export const useEmpresas = defineStore( 'empresas', {
     state: ()=>({
@@ -18,6 +19,7 @@ export const useEmpresas = defineStore( 'empresas', {
 
                 if( datos.status === 200 && datos.statusText==="OK"){
                     this.ListadoEmpresas = datos.data
+                    console.log('ListadoEmpresas' + JSON.stringify(this.ListadoEmpresas));
                 }
             }catch ( error ){
                 console.log( error )
@@ -30,7 +32,14 @@ export const useEmpresas = defineStore( 'empresas', {
                     this.ListadoEmpresas = datos.data
                     return datos.data
             }catch ( error ){
-                    console.log(error.response.data);                
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'No se encontraron resultados',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                })
+                console.log('ListadoEmpresas' + JSON.stringify(this.ListadoEmpresas))
+                return [] 
             }
         },
         async borrarEmpresa(id){
