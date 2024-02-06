@@ -19,7 +19,7 @@ export const useEmpresas = defineStore( 'empresas', {
 
                 if( datos.status === 200 && datos.statusText==="OK"){
                     this.ListadoEmpresas = datos.data
-                    console.log('ListadoEmpresas' + JSON.stringify(this.ListadoEmpresas));
+                    return datos.data
                 }
             }catch ( error ){
                 console.log( error )
@@ -29,17 +29,24 @@ export const useEmpresas = defineStore( 'empresas', {
         async busquedaEmpresas(busqueda){
             try{
                 const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresa/nombre/${busqueda}`)
-                    this.ListadoEmpresas = datos.data
-                    return datos.data
+                this.ListadoEmpresas = datos.data
+                return datos.data    
             }catch ( error ){
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'No se encontraron resultados',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                })
-                console.log('ListadoEmpresas' + JSON.stringify(this.ListadoEmpresas))
-                return [] 
+                if(busqueda === null || busqueda === undefined || busqueda === ' '){
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Ingrese un valor para buscar',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    })
+                }else{
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'No se encontraron resultados',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    })
+                }
             }
         },
         async borrarEmpresa(id){

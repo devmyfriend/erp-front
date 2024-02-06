@@ -16,8 +16,8 @@
             </template>
 
             <td v-if="props.acciones != 0">
-                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="emit ('eAccion', [1, item.EntidadNegocioId]); console.log('El id es: ' + item.EntidadNegocioId)"> 
-                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="emit ('eAccion', [2, item.EntidadNegocioId]); console.log('El id es: ' + item.EntidadNegocioId)"> </td>
+                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="activarAcciones(1, item.EntidadNegocioId)"> 
+                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
             </tr>
           </tbody>
         </table>
@@ -105,14 +105,19 @@ const esperarScroll = (event) => {
   }
 };
 
+function activarAcciones(opc, id){
+  tablaContainer.value.scrollTop = 0;
+  emit ('eAccion', [opc, id])
+}
+
+
 watch(() => props.listado, (newValue, oldValue) => {
   registrosFinales.value = [];
   listadoFinal.value = newValue;
   if (props.pBusqueda) {
     paginaActual.value = 1;
-    emit('eBusqueda', false);
     tablaContainer.value.scrollTop = 0;
-
+    emit('eBusqueda', false);
   }
   cargarMas();
 },{deep: true});

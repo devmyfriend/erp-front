@@ -15,20 +15,15 @@ const store = useEmpresas();
 const txtBusqueda = ref('');
 
 function buscar() {
-    store.busquedaEmpresas(txtBusqueda.value).then((res) => {
-        if (res == []){
-            Swal.fire({
-                title: 'No se encontraron resultados',
-                icon: 'info',
-                confirmButtonText: 'Aceptar'
-            })
-            store.cargarEmpresas().then(() => {
-                emit('eBusqueda', true);
-            })
-        }else if (res != []){
+    if (txtBusqueda.value === '') {
+        store.cargarEmpresas().then(() => {
+            emit('eBusqueda', true);
+        });    
+    }else{
+        store.busquedaEmpresas(txtBusqueda.value).then(() => {
             emit ('eBusqueda', true);
-        }
-    });
+        });
+    }
 }
 </script>
 

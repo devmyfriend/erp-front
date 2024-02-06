@@ -19,6 +19,7 @@ import btNuevoEmpresa from '../components/btNuevoEmpresa.vue';
 import buscadorEmpresa from '../components/buscadorEmpresa.vue';
 import TablaInfinita from '@/shared/sTablaInfinita.vue';
 import { onMounted, ref, watch } from 'vue';
+import Swal from 'sweetalert2';
 
 const { useEmpresas } =require('../store/empresas.js');
 const store = useEmpresas();
@@ -38,10 +39,10 @@ onMounted(() => {
 
 function esperarBusqueda(valor){
   pBusqueda.value = valor;
-
   if(pBusqueda.value){
     ajustarListado();
   }
+
 }
 
 function esperarAccion(res){
@@ -51,11 +52,29 @@ function esperarAccion(res){
   if(opc === 1){
     router.push({name: 'formulario', params: {id: id}});
   }else if(opc === 2){
-    if (store.borrarEmpresa(id)){
-      ajustarListado();
-    }else{
-      alert('No se pudo eliminar la empresa');
-    }
+
+    Swal.fire({
+        title: "Eliminar empresa",
+        text: "¿Realmente quieres eliminar la empresa?",
+        icon: "question",
+        showDenyButton: true,
+        confirmButtonText: "Eliminar",
+        denyButtonText: `No eliminar`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (store.borrarEmpresa(id)){
+            Swal.fire("Eliminado", "La empresa ha sido eliminada", "success").then(() => {
+              ajustarListado();
+            });
+          }else{
+            Swal.fire({
+              title: "Error",
+              text: "Error al eliminar la empresa",
+              icon: "error"
+            });
+          }
+        }
+      });
   }
 }
 
