@@ -4,18 +4,18 @@
       <table>
         <thead>
           <tr>
-            <th v-for="(header, index) in encabezados.slice(1)" :key="index">{{ header }}</th>
-            <th v-if="props.acciones != 0"> Acciones</th>
+            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '% !important' }">{{ header }}</th>
+            <th v-if="props.acciones != 0" :style="{ width: '10% !important' }"> Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in registrosFinales" :key="index">
 
             <template v-for="(value, key, columna) in item">
-              <td v-if="columna >= 1" :key="key">{{ value }}</td>
+              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '% !important' }">{{ value }}</td>
             </template>
 
-            <td v-if="props.acciones != 0">
+            <td v-if="props.acciones != 0" :style="{ width: '10% !important' }">
                 <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="activarAcciones(1, item.EntidadNegocioId)"> 
                 <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
             </tr>
@@ -91,6 +91,7 @@ const paginaActual = ref(1);
 const registrosFinales = ref([]);
 const heightTabla = ref( (props.paginado * 32) + 38 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
 const tablaContainer = ref(null);
+const columnasWidth = ref(100);
 
 const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
@@ -120,7 +121,20 @@ watch(() => props.listado, (newValue, oldValue) => {
     emit('eBusqueda', false);
   }
   cargarMas();
+  widthCol();
 },{deep: true});
+
+function widthCol(){
+  let cantidadCols = 0;
+  if (props.acciones != 0){
+    cantidadCols = props.encabezados.length - 1;
+    columnasWidth.value = (90/cantidadCols);
+  }else{
+    cantidadCols = props.encabezados.length -1;
+    columnasWidth.value = (100/cantidadCols);
+  }
+  console.log('Ancho de columnas: ', columnasWidth.value + '% y cantidad de columnas: ', cantidadCols);
+}
 
 </script>
 
@@ -148,7 +162,6 @@ th {
   background-color: #999999;
   color: #fff;
   height: 3rem;
-
 }
 td{
   background-color: #fff;
