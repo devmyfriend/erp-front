@@ -108,29 +108,13 @@
       </div>
     </div>
   </div>
-
- 
-
-  
       <!-- 
         <modalContacto :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0"  :modo="modo" :key = "modo"
         @guardar-contacto="guardarContacto"  @modificarModo ="actualizarModo" /> 
         -->
-
-      
-
       <modalContacto :ContactoId="ContactoId" :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0"
         :ApellidoPaterno="ApellidoPaterno" :ApellidoMaterno="ApellidoMaterno" :Nombres="Nombres"
         :Departamento="Departamento" :Puesto="Puesto" :key = "modo"  @actualizar-contacto="actualizarContacto"   @guardar-contacto="guardarContacto" :modo="modo"  @modificarModo ="actualizarModo" /> 
-
-    
-    
-
-    
-
-
-  
-
   <div class="modal" tabindex="-1" ref="modalEleLista">
   <div class="modal-dialog">
     <div class="modal-content">

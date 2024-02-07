@@ -225,7 +225,6 @@ export default {
         //        idempresa.value  = router.params.id
         //     }
         // }
-
         onMounted( ()=>{
             
             enlistarPaises()
@@ -233,7 +232,6 @@ export default {
             enlistarRegimenes()
 
         })
-
         const enlistarRegimenes = ()=>{
             storeEmpresa.cargarRegimenes().then(()=>{
                 console.log(storeEmpresa.ListaRegimenes)
@@ -243,7 +241,6 @@ export default {
                 console.log(listaregimenes.value) 
             })
         }
-
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
                 ListaPaises.value = storeEmpresa.listapaises
@@ -251,15 +248,9 @@ export default {
                 // console.log(ListaPaises.value)
             })
         }
-
-
-
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value
         }
-
-
-        
         const actualizarValoresComponenteHijo = ( valores )=>{
                 calle.value           = valores.calle              
                 ciudad.value          = valores.ciudad              
@@ -285,7 +276,6 @@ export default {
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
         }
-
         const verSucursal = ()=>{
             if ( haySucursales.value ) {
                 haySucursales.value = false 
@@ -293,9 +283,6 @@ export default {
                 haySucursales.value = true
             }
         }
-
-
-
         const guardar = async ()=>{
 
             const paisseleccionado = storeEmpresa.NombrePais( pais.value ) 
@@ -346,8 +333,6 @@ export default {
 
             
         }
-        
-        
         return{
 
             calle              ,
@@ -392,7 +377,6 @@ export default {
             verSucursal
         }
     }
-
 }
 
 </script>
