@@ -141,6 +141,7 @@ function widthCol(){
 <style scoped>
 .tablaInfinita {
   text-align: center;
+  /* width: 100%; */
 }
 
 .tablaContainer {

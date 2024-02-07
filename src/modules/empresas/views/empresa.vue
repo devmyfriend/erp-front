@@ -234,11 +234,11 @@ export default {
         })
         const enlistarRegimenes = ()=>{
             storeEmpresa.cargarRegimenes().then(()=>{
-                console.log(storeEmpresa.ListaRegimenes)
+                // console.log(storeEmpresa.ListaRegimenes) 
                 listaregimenes.value = storeEmpresa.listaregimen
 
-                console.log('se cargo la lista de regimenes')
-                console.log(listaregimenes.value) 
+                //console.log('se cargo la lista de regimenes')
+                //console.log(listaregimenes.value) 
             })
         }
         const enlistarPaises =()=>{

@@ -8,9 +8,7 @@
         </div>
         <div class="row align-items-center">
           <div class="col-auto mb-3 align-self-center">Contacto</div>
-          <div class="col-auto">
-          <!--   <input id="contacto" class="form-control mb-3" type="text" /> -->
-  
+          <div class="col-auto">  
             <select class="form-select mb-3" v-model="ContactoSeleccionado" @change="SeleccionContacto">
               <option v-for ="l in ListaContactos">{{l.Nombres + " "+  l.ApellidoPaterno + " "+ l.ApellidoMaterno }}</option>
             </select>
