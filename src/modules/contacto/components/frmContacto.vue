@@ -11,110 +11,52 @@
         <div class="col-auto">
         <!--   <input id="contacto" class="form-control mb-3" type="text" /> -->
 
-          <select class="form-select mb-3">
-            <option v-for ="l in ListaContactos">{{l.Nombres +" "+ l.ApellidoPaterno + " "+ l.ApellidoMaterno}}</option>
+          <select class="form-select mb-3" v-model="ContactoSeleccionado" @change="SeleccionContacto">
+            <option v-for ="l in ListaContactos">{{l.Nombres + " "+  l.ApellidoPaterno + " "+ l.ApellidoMaterno }}</option>
           </select>
 
         </div>
         <div class="col-auto mb-3 align-self-center">
           <span>
-            <img @click="ModalAgregarContacto" class="icono" src="@/assets/img/user-add-icon.png" />
+            <img @click="ModalAgregarContacto(1)" class="icono" src="@/assets/img/AddUser.svg" />
           </span>
         </div>
         <div class="col-auto mb-3 align-self-center">
-          <span>
-            <img @click="ModalListaContacto" class="icono" src="@/assets/img/plus.png" />
-          </span>
         </div>
       </div>
     </div>
     <div class="row align-items-center">
-      <div class="col-12" v-if="datosContactoListos">
-             
-        <tablaInfinita :Lista="ListaContactosTemp" :obtenerTelefonoCorreo="obtenerTelefonoCorreo" :m_actualizarContacto="m_actualizarContacto" :eliminarContacto="eliminarContacto"/>
-  <!-- 
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">id contacto</th>
-              <th scope="col">Contacto</th>
-              <th scope="col">Puesto</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-
-       
-   
-            <tr v-for="lc in ListaContactos" :key="lc.ContactoId" @click="obtenerTelefonoCorreo(lc.ContactoId)">
-              <td>{{ lc.ContactoId }}</td>
-              <td>{{ lc.Nombres }}</td>
-              <td>{{ lc.Puesto }}</td>
-              <td>
-                <span>
-                  <img @click="m_actualizarContacto(lc.ContactoId)" class="icono " src="@/assets/img/edit-icon.png" />
-                </span>
-                <span>
-                  <img @click="eliminarContacto(lc.ContactoId)" class="icono ms-3" src="@/assets/img/remove-icon.png" />
-                </span>
-              </td>
-            </tr>
-
-          </tbody>
-        </table> -->
+      <div class="col-12 mb-2" v-if="datosContactoListos">        
+        <tablaInfinita @activarEditarContacto="ModalAgregarContacto(2)" :Lista="ListaContactosTemp" :m_actualizarContacto="m_actualizarContacto" :eliminarContacto="eliminarContacto"/>
       </div>
     </div>
     <div class="row">
-
       <div class="col-12">
-     <datosTabla :Lista="ListaTelefonos" :tipoTabla="'telefono'" /> 
-        <!-- 
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">id de Tel.</th>
-                <th scope="col">Número Télefonico </th>
-                <th scope="col"> Acciones </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for =" tel in ListaTelefonos" :key="tel.TelefonoId">
-                <td>{{ tel.TelefonoId }}</td>
-                <td>{{ tel.NumeroTelefonico }}</td>
-                <td>
-                  <span>
-                                <img class="icono" src="../assets/edit-icon.png" />
-                              </span>
-                              <span>
-                                <img  class="icono" src="../assets/remove-icon.png" />
-                              </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-       
-        -->
-
-      </div>
-    </div>
-    <div class="row">
-
-      <div class="col-12">
-
-
-       <datosTabla :Lista="ListaCorreos" :tipoTabla="'correo'" /> 
-
-
+        <datosTabla :Lista="ListaTelefonos" :tipoTabla="'telefono'" /> 
+        <datosTabla :Lista="ListaCorreos" :tipoTabla="'correo'" /> 
       </div>
     </div>
   </div>
+
+ 
+
+  
       <!-- 
         <modalContacto :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0"  :modo="modo" :key = "modo"
         @guardar-contacto="guardarContacto"  @modificarModo ="actualizarModo" /> 
         -->
-      <modalContacto :ContactoId="ContactoId" :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0"
-        :ApellidoPaterno="ApellidoPaterno" :ApellidoMaterno="ApellidoMaterno" :Nombres="Nombres"
-        :Departamento="Departamento" :Puesto="Puesto" :key = "modo"  @actualizar-contacto="actualizarContacto"   @guardar-contacto="guardarContacto" :modo="modo"  @modificarModo ="actualizarModo" /> 
+
+      
+      <modalContacto :key = "modo"  @actualizar-contacto="actualizarContacto" @guardar-contacto="guardarContacto" :modo="modo"  @modificarModo ="actualizarModo"/> 
+
+    
+    
+
+    
+
+
+  
+
   <div class="modal" tabindex="-1" ref="modalEleLista">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -166,7 +108,8 @@ export default {
   name: 'frmContacto',
 
   setup() {
-    const icono_addContacto = "../assets/user-add-icon.png";
+    const icono_addContacto = "../assets/AddUser.svg";
+    const ContactoSeleccionado = ref('')
     const ListaContactos = ref([]) // Lista general de contacto
     const ListaContactosTemp = ref([]) //Lista de contacto que deslegara la tabla al buscar los elementos de la tabla
     const ListaTelefonos = ref([])
@@ -194,14 +137,17 @@ export default {
     let modalObjLista = null //modal de lista
     const store = useContacto();
     const { emit } = getCurrentInstance(); 
-
     //Abrir modales
-    const ModalAgregarContacto = () => {
-  
-      modo.value = 'guardar'
-      console.log(modo.value);
+    function ModalAgregarContacto(opcion) {
+      if (opcion == 1){
+        modo.value = 'Guardar'
+
+      }else if (opcion == 2){
+        modo.value = 'Actualizar'
+      }
       mostrarModalContacto.value = true;
     }
+
     const ModalListaContacto = () =>{
       //console.log("entre modal lista contacto")
     //  mostrarModalLista.value = true
@@ -230,38 +176,43 @@ export default {
 
     }
     //CRUD Telefono
-
-    const obtenerTelefonoCorreo = (idContacto) => {
-      store.obtenerDetalle(idContacto).then(() => {
-        ListaTelefonos.value = store.listaTelefono
-        ListaCorreos.value = store.listaCorreo
-      })
-
-
-      
-    }
     //prueba camb iar modo
     const actualizarModo =(nuevoModo) =>{
-      console.log("entre variable desde hijo :",nuevoModo)
+      /* console.log("entre variable desde hijo :",nuevoModo) */
       modo.value = nuevoModo
     }
     //Carga de informacion
 
+    const SeleccionContacto = () =>{
+      console.log('El usuario es: ' + ContactoSeleccionado.value);
+      ContactoId.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value)[0].ContactoId
+      ApellidoMaterno.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value)[0].ApellidoMaterno
+      ApellidoPaterno.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value)[0].ApellidoPaterno
+      Nombres.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value)[0].Nombres
+      Departamento.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value)[0].Departamento
+      Puesto.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value)[0].Puesto
+
+      ListaContactosTemp.value = ListaContactos.value.filter(contacto => (contacto.Nombres + " " + contacto.ApellidoPaterno + " " + contacto.ApellidoMaterno) === ContactoSeleccionado.value);
+    }
     onMounted(() => {
       //obtener contacto
-      store.cargarContactos().then(() => {
+      store.cargarContactos(1).then(() => {
         ListaContactos.value = store.listaContacto
-        console.log('Lista normal',ListaContactos.value)
+        /* console.log('Lista normal',ListaContactos.value) */
           ListaContactosTemp.value = ListaContactos.value
-          console.log('ListaContactosTemp',ListaContactosTemp.value)
+          /* console.log('ListaContactosTemp',ListaContactosTemp.value) */
       
         datosContactoListos.value = true
 
        
 
       });
+      store.obtenerTelefonosCorreosEmpresas().then(()=>{
+        ListaTelefonos.value = store.listaTelefono;
+        ListaCorreos.value=store.listaCorreo;
+        console.log("[TIPO]: ListadoTelefonos: " + JSON.stringify(ListaCorreos.value));
+      });
       modalObjLista = new Modal(modalEleLista.value);
-      
     });
    
     //Operaciones contacto
@@ -269,7 +220,7 @@ export default {
       modo.value = 'actualizar'
       mostrarModalContacto.value = true;
       let Contacto = ListaContactos.value.filter(contacto => contacto.ContactoId === idContacto)
-      console.log(Contacto)
+      /* console.log(Contacto) */
       for (const iterator of Contacto) {
         ContactoId.value = iterator.ContactoId
         Nombres.value = iterator.Nombres
@@ -283,12 +234,12 @@ export default {
 
     }
     const contactoXiD = (idContacto) =>{
-        console.log('Lista contactos',ListaContactos.value)
-        console.log('Lista contacto temp',ListaContactosTemp.value)
+/*         console.log('Lista contactos',ListaContactos.value)
+        console.log('Lista contacto temp',ListaContactosTemp.value) */
         let Contacto = ListaContactos.value.filter(contacto => contacto.ContactoId === idContacto)
-        console.log(Contacto)
+        /* console.log(Contacto) */
         ListaContactosTemp.value = Contacto
-        console.log("Lista contactos temp",ListaContactosTemp.value[0].Nombres)
+        /* console.log("Lista contactos temp",ListaContactosTemp.value[0].Nombres) */
        // console.log(' click en ListaContactosTemp',ListaContactosTemp.value[0].SucursalId)
         emit('actualizar-datos',ListaContactosTemp.value)
 
@@ -321,18 +272,17 @@ export default {
       datosContactoListos,
       mostrarModalLista,
       modalEleLista,
+      ContactoSeleccionado,
       ModalAgregarContacto, //funcion
       guardarContacto,//funcion
-      obtenerTelefonoCorreo, //funcion
       eliminarContacto,
       m_actualizarContacto,
       actualizarContacto,
       ModalListaContacto,
       contactoXiD,
-      actualizarModo
-
+      actualizarModo,
+      SeleccionContacto,
     }
-
   }
 
 
@@ -350,6 +300,7 @@ export default {
 
 .icono {
   width: 1.5rem;
+  cursor: pointer;
 }
 
 .contenedor {
