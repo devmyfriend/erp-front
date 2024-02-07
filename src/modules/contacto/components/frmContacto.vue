@@ -5,28 +5,26 @@
     </div>
     <div class="filaContacto">
       <label for="selectContacto" id="lbContacto" class="lbContacto"> Contacto </label>
-      <select id="selectContacto" name="selectContacto" class="selectContacto">
-        <option value="1">Contacto 1</option>
-        <option value="2">Contacto 2</option>
-        <option value="3">Contacto 3</option>
+      <select v-for="contactos in ListadoContactos" :key="ContactoId" class="selectContacto">
+        <option :value="contactos.ContactoId"> {{ contactos.Nombres }} {{ contactos.ApellidoPaterno }} {{ contactos.ApellidoMaterno }} </option>
       </select>
       <img src="@/assets/img/AddUser.svg" class="icono addContacto">
       <div class="tablaContactos">
-      <tablaInfinita></tablaInfinita>
+      <tablaInfinita :listado="ListadoContactos" :encabezados="headsContacto"/>
       </div>
     </div>
     <div class="filaContacto">
       <input type="text" placeholder="Teléfono" class="inp">
       <img src="@/assets/img/AddUser.svg" class="icono addContacto">
       <div class="filaMiniTabla">
-        <tablaInfinita></tablaInfinita>
+        <tablaInfinita :listado="ListadoTelefonos" :encabezados="headsTelefono" />
       </div>
     </div>
     <div class="filaContacto">
       <input type="text" placeholder="Correo e." class="inp">
       <img src="@/assets/img/AddUser.svg" class="icono addContacto">
       <div class="filaMiniTabla">
-        <tablaInfinita></tablaInfinita>
+        <tablaInfinita :listado="ListadoCorreos" :encabezados="headsCorreo" />
       </div>
     </div>
   </div>
@@ -37,17 +35,76 @@ import { onMounted, ref } from 'vue';
 import tablaInfinita from '@/shared/sTablaInfinita.vue';
 const { useContacto } = require('../store/contacto')
 const store = useContacto()
+const props = defineProps({
+  id: {
+    type: String,
+    default: '1'
+  }
+})
 
 const ListadoContactos = ref([])
+const headsContacto = ref([])
+
 const ListadoTelefonos = ref([])
+const headsTelefono = ref([])
+
 const ListadoCorreos = ref([])
+const headsCorreo = ref([])
 
 onMounted(() => {
-  ListadoContactos.value = store.cargarContactos().then(() =>{
-    console.log('[OnMounted] ListadoContactos: ', JSON.stringify(ListadoContactos.value));
+  store.cargarContactos(props.id).then(() =>{
+    loadContactos()
+    loadTelMail()
   })
 })
 
+function loadContactos(){
+  store.cargarContactos(props.id).then(() =>{
+    ListadoContactos.value = store.listaContacto
+    ListadoContactos.value = ListadoContactos.value.map(contacto => {
+    return {
+        ContactoId: contacto.ContactoId,
+        Nombres: contacto.Nombres,
+        ApellidoPaterno: contacto.ApellidoPaterno,
+        ApellidoMaterno: contacto.ApellidoMaterno,
+        Departamento: contacto.Departamento,
+        Departamento: contacto.Departamento
+    };
+  });
+    headsContacto.value = Object.keys(ListadoContactos.value[0]);
+    console.log('[OnMounted] ListadoContactos: ', JSON.stringify(ListadoContactos.value));
+    console.log('[OnMounted] ID: ', props.id, ' y encabezados: ', headsContacto.value);
+  });
+}
+
+function loadTelMail(){
+  store.cargarTelMails(props.id).then(() =>{
+    ListadoTelefonos.value = store.listaTelefono
+    ListadoCorreos.value = store.listaCorreo
+
+    ListadoTelefonos.value = ListadoTelefonos.value.map(telefono => {
+      return {
+          EntidadNegocioId: telefono.EntidadNegocioId,
+          TelefonoId: telefono.TelefonoId,
+          NumeroTelefonico: telefono.NumeroTelefonico,
+      };
+    });
+
+    ListadoContactos.value = ListadoContactos.value.map(correo => {
+      return {
+          EntidadNegocioId: correo.EntidadNegocioId,
+          EmailId: correo.EmailId,
+          Email: correo.Email
+      };
+    });
+
+    headsTelefono.value = Object.keys(ListadoTelefonos.value[0]);
+    headsContacto.value = Object.keys(ListadoCorreos.value[0]);
+
+    console.log('[OnMounted] ListadoTelefonos: ', JSON.stringify(ListadoTelefonos.value), '\nListadoCorreos: ', JSON.stringify(ListadoCorreos.value));
+    console.log('[OnMounted] ID: ', props.id, ' y encabezadosTel: ', headsTelefono.value, '\nID: ', props.id, ' y encabezadosCorreo: ', headsContacto.value);
+  });
+}
 </script>
 
 <style scoped>
