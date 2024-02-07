@@ -27,7 +27,7 @@ const store = useEmpresas();
 const ListadoEmpresas = ref([]);
 const encabezados = ref([]);
 
-const paginado = ref(5);
+const paginado = ref(15);
 const acciones = ref(2);
 const pBusqueda = ref(false);
 
@@ -81,7 +81,7 @@ function esperarAccion(res){
 function ajustarListado(){
   ListadoEmpresas.value = store.getListado
   ListadoEmpresas.value = ListadoEmpresas.value.map(empresa => {
-    const Direccion = `${empresa.Pais}, ${empresa.Estado}, ${empresa.CodigoPostal}, ${empresa.NumeroExt}, ${empresa.NumeroInt}, ${empresa.Localidad}, ${empresa.Colonia}`;
+    const Direccion = `${empresa.Pais}, ${empresa.Estado}, ${empresa.CodigoPostal}, Ext: ${empresa.NumeroExt}, Int: ${empresa.NumeroInt}, ${empresa.Localidad}, ${empresa.Colonia}`;
     return {
         EntidadNegocioId: empresa.EntidadNegocioId,
         NombreOficial: empresa.NombreOficial,

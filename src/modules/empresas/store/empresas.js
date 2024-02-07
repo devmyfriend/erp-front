@@ -34,16 +34,16 @@ export const useEmpresas = defineStore( 'empresas', {
             }catch ( error ){
                 if(busqueda === null || busqueda === undefined || busqueda === ' '){
                     Swal.fire({
-                        title: 'Error!',
+                        title: 'Cuidado!',
                         text: 'Ingrese un valor para buscar',
-                        icon: 'error',
+                        icon: 'warning',
                         confirmButtonText: 'Aceptar'
                     })
                 }else{
                     Swal.fire({
-                        title: 'Error!',
+                        title: 'Ups',
                         text: 'No se encontraron resultados',
-                        icon: 'error',
+                        icon: 'warning',
                         confirmButtonText: 'Aceptar'
                     })
                 }
