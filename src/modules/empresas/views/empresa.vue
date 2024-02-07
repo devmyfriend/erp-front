@@ -419,7 +419,6 @@ fieldset {
 }
 
 .datosContactos {
-    background-color: #006eff;
     color: #fff;
     display: inline-block;
     width: auto;

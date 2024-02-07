@@ -22,10 +22,10 @@ export const useContacto = defineStore('contacto',{
       return state.ListaContactos;
     },
     listaTelefono(state){
-      return state.ListaTelefonos
+      return state.ListaTelefonos;
     },
     listaCorreo(state){
-      return state.ListaCorreos
+      return state.ListaCorreos;
     },
 
 
@@ -72,6 +72,35 @@ export const useContacto = defineStore('contacto',{
         }
       },
       async cargarCorreoContactos(id){
+      },
+      async crearTelefono(body){
+        try{
+          const datos = await axios.post(`${process.env.VUE_APP_PATH_API }v1/empresa/telefono/crear`, body);
+
+          if (datos.status === 200 && datos.statusText === "OK") {
+            console.log(datos);
+            //sweetalert
+            return true;
+          }
+
+        } catch(error){
+          console.log(error);
+          //sweetalert
+        }
+      },
+      async crearCorreo(body){
+        try{
+          const datos = await axios.post(`${process.env.VUE_APP_PATH_API }v1/empresa/emails/crear`, body);
+          
+          if (datos.status === 200 && datos.statusText === "OK") {
+            console.log(datos);
+            //sweetalert
+            return true;
+          }
+        } catch(error){
+          console.log(error);
+          //sweetalert
+        }
       },
   }
 })

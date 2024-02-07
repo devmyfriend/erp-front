@@ -1,10 +1,10 @@
 <template>
   <div class="tablaInfinita">
     <div class="tablaContainer" ref="tablaContainer" @scroll="esperarScroll" :style="{ height: heightTabla + 'px' }">
-      <table>
+      <table ref="tablaInf">
         <thead>
           <tr>
-            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '% !important' }">{{ header }}</th>
+            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%' }">{{ header }}</th>
             <th v-if="props.acciones != 0" :style="{ width: '10% !important' }"> Acciones</th>
           </tr>
         </thead>
@@ -12,12 +12,12 @@
           <tr v-for="(item, index) in registrosFinales" :key="index">
 
             <template v-for="(value, key, columna) in item">
-              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '% !important' }">{{ value }}</td>
+              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td>
             </template>
 
             <td v-if="props.acciones != 0" :style="{ width: '10% !important' }">
-                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="activarAcciones(1, item.EntidadNegocioId)"> 
-                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
+                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" :class="{ small: isSmall }"      @click="activarAcciones(1, item.EntidadNegocioId)"> 
+                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" :class="{ small: isSmall }"     v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
             </tr>
           </tbody>
         </table>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onUpdated } from 'vue';
 
 const props = defineProps({
   encabezados: {
@@ -82,16 +82,14 @@ const props = defineProps({
 
 const emit = defineEmits( ['eAccion', 'eBusqueda']);
 
-onMounted(() => {
-  /* cargarMas(); */
-  tablaContainer.value = ref.tablaContainer;
-});
 const listadoFinal = ref( [] );
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
 const heightTabla = ref( (props.paginado * 32) + 38 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
 const tablaContainer = ref(null);
+const tablaInf = ref(null);
 const columnasWidth = ref(100);
+const isSmall = ref(false);
 
 const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
@@ -133,9 +131,12 @@ function widthCol(){
     cantidadCols = props.encabezados.length -1;
     columnasWidth.value = (100/cantidadCols);
   }
-  console.log('Ancho de columnas: ', columnasWidth.value + '% y cantidad de columnas: ', cantidadCols);
-}
 
+  if (tablaContainer.value.offsetWidth <= 650){
+    tablaContainer.value.style.fontSize = '0.8rem';
+    isSmall.value = true;
+  }
+}
 </script>
 
 <style scoped>
@@ -157,6 +158,9 @@ table {
 td, th {
   padding: 10px;
   border: 1px solid #000;
+  word-break: break-all;
+  padding: 0px;
+  margin: 0px;
 }
 
 th {
@@ -168,7 +172,6 @@ td{
   background-color: #fff;
   color: #999999;
   height: 2rem;
-  padding: 0rem 0.5rem 0rem 0.5rem;
 }
 
 button {
@@ -178,5 +181,10 @@ button {
 .Acciones {
   height: 1.5rem;
   cursor: pointer;
+}
+.small {
+  height: 1rem;
+  width: 1rem;
+  margin: auto 0.25rem;
 }
 </style>
