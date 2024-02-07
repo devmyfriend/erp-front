@@ -1,39 +1,39 @@
 <template>
   <div class="tablaInfinita">
-    <h1> TABLA INFINITA | Working in</h1>
     <div class="tablaContainer" ref="tablaContainer" @scroll="esperarScroll" :style="{ height: heightTabla + 'px' }">
       <table>
         <thead>
           <tr>
-            <th v-for="(header, index) in encabezados" :key="index">{{ header }}</th>
-            <th v-if="acciones != 0"> Acciones</th>
+            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '% !important' }">{{ header }}</th>
+            <th v-if="props.acciones != 0" :style="{ width: '10% !important' }"> Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in registrosFinales" :key="index">
-            <td v-for="(value, key) in item" :key="key">{{ value }}</td>
-            <td v-if="acciones != 0">
-                <img src="../assets/img/edit.svg"  alt="Editar"   class="me-2"> 
-                <img src="../assets/img/trash.svg" alt="Eliminar" class="ms-2" v-if="acciones == 2"> </td>
+
+            <template v-for="(value, key, columna) in item">
+              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '% !important' }">{{ value }}</td>
+            </template>
+
+            <td v-if="props.acciones != 0" :style="{ width: '10% !important' }">
+                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="activarAcciones(1, item.EntidadNegocioId)"> 
+                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
             </tr>
           </tbody>
         </table>
       </div>
-    <button @click="fRegistroTemporal"> Generar registro temporal </button>
   </div>
-  {{ registrosFinales }}
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { defineEmits } from 'vue';
 
 const props = defineProps({
   encabezados: {
     type: Array,
     default: ['Nombre', 'Edad', 'País']
   },
-  listadoFinal: {
+  listado: {
     type: Array,
     default: [
   { nombre: 'Juan', edad: 25, pais: 'España' },
@@ -80,76 +80,71 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits( ['eAccion',
-  'eDesactivarRegistroNuevo',
-  'eDesactivarBusqueda',
-  'eDesactivarAccion',
-  'eDesactivarSaveAll'
-]);
+const emit = defineEmits( ['eAccion', 'eBusqueda']);
 
 onMounted(() => {
-  cargarMas();
+  /* cargarMas(); */
+  tablaContainer.value = ref.tablaContainer;
 });
-
-const encabezados = ref( props.encabezados );
-const listadoFinal = ref( props.listadoFinal );
-const paginado = ref( props.paginado );
-const acciones = ref( props.acciones );
-
-const pBusqueda = ref( props.pBusqueda );
-const pAccion = ref( props.pAccion );
-const pSaveAll = ref( props.pSaveAll );
-const pRegistroNuevo = ref( props.pRegistroNuevo );
-
+const listadoFinal = ref( [] );
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
-const heightTabla = ref( (paginado.value * 32) + 48 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
-
-const conteoTemporal = ref(0);
+const heightTabla = ref( (props.paginado * 32) + 38 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
+const tablaContainer = ref(null);
+const columnasWidth = ref(100);
 
 const cargarMas = () => {
-  const start = (paginaActual.value - 1) * paginado.value;
-  const end = start + paginado.value;
+  const start = (paginaActual.value - 1) * props.paginado;
+  const end = start + props.paginado;
   registrosFinales.value.push(...listadoFinal.value.slice(start, end));
   paginaActual.value++;
 };
-
 const esperarScroll = (event) => {
   const element = event.target;
   if (element.scrollHeight - element.scrollTop - 10 <= element.clientHeight) {
     cargarMas();
-    console.log('[CARGANDO]: ' + element.scrollHeight + ' - ' + element.scrollTop + ' <= ' + element.clientHeight);
-  }else{
-    console.log('[noLOAD]: Se supone que ' + element.scrollHeight + ' - ' + element.scrollTop + ' <= ' + (element.clientHeight));
   }
 };
 
-const fRegistroTemporal = () => {
-  pRegistroNuevo.value = { nombre: 'Temporal', edad: conteoTemporal.value, pais: 'Temporal' };
-  conteoTemporal.value++;
-  console.log('Registro temporal: ', JSON.stringify(pRegistroNuevo.value) );
-};
+function activarAcciones(opc, id){
+  tablaContainer.value.scrollTop = 0;
+  emit ('eAccion', [opc, id])
+}
 
-watch(() => pRegistroNuevo, (newValue, oldValue) => {
-  if (newValue.value != '') {
-    console.log('Se añade el registro temporal: ', JSON.stringify(newValue.value));
-    registrosFinales.value.push(newValue.value);
-    pRegistroNuevo.value = '';
+
+watch(() => props.listado, (newValue, oldValue) => {
+  registrosFinales.value = [];
+  listadoFinal.value = newValue;
+  if (props.pBusqueda) {
+    paginaActual.value = 1;
+    tablaContainer.value.scrollTop = 0;
+    emit('eBusqueda', false);
   }
+  cargarMas();
+  widthCol();
 },{deep: true});
+
+function widthCol(){
+  let cantidadCols = 0;
+  if (props.acciones != 0){
+    cantidadCols = props.encabezados.length - 1;
+    columnasWidth.value = (90/cantidadCols);
+  }else{
+    cantidadCols = props.encabezados.length -1;
+    columnasWidth.value = (100/cantidadCols);
+  }
+  console.log('Ancho de columnas: ', columnasWidth.value + '% y cantidad de columnas: ', cantidadCols);
+}
 
 </script>
 
 <style scoped>
 .tablaInfinita {
-  margin: 20px;
-  padding: 20px;
   text-align: center;
 }
 
 .tablaContainer {
   overflow-y: auto;
-  margin-top: 20px;
 }
 
 table {
@@ -164,18 +159,23 @@ td, th {
 }
 
 th {
-  background-color: #28198c;
+  background-color: #999999;
   color: #fff;
   height: 3rem;
-
 }
 td{
-  background-color: #382c8b55;
+  background-color: #fff;
+  color: #999999;
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
 }
 
 button {
   margin-top: 20px;
+}
+
+.Acciones {
+  height: 1.5rem;
+  cursor: pointer;
 }
 </style>
