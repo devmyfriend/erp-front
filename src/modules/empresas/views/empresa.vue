@@ -386,17 +386,17 @@ export default {
 
 
 h1 {
-    color: white;
+    color: #000;
     font-size: 2rem;
+    font-weight: bolder;
     text-align: left;
-    margin: 1.4rem;
+    margin-bottom: 1.5rem;
 }
 
 .frame {
     align-items: left;
     background-color: $panel;
     height: 50.875rem;
-    margin: 1.5rem;
     padding: 0 0.625rem 0 0.625rem;
     width: 82.9375rem;
 }
@@ -419,11 +419,10 @@ fieldset {
 }
 
 .datosContactos {
-    background-color: 999999;
+    background-color: #006eff;
     color: #fff;
     display: inline-block;
-    width: 50%;
-
+    width: auto;
 }
 
 .botones {
