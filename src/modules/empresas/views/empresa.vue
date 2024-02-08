@@ -112,9 +112,10 @@
                     @actualizarValores="actualizarValoresComponenteHijo"  
 
                 />
+                
                 <!-- fin de formuraio general de datos de empresa -->
                 <!-- acciones de sucursales -->
-                <div class="sucursales">
+                <div v-if="idempresa>0" class="sucursales">
                     <h3>Sucursales</h3>
                     <a @click="abrircerrarSucursal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
@@ -136,6 +137,11 @@
                         Ver Sucursal
                     </a>
                 </div>
+                
+                <div class="botones">
+                    <button class="btn btn-save" @click="guardar"> Guardar</button>
+                    <button class="btn btn-danger">Cancelar</button>
+                </div>
                 <!-- fin de acciones de sucursales -->
             </div>
             <!-- formualrios de contactos -->
@@ -143,10 +149,6 @@
                 <Contacto></Contacto>
             </div>
             <!-- fin de formulario de contactos -->
-        </div>
-        <div class="botones">
-            <button class="btn btn-save" @click="guardar"> Guardar</button>
-            <button class="btn btn-danger">Cancelar</button>
         </div>
     </div>
 </template>
@@ -237,9 +239,6 @@ export default {
             storeEmpresa.cargarRegimenes().then(()=>{
                 console.log(storeEmpresa.ListaRegimenes)
                 listaregimenes.value = storeEmpresa.listaregimen
-
-                console.log('se cargo la lista de regimenes')
-                console.log(listaregimenes.value) 
             })
         }
 
@@ -251,7 +250,10 @@ export default {
 
         }
 
-
+        
+        const cargapaises = ()=>{
+            enlistarPaises()
+        }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value 

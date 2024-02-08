@@ -51,7 +51,7 @@
                </fieldset>
                <fieldset>
                     <label class="labelPais" for="pais">País</label>
-                    <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
+                    <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores" @focus="actualizarPaises">
                         <!-- <option selected value="MEX">México</option> --> 
                         <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
                     </select>
@@ -78,7 +78,7 @@
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
-                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" v-model="regimenfiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
+                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" v-model="regimenfiscal" id="idClaveRegimenFiscal" @change="actualizarValores" @focus="actualizarRegimenFiscal">
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
                     </select>
@@ -280,6 +280,17 @@ export default {
         const cargarPaises = ()=>{
             ListaPaises.value = storeEmpresa.listapaises
         }
+
+        const actualizarPaises = () =>{
+            ListaPaises.value = null
+            cargarPaises()
+        }
+
+        const actualizarRegimenFiscal = ()=>{
+            listaregimenes.value=null
+            cargarListaRegimenFiscal()
+        }
+
         const cargarListaRegimenFiscal = () => {
             listaregimenes.value = storeEmpresa.listaPFisica
         }        
@@ -406,6 +417,8 @@ export default {
 
             actualizarValores,
             PersonaSelecionada,
+            actualizarPaises,
+            actualizarRegimenFiscal
             // validarArchivo,
 
         }
