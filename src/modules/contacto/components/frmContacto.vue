@@ -180,7 +180,7 @@ h1{
 .contenedorPadre{
   height: 100%;
   width: 650px;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0rem 1.5rem;
 }
 .icono{
   height: 1.5rem;

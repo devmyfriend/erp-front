@@ -386,12 +386,20 @@ export default {
 
 
 h1 {
-    color: #000;
-    font-size: 2rem;
-    font-weight: bolder;
-    text-align: left;
-    margin-bottom: 1.5rem;
+  text-align: start;
+  color: #000;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  margin-right: 0rem;
+  width: auto;
 }
+/* h1 {
+    text-align: left;
+    color: #000;
+    font-weight: bolder;
+    font-size: 2rem;
+} */
 
 .frame {
     align-items: left;
@@ -409,13 +417,13 @@ fieldset {
 
 .contenedor {
     display: flex;
-    justify-content: space-between;
 }
 
 .datosEmpresa {
     border-right: solid 1px #000;
     display: inline-block;
     width: 50%;
+    height: 750px;
 }
 
 .datosContactos {
@@ -427,7 +435,6 @@ fieldset {
 .botones {
     width: 100%;
     height: 5.75rem;
-    padding-top: 1.8125rem;
 }
 
 button {

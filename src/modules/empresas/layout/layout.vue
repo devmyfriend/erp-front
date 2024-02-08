@@ -51,17 +51,7 @@
   </script>
   
   <style>
-    body{
-     height: 100vh;
-     width: 100vw;   
-    }
-    .layout-background{
-        height: 100vh;
-        width: 100vw;
-    }
     .layout-container{
-        height: 100vh;
-        width: 100vw;
         background-color: white;
         margin: auto;
         display: flex;
@@ -109,8 +99,6 @@
     .contenedor-Contenido{
         margin: 1.5rem;
         width: auto;
-        height: auto;
-        max-width: 100%;
         height: 40.5rem;
         max-height: 40.5rem;
         min-height: 40.5rem;
