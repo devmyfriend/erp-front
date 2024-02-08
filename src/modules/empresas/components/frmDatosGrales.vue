@@ -319,20 +319,6 @@ export default {
             }
         }) 
 
-        // watch(estado,( estado )=>{
-            
-        //     if( estado.length > 0 &&  estado != '' ){
-        //         storeDomicilio.cargarMunicipio( estado ).then(()=>{
-        //             listamunicipio.value = storeDomicilio.listaMunicipios 
-        //         })
-    
-        //         storeDomicilio.cargarLocalidad( estado ).then(()=>{
-        //             listalocalidad.value = storeDomicilio.listadoLocalidades 
-        //         })
-        //     }
-
-        // })
-
         watch( codigopostal, ( codigopostal )=>{
                 if( codigopostal.length === 5 ){
 
@@ -375,33 +361,6 @@ export default {
             }) 
         }
 
-        // const guardar= ()=>{
-        //     const datos = {
-        //         Entidad:{
-                    
-        //             ClavePais:          pais.value,
-        //             ClaveRegimenFiscal: regimenfiscal.value,
-        //             NombreComercial:    nombrecomercial.value,
-        //             NombreOficial:      nombreoficial.value,
-        //             PersonaFisica:      personafisica.value,
-        //             PersonaMoral:       personamoral.value,
-        //             RFC:                rfc.value,
-        //         },
-        //         Domicilio:{
-        //             Calle: calle.value,
-        //             ClaveColonia: colonia.value,
-        //             ClaveEstado: estado.value,
-        //             ClaveLocalidad: ciudad.value,
-        //             ClaveMunicipio: municipio.value,
-        //             CodigoPostal: codigopostal.value,
-        //             NumeroExt: noext.value,
-        //             NumeroInt: noint.value,
-        //             Pais: pais.value,
-        //         }
-        //     }
-
-        //     storeEmpresa.crearEmpresa( datos )
-        // }
         
         return{
             esextranjero,
