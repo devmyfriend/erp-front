@@ -1,5 +1,6 @@
 <template>
     <favico 
+      :menu="menu"
       :items="items"
     />
 </template>
@@ -19,22 +20,31 @@ export default {
     favico
   },
   setup(){
-
+    const menu ={
+        name: 'menu',
+        icono: '/images/fabico/hamburguesas.svg'
+    }
     const items=[
         {
           name: 'regresar',
           icono: '/images/fabico/ListaPrecios.svg',
-          pathname: 'listado'
+          pathname: 'listado',
         },
         {
           name: 'empresa',
-          icono: '/images/fabico/fabico/SAT.svg',
-          pathname: 'formualrio'
+          icono: '/images/fabico/SAT.svg',
+          pathname: 'formualrio',
+        },
+        {
+          name: 'conversion',
+          icono: '/images/fabico/unidadmedida.svg',
+          pathname: '',
         }
       ]
 
     return{
-      items
+      items,
+      menu
     }
   }
 }

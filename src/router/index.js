@@ -20,13 +20,13 @@ const routes = [
     name: 'login',
     component: Login
   },
- 
+  //ruta de pruebas se puede borrar
   {
     path:'/helloworld',
     name: 'helloworld',
     component: HelloWorld
   }
- 
+ //fin de rutas de pruebas.
 ]
 
 const router = createRouter({

@@ -1,40 +1,19 @@
 <template>
     <div>
-        <buttom class="btn item">
-            <img src="../../../assets/img/favico/hamburguesas.svg" />
+        <buttom class="btn item"  @click="showMainMenu(showMenu)">
+            <!-- <img src="../../../assets/img/favico/hamburguesas.svg" @click="showMainMenu(showMenu)" /> -->
+            <img :src="menu.icono" />
         </buttom>
     </div>
-    <div class="menu">
-        <button v-for="item in items" class="btn subitems">
-            <center>
-                <img :src="item.icono" @click="goTo(item.pathname)">
-            </center>
-        </button>
-        <button class="btn subitems">
-            <center>
-                <img src="../../../assets/img/favico/UnidadMedida.svg">
-            </center>
-        </button>
-        <!--<button class="btn subitems">
-            <center>
-                <img src="../../../assets/img/favico/UnidadMedida.svg">
-            </center>
-        </button> -->
-        <!-- <button class="btn subitems">
-            <center>
-                <img src="../../../assets/img/favico/conversiones.svg">
-            </center>
-        </button>
-        <button class="btn subitems">
-            <center>
-                <img src="../../../assets/img/favico/ListaPrecios.svg">
-            </center>
-        </button>
-        <button class="btn subitems">
-            <center>
-                <img src="../../../assets/img/favico/SAT.svg">
-            </center>
-        </button> -->
+    <div v-if="showMenu" class="menu">
+        <div v-for="item in items">
+            <button class="btn subitems" @click="goTo(item.pathname)">
+                <center>
+                    <img :src="item.icono" >
+                </center>
+            </button>
+        </div>
+        
     </div>
 </template>
 
@@ -44,16 +23,24 @@
     export default{
         name:'FabIcon',
         props:{
+            menu:{
+                type: Array
+            },
             items:{
                 type: Array
             }
         },
         setup( props ){
-            const items = ref( props.items)
+            const menu     = ref( props.menu )
+            const items    = ref( props.items)
+
+            const showMenu = ref( false )
 
             const router = useRouter()
 
-            
+            const showMainMenu = ( show )=>{
+                showMenu.value = show === true? false : true
+            }
 
             const goTo = ( path )=>{
                 router.push( { name: path } )
@@ -61,7 +48,10 @@
 
             return{
                 items,
-                goTo
+                showMenu,
+
+                goTo,
+                showMainMenu
             }
         }
     }
