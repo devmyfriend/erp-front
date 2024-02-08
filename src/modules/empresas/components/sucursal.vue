@@ -7,16 +7,21 @@
             </fieldset>
             <fieldset>
                 <!-- <label for="">Nombre del responsable</label> -->
-                <select v-model="responsable" class="responsableSucursal" name="txtResponsable" id="idResponsable" v-on:focus="cargarResponsables">
+
+                <!-- <select v-model="responsable" class="responsableSucursal" name="txtResponsable" id="idResponsable" v-on:focus="cargarResponsables">
                     <option value="">Nombre del responsable</option>
-                </select>
+                </select> -->
+                <input class="responsableSucursal" type="text" name="txtResponsable" id="idResponsable" placeholder="Responsable">
+
             </fieldset>
             <fieldset>
                 <label for="">Domicilio</label> <br>
                 <input v-model="calle" class="calleSucursal" type="text" name="txtCalle" id="idCalle" placeholder="Calle">
                 <input v-model="noext" class="noextintSucursal" type="text" name="txtNoExt" id="idNoExt" placeholder="No. Ext">
                 <input v-model="noint" class="noextintSucursal" type="text" name="txtNoInt" id="idNoInt" placeholder="No. Int">
-                <input class="responsableSucursal" type="text" placeholder="Colonia">
+
+                <input v-model="colonia" class="responsableSucursal" type="text" placeholder="Colonia">
+
             </fieldset>
             <fieldset>
                 <div class="grupoField">
@@ -73,6 +78,10 @@
 
 <script>
 import { ref, computed, watch } from 'vue';
+
+import Swal from 'sweetalert2'
+
+
 import Telefonos from '@/shared/datosTabla.vue'
 import Emails from '@/shared/datosTabla.vue'
 
@@ -87,6 +96,9 @@ export default {
     },
     props:{
         idempresa: Number,
+
+        pais: String
+
     },
     setup ( props ) {
 
@@ -106,6 +118,9 @@ export default {
         const municipio      = ref ('')
         const ciudad         = ref ('')
         const responsable    = ref ('')
+
+        const pais           = ref( props.pais )
+
 
         const storeDomicilio = useDomicilioSAT()
         const storeSucursal = useSucursal()
@@ -139,27 +154,39 @@ export default {
 
         })
 
-        const guardar = ()=>{
+
+        const guardar = async ()=>{
             const datos ={
-                Sucursal:{
-                    idempresa,
-                    nombresucursal,
+                sucursal:[{
+                    Nombre: nombresucursal.value,
+                    EntidadNegocioId: idempresa.value,
+                    ResponsableId:1,
                     CreadoPor: 1
-                },
-                datos:{
-                    calle,
-                    ciudad,
-                    codigopostal,
-                    colonia,
-                    estado,
-                    municipio,
-                    noext,
-                    noint,
-                    pais: 'MEX',
-                }
+                }],
+                datos:[{
+                    Calle: calle.value,
+                    NumeroExt: noext.value,
+                    NumeroInt: noint.value,
+                    CodigoPostal: codigopostal.value,
+                    Estado: estado.value,
+                    Municipio: municipio.value,
+                    Localidad: ciudad.value,
+                    Colonia: colonia.value,
+                    Pais: pais.value,
+                    
+                }]
             }
 
-            const data = storeScursal.crearSucursal( datos )
+            const res = await storeScursal.crearSucursal( datos )
+
+            console.log( res)
+            
+            Swal.fire({
+                title: res.status === 200? 'Ok':  'Error',
+                text:  res.status === 200? res.message: res.error? res.error: res.errors? res.errors[0]:'Error',
+                icon:  res.status === 200? 'success': 'error',
+            })
+
 
         }
 
@@ -174,6 +201,9 @@ export default {
             noext,
             noint,
             nombresucursal,
+
+            pais,
+
             responsable,
 
             listaemails,

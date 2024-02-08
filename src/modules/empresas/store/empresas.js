@@ -1,14 +1,17 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+
 import Swal from "sweetalert2";
 
 export const useEmpresas = defineStore( 'empresas', {
     state: ()=>({
         ListadoEmpresas:  [],
+
         propietaria: false
     }),
     getters:{
         getListado( state ){
+
             return state.ListadoEmpresas
         },
     },
@@ -22,10 +25,12 @@ export const useEmpresas = defineStore( 'empresas', {
                     return datos.data
                 }
             }catch ( error ){
+
                 console.log( error )
                 throw new Error( error )
             }
         },
+
         async busquedaEmpresas(busqueda){
             try{
                 const datos = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/empresa/nombre/${busqueda}`)
@@ -56,12 +61,15 @@ export const useEmpresas = defineStore( 'empresas', {
                     return true
                 }
             }catch ( error ){
+
                 console.log( error )
                 throw new Error( error )
             }
         },
+
         setPropietaria( propietaria ){
             this.propietaria = propietaria
+
         }
     }
 })

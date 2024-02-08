@@ -17,7 +17,11 @@
                 </div>
             </template>
             <template v-slot:body>
-                <Sucursal></Sucursal>
+                <!-- <Sucursal></Sucursal> -->
+                <Sucursal
+                    :idempresa="idempresa" 
+                    :pais = "pais"
+                />
             </template>
             <template v-slot:footer>
                 <div class="footButon">
@@ -45,7 +49,10 @@
             </template>
             <template v-slot:body>
                 <Sucursal 
-                    :idempresa="idempresa?idempresa:0"
+
+                    :idempresa="idempresa"
+                    :pais="pais"
+
                 />
             </template>
         </Modal>
@@ -213,18 +220,10 @@ export default {
         const seEditaSucursal = ref ( false )
         const haySucursales = ref ( false )
 
+
         const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
 
-        // const router = useRoute()
-        // espropietaria = router.params.propietaria
-
-        // const validarEsNuevo = ()=>{
-        //     if(router.params.id && router.params.id > 0){
-        //        esnuevo.value = false 
-        //        idempresa.value  = router.params.id
-        //     }
-        // }
 
         onMounted( ()=>{
             
@@ -247,17 +246,17 @@ export default {
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
                 ListaPaises.value = storeEmpresa.listapaises
-                // console.log('enlistar')
-                // console.log(ListaPaises.value)
+
             })
+
         }
 
 
 
         const abrircerrarSucursal= ()=> { 
-            haySucursal.value = !haySucursal.value
+            haySucursal.value = !haySucursal.value 
         }
-
+ 
 
         
         const actualizarValoresComponenteHijo = ( valores )=>{
@@ -268,13 +267,13 @@ export default {
                 colonia.value         = valores.colonia
                 colonianombre.value   = valores.colonianombre
                 esextranjero.value    = valores.esextranjero
-                estado.value          = valores.estado
+                estado.value          = valores.estado 
                 estadonombre.value    = valores.estadonombre       
                 idempresa.value       = valores.idempresa
                 municipio.value       = valores.municipio          
                 municipionombre.value = valores.municipionombre     
                 noext.value           = valores.noext
-                noint.value           = valores.noint         
+                noint.value           = valores.noint          
                 nombrecomercial.value = valores.nombrecomercial
                 nombreoficial.value   = valores.nombreoficial
                 pais.value            = valores.pais
@@ -284,7 +283,7 @@ export default {
                 regimenfiscal.value   = valores.regimenfiscal
                 rfc.value             = valores.rfc
                 taxid.value           = valores.taxid
-        }
+        } 
 
         const verSucursal = ()=>{
             if ( haySucursales.value ) {
@@ -310,7 +309,7 @@ export default {
                         NombreComercial:    nombrecomercial.value,
                         NombreOficial:      nombreoficial.value,
                         PersonaFisica:      personafisica.value,
-                        PersonaMoral:       personamoral.value,
+                        PersonaMoral:       personamoral.value, 
                         RFC:                rfc.value,
                         Borrado:            0,
                         logo:               ""
@@ -327,7 +326,7 @@ export default {
                         CodigoPostal:       codigopostal.value,
                         NumeroExt:          noext.value,
                         NumeroInt:          noint.value,
-                        Pais:               paisseleccionado.Descripcion 
+                        Pais:               paisseleccionado.Descripcion  
                     }
                 ]  
             }
@@ -346,6 +345,8 @@ export default {
 
             
         }
+
+
         
         
         return{

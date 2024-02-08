@@ -1,10 +1,14 @@
 <template>
-    <frmDatosGrales></frmDatosGrales>
+    <favico 
+      :menu="menu"
+      :items="items"
+    />
 </template>
 
 <script>
 
-import frmDatosGrales from '../modules/empresas/views/empresa.vue'
+import favico from '@/shared/favico/components/item.vue'
+
 
 export default {
   name: 'HelloWorld',
@@ -13,10 +17,34 @@ export default {
   },
   components:{
     /* listEmpresas */
+    favico
   },
   setup(){
+    const menu ={
+        name: 'menu',
+        icono: '/images/fabico/hamburguesas.svg'
+    }
+    const items=[
+        {
+          name: 'regresar',
+          icono: '/images/fabico/ListaPrecios.svg',
+          pathname: 'listado',
+        },
+        {
+          name: 'empresa',
+          icono: '/images/fabico/SAT.svg',
+          pathname: 'formualrio',
+        },
+        {
+          name: 'conversion',
+          icono: '/images/fabico/unidadmedida.svg',
+          pathname: '',
+        }
+      ]
+
     return{
-      
+      items,
+      menu
     }
   }
 }
