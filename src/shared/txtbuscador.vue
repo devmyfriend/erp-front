@@ -7,7 +7,9 @@
 </template>
   
 <script>
+
 import { ref, defineProps, defineEmits, computed} from 'vue';
+
 const { useEmpresas } = require('../modules/empresas/store/empresas');
 
 export default {

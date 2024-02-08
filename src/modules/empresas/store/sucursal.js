@@ -6,6 +6,7 @@ export const useSucursal = defineStore( 'sucursal', {
 
     },
     actions:{
+
         // async CargarResponsables( idempresa ){
         //     try{
         //         const data = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/contactos/${ idempresa }`)
@@ -29,6 +30,7 @@ export const useSucursal = defineStore( 'sucursal', {
 
             }
             
+
         }
     }
 })

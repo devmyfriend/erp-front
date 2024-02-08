@@ -36,7 +36,9 @@
 </template>
 
 <script setup>
-import { ref,defineProps, onMounted,watch,toRefs } from 'vue';
+
+import { ref, onMounted,watch,toRefs } from 'vue';
+
 import ScrollInfinito from './ScrollInfinito.vue'
 
 const { Lista, obtenerTelefonoCorreo, m_actualizarContacto, eliminarContacto } = defineProps({

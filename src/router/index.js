@@ -1,8 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/modules/login/components/login.vue'
+
 import HelloWorld from '@/components/HelloWorld.vue'
 
+
 import empresasRouter from '@/modules/empresas/routes/index'
+import tablaInfinita from '@/shared/sTablaInfinita.vue'
 
 const routes = [
   {
@@ -10,6 +13,11 @@ const routes = [
     name: 'home',
     redirect: '/login',
     component: Login
+  },
+  {
+    path: '/tablaInfinita',
+    name: 'tablaInfinita',
+    component: tablaInfinita
   },
   {
     path: '/empresas',

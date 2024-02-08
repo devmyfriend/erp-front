@@ -7,17 +7,21 @@
             </fieldset>
             <fieldset>
                 <!-- <label for="">Nombre del responsable</label> -->
+
                 <!-- <select v-model="responsable" class="responsableSucursal" name="txtResponsable" id="idResponsable" v-on:focus="cargarResponsables">
                     <option value="">Nombre del responsable</option>
                 </select> -->
                 <input class="responsableSucursal" type="text" name="txtResponsable" id="idResponsable" placeholder="Responsable">
+
             </fieldset>
             <fieldset>
                 <label for="">Domicilio</label> <br>
                 <input v-model="calle" class="calleSucursal" type="text" name="txtCalle" id="idCalle" placeholder="Calle">
                 <input v-model="noext" class="noextintSucursal" type="text" name="txtNoExt" id="idNoExt" placeholder="No. Ext">
                 <input v-model="noint" class="noextintSucursal" type="text" name="txtNoInt" id="idNoInt" placeholder="No. Int">
+
                 <input v-model="colonia" class="responsableSucursal" type="text" placeholder="Colonia">
+
             </fieldset>
             <fieldset>
                 <div class="grupoField">
@@ -74,7 +78,9 @@
 
 <script>
 import { ref, computed, watch } from 'vue';
+
 import Swal from 'sweetalert2'
+
 
 import Telefonos from '@/shared/datosTabla.vue'
 import Emails from '@/shared/datosTabla.vue'
@@ -90,7 +96,9 @@ export default {
     },
     props:{
         idempresa: Number,
+
         pais: String
+
     },
     setup ( props ) {
 
@@ -110,7 +118,9 @@ export default {
         const municipio      = ref ('')
         const ciudad         = ref ('')
         const responsable    = ref ('')
+
         const pais           = ref( props.pais )
+
 
         const storeDomicilio = useDomicilioSAT()
         const storeSucursal = useSucursal()
@@ -144,6 +154,7 @@ export default {
 
         })
 
+
         const guardar = async ()=>{
             const datos ={
                 sucursal:[{
@@ -176,6 +187,7 @@ export default {
                 icon:  res.status === 200? 'success': 'error',
             })
 
+
         }
 
         return {
@@ -189,7 +201,9 @@ export default {
             noext,
             noint,
             nombresucursal,
+
             pais,
+
             responsable,
 
             listaemails,

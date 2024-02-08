@@ -49,8 +49,10 @@
             </template>
             <template v-slot:body>
                 <Sucursal 
+
                     :idempresa="idempresa"
                     :pais="pais"
+
                 />
             </template>
         </Modal>
@@ -218,8 +220,10 @@ export default {
         const seEditaSucursal = ref ( false )
         const haySucursales = ref ( false )
 
+
         const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
+
 
         onMounted( ()=>{
             
@@ -242,7 +246,9 @@ export default {
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
                 ListaPaises.value = storeEmpresa.listapaises
+
             })
+
         }
 
 
@@ -339,6 +345,8 @@ export default {
 
             
         }
+
+
         
         
         return{
