@@ -18,7 +18,14 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  //borrar esta seccion de prubas
+  {
+    path:'/helloworld',
+    name: 'helloworld',
+    component: HelloWorld
   }
+  //fin de la seccion de purebas.
 ]
 
 const router = createRouter({
