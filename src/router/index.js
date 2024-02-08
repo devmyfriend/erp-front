@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '@/modules/login/components/login.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
 
 import empresasRouter from '@/modules/empresas/routes/index'
 
@@ -19,13 +20,13 @@ const routes = [
     name: 'login',
     component: Login
   },
-  //borrar esta seccion de prubas
+ 
   {
     path:'/helloworld',
     name: 'helloworld',
     component: HelloWorld
   }
-  //fin de la seccion de purebas.
+ 
 ]
 
 const router = createRouter({

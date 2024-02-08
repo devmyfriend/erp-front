@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import { ref } from 'vue'
+    import { ref, computed } from 'vue';
     import { useRouter } from 'vue-router'
     export default{
         name:'FabIcon',
@@ -52,6 +52,8 @@
             const items = ref( props.items)
 
             const router = useRouter()
+
+            
 
             const goTo = ( path )=>{
                 router.push( { name: path } )

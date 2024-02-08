@@ -23,13 +23,13 @@ export default {
     const items=[
         {
           name: 'regresar',
-          icono: '../../assets/img/favico/ListaPrecios.svg',
-          pathname: 'home'
+          icono: '/images/fabico/ListaPrecios.svg',
+          pathname: 'listado'
         },
         {
           name: 'empresa',
-          icono: '../../assets/img/favico/SAT.svg',
-          pathname: 'empresas'
+          icono: '/images/fabico/fabico/SAT.svg',
+          pathname: 'formualrio'
         }
       ]
 
