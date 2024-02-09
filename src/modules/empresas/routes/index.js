@@ -11,7 +11,14 @@ export default{
         },{
             path: 'formulario',
             name: 'formulario',
-            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue')
+            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue'),
+        },
+        //prueba de modificacion de ruta para validar que se pueda hacer las actualizciones de empresa.
+        {
+            path: 'formulario/:id',
+            name: 'frmeditar',
+            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue'),
         }
+        //fin de prueba
     ]
 }

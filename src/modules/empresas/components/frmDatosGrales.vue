@@ -51,7 +51,7 @@
                </fieldset>
                <fieldset>
                     <label class="labelPais" for="pais">País</label>
-                    <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores">
+                    <select class="pais" name="pais" id="idPais" v-model="pais" @change="actualizarValores" @focus="actualizarPaises">
                         <!-- <option selected value="MEX">México</option> --> 
                         <option v-for="optPais in ListaPaises" :key="optPais.ClavePais"  :value="optPais.ClavePais">{{optPais.Descripcion}}</option>
                     </select>
@@ -78,7 +78,7 @@
                     <input v-if="esextranjero" class="taxId" type="text" name="taxId" id="idTaxId" placeholder="Tax Id">
                </fieldset>
                <fieldset>
-                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" v-model="regimenfiscal" id="idClaveRegimenFiscal" @change="actualizarValores">
+                    <select class="claveRegimenFiscal" name="claveRegimenFiscal" v-model="regimenfiscal" id="idClaveRegimenFiscal" @change="actualizarValores" @focus="actualizarRegimenFiscal">
                         <option selected value="">Régimen Fiscal</option>
                         <option v-for="regimen in listaregimenes" :key="regimen.ClaveRegimenFiscal" :value="regimen.ClaveRegimenFiscal">{{regimen.Descripcion}}</option>
                     </select>
@@ -280,6 +280,17 @@ export default {
         const cargarPaises = ()=>{
             ListaPaises.value = storeEmpresa.listapaises
         }
+
+        const actualizarPaises = () =>{
+            ListaPaises.value = null
+            cargarPaises()
+        }
+
+        const actualizarRegimenFiscal = ()=>{
+            listaregimenes.value=null
+            cargarListaRegimenFiscal()
+        }
+
         const cargarListaRegimenFiscal = () => {
             listaregimenes.value = storeEmpresa.listaPFisica
         }        
@@ -363,7 +374,32 @@ export default {
             }) 
         }
 
-
+        watch( props, ( newprops, oldprops )=>{
+            calle.value             = newprops.calle              
+            ciudad.value            = newprops.ciudad              
+            ciudadnombre.value      = newprops.ciudadnombre
+            codigopostal.value      = newprops.codigopostal       
+            colonia.value           = newprops.colonia 
+            colonianombre.value     = newprops.colonianombre
+            esextranjero.value      = newprops.esextranjero
+            estado.value            = newprops.estado
+            estadonombre.value      = newprops.estadonombre       
+            idempresa.value         = newprops.idempresa
+            municipio.value         = newprops.municipio          
+            municipionombre.value   = newprops.municipionombre
+            noext.value             = newprops.noext
+            noint.value             = newprops.noint         
+            nombrecomercial.value   = newprops.nombrecomercial
+            nombreoficial.value     = newprops.nombreoficial
+            pais.value              = newprops.pais
+            paisnombre.value        = newprops.paisnombre
+            personafisica.value     = newprops.personafisca
+            personamoral.value      = newprops.personamoral
+            regimenfiscal.value     = newprops.regimenfiscal
+            rfc.value               = newprops.rfc
+            taxid.value             = newprops.taxid
+            console.log(`el pais obtenido es ${ pais.value }`)
+        } )
 
         
         return{
@@ -406,6 +442,8 @@ export default {
 
             actualizarValores,
             PersonaSelecionada,
+            actualizarPaises,
+            actualizarRegimenFiscal
             // validarArchivo,
 
         }

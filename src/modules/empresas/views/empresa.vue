@@ -112,9 +112,10 @@
                     @actualizarValores="actualizarValoresComponenteHijo"  
 
                 />
+                
                 <!-- fin de formuraio general de datos de empresa -->
                 <!-- acciones de sucursales -->
-                <div class="sucursales">
+                <div v-if="idempresa>0" class="sucursales">
                     <h3>Sucursales</h3>
                     <a @click="abrircerrarSucursal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none">
@@ -136,6 +137,11 @@
                         Ver Sucursal
                     </a>
                 </div>
+                
+                <div class="botones">
+                    <button class="btn btn-save" @click="guardar"> Guardar</button>
+                    <button class="btn btn-danger" @click="cancelar">Cancelar</button>
+                </div>
                 <!-- fin de acciones de sucursales -->
             </div>
             <!-- formualrios de contactos -->
@@ -144,16 +150,12 @@
             </div>
             <!-- fin de formulario de contactos -->
         </div>
-        <div class="botones">
-            <button class="btn btn-save" @click="guardar"> Guardar</button>
-            <button class="btn btn-danger">Cancelar</button>
-        </div>
     </div>
 </template>
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2'
 
 
@@ -219,11 +221,14 @@ export default {
         const haySucursal = ref ( false )
         const seEditaSucursal = ref ( false )
         const haySucursales = ref ( false )
+        const seEditaEmpresa = ref( false )
 
 
         const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
 
+        const route = useRoute()
+        const router = useRouter()
 
         onMounted( ()=>{
             
@@ -231,27 +236,65 @@ export default {
             
             enlistarRegimenes()
 
+            cargaDatos()
+
         })
 
         const enlistarRegimenes = ()=>{
             storeEmpresa.cargarRegimenes().then(()=>{
                 console.log(storeEmpresa.ListaRegimenes)
                 listaregimenes.value = storeEmpresa.listaregimen
-
-                console.log('se cargo la lista de regimenes')
-                console.log(listaregimenes.value) 
             })
         }
 
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
                 ListaPaises.value = storeEmpresa.listapaises
-
             })
 
         }
 
+        const cargaDatos = async ()=>{
+            idempresa.value = route.params.id
+            
+            if( idempresa.value > 0 ){
+                const datos = await storeEmpresa.obtenerEmpresa( idempresa.value )
+                
+                if( datos.status === 200 ){
+                    const valores = datos.data[0]
+                    console.log( valores )
+                    idempresa.value = valores.EntidadNegocioId
+                    rfc.value = valores.RFC
+                    nombreoficial.value = valores.NombreOficial
+                    pais.value = valores.Pais
+                    personafisica.value = valores.PersonaFisica
+                    personamoral.value = valores.PersonaMoral
+                    regimenfiscal.value = valores.ClaveRegimenFiscal
+                    nombrecomercial.value = valores.NombreComercial
+                    calle.value = valores.Calle
+                    noext.value = valores.NumeroExt
+                    noint.value = valores.NumeroInt
+                    codigopostal.value = valores.CodigoPostal
+                    estadonombre.value = valores.Estado
+                    ciudad.value = valores.Localidad
+                    colonianombre.value = valores.Colonia
 
+                    seEditaEmpresa.value = true
+                }else{
+                    console.log( datos )
+                    Swal.fire({
+                        title: datos.status === 200? 'Ok':  'Error',
+                        text:  datos.status === 200? datos.data.message: datos.error? datos.error: datos.errors? datos.errors[0]:'Error',
+                        icon:  datos.status === 200? 'success': 'error',
+                    })
+                }
+            }
+            
+        }
+        
+        // const cargapaises = ()=>{
+        //     enlistarPaises()
+        // }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value 
@@ -312,7 +355,9 @@ export default {
                         PersonaMoral:       personamoral.value, 
                         RFC:                rfc.value,
                         Borrado:            0,
-                        logo:               ""
+                        logo:               "",
+                        // Estatus:            0,
+                        // taxid:              ""
                     }
                 ],
                 CreadoPor: 1,
@@ -331,22 +376,39 @@ export default {
                 ]  
             }
 
-            console.log( datos )
-
-            const respuesta = await storeEmpresa.crearEmpresa( datos )
             
-            idempresa.value = storeEmpresa.IdEmpresa
 
-            Swal.fire({
-                title: respuesta.status === 200? 'Ok':  'Error',
-                text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
-                icon:  respuesta.status === 200? 'success': 'error',
-            })
+            if( seEditaEmpresa.value === false ){
+            
+                console.log('nueva empresa')
+                const respuesta = await storeEmpresa.crearEmpresa( datos )
+                
+                console.log(respuesta)
 
+                idempresa.value = storeEmpresa.IdEmpresa
+
+                Swal.fire({
+                    title: respuesta.status === 200? 'Ok':  'Error',
+                    text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
+                    icon:  respuesta.status === 200? 'success': 'error',
+                })
+
+            }else{
+                
+                const respuesta = await storeEmpresa.actualizarEmpresa( datos )
+
+                Swal.fire({
+                    title: respuesta.status === 200? 'Ok':  'Error',
+                    text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
+                    icon:  respuesta.status === 200? 'success': 'error',
+                })
+            }
             
         }
 
-
+        const cancelar = ()=>{
+            router.push({ name: 'listado' })
+        }
         
         
         return{
@@ -383,6 +445,7 @@ export default {
             listaestado,
 
             guardar,
+            cancelar,
 
 
             abrircerrarSucursal,
