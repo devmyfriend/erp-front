@@ -221,17 +221,21 @@ export default {
         const haySucursal = ref ( false )
         const seEditaSucursal = ref ( false )
         const haySucursales = ref ( false )
+        const seEditaEmpresa = ref( false )
 
 
         const storeEmpresa = useEmpresa()
         const storeDomicilio = useDomicilioSAT()
 
+        const route = useRoute()
 
         onMounted( ()=>{
             
             enlistarPaises()
             
             enlistarRegimenes()
+
+            cargaDatos()
 
         })
 
@@ -245,15 +249,51 @@ export default {
         const enlistarPaises =()=>{
             storeEmpresa.cargarPaises().then(()=>{
                 ListaPaises.value = storeEmpresa.listapaises
-
             })
 
         }
 
-        
-        const cargapaises = ()=>{
-            enlistarPaises()
+        const cargaDatos = async ()=>{
+            idempresa.value = route.params.id
+            
+            if( idempresa.value > 0 ){
+                const datos = await storeEmpresa.obtenerEmpresa( idempresa.value )
+                
+                if( datos.status === 200 ){
+                    const valores = datos.data[0]
+                    console.log( valores )
+                    idempresa.value = valores.EntidadNegocioId
+                    rfc.value = valores.RFC
+                    nombreoficial.value = valores.NombreOficial
+                    pais.value = valores.Pais
+                    personafisica.value = valores.PersonaFisica
+                    personamoral.value = valores.PersonaMoral
+                    regimenfiscal.value = valores.ClaveRegimenFiscal
+                    nombrecomercial.value = valores.NombreComercial
+                    calle.value = valores.Calle
+                    noext.value = valores.NumeroExt
+                    noint.value = valores.NumeroInt
+                    codigopostal.value = valores.CodigoPostal
+                    estadonombre.value = valores.Estado
+                    ciudad.value = valores.Localidad
+                    colonianombre.value = valores.Colonia
+
+                    seEditaEmpresa.value = true
+                }else{
+                    console.log( datos )
+                    Swal.fire({
+                        title: datos.status === 200? 'Ok':  'Error',
+                        text:  datos.status === 200? datos.data.message: datos.error? datos.error: datos.errors? datos.errors[0]:'Error',
+                        icon:  datos.status === 200? 'success': 'error',
+                    })
+                }
+            }
+            
         }
+        
+        // const cargapaises = ()=>{
+        //     enlistarPaises()
+        // }
 
         const abrircerrarSucursal= ()=> { 
             haySucursal.value = !haySucursal.value 
@@ -333,11 +373,15 @@ export default {
                 ]  
             }
 
-            console.log( datos )
-
-            const respuesta = await storeEmpresa.crearEmpresa( datos )
+            if( !seEditaEmpresa ){
             
-            idempresa.value = storeEmpresa.IdEmpresa
+                const respuesta = await storeEmpresa.crearEmpresa( datos )
+                
+                idempresa.value = storeEmpresa.IdEmpresa
+
+            }else{
+                
+            }
 
             Swal.fire({
                 title: respuesta.status === 200? 'Ok':  'Error',

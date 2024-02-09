@@ -374,7 +374,32 @@ export default {
             }) 
         }
 
-
+        watch( props, ( newprops, oldprops )=>{
+            calle.value             = newprops.calle              
+            ciudad.value            = newprops.ciudad              
+            ciudadnombre.value      = newprops.ciudadnombre
+            codigopostal.value      = newprops.codigopostal       
+            colonia.value           = newprops.colonia 
+            colonianombre.value     = newprops.colonianombre
+            esextranjero.value      = newprops.esextranjero
+            estado.value            = newprops.estado
+            estadonombre.value      = newprops.estadonombre       
+            idempresa.value         = newprops.idempresa
+            municipio.value         = newprops.municipio          
+            municipionombre.value   = newprops.municipionombre
+            noext.value             = newprops.noext
+            noint.value             = newprops.noint         
+            nombrecomercial.value   = newprops.nombrecomercial
+            nombreoficial.value     = newprops.nombreoficial
+            pais.value              = newprops.pais
+            paisnombre.value        = newprops.paisnombre
+            personafisica.value     = newprops.personafisca
+            personamoral.value      = newprops.personamoral
+            regimenfiscal.value     = newprops.regimenfiscal
+            rfc.value               = newprops.rfc
+            taxid.value             = newprops.taxid
+            console.log(`el pais obtenido es ${ pais.value }`)
+        } )
 
         
         return{

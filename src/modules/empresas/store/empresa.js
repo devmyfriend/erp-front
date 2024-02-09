@@ -101,15 +101,29 @@ export const useEmpresa = defineStore( 'empresa', {
 
                 const empresa  = await axios.post(`${ process.env.VUE_APP_PATH_API }v1/empresa/crear`, datos )
 
-                console.log(empresa.data.EmpresaId)
-
                 this.EmpresaId = empresa.data.EmpresaId
+                
                 return empresa.data
 
             }catch( error ){
                 return (error.response.data)
             }
+        },
+
+        async obtenerEmpresa ( idempresa ){
+
+            try{
+
+                const empresa = await axios.get( `${ process.env.VUE_APP_PATH_API }v1/empresa/${ idempresa }`)
+
+                return empresa
+
+            }catch( error ){
+                return error.response
+            }
         }
+
+        
  
     }
 
