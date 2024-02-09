@@ -7,7 +7,7 @@
     </div>
     <div class="tablaContainer">
       <TablaInfinita 
-      :listado="ListadoEmpresas" :encabezados="encabezados" :paginado="paginado" :acciones="acciones" :pBusqueda="pBusqueda" 
+      :listado="ListadoEmpresas" :encabezados="encabezados" :paginado="paginado" :acciones="acciones" :pBusqueda="pBusqueda" :pAccion="pAccion"
       @eBusqueda="esperarBusqueda" @eAccion="esperarAccion"/>
     </div>
   </div>
@@ -25,11 +25,12 @@ const { useEmpresas } =require('../store/empresas.js');
 const store = useEmpresas();
 
 const ListadoEmpresas = ref([]);
-const encabezados = ref([]);
+const encabezados = ref(['EntidadNegocioId', 'Nombre Oficial', 'Nombre Comercial', 'RFC', 'Dirección']);
 
 const paginado = ref(15);
 const acciones = ref(2);
 const pBusqueda = ref(false);
+const pAccion = ref(false);
 
 onMounted(() => {
   store.cargarEmpresas().then(() =>{
@@ -45,37 +46,35 @@ function esperarBusqueda(valor){
 
 }
 
-function esperarAccion(res){
-  const opc = res[0];
-  const id = res[1];
-
-  if(opc === 1){
-    router.push({name: 'formulario', params: {id: id}});
-  }else if(opc === 2){
-
-    Swal.fire({
-        title: "Eliminar empresa",
-        text: "¿Realmente quieres eliminar la empresa?",
-        icon: "question",
-        showDenyButton: true,
-        confirmButtonText: "Eliminar",
-        denyButtonText: `No eliminar`,
+function esperarAccion(opc, registroRecibido){
+  pAccion.value = !pAccion.value;
+  if(opc !== null){
+    if(opc === 1){
+      router.push({name: 'formulario', params: {id: registroRecibido.EntidadNegocioId}});
+    } else if(opc === 2){
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, bórralo!'
       }).then((result) => {
         if (result.isConfirmed) {
-          if (store.borrarEmpresa(id)){
-            Swal.fire("Eliminado", "La empresa ha sido eliminada", "success").then(() => {
-              ajustarListado();
-            });
-          }else{
-            Swal.fire({
-              title: "Error",
-              text: "Error al eliminar la empresa",
-              icon: "error"
-            });
-          }
+          store.borrarEmpresa(registroRecibido.EntidadNegocioId).then(() => {
+            ajustarListado();
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+              )
+          });
         }
-      });
+      })
+    } 
   }
+
 }
 
 function ajustarListado(){
@@ -83,16 +82,14 @@ function ajustarListado(){
   ListadoEmpresas.value = ListadoEmpresas.value.map(empresa => {
     const Direccion = `${empresa.Pais}, ${empresa.Estado}, ${empresa.CodigoPostal}, Ext: ${empresa.NumeroExt}, Int: ${empresa.NumeroInt}, ${empresa.Localidad}, ${empresa.Colonia}`;
     return {
-        EntidadNegocioId: empresa.EntidadNegocioId,
-        NombreOficial: empresa.NombreOficial,
-        NombreComercial: empresa.NombreComercial,
-        RFC: empresa.RFC,
-        Direccion: Direccion
+      EntidadNegocioId: empresa.EntidadNegocioId,
+      NombreOficial: empresa.NombreOficial,
+      NombreComercial: empresa.NombreComercial,
+      RFC: empresa.RFC,
+      Direccion: Direccion
     };
   });
-    encabezados.value = Object.keys(ListadoEmpresas.value[0]);
 }
-
 </script>
 
 <style>

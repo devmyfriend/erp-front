@@ -4,7 +4,7 @@
       <table ref="tablaInf">
         <thead>
           <tr>
-            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%' }">{{ header }}</th>
+            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%'}">{{ header }}</th>
             <th v-if="props.acciones != 0" :style="{ width: '10% !important' }"> Acciones</th>
           </tr>
         </thead>
@@ -16,17 +16,29 @@
             </template>
 
             <td v-if="props.acciones != 0" :style="{ width: '10% !important' }">
-                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" :class="{ small: isSmall }"      @click="activarAcciones(1, item.EntidadNegocioId)"> 
-                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" :class="{ small: isSmall }"     v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
-            </tr>
-          </tbody>
-        </table>
+                <img 
+                  src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" 
+                  :class="{ small: isSmall }"
+                  @click="activarAcciones(1, item)"
+                > 
+                
+                <img 
+                  src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" 
+                  :class="{ small: isSmall }"
+                  v-if="props.acciones == 2"
+                  @click="activarAcciones(2, item)"
+                > 
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
       </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onUpdated } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   encabezados: {
@@ -60,16 +72,16 @@ const props = defineProps({
     type: Number,
     default: 0 //0 sin acciones, 1 solo editar, 2 eliminar y editar
   },
+  saltos: {
+    type: Number,
+    default: 0
+  },
     /* Flags */
   pBusqueda: {
     type: Boolean,
     default: false
   },
   pAccion: {
-    type: Boolean,
-    default: false
-  },
-  pSaveAll: {
     type: Boolean,
     default: false
   },
@@ -85,7 +97,7 @@ const emit = defineEmits( ['eAccion', 'eBusqueda']);
 const listadoFinal = ref( [] );
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
-const heightTabla = ref( (props.paginado * 32) + 38 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
+const heightTabla = ref( (props.paginado * 32) + 22 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
 const tablaContainer = ref(null);
 const tablaInf = ref(null);
 const columnasWidth = ref(100);
@@ -94,9 +106,11 @@ const isSmall = ref(false);
 const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
   const end = start + props.paginado;
+  /* console.log('start: ' + start + ' end: ' + end); */
   registrosFinales.value.push(...listadoFinal.value.slice(start, end));
   paginaActual.value++;
 };
+
 const esperarScroll = (event) => {
   const element = event.target;
   if (element.scrollHeight - element.scrollTop - 10 <= element.clientHeight) {
@@ -104,20 +118,25 @@ const esperarScroll = (event) => {
   }
 };
 
-function activarAcciones(opc, id){
+function activarAcciones(accion, info){
   tablaContainer.value.scrollTop = 0;
-  emit ('eAccion', [opc, id])
+  emit ('eAccion', accion, info)
 }
 
 
 watch(() => props.listado, (newValue, oldValue) => {
   registrosFinales.value = [];
   listadoFinal.value = newValue;
+  paginaActual.value = 1;
+  tablaContainer.value.scrollTop = 0;
+
   if (props.pBusqueda) {
-    paginaActual.value = 1;
-    tablaContainer.value.scrollTop = 0;
-    emit('eBusqueda', false);
+    emit('eBusqueda', null);
   }
+  if (props.pAccion) {
+    emit('eAccion', null);
+  }
+
   cargarMas();
   widthCol();
 },{deep: true});
@@ -137,6 +156,7 @@ function widthCol(){
     isSmall.value = true;
   }
 }
+
 </script>
 
 <style scoped>
@@ -166,7 +186,7 @@ td, th {
 th {
   background-color: #999999;
   color: #fff;
-  height: 3rem;
+  height: 2rem;
 }
 td{
   background-color: #fff;
