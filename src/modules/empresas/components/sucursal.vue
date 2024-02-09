@@ -73,8 +73,8 @@
 
 <script>
 import { ref, computed, watch } from 'vue';
-import Telefonos from '@/shared/datosTabla.vue'
-import Emails from '@/shared/datosTabla.vue'
+/* import Telefonos from '@/shared/datosTabla.vue'
+import Emails from '@/shared/datosTabla.vue' */
 
 import { useSucursal } from '../store/sucursal';
 import { useDomicilioSAT } from '../store/domiciliosat';
