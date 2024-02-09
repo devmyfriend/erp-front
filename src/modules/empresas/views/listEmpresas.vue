@@ -123,3 +123,35 @@ h1 {
   margin: 0.8125rem;
 }
 </style>
+
+<style>
+h1 {
+  text-align: start;
+  color: #000;
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  width: 100%;
+  height: 100%;
+  background-color: #D9D9D9;
+}
+.formulario {
+  margin-top: 1.5rem;
+  display: flex;
+  
+  vertical-align: middle;
+  line-height: 2.1875rem;
+
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.6rem;
+  width: 100%;
+}
+.tablaContainer {
+  margin: 0.8125rem;
+}
+</style>
