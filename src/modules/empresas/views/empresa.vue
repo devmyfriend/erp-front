@@ -140,7 +140,7 @@
                 
                 <div class="botones">
                     <button class="btn btn-save" @click="guardar"> Guardar</button>
-                    <button class="btn btn-danger">Cancelar</button>
+                    <button class="btn btn-danger" @click="cancelar">Cancelar</button>
                 </div>
                 <!-- fin de acciones de sucursales -->
             </div>
@@ -155,7 +155,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2'
 
 
@@ -228,6 +228,7 @@ export default {
         const storeDomicilio = useDomicilioSAT()
 
         const route = useRoute()
+        const router = useRouter()
 
         onMounted( ()=>{
             
@@ -354,7 +355,9 @@ export default {
                         PersonaMoral:       personamoral.value, 
                         RFC:                rfc.value,
                         Borrado:            0,
-                        logo:               ""
+                        logo:               "",
+                        // Estatus:            0,
+                        // taxid:              ""
                     }
                 ],
                 CreadoPor: 1,
@@ -373,26 +376,39 @@ export default {
                 ]  
             }
 
-            if( !seEditaEmpresa ){
             
+
+            if( seEditaEmpresa.value === false ){
+            
+                console.log('nueva empresa')
                 const respuesta = await storeEmpresa.crearEmpresa( datos )
                 
+                console.log(respuesta)
+
                 idempresa.value = storeEmpresa.IdEmpresa
+
+                Swal.fire({
+                    title: respuesta.status === 200? 'Ok':  'Error',
+                    text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
+                    icon:  respuesta.status === 200? 'success': 'error',
+                })
 
             }else{
                 
+                const respuesta = await storeEmpresa.actualizarEmpresa( datos )
+
+                Swal.fire({
+                    title: respuesta.status === 200? 'Ok':  'Error',
+                    text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
+                    icon:  respuesta.status === 200? 'success': 'error',
+                })
             }
-
-            Swal.fire({
-                title: respuesta.status === 200? 'Ok':  'Error',
-                text:  respuesta.status === 200? respuesta.message: respuesta.error? respuesta.error: respuesta.errors? respuesta.errors[0]:'Error',
-                icon:  respuesta.status === 200? 'success': 'error',
-            })
-
             
         }
 
-
+        const cancelar = ()=>{
+            router.push({ name: 'listado' })
+        }
         
         
         return{
@@ -429,6 +445,7 @@ export default {
             listaestado,
 
             guardar,
+            cancelar,
 
 
             abrircerrarSucursal,

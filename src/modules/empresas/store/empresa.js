@@ -121,6 +121,18 @@ export const useEmpresa = defineStore( 'empresa', {
             }catch( error ){
                 return error.response
             }
+        },
+
+        async actualizarEmpresa ( datos ){
+            try{
+
+                const empresa = await axios.patch( `${ process.env.VUE_APP_PATH_API }v1/empresa/editar/`, datos )
+                return empresa.data
+
+            }catch( error ){
+                return error.response
+            }
+
         }
 
         
