@@ -14,30 +14,42 @@
         </select>
         <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="abrirMContacto">
       </div>
-      <div class="tablaContactos">
-        <tablaInfinita :listado="ListadoContactos" :encabezados="['ContactoId', 'Nombres',	'Paterno',	'Materno',	'Departamento']" :acciones="2"/>
+      <div class="tablaContactos" @mouseenter="tipo = 1">
+        <tablaInfinita 
+          :listado="ListadoContactos" 
+          :encabezados="headsContacto" 
+          :acciones="2" :paginado="3"
+        />
       </div>
     </div>
 
-    <div class="filaContacto">
+    <div class="filaContacto" @mouseenter="tipo = 2">
       <div class="formulario">
         <input  v-model="telefono" type="text" placeholder="Teléfono" class="inp">
         <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarDatos(1)">
       </div>
 
       <div class="filaMiniTabla">
-        <tablaInfinita :listado="ListadoTelefonos" :encabezados="headsTelefono" />
+        <tablaInfinita
+          :listado="ListadoTelefonos" 
+          :encabezados="headsTelefono" 
+          :acciones="2" :paginado="3" @eAccion="esperarAccionWrapper"
+        />
       </div>
     </div>
 
-    <div class="filaContacto">
+    <div class="filaContacto" @mouseenter="tipo = 3">
       <div class="formulario">
         <input  v-model="correo" type="text" placeholder="Correo e." class="inp">
         <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarDatos(2)">
       </div>
 
       <div class="filaMiniTabla">
-        <tablaInfinita :listado="ListadoCorreos" :encabezados="headsCorreo" />
+        <tablaInfinita 
+          :listado="ListadoCorreos" 
+          :encabezados="headsCorreo"
+          :acciones="2" :paginado="3" @eAccion="esperarAccionWrapper"
+        />
       </div>
     </div>
   
@@ -47,6 +59,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import tablaInfinita from '@/shared/sTablaInfinita.vue';
+import Swal from 'sweetalert2';
 const { useContacto } = require('../store/contacto')
 const store = useContacto()
 const props = defineProps({
@@ -57,16 +70,18 @@ const props = defineProps({
 })
 
 const ListadoContactos = ref([])
-const headsContacto = ref([])
+const headsContacto = ref(['ContactoId', 'Nombres',	'Paterno',	'Materno',	'Departamento'])
 
 const ListadoTelefonos = ref([])
-const headsTelefono = ref([])
+const headsTelefono = ref(['ID', 'Telefono'])
 
 const ListadoCorreos = ref([])
-const headsCorreo = ref([])
+const headsCorreo = ref(['ID', 'Correo'])
 
 const telefono = ref('')
 const correo = ref('')
+
+const tipo = ref(0)
 
 onMounted(() => {
   store.cargarContactos(props.id).then(() =>{
@@ -99,22 +114,17 @@ function loadTelMail(){
 
     ListadoTelefonos.value = ListadoTelefonos.value.map(telefono => {
       return {
-          EntidadNegocioId: telefono.EntidadNegocioId,
-          TelefonoId: telefono.TelefonoId,
-          NumeroTelefonico: telefono.NumeroTelefonico,
+        TelefonoId: telefono.TelefonoId,  
+        NumeroTelefonico: telefono.NumeroTelefonico,
       };
     });
 
     ListadoCorreos.value = ListadoCorreos.value.map(correo => {
       return {
-          EntidadNegocioId: correo.EntidadNegocioId,
-          EmailId: correo.EmailId,
-          Email: correo.Email
+        EmailId: correo.EmailId,
+        Email: correo.Email,
       };
     });
-
-    headsTelefono.value = Object.keys(ListadoTelefonos.value[0]);
-    headsCorreo.value = Object.keys(ListadoCorreos.value[0]);
     });
 }
 
@@ -131,7 +141,6 @@ function agregarDatos(opc){
     }
     store.crearTelefono(contenido).then((res) =>{
       if(res){
-        //sweetalert
         telefono.value = ''
         loadTelMail()
       }
@@ -144,7 +153,6 @@ function agregarDatos(opc){
     }
     store.crearCorreo(contenido).then((res) =>{
       if(res){
-        //sweetalert
         correo.value = ''
         loadTelMail()
       }
@@ -154,6 +162,11 @@ function agregarDatos(opc){
 
 function validar(opc, txt){
   if(txt == '' || txt == null || txt == undefined || txt == ' '){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'El campo no puede estar vacío'
+    })
     return false
   }else{
     if(opc == 1){ //Telefono
@@ -169,6 +182,65 @@ function validar(opc, txt){
         return false
       }
     }
+  }
+}
+
+const esperarAccionWrapper = (act, data) => {
+  if(act == 1){
+
+  }else if(act == 2) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, bórralo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(tipo.value == 1){
+          const body = {
+              "ContactoId": data.ContactoId,
+              "BorradoPor": "0"
+          }
+          if(store.borrarContacto(body)){
+            loadContactos()
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+            )
+          }
+          }else if(tipo.value == 2){
+          const body = {
+              "TelefonoId": data.TelefonoId,
+              "BorradoPor": "0"
+          }
+          if(store.borrarTelefono(body)){
+            loadTelMail()
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+            )
+          }
+        }else if(tipo.value == 3){
+          const body = {
+              "EmailId": data.EmailId,
+              "BorradoPor": "0"
+          }
+          if(store.borrarCorreo(body)){
+            loadTelMail()
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+            )
+          }
+        }
+      }
+    })
   }
 }
 </script>
