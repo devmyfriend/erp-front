@@ -31,9 +31,49 @@
                     <router-link to="/" class="Empresas">
                         <img src="@/assets/img/logoutIco.svg" alt="Empresa">
                         <p>Logout</p>
+    <div class="layout-background">
+        <div class="layout-container">
+            <div class="layout-sideNav">
+                <div class="sideNav-logo">
+                    <img src="@/assets/img/imgEmpresa.svg" alt="Empresa">
+                </div>            
+                <div class="modulos-sideNav">
+                    <router-link :to="{ name: 'Empresas'}">
+                        <img src="@/assets/img/orgIco.svg" alt="Empresa">
+                        <p>Organización</p>
+                    </router-link>
+  
+                    <router-link :to="{ name: 'Empresas'}">
+                        <img src="@/assets/img/ventaIco.svg" alt="Empresa">
+                        <p>Ventas</p>
+                    </router-link>
+  
+                    <router-link :to="{ name: 'Empresas'}">
+                        <img src="@/assets/img/compraIco.svg" alt="Empresa">
+                        <p>Compras</p>
+                    </router-link>
+                    <router-link :to="{ name: 'Empresas'}">
+                        <img src="@/assets/img/catIco.svg" alt="Empresa">
+                        <p>Catálogo</p>
+                    </router-link>
+                    <router-link :to="{ name: 'Empresas' }">
+                        <img src="@/assets/img/cfgIco.svg" alt="Empresa">
+                        <p>Configuración</p>
+                    </router-link>
+                    <router-link to="/" class="Empresas">
+                        <img src="@/assets/img/logoutIco.svg" alt="Empresa">
+                        <p>Logout</p>
                     </router-link>
                 </div>
+                </div>
             </div>
+            <div class="w-100">
+                <div class="navegador d-flex justify-content-between align-items-center px-2 py-1">
+                    <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
+                    <a class="iconUsr pe-3" href="#"> <img src="@/assets/img/userIco.svg" alt="Usuario" ></a>
+                </div>
+                <div class="contenedor-Contenido">
+                        <router-view/>
             <div class="w-100">
                 <div class="navegador d-flex justify-content-between align-items-center px-2 py-1">
                     <a class="navbar-brand ps-3" href="#">GRUPO COMERCIAL MYFRIEND</a>
@@ -51,17 +91,7 @@
   </script>
   
   <style>
-    body{
-     height: 100vh;
-     width: 100vw;   
-    }
-    .layout-background{
-        height: 100vh;
-        width: 100vw;
-    }
     .layout-container{
-        height: 100vh;
-        width: 100vw;
         background-color: white;
         margin: auto;
         display: flex;
@@ -109,8 +139,6 @@
     .contenedor-Contenido{
         margin: 1.5rem;
         width: auto;
-        height: auto;
-        max-width: 100%;
         height: 40.5rem;
         max-height: 40.5rem;
         min-height: 40.5rem;

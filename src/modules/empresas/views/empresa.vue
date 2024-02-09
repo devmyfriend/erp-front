@@ -456,7 +456,6 @@ export default {
             verSucursal
         }
     }
-
 }
 
 </script>
@@ -466,17 +465,25 @@ export default {
 
 
 h1 {
-    color: white;
-    font-size: 2rem;
-    text-align: left;
-    margin: 1.4rem;
+  text-align: start;
+  color: #000;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  margin-right: 0rem;
+  width: auto;
 }
+/* h1 {
+    text-align: left;
+    color: #000;
+    font-weight: bolder;
+    font-size: 2rem;
+} */
 
 .frame {
     align-items: left;
     background-color: $panel;
     height: 50.875rem;
-    margin: 1.5rem;
     padding: 0 0.625rem 0 0.625rem;
     width: 82.9375rem;
 }
@@ -489,27 +496,24 @@ fieldset {
 
 .contenedor {
     display: flex;
-    justify-content: space-between;
 }
 
 .datosEmpresa {
     border-right: solid 1px #000;
     display: inline-block;
     width: 50%;
+    height: 750px;
 }
 
 .datosContactos {
-    background-color: 999999;
     color: #fff;
     display: inline-block;
-    width: 50%;
-
+    width: auto;
 }
 
 .botones {
     width: 100%;
     height: 5.75rem;
-    padding-top: 1.8125rem;
 }
 
 button {

@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-import { Swal } from 'sweetalert2/dist/sweetalert2';
 import { ref } from 'vue';
 const emit = defineEmits('eBusqueda');
 const { useEmpresas } = require('@/modules/empresas/store/empresas.js')
