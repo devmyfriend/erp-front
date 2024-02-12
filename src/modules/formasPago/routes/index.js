@@ -1,0 +1,13 @@
+export default{
+    name:'formasPago',
+    path:'/formasPago',
+    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/formasPago/views/listFormasPago.vue'),
+    redirect: '/formasPago/listado/',
+    children:[
+        {
+            path:'listado/',
+            name: 'listadoFormasPago',
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/formasPago/views/listFormasPago.vue'),
+        }
+    ]
+}

@@ -28,7 +28,11 @@
                         <img src="@/assets/img/cfgIco.svg" alt="Empresa">
                         <p>Configuración</p>
                     </router-link>
-                    <router-link to="/" class="Empresas">
+                    <router-link :to="{ path: '/Menu' }">
+                        <img src="@/assets/img/cfgIco.svg" alt="Empresa">
+                        <p>MENU TEMPORAL</p>
+                    </router-link>
+                    <router-link to="/" class="Empresas logout">
                         <img src="@/assets/img/logoutIco.svg" alt="Empresa">
                         <p>Logout</p>
                     </router-link>

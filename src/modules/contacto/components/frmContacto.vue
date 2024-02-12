@@ -61,6 +61,7 @@
       @esperarDatosContacto="agregarDatos"
       @cerrarModal="abrirMContacto"
       v-if="pContactoNuevo"
+      :EntidadNegocioId="props.EntidadNegocioId"
     />
   </div>
 </template>
@@ -304,7 +305,7 @@ h1{
   margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
 }
 table{
   background-color: aquamarine;

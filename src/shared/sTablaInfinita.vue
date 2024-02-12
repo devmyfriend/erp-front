@@ -137,7 +137,8 @@ watch(() => props.listado, (newValue, oldValue) => {
     emit('eRegistroNuevo', false);
     tablaContainer.value.scrollTop = 0;
   }
-
+  
+  console.log('Alto: ' + tablaContainer.value.offsetHeight + ' Necesario: ' + heightTabla.value);
   cargarMas();
   widthCol();
 },{deep: true});
@@ -156,7 +157,6 @@ function widthCol(){
     isSmall.value = true;
   }
 }
-
 </script>
 
 <style scoped>
