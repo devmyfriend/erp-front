@@ -1,395 +1,305 @@
-<template >
-  <div class="container  contenedor">
-
-    <div class="row">
-      <div class="col-12">
-        <h1>Contacto</h1>
-
-      </div>
-      <div class="row align-items-center">
-        <div class="col-auto mb-3 align-self-center">Contacto</div>
-        <div class="col-auto">
-        <!--   <input id="contacto" class="form-control mb-3" type="text" /> -->
-
-          <select class="form-select mb-3">
-            <option v-for ="l in ListaContactos">{{l.Nombres +" "+ l.ApellidoPaterno + " "+ l.ApellidoMaterno}}</option>
-          </select>
-
-        </div>
-        <div class="col-auto mb-3 align-self-center">
-          <span>
-            <img @click="ModalAgregarContacto" class="icono" src="@/assets/img/user-add-icon.png" />
-          </span>
-        </div>
-        <div class="col-auto mb-3 align-self-center">
-          <span>
-            <img @click="ModalListaContacto" class="icono" src="@/assets/img/plus.png" />
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="row align-items-center">
-      <div class="col-12" v-if="datosContactoListos">
-             
-        <tablaInfinita :Lista="ListaContactosTemp" :obtenerTelefonoCorreo="obtenerTelefonoCorreo" :m_actualizarContacto="m_actualizarContacto" :eliminarContacto="eliminarContacto"/>
-  <!-- 
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">id contacto</th>
-              <th scope="col">Contacto</th>
-              <th scope="col">Puesto</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-
-       
-   
-            <tr v-for="lc in ListaContactos" :key="lc.ContactoId" @click="obtenerTelefonoCorreo(lc.ContactoId)">
-              <td>{{ lc.ContactoId }}</td>
-              <td>{{ lc.Nombres }}</td>
-              <td>{{ lc.Puesto }}</td>
-              <td>
-                <span>
-                  <img @click="m_actualizarContacto(lc.ContactoId)" class="icono " src="@/assets/img/edit-icon.png" />
-                </span>
-                <span>
-                  <img @click="eliminarContacto(lc.ContactoId)" class="icono ms-3" src="@/assets/img/remove-icon.png" />
-                </span>
-              </td>
-            </tr>
-
-          </tbody>
-        </table> -->
-      </div>
-    </div>
-    <div class="row">
-
-      <div class="col-12">
-     <datosTabla :Lista="ListaTelefonos" :tipoTabla="'telefono'" /> 
-        <!-- 
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">id de Tel.</th>
-                <th scope="col">Número Télefonico </th>
-                <th scope="col"> Acciones </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for =" tel in ListaTelefonos" :key="tel.TelefonoId">
-                <td>{{ tel.TelefonoId }}</td>
-                <td>{{ tel.NumeroTelefonico }}</td>
-                <td>
-                  <span>
-                                <img class="icono" src="../assets/edit-icon.png" />
-                              </span>
-                              <span>
-                                <img  class="icono" src="../assets/remove-icon.png" />
-                              </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-       
-        -->
-
-      </div>
-    </div>
-    <div class="row">
-
-      <div class="col-12">
-
-
-       <datosTabla :Lista="ListaCorreos" :tipoTabla="'correo'" /> 
-
-
-      </div>
-    </div>
-  </div>
-
- 
-
-  
-      <!-- 
-        <modalContacto :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0"  :modo="modo" :key = "modo"
-        @guardar-contacto="guardarContacto"  @modificarModo ="actualizarModo" /> 
-        -->
-
-      
-
-      <modalContacto :ContactoId="ContactoId" :SucursalId="1010" :CreadoPor="123" :ActualizadoPor="0"
-        :ApellidoPaterno="ApellidoPaterno" :ApellidoMaterno="ApellidoMaterno" :Nombres="Nombres"
-        :Departamento="Departamento" :Puesto="Puesto" :key = "modo"  @actualizar-contacto="actualizarContacto"   @guardar-contacto="guardarContacto" :modo="modo"  @modificarModo ="actualizarModo" /> 
-
+<template>
+  <div class="contenedorPadre">
+    <h1> Contacto </h1>
     
-    
-
-    
-
-
-  
-
-  <div class="modal" tabindex="-1" ref="modalEleLista">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Lista de Contactos</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <select class="form-select" multiple aria-label="Multiple select example" v-for="lc in ListaContactos" :key="lc.ContactoId">
-           
-            <option  :value="lc.ContactoId" @click="contactoXiD(lc.ContactoId)">{{lc.Nombres}}</option>
-          
+    <div class="filaContacto">
+      <div class="formulario">
+        <label for="selectContacto" id="lbContacto" class="lbContacto"> Contacto </label>
+        <select class="selectContacto">
+          <option
+            v-for="contactos in ListadoContactos" 
+            :key="ContactoId">
+            {{ contactos.Nombres }} {{ contactos.ApellidoPaterno }} {{ contactos.ApellidoMaterno }} 
+          </option>
         </select>
-
+        <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="abrirMContacto">
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cerrarModal">Close</button>
-        <button type="button" class="btn btn-primary">Guardar cambios</button>
+      <div class="tablaContactos" @mouseenter="tipo = 1">
+        <tablaInfinita 
+          :listado="ListadoContactos" 
+          :encabezados="headsContacto" 
+          :acciones="2" :paginado="3"
+        />
       </div>
     </div>
-  </div>
-</div>
 
-<!-- 
-    <ListaContacto :Lista="ListaContactos" :visible="mostrarModalLista"/> -->
+    <div class="filaContacto" @mouseenter="tipo = 2">
+      <div class="formulario">
+        <input  v-model="telefono" type="text" placeholder="Teléfono" class="inp">
+        <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarDatos(1)">
+      </div>
+
+      <div class="filaMiniTabla">
+        <tablaInfinita
+          :listado="ListadoTelefonos" 
+          :encabezados="headsTelefono" 
+          :acciones="2" :paginado="3" @eAccion="esperarAccionWrapper"
+        />
+      </div>
+    </div>
+
+    <div class="filaContacto" @mouseenter="tipo = 3">
+      <div class="formulario">
+        <input  v-model="correo" type="text" placeholder="Correo e." class="inp">
+        <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarDatos(2)">
+      </div>
+
+      <div class="filaMiniTabla">
+        <tablaInfinita 
+          :listado="ListadoCorreos" 
+          :encabezados="headsCorreo"
+          :acciones="2" :paginado="3" @eAccion="esperarAccionWrapper"
+        />
+      </div>
+    </div>
   
+  </div>
 </template>
 
-<script >
-
-import { ref, onMounted,getCurrentInstance } from 'vue'
-import datosTabla from '@/shared/datosTabla.vue'
-import modalContacto from './modalContacto.vue'
-import tablaInfinita from './tablaInfinita.vue'
-import ListaContacto from './ListaContacto.vue'
-import {Modal} from 'bootstrap'
+<script setup>
+import { onMounted, ref } from 'vue';
+import tablaInfinita from '@/shared/sTablaInfinita.vue';
+import Swal from 'sweetalert2';
 const { useContacto } = require('../store/contacto')
-
-
-export default {
-  components: {
-
-    datosTabla,
-    modalContacto,
-    tablaInfinita,
-    ListaContacto
-
-  },
-  name: 'frmContacto',
-
-  setup() {
-    const icono_addContacto = "../assets/user-add-icon.png";
-    const ListaContactos = ref([]) // Lista general de contacto
-    const ListaContactosTemp = ref([]) //Lista de contacto que deslegara la tabla al buscar los elementos de la tabla
-    const ListaTelefonos = ref([])
-    const ListaCorreos = ref([])
-    const idSucursal = ref(1010);
-    const ContactoId = ref(0)
-    const ApellidoPaterno = ref('');
-    const ApellidoMaterno = ref('');
-    const Nombres = ref('');
-    const Departamento = ref('');
-    const Puesto = ref('');
-    const numTelefono = ref('');
-    const correo = ref('');
-    const CreadoPor = ref(123)
-    const ActualizadoPor = ref(0)
-    const BorradoPor = null
-    const BorradoEn = null
-    const Telefonos = ref([])
-    const Correos = ref([])
-    const modo = ref('')
-    const datosContactoListos = ref(false)
-    const mostrarModalLista = ref(false)
-    let mostrarModalContacto = ref(false)
-    let modalEleLista = ref(null) //modal de lista
-    let modalObjLista = null //modal de lista
-    const store = useContacto();
-    const { emit } = getCurrentInstance(); 
-
-    //Abrir modales
-    const ModalAgregarContacto = () => {
-  
-      modo.value = 'guardar'
-      console.log(modo.value);
-      mostrarModalContacto.value = true;
-    }
-    const ModalListaContacto = () =>{
-      //console.log("entre modal lista contacto")
-    //  mostrarModalLista.value = true
-      //console.log(mostrarModalLista.value)
-      modalObjLista.show()
-    }
-
-
-    //CRUD CONTACTO 
-    const guardarContacto = (datos, telefonos, correos) => {
-      store.guardarContactos(datos, telefonos, correos);
-
-     
-    }
-
-    const eliminarContacto = (idContacto) => {
-
-      store.borrarContacto(idContacto)
-
-
-    }
- 
-
-    const actualizarContacto = (datos, telefonos, correos) => {
-      store.actualizaContactos(datos, telefonos, correos)
-
-    }
-    //CRUD Telefono
-
-    const obtenerTelefonoCorreo = (idContacto) => {
-      store.obtenerDetalle(idContacto).then(() => {
-        ListaTelefonos.value = store.listaTelefono
-        ListaCorreos.value = store.listaCorreo
-      })
-
-
-      
-    }
-    //prueba camb iar modo
-    const actualizarModo =(nuevoModo) =>{
-      console.log("entre variable desde hijo :",nuevoModo)
-      modo.value = nuevoModo
-    }
-    //Carga de informacion
-
-    onMounted(() => {
-      //obtener contacto
-      store.cargarContactos().then(() => {
-        ListaContactos.value = store.listaContacto
-        console.log('Lista normal',ListaContactos.value)
-          ListaContactosTemp.value = ListaContactos.value
-          console.log('ListaContactosTemp',ListaContactosTemp.value)
-      
-        datosContactoListos.value = true
-
-       
-
-      });
-      modalObjLista = new Modal(modalEleLista.value);
-      
-    });
-   
-    //Operaciones contacto
-    const m_actualizarContacto = (idContacto) => {
-      modo.value = 'actualizar'
-      mostrarModalContacto.value = true;
-      let Contacto = ListaContactos.value.filter(contacto => contacto.ContactoId === idContacto)
-      console.log(Contacto)
-      for (const iterator of Contacto) {
-        ContactoId.value = iterator.ContactoId
-        Nombres.value = iterator.Nombres
-        ApellidoPaterno.value = iterator.ApellidoPaterno
-        ApellidoMaterno.value = iterator.ApellidoMaterno
-        Departamento.value = iterator.Departamento
-        Puesto.value = iterator.Puesto
-
-
-      }
-
-    }
-    const contactoXiD = (idContacto) =>{
-        console.log('Lista contactos',ListaContactos.value)
-        console.log('Lista contacto temp',ListaContactosTemp.value)
-        let Contacto = ListaContactos.value.filter(contacto => contacto.ContactoId === idContacto)
-        console.log(Contacto)
-        ListaContactosTemp.value = Contacto
-        console.log("Lista contactos temp",ListaContactosTemp.value[0].Nombres)
-       // console.log(' click en ListaContactosTemp',ListaContactosTemp.value[0].SucursalId)
-        emit('actualizar-datos',ListaContactosTemp.value)
-
-    }
-
-    return {
-      icono_addContacto,
-      ListaContactos,
-      idSucursal,
-      ContactoId,
-      ApellidoPaterno,
-      ApellidoMaterno,
-      Nombres,
-      Departamento,
-      Puesto,
-      numTelefono,
-      correo,
-      CreadoPor,
-      BorradoPor,
-      BorradoEn,
-
-      Telefonos,
-      Correos,
-      ListaTelefonos,
-      ListaCorreos,
-      ListaContactosTemp,
-      mostrarModalContacto,
-      ActualizadoPor,
-      modo,
-      datosContactoListos,
-      mostrarModalLista,
-      modalEleLista,
-      ModalAgregarContacto, //funcion
-      guardarContacto,//funcion
-      obtenerTelefonoCorreo, //funcion
-      eliminarContacto,
-      m_actualizarContacto,
-      actualizarContacto,
-      ModalListaContacto,
-      contactoXiD,
-      actualizarModo
-
-    }
-
+const store = useContacto()
+const props = defineProps({
+  id: {
+    type: String,
+    default: '1'
   }
+})
 
+const ListadoContactos = ref([])
+const headsContacto = ref(['ContactoId', 'Nombres',	'Paterno',	'Materno',	'Departamento'])
 
+const ListadoTelefonos = ref([])
+const headsTelefono = ref(['ID', 'Telefono'])
 
+const ListadoCorreos = ref([])
+const headsCorreo = ref(['ID', 'Correo'])
 
+const telefono = ref('')
+const correo = ref('')
 
+const tipo = ref(0)
 
+onMounted(() => {
+  store.cargarContactos(props.id).then(() =>{
+    loadContactos()
+    loadTelMail()
+  })
+})
 
+function loadContactos(){
+  store.cargarContactos(props.id).then(() =>{
+    ListadoContactos.value = store.listaContacto
+    ListadoContactos.value = ListadoContactos.value.map(contacto => {
+    return {
+        ContactoId: contacto.ContactoId,
+        Nombres: contacto.Nombres,
+        ApellidoPaterno: contacto.ApellidoPaterno,
+        ApellidoMaterno: contacto.ApellidoMaterno,
+        Departamento: contacto.Departamento,
+        Departamento: contacto.Departamento
+    };
+  });
+    headsContacto.value = Object.keys(ListadoContactos.value[0]);
+  });
 }
 
+function loadTelMail(){
+  store.cargarTelMails(props.id).then(() =>{
+    ListadoTelefonos.value = store.listaTelefono
+    ListadoCorreos.value = store.listaCorreo
+
+    ListadoTelefonos.value = ListadoTelefonos.value.map(telefono => {
+      return {
+        TelefonoId: telefono.TelefonoId,  
+        NumeroTelefonico: telefono.NumeroTelefonico,
+      };
+    });
+
+    ListadoCorreos.value = ListadoCorreos.value.map(correo => {
+      return {
+        EmailId: correo.EmailId,
+        Email: correo.Email,
+      };
+    });
+    });
+}
+
+function abrirMContacto(){
+  alert('abrir modal')
+}
+
+function agregarDatos(opc){
+  if(opc == 1 && validar(1, telefono.value)){
+    const contenido = {
+      EntidadNegocioId: props.id,
+      NumeroTelefonico: telefono.value,
+      CreadoPor: '0'
+    }
+    store.crearTelefono(contenido).then((res) =>{
+      if(res){
+        telefono.value = ''
+        loadTelMail()
+      }
+    }) 
+  }else if (opc == 2 && validar(2, correo.value)){
+    const contenido = {
+      EntidadNegocioId: props.id,
+      Email: correo.value,
+      CreadorPor: '0'
+    }
+    store.crearCorreo(contenido).then((res) =>{
+      if(res){
+        correo.value = ''
+        loadTelMail()
+      }
+    })
+  }
+}
+
+function validar(opc, txt){
+  if(txt == '' || txt == null || txt == undefined || txt == ' '){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'El campo no puede estar vacío'
+    })
+    return false
+  }else{
+    if(opc == 1){ //Telefono
+      if(txt.length != 10){
+        return false
+      }else{
+        return true
+      }
+    }else{  //Correo
+      if(txt.includes('@') && txt.includes('.')){
+        return true
+      }else{
+        return false
+      }
+    }
+  }
+}
+
+const esperarAccionWrapper = (act, data) => {
+  if(act == 1){
+
+  }else if(act == 2) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, bórralo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(tipo.value == 1){
+          const body = {
+              "ContactoId": data.ContactoId,
+              "BorradoPor": "0"
+          }
+          if(store.borrarContacto(body)){
+            loadContactos()
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+            )
+          }
+          }else if(tipo.value == 2){
+          const body = {
+              "TelefonoId": data.TelefonoId,
+              "BorradoPor": "0"
+          }
+          if(store.borrarTelefono(body)){
+            loadTelMail()
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+            )
+          }
+        }else if(tipo.value == 3){
+          const body = {
+              "EmailId": data.EmailId,
+              "BorradoPor": "0"
+          }
+          if(store.borrarCorreo(body)){
+            loadTelMail()
+            Swal.fire(
+              'Borrado!',
+              'El registro ha sido eliminado.',
+              'success'
+            )
+          }
+        }
+      }
+    })
+  }
+}
 </script>
 
-<style lang="scss" scoped>
-@import '../../../styles/variables.scss';
-
-.icono {
-  width: 1.5rem;
-}
-
-.contenedor {
-  align-items: right;
-  width: 40.93rem;
-
-
-  padding: 1.5rem 1.5rem 0rem 1.5rem;
-  text-align: left;
-
-}
-
-h1 {
-
+<style scoped>
+h1{
+  text-align: start;
   font-size: 2rem;
-  text-align: left;
 }
-
-h5,
-h4 {
-  color: black;
-
+.contenedorPadre{
+  height: 100%;
+  width: 650px;
+  padding: 1.5rem 1.5rem 0rem 1.5rem;
 }
-
-
-
+.icono{
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+}
+.lbContacto{
+  color: #999;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+.selectContacto{
+  width: 27.75rem;
+  height: 2rem;
+  font-size: 1rem;
+  border-radius: 0.3125rem;
+  border: none;
+  padding: 0.25rem 1rem;
+}
+.addContacto{
+  margin-left: 1rem;
+}
+.filaContacto{
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+table{
+  background-color: aquamarine;
+  width: 100%;
+}
+.inp{
+  width: 16rem;
+  height: 2rem;
+  border-radius: 0.3125rem;
+  border: none;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+.filaMiniTabla{
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.tablaContactos{
+  margin: 1rem auto 1rem auto;
+  width: 100%;
+}
 </style>

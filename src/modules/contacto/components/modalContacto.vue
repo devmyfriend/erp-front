@@ -38,11 +38,11 @@
                 
                   <div class="row">
                     <div class="col-6">
-                      <datosTabla :Lista="telefonos" :tipoTabla ="'telefono'"/>
+                     <!--  <datosTabla :Lista="telefonos" :tipoTabla ="'telefono'"/> -->
                     
                     </div>
                     <div class="col-6">
-                      <datosTabla :Lista="correos" :tipoTabla ="'correo'"/>
+                      <!-- <datosTabla :Lista="correos" :tipoTabla ="'correo'"/> -->
                  
                     </div>
                   </div>
@@ -66,13 +66,13 @@
 </template>
 
 <script>
-    import datosTabla from '@/shared/datosTabla.vue';
+    /* import datosTabla from '@/shared/datosTabla.vue'; */
     import {Modal} from 'bootstrap'
 import { onMounted,ref, onBeforeUnmount,watch } from 'vue';
   export default {
     components:{
 
-        datosTabla
+        /* datosTabla */
     },
     props:{
         SucursalId:{
