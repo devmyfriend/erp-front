@@ -187,9 +187,8 @@ export default {
         },
         esnuevo:            Boolean,
         idempresa:{         
-            type: String,
-            default: '',
-            require: false
+            type: Number,
+            default: 0
         },
         nombrecomercial:    String,        
         nombreoficial:      String,
@@ -319,10 +318,8 @@ export default {
         watch( personafisica, ( fisica )=>{
             
             if(fisica){
-                // console.log(store.listaPFisica)
                 console.log('persona fisica')
                 listaregimenes.value = storeEmpresa.listaPFisica
-                console.log(listaregimenes)
 
             }else{
                 console.log('persona moral')
@@ -398,7 +395,7 @@ export default {
             regimenfiscal.value     = newprops.regimenfiscal
             rfc.value               = newprops.rfc
             taxid.value             = newprops.taxid
-            console.log(`el pais obtenido es ${ pais.value }`)
+            // console.log(`el pais obtenido es ${ pais.value }`)
         } )
 
         

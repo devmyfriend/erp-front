@@ -67,9 +67,13 @@ import Swal from 'sweetalert2';
 const { useContacto } = require('../store/contacto')
 const store = useContacto()
 const props = defineProps({
-  id: {
-    type: String,
-    default: '1'
+  EntidadNegocioId: {
+    type: Number,
+    default: 1
+  },
+  ContactoId: {
+    type: Number,
+    default: 1
   }
 })
 
@@ -89,14 +93,14 @@ const pRegistroNuevo = ref(false)
 const tipo = ref(0)
 
 onMounted(() => {
-  store.cargarContactos(props.id).then(() =>{
+  store.cargarContactos(props.EntidadNegocioId).then(() =>{
     loadContactos()
     loadTelMail()
   })
 })
 
 function loadContactos(){
-  store.cargarContactos(props.id).then(() =>{
+  store.cargarContactos(props.EntidadNegocioId).then(() =>{
     ListadoContactos.value = store.listaContacto
     ListadoContactos.value = ListadoContactos.value.map(contacto => {
     return {
@@ -113,7 +117,7 @@ function loadContactos(){
 }
 
 function loadTelMail(){
-  store.cargarTelMails(props.id).then(() =>{
+  store.cargarTelMails(props.EntidadNegocioId).then(() =>{
     ListadoTelefonos.value = store.listaTelefono
     ListadoCorreos.value = store.listaCorreo
 
@@ -140,7 +144,7 @@ function abrirMContacto(){
 function agregarDatos(opc){
   if(opc == 1 && validar(1, telefono.value)){
     const contenido = {
-      EntidadNegocioId: props.id,
+      EntidadNegocioId: props.EntidadNegocioId,
       NumeroTelefonico: telefono.value,
       CreadoPor: '0'
     }
@@ -153,7 +157,7 @@ function agregarDatos(opc){
     }) 
   }else if (opc == 2 && validar(2, correo.value)){
     const contenido = {
-      EntidadNegocioId: props.id,
+      EntidadNegocioId: props.EntidadNegocioId,
       Email: correo.value,
       CreadorPor: '0'
     }

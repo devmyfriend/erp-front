@@ -242,7 +242,7 @@ export default {
 
         const enlistarRegimenes = ()=>{
             storeEmpresa.cargarRegimenes().then(()=>{
-                console.log(storeEmpresa.ListaRegimenes)
+                // console.log(storeEmpresa.ListaRegimenes)
                 listaregimenes.value = storeEmpresa.listaregimen
             })
         }

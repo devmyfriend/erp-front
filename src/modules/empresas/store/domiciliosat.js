@@ -49,8 +49,6 @@ export const useDomicilioSAT = defineStore( 'domicilioSAT', {
                 // console.log( datos )
                 if( datos.status === 200  && datos.statusText === "OK" ){
                      const { data } = datos 
-                    console.log('listado de estados')
-                    console.log(data) 
                     this.ListaEstados = data
                 }
 

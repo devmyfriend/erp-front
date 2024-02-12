@@ -58,10 +58,10 @@ export const useEmpresas = defineStore( 'empresas', {
             try{
                 const datos = await axios.delete(`${ process.env.VUE_APP_PATH_API }v1/empresa/desactivar/${id}`)
                 if( datos.status === 200 && datos.statusText==="OK"){
+                    console.log(`\n \n \n Toda tu marca personal: ${id} \n \n \n`);
                     return true
                 }
             }catch ( error ){
-
                 console.log( error )
                 throw new Error( error )
             }

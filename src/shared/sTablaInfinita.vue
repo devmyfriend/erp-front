@@ -4,18 +4,18 @@
       <table>
         <thead>
           <tr>
-            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '% !important' }">{{ header }}</th>
-            <th v-if="props.acciones != 0" :style="{ width: '10% !important' }"> Acciones</th>
+            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%' }">{{ header }}</th>
+            <th v-if="props.acciones != 0" :style="{ width: '10%' }"> Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in registrosFinales" :key="index">
 
             <template v-for="(value, key, columna) in item">
-              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '% !important' }">{{ value }}</td>
+              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td>
             </template>
 
-            <td v-if="props.acciones != 0" :style="{ width: '10% !important' }">
+            <td v-if="props.acciones != 0" :style="{ width: '10%' }">
                 <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="activarAcciones(1, item.EntidadNegocioId)"> 
                 <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
             </tr>
@@ -124,7 +124,6 @@ watch(() => props.listado, (newValue, oldValue) => {
   }else if (props.pAccion) {
     emit('eAccion', false);
     tablaContainer.value.scrollTop = 0;
-    console.log('eAccion en hijo es verdadera');
   }else if (props.pRegistroNuevo) {
     emit('eRegistroNuevo', false);
     tablaContainer.value.scrollTop = 0;
@@ -143,7 +142,6 @@ function widthCol(){
     cantidadCols = props.encabezados.length -1;
     columnasWidth.value = (100/cantidadCols);
   }
-  console.log('Ancho de columnas: ', columnasWidth.value + '% y cantidad de columnas: ', cantidadCols);
 }
 
 </script>
