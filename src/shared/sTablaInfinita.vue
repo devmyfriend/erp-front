@@ -75,12 +75,12 @@ const props = defineProps({
   },
     /* Registro temporal x Input */
   pRegistroNuevo: {
-    type: Object,
-    default: {}
+    type: Boolean,
+    default: false
   }
 });
 
-const emit = defineEmits( ['eAccion', 'eBusqueda']);
+const emit = defineEmits( ['eAccion', 'eBusqueda','eRegistroNuevo']);
 
 onMounted(() => {
   /* cargarMas(); */
@@ -97,7 +97,6 @@ const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
   const end = start + props.paginado;
   registrosFinales.value.push(...listadoFinal.value.slice(start, end));
-  console.log('[CargarMas]: ' + JSON.stringify(registrosFinales.value));
   paginaActual.value++;
 };
 
@@ -124,6 +123,10 @@ watch(() => props.listado, (newValue, oldValue) => {
     tablaContainer.value.scrollTop = 0;
   }else if (props.pAccion) {
     emit('eAccion', false);
+    tablaContainer.value.scrollTop = 0;
+    console.log('eAccion en hijo es verdadera');
+  }else if (props.pRegistroNuevo) {
+    emit('eRegistroNuevo', false);
     tablaContainer.value.scrollTop = 0;
   }
 

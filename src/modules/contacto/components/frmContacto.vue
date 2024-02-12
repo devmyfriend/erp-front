@@ -19,6 +19,8 @@
           :listado="ListadoContactos" 
           :encabezados="headsContacto" 
           :acciones="2" :paginado="3"
+          :pRegistroNuevo="pRegistroNuevo"
+          @eRegistroNuevo="pRegistroNuevo = false"
         />
       </div>
     </div>
@@ -33,7 +35,8 @@
         <tablaInfinita
           :listado="ListadoTelefonos" 
           :encabezados="headsTelefono" 
-          :acciones="2" :paginado="3" @eAccion="esperarAccionWrapper"
+          :paginado="3" :acciones="2" :pRegistroNuevo="pRegistroNuevo" @eAccion="esperarAccionWrapper"
+          @eRegistroNuevo="pRegistroNuevo = false"
         />
       </div>
     </div>
@@ -48,7 +51,8 @@
         <tablaInfinita 
           :listado="ListadoCorreos" 
           :encabezados="headsCorreo"
-          :acciones="2" :paginado="3" @eAccion="esperarAccionWrapper"
+          :acciones="2" :paginado="3" :pRegistroNuevo="pRegistroNuevo" @eAccion="esperarAccionWrapper"
+          @eRegistroNuevo="pRegistroNuevo = false"
         />
       </div>
     </div>
@@ -81,6 +85,7 @@ const headsCorreo = ref(['ID', 'Correo'])
 const telefono = ref('')
 const correo = ref('')
 
+const pRegistroNuevo = ref(false)
 const tipo = ref(0)
 
 onMounted(() => {
@@ -143,6 +148,7 @@ function agregarDatos(opc){
       if(res){
         telefono.value = ''
         loadTelMail()
+        pRegistroNuevo.value = true
       }
     }) 
   }else if (opc == 2 && validar(2, correo.value)){
@@ -155,6 +161,7 @@ function agregarDatos(opc){
       if(res){
         correo.value = ''
         loadTelMail()
+        pRegistroNuevo.value = true
       }
     })
   }

@@ -7,7 +7,7 @@
     </div>
     <div class="tablaContainer">
       <TablaInfinita 
-      :listado="ListadoEmpresas" :encabezados="encabezados" :paginado="paginado" :acciones="acciones" :pBusqueda="pBusqueda" 
+      :listado="ListadoEmpresas" :encabezados="encabezados" :paginado="paginado" :acciones="acciones" :pBusqueda="pBusqueda" :pAccion="pAccion"
       @eBusqueda="esperarBusqueda" @eAccion="esperarAccion"/>
     </div>
   </div>
@@ -30,6 +30,7 @@ const encabezados = ref([]);
 const paginado = ref(15);
 const acciones = ref(2);
 const pBusqueda = ref(false);
+const pAccion = ref(false);
 
 onMounted(() => {
   store.cargarEmpresas().then(() =>{
@@ -46,35 +47,38 @@ function esperarBusqueda(valor){
 }
 
 function esperarAccion(res){
-  const opc = res[0];
-  const id = res[1];
+  if(res != false){
+    pAccion.value = true;
+    const opc = res[0];
+    const id = res[1];
 
-  if(opc === 1){
-    router.push({name: 'formulario', params: {id: id}});
-  }else if(opc === 2){
+    if(opc === 1){
+      router.push({name: 'formulario', params: {id: id}});
+    }else if(opc === 2){
 
-    Swal.fire({
-        title: "Eliminar empresa",
-        text: "¿Realmente quieres eliminar la empresa?",
-        icon: "question",
-        showDenyButton: true,
-        confirmButtonText: "Eliminar",
-        denyButtonText: `No eliminar`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          if (store.borrarEmpresa(id)){
-            Swal.fire("Eliminado", "La empresa ha sido eliminada", "success").then(() => {
-              ajustarListado();
-            });
-          }else{
-            Swal.fire({
-              title: "Error",
-              text: "Error al eliminar la empresa",
-              icon: "error"
-            });
+      Swal.fire({
+          title: "Eliminar empresa",
+          text: "¿Realmente quieres eliminar la empresa?",
+          icon: "question",
+          showDenyButton: true,
+          confirmButtonText: "Eliminar",
+          denyButtonText: `No eliminar`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if (store.borrarEmpresa(id)){
+              Swal.fire("Eliminado", "La empresa ha sido eliminada", "success").then(() => {
+                ajustarListado();
+              });
+            }else{
+              Swal.fire({
+                title: "Error",
+                text: "Error al eliminar la empresa",
+                icon: "error"
+              });
+            }
           }
-        }
-      });
+        });
+    }
   }
 }
 
