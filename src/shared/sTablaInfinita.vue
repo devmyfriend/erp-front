@@ -161,7 +161,7 @@ function widthCol(){
 
 <style scoped>
 .tablaInfinita {
-  text-align: center;
+  text-align: start;
 }
 
 .tablaContainer {
@@ -194,13 +194,16 @@ td{
 button {
   margin-top: 20px;
 }
-
 .Acciones {
   height: 1.5rem;
   cursor: pointer;
 }
+th, .Acciones{
+  text-align: center;
+}
 .accionesTabla{
   width: 10%;
+  text-align: center;
 }
 .small{
   height: 1rem;

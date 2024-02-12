@@ -38,6 +38,10 @@ input{
 input:focus{
     outline: none;
 }
+input::placeholder{
+    color: #CBCBCB;
+    padding-left: 1rem;
+}
 img{
     cursor: pointer;
     height: 1.375rem;
