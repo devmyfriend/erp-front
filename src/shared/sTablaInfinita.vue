@@ -15,7 +15,7 @@
               <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td>
             </template>
 
-            <td v-if="props.acciones != 0" :style="{ width: '10%' }">
+            <td v-if="props.acciones != 0" class="accionesTabla">
                 <img 
                   src="../assets/img/edit.svg"
                   alt="Editar"
@@ -198,5 +198,13 @@ button {
 .Acciones {
   height: 1.5rem;
   cursor: pointer;
+}
+.accionesTabla{
+  width: 10%;
+}
+.small{
+  height: 1rem;
+  width: 1rem;
+  margin: 0px !important;
 }
 </style>
