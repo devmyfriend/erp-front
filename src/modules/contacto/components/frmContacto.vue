@@ -112,7 +112,6 @@ function loadContactos(){
         Departamento: contacto.Departamento
     };
   });
-    headsContacto.value = Object.keys(ListadoContactos.value[0]);
   });
 }
 

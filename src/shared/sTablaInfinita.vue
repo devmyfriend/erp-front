@@ -16,8 +16,20 @@
             </template>
 
             <td v-if="props.acciones != 0" :style="{ width: '10%' }">
-                <img src="../assets/img/edit.svg"  alt="Editar"   class="Acciones me-2" @click="activarAcciones(1, item.EntidadNegocioId)"> 
-                <img src="../assets/img/trash.svg" alt="Eliminar" class="Acciones ms-2" v-if="props.acciones == 2" @click="activarAcciones(2, item.EntidadNegocioId)"> </td>
+                <img 
+                  src="../assets/img/edit.svg"
+                  alt="Editar"
+                  class="Acciones me-2"
+                  :class="{ small: isSmall }"
+                  @click="activarAcciones(1, item.EntidadNegocioId)"> 
+                <img 
+                  src="../assets/img/trash.svg"
+                  alt="Eliminar"
+                  class="Acciones ms-2"
+                  :class="{ small: isSmall }"
+                  v-if="props.acciones == 2"
+                  @click="activarAcciones(2, item.EntidadNegocioId)">
+              </td>
             </tr>
           </tbody>
         </table>
@@ -82,16 +94,13 @@ const props = defineProps({
 
 const emit = defineEmits( ['eAccion', 'eBusqueda','eRegistroNuevo']);
 
-onMounted(() => {
-  /* cargarMas(); */
-  tablaContainer.value = ref.tablaContainer;
-});
 const listadoFinal = ref( [] );
 const paginaActual = ref(1);
 const registrosFinales = ref([]);
 const heightTabla = ref( (props.paginado * 32) + 38 ); //Se calcula la altura de la tabla según la cantidad de registros máxima ([Paginado] * [Height_TD] + [Height_TH])
 const tablaContainer = ref(null);
 const columnasWidth = ref(100);
+const isSmall = ref(false);
 
 const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
@@ -141,6 +150,10 @@ function widthCol(){
   }else{
     cantidadCols = props.encabezados.length -1;
     columnasWidth.value = (100/cantidadCols);
+  }
+  if (tablaContainer.value.offsetWidth <= 650){
+    tablaContainer.value.style.fontSize = '0.8rem';
+    isSmall.value = true;
   }
 }
 
