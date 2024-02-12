@@ -97,8 +97,10 @@ const cargarMas = () => {
   const start = (paginaActual.value - 1) * props.paginado;
   const end = start + props.paginado;
   registrosFinales.value.push(...listadoFinal.value.slice(start, end));
+  console.log('[CargarMas]: ' + JSON.stringify(registrosFinales.value));
   paginaActual.value++;
 };
+
 const esperarScroll = (event) => {
   const element = event.target;
   if (element.scrollHeight - element.scrollTop - 10 <= element.clientHeight) {
@@ -115,11 +117,16 @@ function activarAcciones(opc, id){
 watch(() => props.listado, (newValue, oldValue) => {
   registrosFinales.value = [];
   listadoFinal.value = newValue;
+  paginaActual.value = 1;
+  
   if (props.pBusqueda) {
-    paginaActual.value = 1;
-    tablaContainer.value.scrollTop = 0;
     emit('eBusqueda', false);
+    tablaContainer.value.scrollTop = 0;
+  }else if (props.pAccion) {
+    emit('eAccion', false);
+    tablaContainer.value.scrollTop = 0;
   }
+
   cargarMas();
   widthCol();
 },{deep: true});
