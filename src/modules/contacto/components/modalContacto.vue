@@ -11,7 +11,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-12">
-                  <h4>Añadir datos del contacto {{ modo }}</h4>
+                  <h4 class="mb-4" >Añadir datos del contacto {{ modo }}</h4>
                 </div>
               </div>
               <div class="row">
@@ -69,183 +69,114 @@
     /* import datosTabla from '@/shared/datosTabla.vue'; */
     import {Modal} from 'bootstrap'
 import { onMounted,ref, onBeforeUnmount,watch } from 'vue';
-  export default {
-    components:{
-
-        /* datosTabla */
-    },
-    props:{
-        SucursalId:{
-            type:Number
-
-        },
-        CreadoPor:{
-            type:Number
-
-        },
-        ActualizadoPor:{
-            type:Number
-        },
-        ContactoId:{
-          type:Number,
-          default:0
-
-        },
-      ApellidoPaterno:{
-        type:String,
-        default:''
-    
-    },
-      ApellidoMaterno:{
-
-          type: String,
-          default:''
-
-      },
+export default {
+  props:{
+  },
+  setup(props,context){
+      let modalEle = ref(null)
+      const apellidoPaterno = ref('')
+        const apellidoMaterno = ref('')
+        const nombres = ref('')
+        const departamento = ref('')
+        const puesto = ref('')
+      const telefonos = ref(props.Telefonos)
+      const correos = ref(props.Correos)
       
-      Nombres:{
-        type:String,
-        default:''
-
-    },
-    Departamento:
-      {
-        type:String,
-        default:''
-    },
-      Puesto:
-      {
-        type:String,
-        default:''
-    },
-      Telefonos:{
-        type:Array,
-        default:[]
+      let modalObj = null
         
-    },
-      Correos:{
-        type:Array,
-        default:[]
-      },
-      modo:{
-        type:String
-      },
-   
-      trigger:{
-        type:String,
-        default:''
-
-      }
-    },
-    setup(props,context){
-        let modalEle = ref(null)
-        const apellidoPaterno = ref('')
-         const apellidoMaterno = ref('')
-          const nombres = ref('')
-          const departamento = ref('')
-          const puesto = ref('')
-        const telefonos = ref(props.Telefonos)
-        const correos = ref(props.Correos)
-        
-        let modalObj = null
-          
-    
-        if(props.modo == 'actualizar'){
-           apellidoPaterno.value = props.ApellidoPaterno
-           apellidoMaterno.value = props.ApellidoMaterno
-           nombres.value = props.Nombres 
-           departamento.value = props.Departamento
-           puesto.value = props.Puesto
-        }
-
-        
-   
-        const h_guardarContacto = () =>{
-        
-            const datos = {
-                SucursalId:props.SucursalId,
-                ApellidoPaterno: apellidoPaterno.value,
-                ApellidoMaterno:apellidoMaterno.value,  
-                Nombres:nombres.value,
-                Departamento:departamento.value,
-                Puesto:puesto.value,
-                CreadoPor:props.CreadoPor,
-                ActualizadoPor:props.ActualizadoPor
-            }
-            console.log(datos)
-            
-            context.emit('guardar-contacto',datos,telefonos.value,correos.value)
-            modalObj.hide()
-
-        }
-
-        const h_actualizarContacto = () =>{
-            
-         
-          const datos = {
-                SucursalId:props.SucursalId,
-                ApellidoPaterno: apellidoPaterno.value,
-                ApellidoMaterno:apellidoMaterno.value,  
-                Nombres:nombres.value,
-                Departamento:departamento.value,
-                Puesto:puesto.value,
-                CreadoPor:props.CreadoPor,
-                ActualizadoPor:props.ActualizadoPor,
-                ContactoId:props.ContactoId
-            }
-            console.log(datos)
-            context.emit('actualizar-contacto',datos,telefonos.value,correos.value)
-            
-            modalObj.hide()
-
-        }
-     
-
-        onMounted(()=>{
-           console.log("Montando modal");
-          modalObj = new Modal(modalEle.value) 
-       
-          if(props.modo != ''){
-            modalObj.show()
-          }
-         
-
-       
-
-        });
-    
-        onBeforeUnmount(() => {
-          console.log("modificando modo");
-          context.emit('modificarModo','');
-      // Realizar tareas de limpieza, cancelar suscripciones, liberar recursos, etc.
-    });
   
-    watch(() => props.modo, (nuevoModo) => {
-      if (nuevoModo !== '') {
-        modalObj.show();
+      if(props.modo == 'actualizar'){
+          apellidoPaterno.value = props.ApellidoPaterno
+          apellidoMaterno.value = props.ApellidoMaterno
+          nombres.value = props.Nombres 
+          departamento.value = props.Departamento
+          puesto.value = props.Puesto
       }
-    });
-        return{
 
-            modalEle,
-            apellidoPaterno ,
-         apellidoMaterno ,
-         nombres ,
-         departamento ,
-         puesto ,
-         telefonos,
-        correos,
-        h_guardarContacto,
-        h_actualizarContacto
+      
+  
+      const h_guardarContacto = () =>{
+      
+          const datos = {
+              SucursalId:props.SucursalId,
+              ApellidoPaterno: apellidoPaterno.value,
+              ApellidoMaterno:apellidoMaterno.value,  
+              Nombres:nombres.value,
+              Departamento:departamento.value,
+              Puesto:puesto.value,
+              CreadoPor:props.CreadoPor,
+              ActualizadoPor:props.ActualizadoPor
+          }
+          console.log(datos)
+          
+          context.emit('guardar-contacto',datos,telefonos.value,correos.value)
+          modalObj.hide()
+
+      }
+
+      const h_actualizarContacto = () =>{
+          
+        
+        const datos = {
+              SucursalId:props.SucursalId,
+              ApellidoPaterno: apellidoPaterno.value,
+              ApellidoMaterno:apellidoMaterno.value,  
+              Nombres:nombres.value,
+              Departamento:departamento.value,
+              Puesto:puesto.value,
+              CreadoPor:props.CreadoPor,
+              ActualizadoPor:props.ActualizadoPor,
+              ContactoId:props.ContactoId
+          }
+          console.log(datos)
+          context.emit('actualizar-contacto',datos,telefonos.value,correos.value)
+          
+          modalObj.hide()
+
+      }
+    
+
+      onMounted(()=>{
+          console.log("Montando modal");
+        modalObj = new Modal(modalEle.value) 
+      
+        if(props.modo != ''){
+          modalObj.show()
         }
+        
 
+      
+
+      });
+  
+      onBeforeUnmount(() => {
+        console.log("modificando modo");
+        context.emit('modificarModo','');
+    // Realizar tareas de limpieza, cancelar suscripciones, liberar recursos, etc.
+  });
+
+  watch(() => props.modo, (nuevoModo) => {
+    if (nuevoModo !== '') {
+      modalObj.show();
     }
+  });
+      return{
+
+          modalEle,
+          apellidoPaterno ,
+        apellidoMaterno ,
+        nombres ,
+        departamento ,
+        puesto ,
+        telefonos,
+      correos,
+      h_guardarContacto,
+      h_actualizarContacto
+      }
 
   }
 
-
-
-
+}
 </script>
 
 <style scoped>

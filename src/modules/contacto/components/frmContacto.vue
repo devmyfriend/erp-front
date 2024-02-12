@@ -56,16 +56,24 @@
         />
       </div>
     </div>
-  
+
+    <modalContacto 
+      @esperarDatosContacto="agregarDatos"
+      @cerrarModal="abrirMContacto"
+      v-if="pContactoNuevo"
+    />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import tablaInfinita from '@/shared/sTablaInfinita.vue';
+import modalContacto from '@/modules/contacto/components/modalContacto.vue';
 import Swal from 'sweetalert2';
+
 const { useContacto } = require('../store/contacto')
 const store = useContacto()
+
 const props = defineProps({
   EntidadNegocioId: {
     type: Number,
@@ -89,6 +97,7 @@ const headsCorreo = ref(['ID', 'Correo'])
 const telefono = ref('')
 const correo = ref('')
 
+const pContactoNuevo = ref(false)
 const pRegistroNuevo = ref(false)
 const tipo = ref(0)
 
@@ -137,10 +146,10 @@ function loadTelMail(){
 }
 
 function abrirMContacto(){
-  alert('abrir modal')
+  pContactoNuevo.value = !pContactoNuevo.value 
 }
 
-function agregarDatos(opc){
+function agregarDatos(opc, data){
   if(opc == 1 && validar(1, telefono.value)){
     const contenido = {
       EntidadNegocioId: props.EntidadNegocioId,
@@ -154,7 +163,8 @@ function agregarDatos(opc){
         pRegistroNuevo.value = true
       }
     }) 
-  }else if (opc == 2 && validar(2, correo.value)){
+  }
+  else if (opc == 2 && validar(2, correo.value)){
     const contenido = {
       EntidadNegocioId: props.EntidadNegocioId,
       Email: correo.value,
@@ -167,6 +177,10 @@ function agregarDatos(opc){
         pRegistroNuevo.value = true
       }
     })
+  }
+  else if (opc == 3){
+    pContactoNuevo.value = !pContactoNuevo.value
+    console.log('DatosContact: \n' + JSON.stringify(data))
   }
 }
 

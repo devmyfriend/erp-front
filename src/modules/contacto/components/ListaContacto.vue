@@ -1,7 +1,7 @@
 /* Modal que desplegara la lista de contactos y al seleccionarlo desplegara en la tabla la lista unica de contacto */
 
 <script setup>
-import {ref,onMounted,watch} from 'vue'
+import {ref,onMounted} from 'vue'
 import {Modal} from 'bootstrap'
 const {Lista,visible} = defineProps({
   Lista:Array,
@@ -26,14 +26,9 @@ if(visible){
   modalObj.show()
 }
 onMounted(()=>{
-           
   modalObj = new Modal(modalEle.value);
   modalObj.show()
-       });
-
-
-
-
+});
 
 const cerrarModal = ()=>{
   console.log("cerrar modol")

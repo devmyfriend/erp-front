@@ -54,8 +54,20 @@ export const useEmpresas = defineStore( 'empresas', {
                 }
             }
         },
-        async borrarEmpresa(id){
+        async borrarEmpresa(body){
             try{
+                const datos = await axios.delete(`${ process.env.VUE_APP_PATH_API }v1/empresa/desactivar`, body)
+                if( datos.status === 200 && datos.statusText==="OK"){
+                    console.log(`\n \n \n Toda tu marca personal: ${body} \n \n \n`);
+                    return true
+                }
+            }catch ( error ){
+                console.log( error )
+                throw new Error( error )
+            }
+
+
+/*             try{
                 const datos = await axios.delete(`${ process.env.VUE_APP_PATH_API }v1/empresa/desactivar/${id}`)
                 if( datos.status === 200 && datos.statusText==="OK"){
                     console.log(`\n \n \n Toda tu marca personal: ${id} \n \n \n`);
@@ -64,7 +76,10 @@ export const useEmpresas = defineStore( 'empresas', {
             }catch ( error ){
                 console.log( error )
                 throw new Error( error )
-            }
+            } */
+
+
+
         },
 
         setPropietaria( propietaria ){

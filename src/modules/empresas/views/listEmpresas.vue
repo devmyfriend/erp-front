@@ -65,7 +65,11 @@ function esperarAccion(res){
           denyButtonText: `No eliminar`,
         }).then((result) => {
           if (result.isConfirmed) {
-            if (store.borrarEmpresa(id)){
+            const body = {
+              EntidadNegocioId: id,
+              BorradoPor: 1
+            }
+            if (store.borrarEmpresa(body)){
               Swal.fire("Eliminado", "La empresa ha sido eliminada", "success").then(() => {
                 ajustarListado();
               });
