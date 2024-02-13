@@ -65,21 +65,11 @@ export const useContacto = defineStore('contacto',{
           console.log(error);
         }
       },
-      async cargarTelContactos(id){
-        try{
-          
-        }catch(error){
-          console.log(error);
-        }
-      },
-      async cargarCorreoContactos(id){
-      },
       async crearTelefono(body){
         try{
           const datos = await axios.post(`${process.env.VUE_APP_PATH_API }v1/empresa/telefono/crear`, body);
 
           if (datos.status === 200 && datos.statusText === "OK") {
-            console.log(datos);
             Swal.fire({
               title: 'Telefono creado',
               text: 'El telefono se ha creado correctamente',
@@ -104,7 +94,6 @@ export const useContacto = defineStore('contacto',{
           const datos = await axios.post(`${process.env.VUE_APP_PATH_API }v1/empresa/emails/crear`, body);
           
           if (datos.status === 200 && datos.statusText === "OK") {
-            console.log(datos);
             Swal.fire({
               title: 'Correo creado',
               text: 'El correo se ha creado correctamente',
@@ -170,6 +159,50 @@ export const useContacto = defineStore('contacto',{
           });
         }
       },
+
+      async crearContacto(body){
+        try{
+          const bodyContacto = {
+            "EmpresaId": body.EmpresaId,
+            "Nombres": body.Nombres,
+            "ApellidoPaterno": body.ApellidoPaterno,
+            "ApellidoMaterno": body.ApellidoMaterno,
+            "Departamento": body.Departamento,
+            "Puesto": body.Puesto,
+            "CreadoPor": body.CreadoPor || 1 
+          }
+          const datosContacto = await axios.post(`${process.env.VUE_APP_PATH_API }v1/empresa/contacto/crear`, bodyContacto);
+          if (datosContacto.status === 200 && datosContacto.statusText === "OK") {
+            var regex = /:\s*(\d+)/;
+            var coincidencia = datosContacto.data.message.match(regex);
+            var idContacto = coincidencia ? coincidencia[1] : null;
+            var bodyTelMail = {
+              "ContactoId": idContacto,
+              "CreadoPor": 2,
+              "Correos": body.Correos,
+              "Telefonos": body.Telefonos
+            }
+            const datosTelMail = await axios.post(`${process.env.VUE_APP_PATH_API }v1/contacto/datos`, bodyTelMail);
+            if (datosTelMail.status === 201 && datosTelMail.statusText === "Created") {
+              Swal.fire({
+                title: 'Contacto creado',
+                text: 'El contacto se ha creado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+              return true;
+            }
+          }
+        }catch(error){
+          console.log(error);
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo crear el contacto',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      },
       async borrarContacto(body){
         try{
           const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/contacto/borrar`, body);
@@ -192,6 +225,15 @@ export const useContacto = defineStore('contacto',{
             confirmButtonText: 'Aceptar'
           });
         }
+      },
+      async cargarTelContactos(id){
+        try{
+          
+        }catch(error){
+          console.log(error);
+        }
+      },
+      async cargarCorreoContactos(id){
       },
   }
 })

@@ -62,6 +62,7 @@
       @cerrarModal="abrirMContacto"
       v-if="pContactoNuevo"
       :EntidadNegocioId="props.EntidadNegocioId"
+      :modo="'Guardar'"
     />
   </div>
 </template>
@@ -147,7 +148,8 @@ function loadTelMail(){
 }
 
 function abrirMContacto(){
-  pContactoNuevo.value = !pContactoNuevo.value 
+  pContactoNuevo.value = !pContactoNuevo.value;
+  console.log('Modal:' + pContactoNuevo.value);
 }
 
 function agregarDatos(opc, data){
@@ -180,8 +182,7 @@ function agregarDatos(opc, data){
     })
   }
   else if (opc == 3){
-    pContactoNuevo.value = !pContactoNuevo.value
-    console.log('DatosContact: \n' + JSON.stringify(data))
+    console.log('DatosContacto: \n' + JSON.stringify(data))
   }
 }
 
@@ -201,7 +202,7 @@ function validar(opc, txt){
         return true
       }
     }else{  //Correo
-      if(txt.includes('@') && txt.includes('.')){
+      if(txt.includes('@') && txt.includes('.') && !txt.includes(' ')){
         return true
       }else{
         return false

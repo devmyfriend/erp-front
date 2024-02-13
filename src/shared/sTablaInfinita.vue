@@ -21,14 +21,14 @@
                   alt="Editar"
                   class="Acciones me-2"
                   :class="{ small: isSmall }"
-                  @click="activarAcciones(1, item.EntidadNegocioId)"> 
+                  @click="activarAcciones(1, item)"> 
                 <img 
                   src="../assets/img/trash.svg"
                   alt="Eliminar"
                   class="Acciones ms-2"
                   :class="{ small: isSmall }"
                   v-if="props.acciones == 2"
-                  @click="activarAcciones(2, item.EntidadNegocioId)">
+                  @click="activarAcciones(2, item)">
               </td>
             </tr>
           </tbody>
@@ -116,9 +116,9 @@ const esperarScroll = (event) => {
   }
 };
 
-function activarAcciones(opc, id){
+function activarAcciones(opc, registro){
   tablaContainer.value.scrollTop = 0;
-  emit ('eAccion', [opc, id])
+  emit ('eAccion', opc, registro)
 }
 
 
@@ -138,7 +138,6 @@ watch(() => props.listado, (newValue, oldValue) => {
     tablaContainer.value.scrollTop = 0;
   }
   
-  console.log('Alto: ' + tablaContainer.value.offsetHeight + ' Necesario: ' + heightTabla.value);
   cargarMas();
   widthCol();
 },{deep: true});
