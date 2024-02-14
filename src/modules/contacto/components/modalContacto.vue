@@ -39,15 +39,19 @@
                 <div class="row">
                   <div class="col-6" @mouseenter="tipo = 1">
                     <div class="formulario">
-                      <input  v-model="telInput" type="text" placeholder="Telefono" class="inp">
-                      <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarRegistro(1)">
+                      <p class="MSJ" v-if="editandoTel"> Editando telefono</p>
+                      <input v-model="telInput" type="text" placeholder="Telefono" class="inp">
+                      <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarRegistro(1)" v-if="!editandoTel">
+                      <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="reemplazarLocal(1)" v-else>
                     </div>
                     <TablaInfinita :encabezados="['id', 'telefono']" :acciones="2" :listado="telefonos" @eAccion="esperarAccion" />
                   </div>
                   <div class="col-6" @mouseenter="tipo = 2">
                     <div class="formulario">
-                      <input  v-model="correoInput" type="text" placeholder="Correo e." class="inp">
-                      <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarRegistro(2)">
+                      <p class="MSJ" v-if="editandoCorreo"> Editando correo</p>
+                      <input ref="inputCorreo" v-model="correoInput" type="text" placeholder="Correo e." class="inp">
+                      <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarRegistro(2)" v-if="!editandoCorreo">
+                      <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="reemplazarLocal(2)" v-else>
                     </div>
                     <TablaInfinita :encabezados="['id', 'correo']" :acciones="2" :listado="correos" @eAccion="esperarAccion"/>
                   </div>
@@ -57,7 +61,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button @click="modo === 'Guardar' ? GuardarTodo() : ActualizarTodo()" type="button" class="btn btn-primary">{{ modo }}</button>
+          <button @click="modo === 'Guardar' ? GuardarTodo() : ActualizarDatos()" type="button" class="btn btn-primary">{{ modo }}</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </div>
@@ -70,15 +74,23 @@ import {Modal} from 'bootstrap'
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import TablaInfinita from '@/shared/sTablaInfinita.vue'
 import Swal from 'sweetalert2'
+import { jsx } from 'vue/jsx-runtime';
+import { storeToRefs } from 'pinia';
 const { useContacto } = require('../store/contacto.js')
 const store = useContacto()
 
 let modalEle = ref(null)
+const contactoId = ref(0)
 const apellidoPaterno = ref('')
 const apellidoMaterno = ref('')
 const nombres = ref('')
 const departamento = ref('')
 const puesto = ref('')
+
+const editandoTel = ref(false)
+const telefonoEdit = ref({})
+const editandoCorreo = ref(false)
+const correoEdit = ref({})
 
 const telefonos = ref([])
 const correos = ref([])
@@ -136,20 +148,117 @@ const GuardarTodo = () => {
   }
 }
 
+function ActualizarDatos(){
+  if (valApell() && valNombre() && valDep() && valPuesto()) {
+    const bodyContacto = {
+      EntidadNegocioId : props.EntidadNegocioId,
+      ContactoId: contactoId.value,
+      Nombres: nombres.value,
+      ApellidoPaterno: apellidoPaterno.value,
+      ApellidoMaterno: apellidoMaterno.value,
+      Departamento: departamento.value,
+      Puesto: puesto.value,
+      ActualizadoPor: 1,
+    }
+    store.editarContacto(bodyContacto).then((res) => {
+      if(res){
+        Swal.fire('Actualizado', 'El contacto ha sido actualizado', 'success')
+        console.log('Datos: ' + JSON.stringify(bodyContacto))
+        emit('esperarDatosContacto', 3)
+        modalObj.hide()
+      }
+    })
+  }
+}
+
+function reemplazarLocal(opc){
+  if(opc == 1){
+    editandoTel.value = false
+    telefonos.value.forEach((tel) => {
+      if (tel.TelefonoId === telefonoEdit.value.TelefonoId) {
+        tel.NumeroTelefonico = telInput.value
+      }
+    });
+    telInput.value = ''
+  }else if (opc == 2){
+    editandoCorreo.value = false
+    correos.value.forEach((correo) => {
+      if (correo.EmailId === correoEdit.value.EmailId) {
+        correo.Email = correoInput.value
+      }
+    });
+    correoInput.value = ''
+  }
+  if(props.modo === 'Actualizar'){
+    if(tipo.value == 1){
+      console.log('Editaré los telefonos del contacto en store');
+      const body = {
+        "TelefonoId": telefonoEdit.value.TelefonoId,
+        "NumeroTelefonico": telefonoEdit.value.NumeroTelefonico,
+        "ActualizadoPor": "2"
+      }
+      store.editarTelContacto(body).then((res) => {
+        if(res){
+          Swal.fire('Actualizado', 'El teléfono ha sido actualizado', 'success')
+        }
+      })
+    }else if (tipo.value == 2){
+      const body = {
+        "EmailId": correoEdit.value.EmailId,
+        "Email": correoEdit.value.Email,
+        "ActualizadoPor": "2"
+      }
+      console.log('Body: ' + JSON.stringify(correoEdit.value));
+      store.editarCorreoContacto(body).then((res) => {
+        if(res){
+          Swal.fire('Actualizado', 'El correo ha sido actualizado', 'success')
+        }
+      })
+    }
+  }
+}
+
 function agregarRegistro(opc){
   if(opc == 1){
     if(validarInput(1, telInput.value)){
-      telefonos.value.push({id: telefonos.value.length + 1, telefono: telInput.value})
-      telInput.value = ''
+      if(props.modo === 'Guardar'){
+        telefonos.value.push({id: telefonos.value.length + 1, telefono: telInput.value})
+        telInput.value = ''
+      }else{
+        const body = {
+          NumeroTelefonico: telInput.value,
+          ContactoId: contactoId.value,
+          CreadoPor: 1
+        }
+        store.crearTelContacto(body).then((res) => {
+          if(res){
+            telefonos.value.push({id: telefonos.value.length + 1, telefono: telInput.value})
+            telInput.value = ''
+          }
+        })
+      }
     }else{
       console.log('Tel: ' + telInput.value);
       Swal.fire('Error', 'El teléfono no es válido', 'error')
     }
   }else if (opc == 2){
     if(validarInput(2, correoInput.value)){
-      correos.value.push({id: correos.value.length + 1, correo: correoInput.value})
-      console.log('Nuevo correo: ' + correos.value[correos.value.length - 1]);
-      correoInput.value = ''
+      if(props.modo === 'Guardar'){
+        correos.value.push({id: correos.value.length + 1, correo: correoInput.value})
+        correoInput.value = ''
+      }else{
+        const body = {  
+        Email: correoInput.value,
+        ContactoId: contactoId.value,
+        CreadoPor: 1
+      }
+      store.crearCorreoContacto(body).then((res) => {
+        if(res){
+          correos.value.push({id: correos.value.length + 1, correo: correoInput.value})
+          correoInput.value = ''
+        }
+      })
+      }
     }else{
       console.log('Correo: ' + correoInput.value);
       Swal.fire('Error', 'El correo no es válido', 'error')
@@ -158,21 +267,60 @@ function agregarRegistro(opc){
 } 
 
 function esperarAccion(opc, registro){
-  console.log('Tipo: ' + tipo.value + ' Opc: ' + opc + ' Registro: ' + JSON.stringify(registro));
+  console.log('Opc: ' + opc + ' Modo: ' + props.modo + ' tipo: ' + tipo.value);
   if(opc == 1){ //Editar
-    Swal.fire('Editar', 'No se ha implementado la edición', 'info')
+      if(tipo.value == 1){
+        const encuentro = telefonos.value.find((tel) => tel.TelefonoId === registro.TelefonoId)
+        console.log('Encuentro: ' + JSON.stringify(encuentro));
+        editandoTel.value = true;
+        telInput.value = encuentro.NumeroTelefonico;
+        telefonoEdit.value = encuentro
+      }else if (tipo.value == 2){
+        const encuentro = correos.value.find((correo) => correo.EmailId === registro.EmailId)
+        editandoCorreo.value = true;
+        correoInput.value = encuentro.Email;
+        correoEdit.value = encuentro
+      }
   }else if (opc == 2){ //Eliminar
     Swal.fire({
       title: '¿Estás seguro?', text: "No podrás revertir esto!", icon: 'warning', 
       showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Sí, bórralo!'
     }).then((result) => {
       if (result.isConfirmed) {
-        if(tipo.value == 1){
-          telefonos.value = telefonos.value.filter((tel) => tel.id !== registro.id)
-        }else if (tipo.value == 2){
-          correos.value = correos.value.filter((correo) => correo.id !== registro.id)
+        //Si es contacto nuevo
+        if (props.modo === 'Guardar') {
+          if(tipo.value == 1){
+            telefonos.value = telefonos.value.filter((tel) => tel.TelefonoId !== registro.TelefonoId)
+          }else if (tipo.value == 2){
+            correos.value = correos.value.filter((correo) => correo.EmailId !== registro.EmailId)
+          }
+          Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success')
+        }else if (props.modo === 'Actualizar'){
+          if(tipo.value == 1){
+            const body = {
+              "TelefonoId": registro.TelefonoId,
+              "BorradoPor": "0"
+            }
+            store.borrarTelContacto(body).then((res) => {
+              if(res){
+                telefonos.value = telefonos.value.filter((tel) => tel.TelefonoId !== registro.TelefonoId)
+                Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success')
+              }
+            })
+          }else if (tipo.value == 2){
+            const body = {
+              "EmailId": registro.EmailId,
+              "BorradoPor": "0"
+            }
+            store.borrarCorreoContacto(body).then((res) => {
+              if(res){
+                correos.value = correos.value.filter((correo) => correo.EmailId !== registro.EmailId)
+                Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success')
+              }
+            }
+            )
+          }
         }
-        Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success')
       }
     })
   }
@@ -188,14 +336,40 @@ onMounted(() => {
 
   if (Object.keys(props.registro).length !== 0) {
     console.log('Registro: ' + JSON.stringify(props.registro))
-    
+
+    contactoId.value = props.registro.ContactoId
+    apellidoPaterno.value = props.registro.ApellidoPaterno
+    apellidoMaterno.value = props.registro.ApellidoMaterno
+    nombres.value = props.registro.Nombres
+    departamento.value = props.registro.Departamento
+    puesto.value = props.registro.Puesto
+    store.cargarDetalleContacto(contactoId.value).then((res) => {
+      if(res){
+        telefonos.value = store.getTelefonosContacto
+        correos.value = store.getCorreosContacto
+        console.log('Telefonos: ' + JSON.stringify(telefonos.value) + ' \n \n Correos: ' + JSON.stringify(correos.value));
+      }
+    })
   }
 });
 
 onBeforeUnmount(() => {
-  modalObj.hide()
+  /* modalObj.hide() */
   modalObj.dispose()
   emit('cerrarModal')
+  apellidoMaterno.value = ''
+  apellidoPaterno.value = ''
+  nombres.value = ''
+  departamento.value = ''
+  puesto.value = ''
+  telefonos.value = []
+  correos.value = []
+  telInput.value = ''
+  correoInput.value = ''
+  editandoCorreo.value = false
+  editandoTel.value = false
+  telefonoEdit.value = {}
+  correoEdit.value = {}
 })
 
 function valNombre() {
@@ -284,5 +458,10 @@ h4, h5 {
   cursor: pointer;
   margin: auto;
   margin-left: 1rem;
+}
+.MSJ {
+  color: red;
+  font-size: 1rem;
+  margin-bottom: .5rem;
 }
 </style>
