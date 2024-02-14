@@ -67,6 +67,7 @@ export const useContacto = defineStore('contacto',{
       },
       async crearTelefono(body){
         try{
+          alert(JSON.stringify(body));
           const datos = await axios.post(`${process.env.VUE_APP_PATH_API }v1/empresa/telefono/crear`, body);
 
           if (datos.status === 200 && datos.statusText === "OK") {
@@ -114,8 +115,8 @@ export const useContacto = defineStore('contacto',{
       },
       async borrarTelefono(body){
         try{
-          const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/empresa/telefono/desactivar`, body);
-
+        
+          const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/empresa/telefono/desactivar`, {data:body});
           if (datos.status === 200 && datos.statusText === "OK") {
             Swal.fire({
               title: 'Telefono borrado',
@@ -125,12 +126,11 @@ export const useContacto = defineStore('contacto',{
             });
             return true;
           }
-
         }catch (error){
           console.log(error);
           Swal.fire({
             title: 'Error',
-            text: 'No se pudo borrar el telefono',
+            text: 'No se pudo borrar el telefono. \n Body: ' + JSON.stringify(body),
             icon: 'error',
             confirmButtonText: 'Aceptar'
           });
@@ -138,7 +138,7 @@ export const useContacto = defineStore('contacto',{
       },
       async borrarCorreo(body){
         try{
-          const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/empresa/emails/desactivar`, body);
+          const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/empresa/emails/desactivar`, {data:body});
 
           if (datos.status === 200 && datos.statusText === "OK") {
             Swal.fire({
@@ -159,7 +159,6 @@ export const useContacto = defineStore('contacto',{
           });
         }
       },
-
       async crearContacto(body){
         try{
           const bodyContacto = {
@@ -205,7 +204,7 @@ export const useContacto = defineStore('contacto',{
       },
       async borrarContacto(body){
         try{
-          const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/contacto/borrar`, body);
+          const datos = await axios.delete(`${process.env.VUE_APP_PATH_API }v1/contacto/borrar`, {data:body});
 
           if (datos.status === 200 && datos.statusText === "OK") {
             Swal.fire({
@@ -214,13 +213,14 @@ export const useContacto = defineStore('contacto',{
               icon: 'success',
               confirmButtonText: 'Aceptar'
             });
+            console.log('aaaa' + body.EmailId);
             return true;
           }
         }catch (error){
           console.log(error);
           Swal.fire({
             title: 'Error',
-            text: 'No se pudo borrar el contacto',
+            text: 'No se pudo borrar el contacto \n' + JSON.stringify(error),
             icon: 'error',
             confirmButtonText: 'Aceptar'
           });

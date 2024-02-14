@@ -1,7 +1,7 @@
 export default{
     name:'impuestos',
     path:'/impuestos',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/impuestos/views/listImpuestos.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
     redirect: '/impuestos/listado/',
     children:[
         {

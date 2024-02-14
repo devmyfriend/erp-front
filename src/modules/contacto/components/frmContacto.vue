@@ -18,9 +18,11 @@
         <tablaInfinita 
           :listado="ListadoContactos" 
           :encabezados="headsContacto" 
-          :acciones="2" :paginado="3"
+          :acciones="2" 
+          :paginado="3"
           :pRegistroNuevo="pRegistroNuevo"
           @eRegistroNuevo="pRegistroNuevo = false"
+          @eAccion="esperarAccionWrapper"
         />
       </div>
     </div>
@@ -35,7 +37,10 @@
         <tablaInfinita
           :listado="ListadoTelefonos" 
           :encabezados="headsTelefono" 
-          :paginado="3" :acciones="2" :pRegistroNuevo="pRegistroNuevo" @eAccion="esperarAccionWrapper"
+          :paginado="3" 
+          :acciones="2" 
+          :pRegistroNuevo="pRegistroNuevo" 
+          @eAccion="esperarAccionWrapper"
           @eRegistroNuevo="pRegistroNuevo = false"
         />
       </div>
@@ -51,8 +56,10 @@
         <tablaInfinita 
           :listado="ListadoCorreos" 
           :encabezados="headsCorreo"
-          :acciones="2" :paginado="3" :pRegistroNuevo="pRegistroNuevo" @eAccion="esperarAccionWrapper"
+          :acciones="2" :paginado="3" 
+          :pRegistroNuevo="pRegistroNuevo" 
           @eRegistroNuevo="pRegistroNuevo = false"
+          @eAccion="esperarAccionWrapper"
         />
       </div>
     </div>
@@ -62,7 +69,10 @@
       @cerrarModal="abrirMContacto"
       v-if="pContactoNuevo"
       :EntidadNegocioId="props.EntidadNegocioId"
-      :modo="'Guardar'"
+      :modo="modalMode"
+      :pRegistroNuevo="pRegistroNuevo" 
+      @eRegistroNuevo="pRegistroNuevo = false"
+      :registro="registroSelect"
     />
   </div>
 </template>
@@ -102,6 +112,8 @@ const correo = ref('')
 const pContactoNuevo = ref(false)
 const pRegistroNuevo = ref(false)
 const tipo = ref(0)
+const modalMode = ref('Guardar')
+const registroSelect = ref({})
 
 onMounted(() => {
   store.cargarContactos(props.EntidadNegocioId).then(() =>{
@@ -120,7 +132,6 @@ function loadContactos(){
         ApellidoPaterno: contacto.ApellidoPaterno,
         ApellidoMaterno: contacto.ApellidoMaterno,
         Departamento: contacto.Departamento,
-        Departamento: contacto.Departamento
     };
   });
   });
@@ -152,7 +163,8 @@ function abrirMContacto(){
   console.log('Modal:' + pContactoNuevo.value);
 }
 
-function agregarDatos(opc, data){
+function agregarDatos(opc ){
+  console.log('opcion para agregar datos \n 1: Tel 2:Correo 3:Contact \n: ' + opc);
   if(opc == 1 && validar(1, telefono.value)){
     const contenido = {
       EntidadNegocioId: props.EntidadNegocioId,
@@ -182,7 +194,8 @@ function agregarDatos(opc, data){
     })
   }
   else if (opc == 3){
-    console.log('DatosContacto: \n' + JSON.stringify(data))
+    console.log('aaaaaaaaaaaaaaaaaaaa')
+    loadContactos()
   }
 }
 
@@ -213,7 +226,17 @@ function validar(opc, txt){
 
 const esperarAccionWrapper = (act, data) => {
   if(act == 1){
-
+    if(tipo.value == 1){
+      console.log('Editar contacto: ' );
+      registroSelect.value = ListadoContactos.value.find(objeto => objeto.ContactoId === data.ContactoId);
+      console.log('Registro select: ' + JSON.stringify(registroSelect.value));
+      modalMode.value = 'Editar';
+      abrirMContacto()
+    }else if(tipo.value == 2){
+      console.log('Editar telefono: ' );
+    }else if(tipo.value == 3){
+      console.log('Editar correo: ' );
+    }
   }else if(act == 2) {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -227,43 +250,53 @@ const esperarAccionWrapper = (act, data) => {
       if (result.isConfirmed) {
         if(tipo.value == 1){
           const body = {
+              "EntidadNegocioId": props.EntidadNegocioId,
               "ContactoId": data.ContactoId,
               "BorradoPor": "0"
           }
-          if(store.borrarContacto(body)){
-            loadContactos()
-            Swal.fire(
-              'Borrado!',
-              'El registro ha sido eliminado.',
-              'success'
-            )
-          }
+          store.borrarContacto(body).then((res) => {
+            if(res){
+              loadContactos()
+              Swal.fire(
+                'Borrado!',
+                'El registro ha sido eliminado.',
+                'success'
+              )
+            }
+          })
           }else if(tipo.value == 2){
           const body = {
+              "EntidadNegocioId": props.EntidadNegocioId,
               "TelefonoId": data.TelefonoId,
               "BorradoPor": "0"
           }
-          if(store.borrarTelefono(body)){
-            loadTelMail()
-            Swal.fire(
-              'Borrado!',
-              'El registro ha sido eliminado.',
-              'success'
-            )
-          }
+          console.log(body);
+          store.borrarTelefono(body).then((res) => {
+            if(res){
+              loadTelMail()
+              Swal.fire(
+                'Borrado!',
+                'El telefono ha sido eliminado.',
+                'success'
+              )
+            }
+          })
         }else if(tipo.value == 3){
           const body = {
+              "EntidadNegocioId": props.EntidadNegocioId,
               "EmailId": data.EmailId,
               "BorradoPor": "0"
           }
-          if(store.borrarCorreo(body)){
-            loadTelMail()
-            Swal.fire(
-              'Borrado!',
-              'El registro ha sido eliminado.',
-              'success'
-            )
-          }
+          store.borrarCorreo(body).then((res) => {
+            if(res){
+              loadTelMail()
+              Swal.fire(
+                'Borrado!',
+                'El correo ha sido eliminado.',
+                'success'
+              )
+            }
+          })
         }
       }
     })

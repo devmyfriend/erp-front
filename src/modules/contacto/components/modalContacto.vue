@@ -97,6 +97,10 @@ const props = defineProps({
   modo: {
     type: String,
     default: 'Guardar'
+  },
+  registro: {
+    type: Object,
+    default: {}
   }
 
 })
@@ -120,7 +124,7 @@ const GuardarTodo = () => {
       if(res){
         Swal.fire('Guardado', 'El contacto ha sido guardado', 'success')
         console.log('Datos: ' + JSON.stringify(body))
-        emit('esperarDatosContacto', [3, body])
+        emit('esperarDatosContacto', 3)
         modalObj.hide()
       }
     })
@@ -181,18 +185,11 @@ onMounted(() => {
   }else{
     Swal.fire('Error', 'No se ha definido el modo', 'error')
   }
-  
-  // Data de ejemplo para correos y teléfonos
-/*   correos.value = [
-    { id: 1, correo: '123@gmail.com' },
-    { id: 2, correo: '456@gmail.com' },
-    { id: 3, correo: '789@gmail.com' }
-  ]
-  telefonos.value = [
-    { id: 1, telefono: '1234567890' },
-    { id: 2, telefono: '0987654321' },
-    { id: 3, telefono: '1234567890' }
-  ] */
+
+  if (Object.keys(props.registro).length !== 0) {
+    console.log('Registro: ' + JSON.stringify(props.registro))
+    
+  }
 });
 
 onBeforeUnmount(() => {

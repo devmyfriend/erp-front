@@ -1,7 +1,7 @@
 export default{
     name:'cfdi',
     path:'/cfdi',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/usoCFDi/views/listCFDi.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
     redirect: '/cfdi/listado/',
     children:[
         {

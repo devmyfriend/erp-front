@@ -1,7 +1,7 @@
 export default{
     name:'monedas',
     path:'/monedas',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/moneda/views/listMonedas.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
     redirect: '/monedas/listado/',
     children:[
         {
