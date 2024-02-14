@@ -194,7 +194,6 @@ function agregarDatos(opc ){
     })
   }
   else if (opc == 3){
-    console.log('aaaaaaaaaaaaaaaaaaaa')
     loadContactos()
   }
 }
@@ -230,12 +229,79 @@ const esperarAccionWrapper = (act, data) => {
       console.log('Editar contacto: ' );
       registroSelect.value = ListadoContactos.value.find(objeto => objeto.ContactoId === data.ContactoId);
       console.log('Registro select: ' + JSON.stringify(registroSelect.value));
-      modalMode.value = 'Editar';
+      modalMode.value = 'Actualizar';
       abrirMContacto()
     }else if(tipo.value == 2){
-      console.log('Editar telefono: ' );
+      Swal.fire({
+        title: 'Ingresa el numero de telefono',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        showLoaderOnConfirm: true,
+        preConfirm: (inputString) => {
+          // Do something with the inputString
+          if (inputString.length !== 10) {
+            Swal.showValidationMessage('El número de teléfono debe tener 10 dígitos');
+          } else {
+            const body = {
+              "EntidadNegocioId": props.EntidadNegocioId,
+              "TelefonoId": data.TelefonoId,
+              "NumeroTelefonico": inputString,
+              "ActualizadoPor": "0"
+            }
+            console.log('Body: ' + JSON.stringify(body));
+            store.editarTelefono(body).then((res) => {
+              if(res){
+                loadTelMail()
+                Swal.fire({
+                  title: 'Actualizado!',
+                  icon: 'success'
+                })
+              }
+            })
+          }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      });
+      
     }else if(tipo.value == 3){
-      console.log('Editar correo: ' );
+      Swal.fire({
+        title: 'Ingresa el correo electrónico',
+        input: 'email',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        showLoaderOnConfirm: true,
+        preConfirm: (inputString) => {
+          // Do something with the inputString
+          if (!inputString.includes('@') || !inputString.includes('.')) {
+            Swal.showValidationMessage('El correo electrónico debe tener un formato válido');
+          } else {
+            const body = {
+              "EntidadNegocioId": props.EntidadNegocioId,
+              "EmailId": data.EmailId,
+              "Email": inputString,
+              "ActualizadoPor": "0"
+            }
+            console.log('Body: ' + JSON.stringify(body));
+            store.editarCorreo(body).then((res) => {
+              if(res){
+                loadTelMail()
+                Swal.fire({
+                  title: 'Actualizado!',
+                  icon: 'success'
+                })
+              }
+            })
+          }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      });
     }
   }else if(act == 2) {
     Swal.fire({
