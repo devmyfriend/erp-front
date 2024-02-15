@@ -4,120 +4,117 @@
             <h1> Tipos de moneda</h1>
         </header>
         <div class="contenido">
-            <buscadorMonedas/>
+            <buscadorMonedas
+                @eBusqueda="esperarBusqueda"
+            />
             <div class="formulario">
-                <input type="text" placeholder="Clave Moneda" class="ClaveMoneda">
-                <input type="text" placeholder="Nombre" class="NombreMoneda">
-                <img src="@/assets/img/plus.png" alt="AñadirComprobante" class="iconoAgregar">
+                <input type="text" placeholder="Clave Moneda" class="ClaveMoneda" v-model="ClaveMoneda">
+                <input type="text" placeholder="Nombre" class="NombreMoneda" v-model="Descripcion">
+                <img 
+                    src="@/assets/img/plus.png" 
+                    alt="AñadirComprobante" 
+                    class="iconoAgregar"
+                    @click="agregarRegistro"
+                >
             </div>
-            
-
-            
-            <button @click="test"> test </button>
-            <table class="table-bordered">
-                <thead>
-                    <tr>
-                        <th>Clave Moneda</th>
-                        <th>Nombre</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>ARS</td>
-                        <td>Peso Argentino</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>BOB</td>
-                        <td>Boliviano</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>CAD</td>
-                        <td>Dólar Canadiense</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>CLP</td>
-                        <td>Peso Chileno</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>COP</td>
-                        <td>Peso Colombiano</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>USD</td>
-                        <td>Dólar Americano</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>EUR</td>
-                        <td>Euro</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>EGP</td>
-                        <td>Libra Egipcia</td>
-                        <td class="Acciones"> 
-                            <a class="mx-2"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <TablaInfinita
+                class="mt-4"
+                :listado="ListadoMonedas"
+                :encabezados="encabezados"
+                :paginado="paginado"
+                :acciones="acciones"
+                :pBusqueda="pBusqueda"
+                :pAccion="pAccion"
+                @eBusqueda="esperarBusqueda"
+                @eAccion="esperarAccion"
+            />
         </div>
     </div>
 </template>
 
 <script setup>
 import buscadorMonedas from '@/modules/moneda/components/buscadorMonedas.vue'
-/* import tablaInfinita from '@/shared/tablaInfinita.vue' */
 import { ref, onMounted } from 'vue'
-
+import TablaInfinita from '@/shared/sTablaInfinita.vue';
 const { useMonedas } = require('../store/moneda.js')
 const store = useMonedas();
 
 const ListadoMonedas = ref([]);
+const acciones = ref(2);
+const paginado = ref(15);
+const encabezados = ref(['','Clave Moneda', 'Nombre', 'Estatus']);
+const pBusqueda = ref(false);
+const pAccion = ref(false);
+const ClaveMoneda = ref('');
+const Descripcion = ref('');
 
 onMounted(() => {
-    store.cargarMonedas().then(() =>{
-        ListadoMonedas.value = store.getMonedas;
-        console.log("[Front | Carga]: " + JSON.stringify(ListadoMonedas.value));
-    })
+    recargarDatos();
 });
 
 function test(){
-    store.buscarMonedas('Peso').then(() => {
-        ListadoMonedas.value = store.getMonedas
-        console.log("[Front | Buscador]: " + JSON.stringify(ListadoMonedas.value));
+    store.buscarMoneda('Peso').then(() => {
+        ListadoMonedas.value = store.getMonedas;
     })
+}
+
+function recargarDatos(){
+    store.cargarMonedas().then(() =>{
+        ListadoMonedas.value = store.getMonedas;
+        ListadoMonedas.value = ListadoMonedas.value.map(moneda => {
+        return {
+            void: '',
+            ClaveMoneda: moneda.ClaveMoneda,
+            Descripcion: moneda.Descripcion,
+            Activo: moneda.Activo,
+            };
+        });
+    });
+}
+
+function esperarBusqueda(){
+    pBusqueda.value = !pBusqueda.value;
+    console.log('pBusqueda: ', pBusqueda.value);
+    if(pBusqueda.value){
+        /* recargarDatos(); */
+        console.log('Recargar datos');
+    }
+}
+
+function esperarAccion(opc, data){
+    if(!opc){
+        pAccion.value = false;
+    }else{
+        pAccion.value = pAccion.value;
+        console.log('pAccion: ', pAccion.value);
+        if(pAccion.value){
+            if(opc === 1){
+                console.log('Editar: ', data);
+            }else if(opc === 2){
+                console.log('Eliminar: ', data);
+            }
+        }
+    }
+}
+
+function agregarRegistro(){
+    const body = {
+        ClaveMoneda: ClaveMoneda.value,
+        Descripcion: Descripcion.value,
+        Activo: true
+    }
+    store.agregarMoneda(body).then(() => {
+        recargarDatos();
+    });
 }
 
 </script>
 
 <style>
-    
-
     .contenedor {
         background-color: #D9D9D9;
         width: 100%;
-        height: 100%;
+        height: 54rem;
     }
     header {
         width: 100%;
@@ -132,8 +129,11 @@ function test(){
         padding-bottom: 1rem;
         width: 100%;
         background-color: white;
+        text-align: start;
+        color: #000;
+        font-size: 1.75rem;
+        font-weight: bold;
     }
-
     .formulario{
         display: flex;
         justify-content: flex-start;
@@ -164,7 +164,7 @@ function test(){
     height: 1.375rem;
     margin: auto;
     margin-left: 0.5rem;
-    vertical-align: middle;
+    cursor: pointer;
     }
     
 </style>

@@ -1,35 +1,54 @@
 <template>
-    <div class="fila">
-        <input type="text" placeholder="Peso Argentino">
-        <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar">
+    <div class="buscador">
+        <input type="text" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)" placeholder="Peso Argentino">
+        <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+const emit = defineEmits('eBusqueda');
+const { useEmpresas } = require('@/modules/empresas/store/empresas.js')
+const store = useEmpresas();
+
+const txtBusqueda = ref('');
+
+function buscar() {
+    if (txtBusqueda.value === '') {
+        store.cargarEmpresas().then(() => {
+            emit('eBusqueda');
+        });    
+    }else{
+        store.busquedaEmpresas(txtBusqueda.value).then(() => {
+            emit ('eBusqueda');
+        });
+    }
+}
 </script>
 
-<style>
-input {
-    width: 29rem;
+<style scoped>
+.buscador{
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+input{
+    width: 41rem;
     height: 2.1875rem;
+    color: #CBCBCB;
     border: none;
-    border-radius: 5px;
-    padding: 0.5rem;
-    font-size: 1rem;
+    border-radius: 0.3125rem;
+    padding-left: 1rem;
+}
+input:focus{
     outline: none;
 }
-.iconoBuscador{
-    width: 1.375rem;
+input::placeholder{
+    color: #CBCBCB;
+}
+img{
+    cursor: pointer;
     height: 1.375rem;
-    margin: auto;
     margin-left: 0.5rem;
-}
-.fila {
-  display: flex;
-}
-
-::placeholder {
-    font-style: italic;
-    color: #bdbdbdda;
 }
 </style>
