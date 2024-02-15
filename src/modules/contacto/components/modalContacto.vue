@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Añadir contacto</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="limpiar"></button>
         </div>
         <div class="modal-body">
           <div class="container">
@@ -62,7 +62,7 @@
         </div>
         <div class="modal-footer">
           <button @click="modo === 'Guardar' ? GuardarTodo() : ActualizarDatos()" type="button" class="btn btn-primary">{{ modo }}</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="limpiar">Cancelar</button>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@
 
 <script setup>
 import {Modal} from 'bootstrap'
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 import TablaInfinita from '@/shared/sTablaInfinita.vue'
 import Swal from 'sweetalert2'
 import { jsx } from 'vue/jsx-runtime';
@@ -140,7 +140,7 @@ const GuardarTodo = () => {
         modalObj.hide()
       }
     })
-
+    limpiar()
   }else if(telefonos.value.length == 0){
     Swal.fire('Error', 'Debe agregar al menos un teléfono', 'error')
   }else if(correos.value.length == 0){
@@ -165,7 +165,7 @@ function ActualizarDatos(){
         Swal.fire('Actualizado', 'El contacto ha sido actualizado', 'success')
         console.log('Datos: ' + JSON.stringify(bodyContacto))
         emit('esperarDatosContacto', 3)
-        modalObj.hide()
+        limpiar()
       }
     })
   }
@@ -326,6 +326,23 @@ function esperarAccion(opc, registro){
   }
 }
 
+function limpiar(){
+  modalObj.hide()
+  emit('cerrarModal')
+  apellidoMaterno.value = ''
+  apellidoPaterno.value = ''
+  nombres.value = ''
+  departamento.value = ''
+  puesto.value = ''
+  telefonos.value = []
+  correos.value = []
+  telInput.value = ''
+  correoInput.value = ''
+  editandoCorreo.value = false
+  editandoTel.value = false
+  telefonoEdit.value = {}
+  correoEdit.value = {}
+}
 onMounted(() => {
   modalObj = new Modal(modalEle.value) 
   if (props.modo !== '') {
@@ -352,25 +369,6 @@ onMounted(() => {
     })
   }
 });
-
-onBeforeUnmount(() => {
-  /* modalObj.hide() */
-  modalObj.dispose()
-  emit('cerrarModal')
-  apellidoMaterno.value = ''
-  apellidoPaterno.value = ''
-  nombres.value = ''
-  departamento.value = ''
-  puesto.value = ''
-  telefonos.value = []
-  correos.value = []
-  telInput.value = ''
-  correoInput.value = ''
-  editandoCorreo.value = false
-  editandoTel.value = false
-  telefonoEdit.value = {}
-  correoEdit.value = {}
-})
 
 function valNombre() {
   if (nombres.value === '') {

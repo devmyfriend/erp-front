@@ -3,16 +3,24 @@
     <h1> Contacto </h1>
     
     <div class="filaContacto">
-      <div class="formulario">
-        <label for="selectContacto" id="lbContacto" class="lbContacto"> Contacto </label>
-        <select class="selectContacto">
-          <option
-            v-for="contactos in ListadoContactos" 
-            :key="ContactoId">
-            {{ contactos.Nombres }} {{ contactos.ApellidoPaterno }} {{ contactos.ApellidoMaterno }} 
-          </option>
-        </select>
-        <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="abrirMContacto">
+      
+      <div class="formulario principal">
+        <buscador @eBusqueda="esperarBusqueda"/>
+        <button class="btAgregarContacto">
+          <svg src="@/assets/img/AddUser.svg" class="icono btAgregarC" @click="abrirMContacto(1)" height="1rem" xmlns="http://www.w3.org/2000/svg">
+        <path 
+        d="M24.375 8.125H21.875V5.625C21.875 5.28125 21.5938 5 21.25 5H20C19.6562 
+        5 19.375 5.28125 19.375 5.625V8.125H16.875C16.5312 8.125 16.25 8.40625 16.25 
+        8.75V10C16.25 10.3438 16.5312 10.625 16.875 10.625H19.375V13.125C19.375 13.4688 
+        19.6562 13.75 20 13.75H21.25C21.5938 13.75 21.875 13.4688 21.875 13.125V10.625H24.375C24.7188 
+        10.625 25 10.3438 25 10V8.75C25 8.40625 24.7188 8.125 24.375 8.125ZM8.75 10C11.5117 10 13.75 7.76172 
+        13.75 5C13.75 2.23828 11.5117 0 8.75 0C5.98828 0 3.75 2.23828 3.75 5C3.75 7.76172 5.98828 10 8.75 10ZM12.25 
+        11.25H11.5977C10.7305 11.6484 9.76562 11.875 8.75 11.875C7.73438 11.875 6.77344 11.6484 5.90234 11.25H5.25C2.35156 
+        11.25 0 13.6016 0 16.5V18.125C0 19.1602 0.839844 20 1.875 20H15.625C16.6602 20 17.5 19.1602 17.5 18.125V16.5C17.5 
+        13.6016 15.1484 11.25 12.25 11.25Z" fill="#999999"/>
+          </svg>
+          <span class="ms-3"> Agregar Contacto </span> 
+        </button>
       </div>
       <div class="tablaContactos" @mouseenter="tipo = 1">
         <tablaInfinita 
@@ -20,7 +28,9 @@
           :encabezados="headsContacto" 
           :acciones="2" 
           :paginado="3"
+          :pBusqueda="pBusqueda"
           :pRegistroNuevo="pRegistroNuevo"
+          @pBusqueda="esperarBusqueda"
           @eRegistroNuevo="pRegistroNuevo = false"
           @eAccion="esperarAccionWrapper"
         />
@@ -30,7 +40,7 @@
     <div class="filaContacto" @mouseenter="tipo = 2">
       <div class="formulario">
         <input  v-model="telefono" type="text" placeholder="Teléfono" class="inp">
-        <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarDatos(1)">
+        <img src="@/assets/img/AddUser.svg" class="icono margIzq" @click="agregarDatos(1)">
       </div>
 
       <div class="filaMiniTabla">
@@ -49,7 +59,7 @@
     <div class="filaContacto" @mouseenter="tipo = 3">
       <div class="formulario">
         <input  v-model="correo" type="text" placeholder="Correo e." class="inp">
-        <img src="@/assets/img/AddUser.svg" class="icono addContacto" @click="agregarDatos(2)">
+        <img src="@/assets/img/AddUser.svg" class="icono margIzq" @click="agregarDatos(2)">
       </div>
 
       <div class="filaMiniTabla">
@@ -81,6 +91,7 @@
 import { onMounted, ref } from 'vue';
 import tablaInfinita from '@/shared/sTablaInfinita.vue';
 import modalContacto from '@/modules/contacto/components/modalContacto.vue';
+import buscador from '@/modules/contacto/components/buscadorContacto.vue';
 import Swal from 'sweetalert2';
 
 const { useContacto } = require('../store/contacto')
@@ -98,7 +109,7 @@ const props = defineProps({
 })
 
 const ListadoContactos = ref([])
-const headsContacto = ref(['ContactoId', 'Nombres',	'Paterno',	'Materno',	'Departamento'])
+const headsContacto = ref(['ContactoId', 'Nombres',	'Paterno',	'Materno'])
 
 const ListadoTelefonos = ref([])
 const headsTelefono = ref(['ID', 'Telefono'])
@@ -114,6 +125,7 @@ const pRegistroNuevo = ref(false)
 const tipo = ref(0)
 const modalMode = ref('Guardar')
 const registroSelect = ref({})
+const pBusqueda = ref(false)
 
 onMounted(() => {
   store.cargarContactos(props.EntidadNegocioId).then(() =>{
@@ -131,7 +143,8 @@ function loadContactos(){
         Nombres: contacto.Nombres,
         ApellidoPaterno: contacto.ApellidoPaterno,
         ApellidoMaterno: contacto.ApellidoMaterno,
-        Departamento: contacto.Departamento,
+/*         Departamento: contacto.Departamento,
+        Puesto: contacto.Puesto */
     };
   });
   });
@@ -158,13 +171,21 @@ function loadTelMail(){
     });
 }
 
-function abrirMContacto(){
+function abrirMContacto(opc){
+  console.log('opción elegida ' + opc);
   pContactoNuevo.value = !pContactoNuevo.value;
   console.log('Modal:' + pContactoNuevo.value);
+  if (opc == 1) {
+    modalMode.value = 'Guardar'
+    console.log('[G] Modal mode: ' + modalMode.value);
+    registroSelect.value = {}
+  }else if(opc == 2){
+    modalMode.value = 'Actualizar'
+    console.log('[A] Modal mode: ' + modalMode.value);
+  }
 }
 
 function agregarDatos(opc ){
-  console.log('opcion para agregar datos \n 1: Tel 2:Correo 3:Contact \n: ' + opc);
   if(opc == 1 && validar(1, telefono.value)){
     const contenido = {
       EntidadNegocioId: props.EntidadNegocioId,
@@ -223,14 +244,24 @@ function validar(opc, txt){
   }
 }
 
+function esperarBusqueda(){
+  pBusqueda.value = !pBusqueda.value
+  if(pBusqueda.value){
+    alert('[frm] Buscando...: ');
+    loadContactos()
+  }else{
+    alert('[frm] No buscando...: ');
+  }
+}
+
 const esperarAccionWrapper = (act, data) => {
   if(act == 1){
     if(tipo.value == 1){
       console.log('Editar contacto: ' );
-      registroSelect.value = ListadoContactos.value.find(objeto => objeto.ContactoId === data.ContactoId);
+      registroSelect.value = store.listaContacto.find(objeto => objeto.ContactoId === data.ContactoId);
       console.log('Registro select: ' + JSON.stringify(registroSelect.value));
       modalMode.value = 'Actualizar';
-      abrirMContacto()
+      abrirMContacto(2)
     }else if(tipo.value == 2){
       Swal.fire({
         title: 'Ingresa el numero de telefono',
@@ -398,7 +429,7 @@ h1{
   border: none;
   padding: 0.25rem 1rem;
 }
-.addContacto{
+.margIzq{
   margin-left: 1rem;
 }
 .filaContacto{
@@ -408,7 +439,6 @@ h1{
   align-items: flex-start;
 }
 table{
-  background-color: aquamarine;
   width: 100%;
 }
 .inp{
@@ -425,6 +455,26 @@ table{
 }
 .tablaContactos{
   margin: 1rem auto 1rem auto;
+  width: 100%;
+}
+.btAgregarContacto{
+  display: flex;
+  justify-content: center;
+  width: auto;
+  height: 2.1875rem;
+  border: none;
+  border-radius: 0.3125rem;
+  background-color: #999999;
+  color: #fff;
+  padding: 0.5rem 1rem; 
+  text-decoration: none;
+}
+svg path {
+  fill: #fff;
+}
+.principal{
+  display: flex;
+  justify-content: space-between;
   width: 100%;
 }
 </style>
