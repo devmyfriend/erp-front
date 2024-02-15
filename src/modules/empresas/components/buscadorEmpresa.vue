@@ -17,11 +17,11 @@ const txtBusqueda = ref('');
 function buscar() {
     if (txtBusqueda.value === '') {
         store.cargarEmpresas().then(() => {
-            emit('eBusqueda', true);
+            emit('eBusqueda');
         });    
     }else{
         store.busquedaEmpresas(txtBusqueda.value).then(() => {
-            emit ('eBusqueda', true);
+            emit ('eBusqueda');
         });
     }
 }
@@ -34,20 +34,17 @@ input{
     color: #CBCBCB;
     border: none;
     border-radius: 0.3125rem;
+    padding-left: 1rem;
 }
 input:focus{
     outline: none;
 }
 input::placeholder{
     color: #CBCBCB;
-    padding-left: 1rem;
 }
 img{
     cursor: pointer;
     height: 1.375rem;
     margin-left: 0.5rem;
-}
-.buscardorEmpresa{
-    margin-right: 1.5rem;
 }
 </style>

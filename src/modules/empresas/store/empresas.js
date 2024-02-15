@@ -2,16 +2,15 @@ import axios from "axios";
 import { defineStore } from "pinia";
 
 import Swal from "sweetalert2";
+import { swal } from "sweetalert2/dist/sweetalert2";
 
 export const useEmpresas = defineStore( 'empresas', {
     state: ()=>({
         ListadoEmpresas:  [],
-
         propietaria: false
     }),
     getters:{
         getListado( state ){
-
             return state.ListadoEmpresas
         },
     },
@@ -56,14 +55,18 @@ export const useEmpresas = defineStore( 'empresas', {
         },
         async borrarEmpresa(body){
             try{
-                const datos = await axios.delete(`${ process.env.VUE_APP_PATH_API }v1/empresa/desactivar`, body)
+                const datos = await axios.delete(`${ process.env.VUE_APP_PATH_API }v1/empresa/desactivar`, {data: body})
                 if( datos.status === 200 && datos.statusText==="OK"){
-                    console.log(`\n \n \n Toda tu marca personal: ${body} \n \n \n`);
-                    return true
+                    return true;
                 }
             }catch ( error ){
                 console.log( error )
-                throw new Error( error )
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'No se pudo eliminar la empresa',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                })
             }
 
 

@@ -18,7 +18,7 @@ import router from '@/router';
 import btNuevoEmpresa from '../components/btNuevoEmpresa.vue';
 import buscadorEmpresa from '../components/buscadorEmpresa.vue';
 import TablaInfinita from '@/shared/sTablaInfinita.vue';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import Swal from 'sweetalert2';
 
 const { useEmpresas } =require('../store/empresas.js');
@@ -38,24 +38,18 @@ onMounted(() => {
   })
 });
 
-function esperarBusqueda(valor){
-  pBusqueda.value = valor;
+function esperarBusqueda(){
+  pBusqueda.value = !pBusqueda.value;
   if(pBusqueda.value){
     ajustarListado();
   }
-
 }
-
-function esperarAccion(res){
+function esperarAccion(opc, res){
   if(res != false){
     pAccion.value = true;
-    const opc = res[0];
-    const id = res[1];
-
     if(opc === 1){
-      router.push({name: 'formulario', params: {id: id}});
+      router.push({name: 'formulario', params: {id: res.EntidadNegocioId}});
     }else if(opc === 2){
-
       Swal.fire({
           title: "Eliminar empresa",
           text: "¿Realmente quieres eliminar la empresa?",
@@ -66,27 +60,23 @@ function esperarAccion(res){
         }).then((result) => {
           if (result.isConfirmed) {
             const body = {
-              EntidadNegocioId: id,
+              EntidadNegocioId: res.EntidadNegocioId,
               BorradoPor: 1
             }
-            if (store.borrarEmpresa(body)){
-              Swal.fire("Eliminado", "La empresa ha sido eliminada", "success").then(() => {
+            store.borrarEmpresa(body).then((res) => {
+              if(res){
                 ajustarListado();
-              });
-            }else{
-              Swal.fire({
-                title: "Error",
-                text: "Error al eliminar la empresa",
-                icon: "error"
-              });
-            }
+                Swal.fire('Empresa eliminada', '', 'success');
+              }
+            });
           }
         });
     }
+  }else{
+    pAccion.value = false;
   }
 }
-
-function ajustarListado(){
+async function ajustarListado(){
   ListadoEmpresas.value = store.getListado
   ListadoEmpresas.value = ListadoEmpresas.value.map(empresa => {
     const Direccion = `${empresa.Pais}, ${empresa.Estado}, ${empresa.CodigoPostal}, Ext: ${empresa.NumeroExt}, Int: ${empresa.NumeroInt}, ${empresa.Localidad}, ${empresa.Colonia}`;
@@ -99,8 +89,8 @@ function ajustarListado(){
     };
   });
     encabezados.value = Object.keys(ListadoEmpresas.value[0]);
+    return ListadoEmpresas.value;
 }
-
 </script>
 
 <style>
