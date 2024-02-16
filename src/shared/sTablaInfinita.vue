@@ -14,7 +14,9 @@
             <template v-for="(value, key, columna) in item">
               <!-- <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td> -->
               <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">
-                {{ typeof value === 'boolean' ? (value ? 'Activo' : 'Inactivo') : value }}
+                {{ typeof value === 'boolean' ? (value ? 'Activo' : 'Inactivo') : 
+                  (typeof value === 'number' && (value === 0 || value === 1) ? 
+                    (value === 1 ? 'Activo' : 'Inactivo') : value) }}
               </td>
             </template>
             <td v-if="props.acciones != 0" class="accionesTabla">

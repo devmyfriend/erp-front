@@ -6,8 +6,7 @@ export const useMonedas = defineStore('Moneda',{
     state: () => ({
         ListadoMonedas: [],
     }),
-    getters:
-    {
+    getters:{
         getMonedas(state){
             return state.ListadoMonedas;
         },
@@ -70,7 +69,7 @@ export const useMonedas = defineStore('Moneda',{
 
         async editarMoneda(body){
             try{
-                const datos = await axios.patch(`${process.env.VUE_APP_PATH_API}v1/catalogo/metodos/moneda`, {data: body});
+                const datos = await axios.patch(`${process.env.VUE_APP_PATH_API}v1/catalogo/metodos/moneda`, body);
                 if(datos.status === 200 && datos.statusText === "OK"){
                     Swal.fire({
                         title: "Éxito",
