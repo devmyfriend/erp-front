@@ -99,11 +99,11 @@ h1 {
   color: #000;
   font-size: 1.75rem;
   font-weight: bold;
+  margin-bottom: 1.5rem;
 }
 .contenedor {
   display: flex;
   flex-direction: column;
-  margin-top: 1.5rem;
   width: 100%;
   height: 100%;
   background-color: #D9D9D9;

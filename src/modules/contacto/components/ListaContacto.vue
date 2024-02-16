@@ -54,7 +54,7 @@ const cerrarModal = ()=>{
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cerrarModal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cerrarModal">Cerrar</button>
         <button type="button" class="btn btn-primary">Guardar cambios</button>
       </div>
     </div>
