@@ -12,6 +12,7 @@ import cfdiRouter from '@/modules/usoCFDi/routes/index'
 import impuestosRouter from '@/modules/impuestos/routes/index'
 import regimenRouter from '@/modules/regimenFiscal/routes/index'
 import formasPagoRouter from '@/modules/formasPago/routes/index'
+import productosRouter from '@/modules/productos/routes/index'
 
 const routes = [
   {
@@ -68,6 +69,10 @@ const routes = [
     path: '/formasPago',
     ...formasPagoRouter
   },
+  {
+    path: '/productos',
+    ...productosRouter
+  }
  //fin de rutas de pruebas.
 ]
 

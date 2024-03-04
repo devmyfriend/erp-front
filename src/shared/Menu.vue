@@ -12,6 +12,11 @@
         <li><router-link :to="{name: 'regimenFiscal'}"> Regimen Fiscal </router-link></li>
         <li><router-link :to="{name: 'cfdi'}"> CFDi </router-link></li>
     </ul>
+
+    <h2> Productos </h2>
+    <ul>
+        <li> <router-link :to="{name: 'productos'}"> Productos </router-link> </li>
+    </ul>
 </template>
 
 <script setup>
