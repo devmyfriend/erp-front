@@ -151,65 +151,65 @@ function agregarRegistro(){
 
 </script>
 
-<style>
-.contenedor {
-    background-color: #D9D9D9;
-    width: 100%;
-    height: 54rem;
-}
-header {
-    width: 100%;
-    text-align: start;
-}
-.contenido{
-    width: auto;
-    margin: 1rem;
-}
-h1{
-    margin: 0;
-    padding-bottom: 1rem;
-    width: 100%;
-    background-color: white;
-    text-align: start;
-    color: #000;
-    font-size: 1.75rem;
-    font-weight: bold;
-}
-.formulario{
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    margin-top: 1rem;
-}
-.ClaveMoneda, .NombreMoneda, .ValorMoneda {
-    height: 2.1875rem;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem;
-    font-size: 1rem;
-    outline: none;
-}
-.ClaveMoneda{
-    width: 18.75rem;
-}
-.NombreMoneda{
-    width: 21.875rem;
-    margin-left: 0.5rem;
-}
-.ValorMoneda{
-    width: 13.1875rem;
-    margin-left: 0.5rem;
-}
-.iconoAgregar{
-    width: 1.375rem;
-    height: 1.375rem;
-    margin: auto;
-    margin-left: 0.5rem;
-    cursor: pointer;
-}
-.msjEditado{
-    color: red;
-    font-weight: 700;
-    margin: auto 1rem auto 0;
-}
+<style scoped>
+    .contenedor {
+        background-color: #D9D9D9;
+        width: 100%;
+        height: 54rem;
+    }
+    header {
+        width: 100%;
+        text-align: start;
+    }
+    .contenido{
+        width: auto;
+        margin: 1rem;
+    }
+    h1{
+        margin: 0;
+        padding-bottom: 1rem;
+        width: 100%;
+        background-color: white;
+        text-align: start;
+        color: #000;
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+    .formulario{
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .ClaveMoneda, .NombreMoneda, .ValorMoneda {
+        height: 2.1875rem;
+        border: none;
+        border-radius: 5px;
+        padding: 0.5rem;
+        font-size: 1rem;
+        outline: none;
+    }
+    .ClaveMoneda{
+        width: 18.75rem;
+    }
+    .NombreMoneda{
+        width: 21.875rem;
+        margin-left: 0.5rem;
+    }
+    .ValorMoneda{
+        width: 13.1875rem;
+        margin-left: 0.5rem;
+    }
+    .iconoAgregar{
+        width: 1.375rem;
+        height: 1.375rem;
+        margin: auto;
+        margin-left: 0.5rem;
+        cursor: pointer;
+    }
+    .msjEditado{
+        color: red;
+        font-weight: 700;
+        margin: auto 1rem auto 0;
+    }
 </style>

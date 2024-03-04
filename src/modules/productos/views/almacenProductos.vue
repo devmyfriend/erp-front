@@ -11,7 +11,7 @@ const btActivo = ref(3);
 
 <template>
     <header>
-        <h1> Productos </h1>
+        <h1> Productos: {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
         <div class="contenido">
