@@ -40,18 +40,14 @@ function cargarDatos(){
 
 <template>
     <header>
-        <h1> Productos: {{ tipoProducto }}</h1>
+        <h1> Productos: {{ idProducto }} - {{ tipoProducto }}</h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">
             <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
         </div>
-
         <div class="contenido">
             <h2> Listado de Productos</h2>
-
-
-
             <div class="frm">
                 <div>
                     <buscadorProductos/>
@@ -72,9 +68,6 @@ function cargarDatos(){
                     <!-- <input class="" type="number" min="0" max="99" v-model="idProducto"> -->
                 </div>
             </div>
-
-
-
             <div class="tablaContainer">
                 <table>
                     <thead>

@@ -6,8 +6,6 @@
         <router-link v-if="tipoProducto == 'Combos'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: idProducto } }"> Agregar Productos </router-link>
         <router-link v-if="tipoProducto == 'Suscripciones'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: idProducto } }"> Políticas </router-link>
         <router-link :class="{btActivo: btActivo === 6}" :to=" { name: 'cantidadAlmacen', params: { tipo: tipoProducto, id: idProducto } }"> Cantidad por Almacén </router-link>
-
-        <p> El tipo es:  {{ tipoProducto }}, el id es: {{ idProducto }}, y por último, el btActivo es: {{ btActivo }} </p>
     </div>
 </template>
 
@@ -47,7 +45,6 @@ const btActivo = computed(() => {
     height: 2.5rem;
     overflow: hidden;
     align-items: flex-start;
-    margin-left: -1rem;
 }
 a{
     margin: 0rem;

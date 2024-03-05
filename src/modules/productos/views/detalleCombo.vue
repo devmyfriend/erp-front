@@ -10,7 +10,7 @@ const btActivo = ref(4);
 
 <template>
     <header>
-        <h1> Productos: {{ tipoProducto }} </h1>
+        <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
         <div class="contenido">
@@ -25,7 +25,7 @@ const btActivo = ref(4);
 .contenedor {
     background-color: #D9D9D9;
     width: 100%;
-    height: 54rem;
+    height: 51rem;
 }
 header{
     margin-bottom: 1.5rem;
