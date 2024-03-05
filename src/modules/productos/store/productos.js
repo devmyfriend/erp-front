@@ -27,6 +27,6 @@ export const useProductos = defineStore('Productos',{
                     icon: "error",
                 });
             }
-        }
+        },
     }
 });

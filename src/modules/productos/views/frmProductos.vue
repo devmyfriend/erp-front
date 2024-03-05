@@ -3,12 +3,15 @@
     import { useRoute } from 'vue-router';
     import Ventanas from '../components/ventanas.vue';
     import Swal from 'sweetalert2';
+    import mBuscar from '../components/modales/mBuscar.vue';
     
     const route = useRoute();
     
     const idProducto = ref( parseInt(route.params.id) || 0);
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
+
+    const modo = ref(null);
     
     //Datos generales
     const tipoProducto = ref(route.params.tipo);
@@ -121,6 +124,23 @@
             });
         }
     }
+
+    function mostrarM(opc){
+        switch(opc){
+            case 1:
+                modo.value = 'Conversiones';
+                break;
+            case 2:
+                modo.value = 'Clave Producto SAT';
+                break;
+            case 3:
+                modo.value = 'Clave Impuesto';
+                break;
+            case 4:
+                modo.value = 'Clave Unidad SAT';
+                break;
+        }
+    }
 </script>
 
 <template>
@@ -171,7 +191,7 @@
                             <div class="columna">
                                 <label for="uBase"> U. Base </label>
                                 <input type="text" placeholder="Unidad Base" id="uBase" name="uBase" v-model="uBase">
-                                <button class="minibutton" @click="mostrarMConversiones"> 
+                                <button class="minibutton" @click="mostrarM(1)"> 
                                     <img src="@/assets/img/Conversiones.svg" alt="Boton_Conversiones" class="miniImg">
                                 </button>
                             </div>
@@ -196,7 +216,7 @@
                             <div class="columna">
                                 <label for="ClaveProductoSAT"> C. Producto SAT</label>
                                 <input type="text" placeholder="Clave Producto SAT" v-model="claveProductoSAT">
-                                <button class="minibutton" @click="mostrarMClaveProducto"> 
+                                <button class="minibutton" @click="mostrarM(2)"> 
                                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
                                     </svg>
@@ -205,9 +225,9 @@
                             </div>
                             
                             <div class="columna">
-                                <label for="Impuesto"> Impuestos </label>
-                                <input type="text" placeholder="Clave Impuestos" v-model="claveImpuesto">
-                                <button class="minibutton" @click="mostrarMImpuesto">
+                                <label for="Impuesto"> Impuesto Compuesto </label>
+                                <input type="text" placeholder="Clave Impuesto Comp." v-model="claveImpuesto">
+                                <button class="minibutton" @click="mostrarM(3)">
                                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
                                     </svg>
@@ -216,9 +236,9 @@
                         </div>
                         <div class="fila">
                             <div class="columna">
-                                <label for="ClaveUnidad"> Clave Unidad SAT </label>
+                                <label for="ClaveUnidad"> C. Unidad SAT </label>
                                 <input type="text" placeholder="Clave Unidad SAT" v-model="claveUnidadSAT">
-                                <button class="minibutton" @click="mostrarMClaveUnidad"> 
+                                <button class="minibutton" @click="mostrarM(4)"> 
                                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
                                     </svg>
@@ -285,9 +305,7 @@
                         </div>
                     </div>
                 </div>
-
-
-
+                <!-- Combos -->
                 <div class="formulario" v-else>
                     <h3 class="SubtituloInactivo"> Datos generales</h3>
                     <div class="miniContainer">
@@ -348,6 +366,11 @@
             </div>
         </div>
     </div>
+    <mBuscar 
+    v-if="modo != null"
+    :modo="modo"
+    @cerrarModal="modo=null "
+    />
 </template>
 
 <style scoped>
