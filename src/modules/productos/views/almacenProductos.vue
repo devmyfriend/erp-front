@@ -7,6 +7,51 @@ const idProducto = ref( parseInt(route.params.id) || 0);
 const tipoProducto = ref(route.params.tipo || '');
 const btActivo = ref(3);
 
+const registros = ref([
+    {
+        Nombre: 'Almacén 1',
+        StockMaximo: 100,
+        StockMinimo: 10,
+        UltimoPrecio: 9.99
+    },
+    {
+        Nombre: 'Almacén 2',
+        StockMaximo: 200,
+        StockMinimo: 20,
+        UltimoPrecio: 19.99
+    },
+    {
+        Nombre: 'Almacén 3',
+        StockMaximo: 300,
+        StockMinimo: 30,
+        UltimoPrecio: 29.99
+    }
+]);
+
+const Almacen = ref('');
+const Sucursal = ref('');
+const Seccion = ref('');
+const Anaquel = ref('');
+const Nivel = ref('');
+const Lugar = ref('');
+const CantidadMaxima = ref('');
+const CantidadMinima = ref('');
+
+const Existencia = ref(1826);
+const Costo = ref(84);
+const UltimoPrecio = ref(90);
+
+const nSeccion = ref(false);
+const nAnaquel= ref(false);
+const nNivel = ref(false);
+const nLugar = ref(false);
+
+function obtenerRegistro(r){
+    console.log( JSON.stringify(r) );
+    Almacen.value = r.Nombre;
+    CantidadMaxima.value = r.StockMaximo;
+    CantidadMinima.value = r.StockMinimo;
+}
 </script>
 
 <template>
@@ -14,10 +59,108 @@ const btActivo = ref(3);
         <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
+        <div class="ventanas">
+            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
+        </div>
         <div class="contenido">
-            <div class="ventanas">
-                <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
-              </div>
+            <h2> Productos por Almacén </h2>
+            <div class="frm">
+                <div class="columna1">
+                    <h3> Formulario </h3>   
+                    <div class="formulario">
+                        <div class="fila">
+                            <label for="Almacen"> Almacén: </label>
+                            <select name="Almacen" id="Almacen" v-model="Almacen">
+                                <option value="Almacen1"> Almacén 1 </option>
+                            </select>
+                        </div>
+                        <div class="fila">
+                            <label for="Sucursal"> Sucursal: </label>
+                            <select name="Sucursal" id="Sucursal" v-model="Sucursal">
+                                <option value="Sucursal1"> Sucursal 1 </option>
+                            </select>
+                        </div>
+                        <div class="fila">
+                            <label for="Seccion"> Sección: </label>
+                            <select v-if="!nSeccion" name="Seccion" id="Seccion" v-model="Seccion">
+                                <option value="Seccion1"> Seccion 1 </option>
+                            </select>
+                            <input type="text" v-model="Seccion" placeholder="Nueva Sección" v-if="nSeccion">
+                            <img class="Ico" src="@/assets/img/add.svg" @click="nSeccion = !nSeccion">
+                        </div>
+                        <div class="fila">
+                            <label for="Anaquel"> Anaquel: </label>
+                            <select v-if="!nAnaquel" name="Anaquel" id="Anaquel" v-model="Anaquel">
+                                <option value="Anaquel1"> Anaquel 1 </option>
+                            </select>
+                            <input type="text" v-model="Anaquel" placeholder="Nuevo Anaquel" v-if="nAnaquel">
+                            <img class="Ico" src="@/assets/img/add.svg" @click="nAnaquel = !nAnaquel">
+                        </div>
+                        <div class="fila">
+                            <label for="Nivel"> Nivel: </label>
+                            <select v-if="!nNivel" name="Nivel" id="Nivel" v-model="Nivel">
+                                <option value="Nivel1"> Nivel 1 </option>
+                            </select>
+                            <input type="text" v-model="Nivel" placeholder="Nuevo Nivel" v-if="nNivel">
+                            <img class="Ico" src="@/assets/img/add.svg" @click="nNivel = !nNivel">
+                        </div>
+                        <div class="fila">
+                            <label for="Lugar"> Lugar: </label>
+                            <select v-if="!nLugar" name="Lugar" id="Lugar" v-model="Lugar">
+                                <option value="Lugar1"> Lugar 1 </option>
+                            </select>
+                            <input type="text" v-model="Lugar" placeholder="Nuevo Lugar" v-if="nLugar">
+                            <img class="Ico" src="@/assets/img/add.svg" @click="nLugar = !nLugar">
+                        </div>
+                        <div class="fila">
+                            <label for="CantidadMinima"> Cantidad Mínima: </label>
+                            <input type="text" placeholder="Cantidad Mínima" v-model="CantidadMinima">
+                        </div>
+                        <div class="fila">
+                            <label for="CantidadMaxima"> Cantidad Máxima: </label>
+                            <input type="text" placeholder="Cantidad Máxima" v-model="CantidadMaxima">
+                        </div>
+                        <button class="btGuardarTodo" @click="GuardarTodo">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
+                            </svg>
+                            <span> Guardar Productos </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="columna2">
+                     <div class="Datos">
+                         <label class="datosAlmacenTitulo" for="Existencia"> Existencia: </label>
+                         <label class="datosAlmacenValor"  for="valorExistencia"> ${{Existencia}}  </label>
+                         <label class="datosAlmacenTitulo" for="Costo"> Costo: </label>
+                         <label class="datosAlmacenValor"  for="valorCosto"> ${{Costo}} </label>
+                         <label class="datosAlmacenTitulo" for="UltimoPrecio">  Último Precio de Compra: </label>
+                         <label class="datosAlmacenValor"  for="valorUltimoPrecio">  ${{UltimoPrecio}} </label>
+                     </div>
+                     <div class="tablaContainer">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th> Nombre del almacén </th>
+                                    <th> Stock Mínimo </th>
+                                    <th> Stock Máximo </th>
+                                    <th> Ultimo precio compra </th>
+                                    <th> Acciones </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="registro in registros">
+                                    <td> {{     registro.Nombre       }} </td>
+                                    <td> {{     registro.StockMinimo  }} </td>
+                                    <td> {{     registro.StockMaximo  }} </td>
+                                    <td> {{     registro.UltimoPrecio }} </td>
+                                    <td> <img class="btTabla" @click="obtenerRegistro(registro)" src="@/assets/img/details.svg" alt="Detalles"> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                     </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -42,27 +185,139 @@ h1{
     width: auto;
     margin: 1rem;
 }
-
-.ventanas{
+.frm{
+    display: grid;
+    grid-template-columns: 30% 60%;
+    gap: 10rem;
+    justify-content: space-between;
+    padding: 0rem 5rem;
+}
+.formulario{
+    width: 100%;
+    height: 40rem;
+}
+h2{
+    text-align: start;
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+.columna1{
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    
+    height: 40rem;
+    max-height: 40rem;
+}
+.columna2{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 40rem;
+    max-height: 40rem;
+}
+h3{
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+}
+.Datos{
+    width: 100%;
+    height: 2rem;
+    margin-bottom: 1rem;
+}
+.datosAlmacenTitulo{
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-left: 1.5rem;
+}
+.datosAlmacenValor{
+    font-size: 1.25rem;
+    font-weight: lighter;
+    margin-left: 0.25rem;
+}
+.fila{
+    display: flex;
+    align-items: center;
+    height: 2.1875;
+    max-height: 2.1875;
+    min-height: 2.1875;
+    margin-bottom: 1rem;
+}
+.fila label{
+    width: 7.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: start;
+}
+.fila input, .fila select{
+    width: 20.5rem;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    font-weight: lighter;
+    border: none;
+    border-radius: 0.25rem;
+}
+.fila img{
+    margin-left: 0.5rem;
+    width: 1.5rem;
+}
+.btGuardarTodo{
     width: 100%;
     height: 2.5rem;
-    overflow: hidden;
-    align-items: flex-start;
-    margin-left: -1rem;
+    margin-top: 2rem;
+    background-color: #999999;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-button{
-    margin: 0rem;
-    padding: 0rem;
-    border: 1px solid #999999;
-    padding: 0.25rem;
-    width: 15rem;
+.btGuardarTodo svg{
+    margin-right: 0.5rem;
+    height: 1.5rem;
+}
+.btGuardarTodo span{
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.btTabla{
+    width: 1.5rem;
+    cursor: pointer;
+}
+.Ico{
+    width: 1.5rem;
+    cursor: pointer;
 }
 
-.btActivo{
-    background-color: #D9D9D9;
-    border: 2px solid #999999;
-    border-bottom: none;
-    border-right: none;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
+td, th {
+  border: 1px solid #000;
+  padding: 0.25rem 0.5rem;
+  margin: 0rem 0.25rem 0rem 0.25rem;
+}
+th {
+  background-color: #999999;
+  color: #fff;
+  height: 1rem;
+}
+td{
+  background-color: #fff;
+  color: #999999;
+  height: 2rem;
+  padding: 0rem 0.5rem 0rem 0.5rem;
 }
 </style>
