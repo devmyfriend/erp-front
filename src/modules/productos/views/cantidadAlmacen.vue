@@ -7,6 +7,14 @@ const tipoProducto = ref(route.params.tipo || '');
 const idProducto = ref( parseInt(route.params.id) || 0);
 const btActivo = ref(6);
 
+const listadoAlmacenes = ref([
+    {id: 1, nombre: 'Almacen 1', cantidad: 1231},
+    {id: 2, nombre: 'Almacen 2', cantidad: 7234},
+    {id: 3, nombre: 'Almacen 3', cantidad: 4267}
+]);
+const Almacen = ref(-1);
+
+console.log(JSON.stringify(listadoAlmacenes.value[0]));
 </script>
 
 <template>
@@ -14,10 +22,34 @@ const btActivo = ref(6);
         <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
+        <div class="ventanas">
+            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
+          </div>
         <div class="contenido">
-            <div class="ventanas">
-                <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
-              </div>
+            <div class="frm">
+                <label for="Almacen"> Almacén: </label>
+                <select name="Almacen" id="Almacen" v-model="Almacen">
+                    <option value="-1" v-if="Almacen == -1"> Selecciona un almacén </option>
+                    <option v-for="almacen in listadoAlmacenes" :value="almacen.id">{{ almacen.nombre }}</option>
+                </select>
+            </div>
+            
+            <div class="contenedorTabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th> Almacén </th>
+                            <th> Cantidad </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="registro in listadoAlmacenes" :key="registro.id">
+                            <td style="width: 80%;"> {{registro.nombre}}   </td>
+                            <td style="width: 20%;"> {{registro.cantidad}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -39,30 +71,63 @@ h1{
     margin-bottom: 1.5rem;
 }
 .contenido{
-    width: auto;
-    margin: 1rem;
-}
-
-.ventanas{
     display: flex;
-    width: 100%;
-    height: 2.5rem;
-    overflow: hidden;
-    align-items: flex-start;
-    margin-left: -1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
 }
-button{
-    margin: 0rem;
-    padding: 0rem;
-    border: 1px solid #999999;
-    padding: 0.25rem;
-    width: 15rem;
-}
-
 .btActivo{
     background-color: #D9D9D9;
     border: 2px solid #999999;
     border-bottom: none;
     border-right: none;
+}
+.frm{
+    display: flex;
+    width: 100%;
+    text-align: start;
+    margin-bottom: 1rem;
+}
+label{
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+select{
+    width: 35rem;
+    height: 2rem;
+    font-size: 1rem;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    outline: none;
+}
+
+.contenedorTabla{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
+td, th {
+  border: 1px solid #000;
+  padding: 0.25rem 0.5rem;
+  margin: 0rem 0.25rem 0rem 0.25rem;
+}
+th {
+  background-color: #999999;
+  color: #fff;
+  height: 1rem;
+}
+td{
+  background-color: #fff;
+  color: #999999;
+  height: 2rem;
+  padding: 0rem 1rem 0rem 1rem;
+  text-align: start;
 }
 </style>
