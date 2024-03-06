@@ -88,13 +88,6 @@
         modalObj.hide();
         emit('cerrarModal')
     }
-
-    function test() {
-        console.log('test');
-        listado.value = [{id: 1, nombre: 'Juan', apellido: 'Perez', correo: 'IAmJackex@gmail.com'},{id: 2, nombre: 'Juan', apellido: 'Perez', correo: 'IAmJackex@gmail.com'},
-     {id: 3, nombre: 'Juan', apellido: 'Perez', correo: 'asdasdadasdasad@gmail.com'}, {id: 4, nombre: 'Juan', apellido: 'Perez', correo: 'asdasdadasdasad@gmail.com'}]
-    }
-
 </script>
 
   
