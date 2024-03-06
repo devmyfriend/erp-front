@@ -144,17 +144,17 @@ function obtenerRegistro(r){
                                     <th> Nombre del almacén </th>
                                     <th> Stock Mínimo </th>
                                     <th> Stock Máximo </th>
-                                    <th> Ultimo precio compra </th>
+                                    <th> Último precio compra </th>
                                     <th> Acciones </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="registro in registros">
-                                    <td> {{     registro.Nombre       }} </td>
-                                    <td> {{     registro.StockMinimo  }} </td>
-                                    <td> {{     registro.StockMaximo  }} </td>
-                                    <td> {{     registro.UltimoPrecio }} </td>
-                                    <td> <img class="btTabla" @click="obtenerRegistro(registro)" src="@/assets/img/details.svg" alt="Detalles"> </td>
+                                    <td style="width: 60%;"> {{     registro.Nombre       }} </td>
+                                    <td class="td2"> {{     registro.StockMinimo  }} </td>
+                                    <td class="td2"> {{     registro.StockMaximo  }} </td>
+                                    <td class="td3"> {{     registro.UltimoPrecio }} </td>
+                                    <td class="td3"> <img class="btTabla" @click="obtenerRegistro(registro)" src="@/assets/img/details.svg" alt="Detalles"> </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -182,13 +182,14 @@ h1{
     margin-bottom: 1.5rem;
 }
 .contenido{
-    width: auto;
-    margin: 1rem;
+    width: 100%;
+    padding: 1rem;
 }
 .frm{
     display: grid;
-    grid-template-columns: 30% 60%;
-    gap: 10rem;
+    width: 100%;
+    grid-template-columns: 30% 65%;
+    gap: 5%;
     justify-content: space-between;
     padding: 0rem 5rem;
 }
@@ -299,6 +300,12 @@ h3{
     cursor: pointer;
 }
 
+.tablaContainer{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -312,12 +319,18 @@ td, th {
 th {
   background-color: #999999;
   color: #fff;
-  height: 1rem;
+  padding: 0.25rem;
 }
 td{
   background-color: #fff;
   color: #999999;
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
+}
+.td2{
+    width: 7.5%;
+}
+.td3{
+    width: 15%;
 }
 </style>
