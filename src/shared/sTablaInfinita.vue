@@ -194,7 +194,7 @@ td{
 }
 
 button {
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 .Acciones {
   height: 1rem;
@@ -210,6 +210,6 @@ th, .Acciones{
 .small{
   height: 1rem;
   width: 1rem;
-  margin: 0px !important;
+  margin: 0rem !important;
 }
 </style>

@@ -69,8 +69,8 @@ export default defineComponent({
 
 <style>
 .body{
-    margin: 0px;
-    padding: 0px;
+    margin: 0rem;
+    padding: 0rem;
 }
 .sideNav{
     background-color: #343A40;

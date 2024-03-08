@@ -408,7 +408,7 @@ h1{
 }
 .contenedorPadre{
   height: 100%;
-  width: 650px;
+  width: 40.625rem;
   padding: 1.5rem 1.5rem 0rem 1.5rem;
 }
 .icono{

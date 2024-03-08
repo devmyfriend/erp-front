@@ -171,7 +171,7 @@ function test() {
     .ClaveImpuesto, .NombreImpuesto, select, label {
         height: 2.1875rem;
         border: none;
-        border-radius: 5px;
+        border-radius: 0.3125rem;
         padding: 0.5rem;
         font-size: 1rem;
         outline: none;
