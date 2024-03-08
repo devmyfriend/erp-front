@@ -65,7 +65,6 @@ function cargarDatos(){
                         <option value="Combos">Combos</option>
                     </select>
                     <btNuevoProducto :tipoProducto="tipoProducto" :idProducto="idProducto"/>
-                    <!-- <input class="" type="number" min="0" max="99" v-model="idProducto"> -->
                 </div>
             </div>
             <div class="tablaContainer">
@@ -121,12 +120,10 @@ h2{
 }
 .contenido{
     width: 100%;
-    height: 100%;
     overflow: auto;
     padding: 1rem;
     display: flex;
     flex-direction: column;
-
 }
 .frm{
     display: flex;
@@ -163,6 +160,7 @@ h2{
     width: 100%;
     margin: 0rem auto;
     margin-top: 1.5rem;
+    max-height: 39.5rem;
 }
 table {
   width: 100%;
