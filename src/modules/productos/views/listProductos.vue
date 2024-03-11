@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import buscadorProductos from '../components/buscadorProductos.vue';
 import btNuevoProducto from '../components/btNuevoProducto.vue';
@@ -10,7 +10,7 @@ const { useProductos } = require('../store/productos.js')
 const store = useProductos();
 
 const btActivo = ref(1);
-const tipoProducto = ref(route.params.tipo || 'Productos');
+const tipoProducto = ref(route.params.tipo);
 const idProducto = ref(0);
 const ListadoProductos = ref([]);
 
@@ -22,20 +22,39 @@ onMounted(() => {
     cargarDatos();
 });
 
-function cargarDatos(){
-    store.cargarProductos().then(() =>{
-        ListadoProductos.value = store.getProductos;
-        ListadoProductos.value = ListadoProductos.value.map(producto => {
-            return {
-                void: '',
-                ClaveProducto: producto.CodigoProducto,
-                TipoProducto: producto.TipoProductoId,
-                Nombre: producto.NombreProducto,
-                LineaId: producto.LineaId,
-            };
-        });
-    })
+function cargarDatos(t){
+    if(t === undefined){
+        store.cargarProductos().then(() =>{
+            ListadoProductos.value = store.getProductos;
+            ListadoProductos.value = ListadoProductos.value.map(producto => {
+                return {
+                    void: '',
+                    ClaveProducto: producto.CodigoProducto,
+                    TipoProducto: producto.TipoProductoId,
+                    Nombre: producto.NombreProducto,
+                    LineaId: producto.LineaId,
+                };
+            });
+        })
+    }else{
+        store.cargarProductos(t).then(() =>{
+            ListadoProductos.value = store.getProductos;
+            ListadoProductos.value = ListadoProductos.value.map(producto => {
+                return {
+                    void: '',
+                    ClaveProducto: producto.CodigoProducto,
+                    TipoProducto: producto.TipoProductoId,
+                    Nombre: producto.NombreProducto,
+                    LineaId: producto.LineaId,
+                };
+            });
+        })
+    }
 }
+
+watch(tipoProducto, (newValue, oldValue) => {
+    cargarDatos(newValue);
+});
 </script>
 
 <template>
@@ -55,14 +74,14 @@ function cargarDatos(){
                 <div class="formulario">
                     <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                     <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                        <option value="Productos">Productos</option>
-                        <option value="Servicios">Servicios</option>
-                        <option value="Insumos">Insumos</option>
-                        <option value="Activos">Activos</option>
-                        <option value="Productos_Terminados">Productos Terminados</option>
-                        <option value="Productos_Terceros">Productos de Terceros</option>
-                        <option value="Suscripciones">Suscripciones</option>
-                        <option value="Combos">Combos</option>
+                        <option value="pos">Productos</option>
+                        <option value="servicio">Servicios</option>
+                        <option value="insumo">Insumos</option>
+                        <option value="activo">Activos</option>
+                        <option value="final">Productos Terminados</option>
+                        <option value="proveedor">Productos de Terceros</option>
+                        <option value="subscripcion">Suscripciones</option>
+                        <option value="combo">Combos</option>
                     </select>
                     <btNuevoProducto :tipoProducto="tipoProducto" :idProducto="idProducto"/>
                 </div>
@@ -80,9 +99,9 @@ function cargarDatos(){
                     </thead>
                     <tbody>
                         <tr v-for="producto in ListadoProductos" :key="producto.ClaveProducto">
-                            <td> {{ producto.ClaveProducto }}</td>
+                            <td class="colStart"> {{ producto.ClaveProducto }}</td>
                             <td> {{ producto.TipoProducto }}</td>
-                            <td> {{ producto.Nombre }}</td>
+                            <td class="colStart"> {{ producto.Nombre }}</td>
                             <td> {{ producto.LineaId }}</td>
                             <td> <img src="@/assets/img/edit.svg" alt="Editar" class="me-3"> <img src="@/assets/img/trash.svg" alt="Borrar"></td>
                         </tr>
@@ -93,7 +112,7 @@ function cargarDatos(){
     </div>
 </template>
 
-<style scoped>
+<style scoped>  
 .contenedor {
     background-color: #D9D9D9;
     width: 100%;
@@ -109,6 +128,7 @@ h1{
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
+    text-transform: capitalize;
 }
 h2{
     text-align: start;
@@ -182,5 +202,8 @@ td{
   color: #999999;
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
+}
+.colStart{
+    text-align: start;
 }
 </style>

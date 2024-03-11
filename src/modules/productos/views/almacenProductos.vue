@@ -131,7 +131,7 @@ function obtenerRegistro(r){
                 <div class="columna2">
                      <div class="Datos">
                          <label class="datosAlmacenTitulo" for="Existencia"> Existencia: </label>
-                         <label class="datosAlmacenValor"  for="valorExistencia"> ${{Existencia}}  </label>
+                         <label class="datosAlmacenValor"  for="valorExistencia"> {{Existencia}}  </label>
                          <label class="datosAlmacenTitulo" for="Costo"> Costo: </label>
                          <label class="datosAlmacenValor"  for="valorCosto"> ${{Costo}} </label>
                          <label class="datosAlmacenTitulo" for="UltimoPrecio">  Último Precio de Compra: </label>
@@ -150,7 +150,7 @@ function obtenerRegistro(r){
                             </thead>
                             <tbody>
                                 <tr v-for="registro in registros">
-                                    <td style="width: 60%;"> {{     registro.Nombre       }} </td>
+                                    <td class="colNombre"> {{     registro.Nombre       }} </td>
                                     <td class="td2"> {{     registro.StockMinimo  }} </td>
                                     <td class="td2"> {{     registro.StockMaximo  }} </td>
                                     <td class="td3"> {{     registro.UltimoPrecio }} </td>
@@ -332,5 +332,9 @@ td{
 }
 .td3{
     width: 15%;
+}
+.colNombre{
+    width: 60%;
+    text-align: start;
 }
 </style>

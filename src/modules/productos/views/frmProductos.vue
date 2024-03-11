@@ -4,6 +4,8 @@
     import Ventanas from '../components/ventanas.vue';
     import Swal from 'sweetalert2';
     import mBuscar from '../components/modales/mBuscar.vue';
+    const { useProductos } = require('../store/productos.js')
+    const store = useProductos();
     
     const route = useRoute();
     
@@ -32,6 +34,7 @@
         if(tipoProducto.value != '' && claveProducto.value != '' && nombreInput.value != '' && descripcion.value != ''){
             return true;
         }else{
+            console.log('tipoProducto: ', tipoProducto.value, ' claveProducto: ', claveProducto.value, ' nombreInput: ', nombreInput.value, ' descripcion: ', descripcion.value);
             return false;
         }
     });
@@ -45,12 +48,14 @@
     const claveImpuesto = ref('');
     const claveUnidadSAT = ref('');
     const frmUnidadesCompleto = computed(() => {
-        if( uBase.value != '' && uCompra.value != '' && uFiscal.value != '' 
-            && uVenta.value != '' && claveProductoSAT.value != '' && claveImpuesto.value != '' 
-            && claveUnidadSAT.value != ''){
-            return true;
+        if(tipoProducto.value == 'Combos'){
+            return (uVenta.value != '') ? true : false;
         }else{
-            return false;
+            if(uBase.value != '' && uCompra.value != '' && uFiscal.value != '' && uVenta.value != '' && claveProductoSAT.value != '' && claveImpuesto.value != '' && claveUnidadSAT.value != ''){
+                return true;
+            }else{
+                return false;
+            }
         }
     });
 
@@ -63,28 +68,24 @@
     const fInicio = ref('');
     const fFin = ref('');
     const frmCategoriasCompleto = computed(() => {
-        if(lineaProducto.value != '' && categoria1.value != '' && familia.value != '' 
-            && categoria2.value != '' && subfamilia.value != '' && fInicio.value != '' && fFin.value != ''){
-                if(tipoProducto != 'Suscripciones'){
-                    return true;
-                }else if(fInicio.value != '' && fFin.value != '' && fInicio.value < fFin.value){
-                    return true;
-                }else{
-                    return false;
-                }
+        if (tipoProducto.value == 'Combos') {
+            return true;
         }else{
-            return false;
+            if(lineaProducto.value != '' && categoria1.value != '' && familia.value != '' && categoria2.value != '' && subfamilia.value != ''){
+                if(tipoProducto.value == 'Suscripciones'){
+                    return (fInicio.value != '' && fFin.value != '') ? true : false;
+                }else{
+                    return true;
+                }
+            }else{
+                return false;
+            }
         }
     });
 
     const registroCompleto = computed(() => {
-        if(tipoProducto.value != 'Combos'){
-            if(frmGeneralCompleto.value && frmUnidadesCompleto.value && frmCategoriasCompleto.value){
-                return true;
-            }else{
-                return false;
-            }
-        }else if(frmGeneralCompleto.value && uVenta.value != ''){
+        console.log('Datos completos: [General] ' + frmGeneralCompleto.value, ' [Unidades] ',frmUnidadesCompleto.value, ' [Categorias] ' + frmCategoriasCompleto.value);
+        if(frmGeneralCompleto.value && frmUnidadesCompleto.value && frmCategoriasCompleto.value){
             return true;
         }else{
             return false;
@@ -115,7 +116,33 @@
 
     function GuardarTodo(){
         if(registroCompleto.value){
-            console.log('Registro completo');
+            const body = {
+                tipoProducto: tipoProducto.value,
+                claveProducto: claveProducto.value,
+                deshabilitar: deshabilitar.value,
+                nombre: nombreInput.value,
+                descripcion: descripcion.value,
+                uBase: uBase.value,
+                uCompra: uCompra.value,
+                uFiscal: uFiscal.value,
+                uVenta: uVenta.value,
+                claveProductoSAT: claveProductoSAT.value,
+                claveImpuesto: claveImpuesto.value,
+                claveUnidadSAT: claveUnidadSAT.value,
+                lineaProducto: lineaProducto.value,
+                categoria1: categoria1.value,
+                familia: familia.value,
+                categoria2: categoria2.value,
+                subfamilia: subfamilia.value,
+                fInicio: fInicio.value,
+                fFin: fFin.value
+            }
+            store.crearProducto().then((res) => {
+                console.log('Registro completo');
+            }).catch((err) => {
+                console.log('Registro incompleto');
+            });
+            
             LimpiarCampos();
             Swal.fire({
                 title: 'Registro completo',
@@ -125,6 +152,7 @@
             });
         }else{
             console.log('Registro incompleto');
+
             Swal.fire({
                 title: 'Registro incompleto',
                 text: 'El registro no se ha completado correctamente',
@@ -195,9 +223,9 @@
                     <h3 :class="(contenedorSeleccionado == 2) ? 'SubtituloActivo' : 'SubtituloInactivo' " @click="contenedorSeleccionado = 2"> Unidades </h3>
                     <div class="miniContainer" v-if="contenedorSeleccionado == 2">
                         <div class="fila">
-                            <div class="columna">
+                            <div class="columna" :class="{espacioCompleto: capaConversiones}">
                                 <label for="uBase"> U. Base </label>
-                                <select name="uBase" id="uBase" v-model="uBase">
+                                <select name="uBase" id="uBase" v-model="uBase" :class="{ uBaseCompleta: capaConversiones}">
                                     <option value="uBase1"> Unidad Base 1 </option>
                                 </select>
                                 <button class="minibutton" @click="capaConversiones = !capaConversiones"> 
@@ -210,8 +238,8 @@
                             </div>
                             <div class="columna" v-if="!capaConversiones">
                                 <label for="uCompra"> U. Compra </label>
-                                <select name="uBase" id="uBase" v-model="uBase" class="inpCompleto">
-                                    <option value="uBase1"> Unidad Compra 1 </option>
+                                <select name="uCompra" id="uCompra" v-model="uCompra" class="inpCompleto">
+                                    <option value="uCompra1"> Unidad Compra 1 </option>
                                 </select>
                             </div>
                         </div>
@@ -229,9 +257,9 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for ="conversion in listadoConversiones">
-                                            <td> {{ conversion.unidadOrigen}} </td>
-                                            <td> {{ conversion.unidadDestino}} </td>
-                                            <td> {{ conversion.Factor}} </td>
+                                            <td class="colStart"> {{ conversion.unidadOrigen}} </td>
+                                            <td class="colStart"> {{ conversion.unidadDestino}} </td>
+                                            <td class="colStart"> {{ conversion.Factor}} </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -382,8 +410,8 @@
                     <div class="miniContainer">
                         <div class="fila">
                             <label for="uVenta"> U. Venta </label>
-                            <select name="uBase" id="uBase" v-model="uBase" class="inpCompleto">
-                                <option value="uBase1"> Unidad Base 1 </option>
+                            <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
+                                <option value="uVenta1"> Unidad venta 1 </option>
                             </select>
                         </div>
                     </div>
@@ -519,7 +547,7 @@ h3{
     align-items: center;
     margin-bottom: 1rem;
     gap: 1rem;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 .fila label{
     font-size: 1rem;
@@ -622,5 +650,15 @@ td{
   color: #999999;
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
+}
+.colStart{
+    text-align: start;
+}
+.uBaseCompleta{
+    flex-grow: 1;
+    /* margin-right: 0rem !important; */
+}
+.espacioCompleto{
+    width: 100%;
 }
 </style>

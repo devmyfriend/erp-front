@@ -44,8 +44,8 @@ console.log(JSON.stringify(listadoAlmacenes.value[0]));
                     </thead>
                     <tbody>
                         <tr v-for="registro in listadoAlmacenes" :key="registro.id">
-                            <td style="width: 80%;"> {{registro.nombre}}   </td>
-                            <td style="width: 20%;"> {{registro.cantidad}} </td>
+                            <td class="col80"> {{registro.nombre}}   </td>
+                            <td class="col20"> {{registro.cantidad}} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -129,5 +129,13 @@ td{
   height: 2rem;
   padding: 0rem 1rem 0rem 1rem;
   text-align: start;
+}
+.col20{
+    width: 20%;
+    text-align: center;
+}
+.col80{
+    width: 80%;
+    text-align: start;
 }
 </style>

@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const idProducto = ref( parseInt(route.params.id) || 0);
-const tipoProducto = ref('Combos');
+const tipoProducto = ref('combo');
 const btActivo = ref(4);
 
 const actual = ref({});
