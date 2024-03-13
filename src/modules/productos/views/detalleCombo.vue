@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ventanas from '../components/ventanas.vue'
 import buscadorProductos from '../components/buscadorProductos.vue';
 import { useRoute } from 'vue-router';
@@ -9,7 +9,7 @@ const idProducto = ref( parseInt(route.params.id) || 0);
 const tipoProducto = ref('combo');
 const btActivo = ref(4);
 
-const actual = ref({});
+const actual = ref({Cantidad: 0});
 const productosExistente = ref([
     {
         ID: 1,
@@ -115,6 +115,9 @@ const CostoTotal = computed(() => {
     }
     return total;
 });
+watch(() => actual.value.Cantidad, (newValue, oldValue) => {
+    actual.value.Cantidad = parseInt(newValue) || 0;
+});
 </script>
 
 <template>
@@ -135,7 +138,7 @@ const CostoTotal = computed(() => {
                         <div class="inpProducto">
                             <label class="lbFrm" for="Producto"> Producto: </label>
                             
-                            <input type="text" disabled v-model="actual.Nombre" placeholder="Producto 123">
+                            <input class="inpNombre" type="text" disabled v-model="actual.Nombre" placeholder="Producto 123">
                         </div>
                         <div class="inpCantidad">
                             <label class="lbFrm" for="Cantidad"> Cantidad: </label>
@@ -402,5 +405,8 @@ td{
 .Acciones{
     width: 10rem;
     text-align: center;
+}
+.inpNombre{
+    width: 29rem;
 }
 </style>
