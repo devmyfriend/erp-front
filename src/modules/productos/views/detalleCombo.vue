@@ -160,15 +160,7 @@ watch(() => actual.value.Cantidad, (newValue, oldValue) => {
                                 <tr>
                                     <th>ID</th>  
                                     <th> Nombre </th>
-                                    <th> Cantidad </th>
                                     <th> Costo </th>
-                                    <th> Cantidad Mínima </th>
-                                    <th> Cantidad Máxima </th>
-                                    <th> Sección </th>
-                                    <th> Anaquel </th>
-                                    <th> Nivel </th>
-                                    <th> Lugar </th>
-                                    <th> Último precio de compra </th>
                                     <th class="Acciones"> Acciones </th>
                                 </tr>
                             </thead>
@@ -176,16 +168,7 @@ watch(() => actual.value.Cantidad, (newValue, oldValue) => {
                             <tr v-for="productoExistente in productosExistente">
                                 <td> {{productoExistente.ID}} </td>
                                 <td> {{productoExistente.Nombre}} </td>
-                                <td> {{productoExistente.Cantidad}} </td>
                                 <td> {{productoExistente.Costo}} </td>
-                                <td> {{productoExistente['Stock Mínimo']}} </td>
-                                <td> {{productoExistente['Stock Máximo']}} </td>
-                                <td> {{productoExistente.Sección}} </td>
-                                <td> {{productoExistente.Anaquel}} </td>
-                                <td> {{productoExistente.Nivel}} </td>
-                                <td> {{productoExistente.Lugar}} </td>
-                                <td> {{productoExistente['Último precio de compra']}} </td>
-
                                 <td class="Acciones">
                                     <img 
                                         src="@/assets/img/add.svg" 
