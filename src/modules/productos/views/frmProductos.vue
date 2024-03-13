@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, computed, watch } from 'vue';
+    import { ref, computed, watch, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
     import Ventanas from '../components/ventanas.vue';
     import Swal from 'sweetalert2';
@@ -10,6 +10,7 @@
     const route = useRoute();
     
     const idProducto = ref( parseInt(route.params.id) || 0);
+
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
     
@@ -87,6 +88,36 @@
             return true;
         }else{
             return false;
+        }
+    });
+
+    onMounted(() => {
+        if(idProducto.value != 0 && tipoProducto.value != ''){
+            console.log('Los valores recibidos son: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
+            store.buscarProducto(tipoProducto.value , idProducto.value).then(() => {
+                const producto = store.getProducto;
+                tipoProducto.value = producto.TipoProductoId;
+                claveProducto.value = producto.CodigoProducto;
+                deshabilitar.value = producto.Borrado;
+                nombreInput.value = producto.NombreProducto;
+                descripcion.value = producto.Descripcion;
+                uBase.value = producto.UnidadBase;
+                uCompra.value = producto.UnidadCompra;
+                uFiscal.value = producto.UnidadFiscal;
+                uVenta.value = producto.UnidadVenta;
+                claveProductoSAT.value = producto.ClaveProductoSAT;
+                claveImpuesto.value = producto.ClaveImpuestoCompuesto;
+                claveUnidadSAT.value = producto.ClaveUnidadSAT;
+                lineaProducto.value = producto.LineaId;
+                categoria1.value = producto.Categoria1Id;
+                familia.value = producto.FamiliaId;
+                categoria2.value = producto.Categoria2Id;
+                subfamilia.value = producto.SubFamiliaId;
+                fInicio.value = producto.FechaInicio;
+                fFin.value = producto.FechaFin;
+            });
+        }else{
+            console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
         }
     });
     

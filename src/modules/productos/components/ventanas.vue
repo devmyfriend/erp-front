@@ -8,7 +8,7 @@
         <router-link v-if="tipoProducto == 'suscripcion'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: idProducto } }"> Políticas </router-link>
         <router-link :class="{btActivo: btActivo === 6}" :to=" { name: 'cantidadAlmacen', params: { tipo: tipoProducto, id: idProducto } }"> Cantidad por Almacén </router-link>
         </div>
-        <div class="cerrar">
+        <div class="cerrar" v-if="btActivo != 1">
             <router-link 
             :class="{btActivo: btActivo === 1}" 
             :to=" { name: 'listadoProductos', 

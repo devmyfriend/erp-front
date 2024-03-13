@@ -32,6 +32,7 @@ function cargarDatos(t){
                     ClaveProducto: producto.CodigoProducto,
                     TipoProducto: producto.TipoProductoId,
                     Nombre: producto.NombreProducto,
+                    Borrado: producto.Borrado || 0,
                     LineaId: producto.LineaId,
                 };
             });
@@ -51,6 +52,22 @@ function cargarDatos(t){
         })
     }
 }
+
+
+function transfromarTipo(tipoP){
+  const t = {       /* Solve: Debería traer estos datos desde una consulta a ref_ComboBox */
+    '2': 'Producto POS',
+    '3': 'Servicios',
+    '4': 'Insumos',
+    '5': 'Activos',
+    '6': 'Terminados',
+    '7': 'Terceros',
+    '8': 'Suscripciones',
+    '9': 'Combos'
+  };
+  
+  return t[tipoP] || tipoP;
+};
 
 watch(tipoProducto, (newValue, oldValue) => {
     cargarDatos(newValue);
@@ -94,15 +111,25 @@ watch(tipoProducto, (newValue, oldValue) => {
                             <th>Tipo de Producto</th>
                             <th>Nombre</th>
                             <th>ID de Linea</th>
-                            <th> Acciones </th>
+                            <th>Borrado</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="producto in ListadoProductos" :key="producto.ClaveProducto">
                             <td class="colStart"> {{ producto.ClaveProducto }}</td>
-                            <td> {{ producto.TipoProducto }}</td>
+                            
+                            <td> 
+                                {{ transfromarTipo(producto.TipoProducto) }}
+                            </td>
+                            
                             <td class="colStart"> {{ producto.Nombre }}</td>
                             <td> {{ producto.LineaId }}</td>
+                            <td> {{ (typeof producto.Borrado === 'number'
+                                && (producto.Borrado === 0 || producto.Borrado === 1) 
+                                ? (producto.Borrado === 1 ? 'Si' : 'No') 
+                                : producto.Borrado) }} 
+                            </td>
                             <td> <img src="@/assets/img/edit.svg" alt="Editar" class="me-3"> <img src="@/assets/img/trash.svg" alt="Borrar"></td>
                         </tr>
                     </tbody>

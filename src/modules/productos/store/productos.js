@@ -5,10 +5,14 @@ import Swal from "sweetalert2";
 export const useProductos = defineStore('Productos',{
     state: () => ({
         ListadoProductos: [],
+        Producto: {},
     }),
     getters:{
         getProductos(state){
             return state.ListadoProductos;
+        },
+        getProducto(state){
+            return state.Producto;
         },
     },
     actions:{
@@ -80,5 +84,25 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
+        async buscarProducto(id){
+            try{
+                if (tipo === undefined) {
+                    throw new Error("No se ha definido el tipo de producto");
+                }else{
+                    const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos/${id}`);
+                    if(datos.status === 200 && datos.statusText === "OK"){
+                        this.Producto = datos.data.response;
+                        return true;
+                    }
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        }
     }
 });
