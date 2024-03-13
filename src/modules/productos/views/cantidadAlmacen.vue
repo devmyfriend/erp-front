@@ -14,7 +14,6 @@ const listadoAlmacenes = ref([
 ]);
 const Almacen = ref(-1);
 
-console.log(JSON.stringify(listadoAlmacenes.value[0]));
 </script>
 
 <template>
@@ -87,7 +86,7 @@ h1{
     display: flex;
     width: 100%;
     text-align: start;
-    margin-bottom: 1rem;
+    margin-bottom: 1.75rem;
 }
 label{
     font-size: 1.25rem;

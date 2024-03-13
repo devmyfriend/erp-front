@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const tipoProducto = ref('subscripcion');
+const tipoProducto = ref('suscripcion');
 const idProducto = ref( parseInt(route.params.id) || 0);
 const btActivo = ref(5);
 

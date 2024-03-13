@@ -192,10 +192,7 @@
             <h2> Formulario de Productos</h2>
             <div class="frm">
                 <div class="formulario" v-if="tipoProducto != 'combo'">
-                    <div class="titulos">
-                        <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales </h3>
-                        <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 2, SubtituloInactivo: contenedorSeleccionado != 2}" @click="contenedorSeleccionado = 2"> Unidades </h3>
-                    </div>
+                    <h3 class="SubtituloActivo" @click="contenedorSeleccionado = 1"> Datos generales </h3>
                     <div class="miniContainer capaActiva" v-if="contenedorSeleccionado == 1">
                         <div class="fila">
                             <label for="tipoProducto" class="labelTipo"> Tipo: </label>
@@ -209,10 +206,10 @@
                                 <option value="suscripcion">Suscripciones</option>
                                 <option value="combo">Combos</option>
                             </select>
-                            <label for="ClaveProducto"> Código Producto: </label>
-                            <input type="text" placeholder="Código Producto" v-model="claveProducto">                           
-                            <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar: </label>
-                            <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0" v-model="deshabilitar" :checked="deshabilitar">
+                            <label for="ClaveProducto"> Clave Producto </label>
+                            <input type="text" placeholder="ClaveProducto" v-model="claveProducto">                           
+                            <label for="Deshabilitar"> Deshabilitar </label>
+                            <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
                         </div>
                         <div class="fila">
                             <label for="Nombre">Nombre: </label>
@@ -222,43 +219,8 @@
                             <label for="Descripcion"> Descripción: </label>
                             <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
                         </div>
-                        <div class="fila">
-                            <div class="filaCompleta">
-                                <label for="Linea"> Linea </label>
-                                <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
-                                    <option value="Linea">Linea</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <label for="Categoria1"> Categoria 1</label>
-                            <select name="Categoria1" id="Categoria1" v-model="categoria1" class="inpCompleto">
-                                <option value="Categoria"> Categoria </option>
-                            </select>
-
-                            <label for="Familia"> Familia </label>
-                            <select name="Familia" id="Familia" v-model="familia" class="inpCompleto">
-                                <option value="Familia"> Familia </option>
-                            </select>
-                        </div>
-                        <div class="fila">
-                            <label for="Categoria2"> Categoria 2</label>
-                            <select name="Categoria2" id="Categoria2" v-model="categoria2" class="inpCompleto">
-                                <option value="Categoria"> Categoria </option>
-                            </select>
-                            <label for="SubFamilia"> SubFamilia </label>
-                            <select name="SubFamilia" id="SubFamilia" v-model="subfamilia" class="inpCompleto">
-                                <option value="SubFamilia"> SubFamilia </option>
-                            </select>
-                        </div>
-                        <div class="fila" v-if="tipoProducto == 'suscripcion'">
-                            <label for="FechaInicio"> Fecha Inicio </label>
-                            <input class="inpCompleto" type="date" name="FechaInicio" id="FechaInicio" v-model="fInicio" min="2010-01-01" :max="fFin">
-
-                            <label for="FechaFin"> Fecha Fin </label>
-                            <input class="inpCompleto" type="date" name="FechaFin" id="FechaFin" v-model="fFin" :min="fInicio">
-                        </div>
                     </div>
+                    <h3 class="SubtituloActivo" @click="contenedorSeleccionado = 2"> Unidades </h3>
                     <div class="miniContainer capaActiva" v-if="contenedorSeleccionado == 2">
                         <div class="fila">
                             <div class="columna" :class="{espacioCompleto: capaConversiones}">
@@ -353,8 +315,60 @@
                             </div>
                         </div>
                     </div>
+                    <h3 class="SubtituloActivo" @click="contenedorSeleccionado = 3"> Categorias </h3>
+                    <div class="miniContainer capaActiva" v-if="contenedorSeleccionado == 3">
+                        <div class="fila">
+                            <div class="filaCompleta">
+                                <label for="Linea"> Linea </label>
+                                <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
+                                    <option value="Linea">Linea</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="columna">
+                                <label for="Categoria1"> Categoria 1</label>
+                                <select name="Categoria1" id="Categoria1" v-model="categoria1" class="inpCompleto">
+                                    <option value="Categoria"> Categoria </option>
+                                </select>
+                            </div>
 
-                    <div class="miniContainer btGuardarTodo">
+                            <div class="columna">
+                                <label for="Familia"> Familia </label>
+                                <select name="Familia" id="Familia" v-model="familia" class="inpCompleto">
+                                    <option value="Familia"> Familia </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="columna">
+                                <label for="Categoria2"> Categoria 2</label>
+                                <select name="Categoria2" id="Categoria2" v-model="categoria2" class="inpCompleto">
+                                    <option value="Categoria"> Categoria </option>
+                                </select>
+                            </div>
+
+                            <div class="columna">
+                                <label for="SubFamilia"> SubFamilia </label>
+                                <select name="SubFamilia" id="SubFamilia" v-model="subfamilia" class="inpCompleto">
+                                    <option value="SubFamilia"> SubFamilia </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fila" v-if="tipoProducto == 'suscripcion'">
+                            <div class="columna">
+                                <label for="FechaInicio"> Fecha Inicio </label>
+                                <input class="inpCompleto" type="date" name="FechaInicio" id="FechaInicio" v-model="fInicio" min="2010-01-01" :max="fFin">
+                            </div>
+
+                            <div class="columna">
+                                <label for="FechaFin"> Fecha Fin </label>
+                                <input class="inpCompleto" type="date" name="FechaFin" id="FechaFin" v-model="fFin" :min="fInicio">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- bt agregar -->
+                    <div class="miniContainer btGuardarTodo" v-if="registroCompleto">
                         <button class="guardarTodo" @click="GuardarTodo">
                             <img src="@/assets/img/Save.svg" class="imgButton"> 
                             <span> Guardar producto </span> 
@@ -363,11 +377,8 @@
                 </div>
                 <!-- Combos -->
                 <div class="formulario" v-else>
-                    <div class="titulos">
-                        <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales</h3>
-                    </div>
-
-                    <div class="miniContainer capaActiva">
+                    <h3 class="SubtituloActivo"> Datos generales</h3>
+                    <div class="miniContainer">
                         <div class="fila">
                             <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                             <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
@@ -386,32 +397,45 @@
                             
                             <label for="Deshabilitar"> Deshabilitar </label>
                             <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
-                            </div>
-                            <div class="fila">
-                                <label for="Nombre">Nombre: </label>
-                                <input type="text" placeholder="Nombre" id="Nombre" name="Nombre" v-model="nombreInput">
-                            </div>
-                            <div class="fila">
-                                <label for="Descripcion"> Descripción: </label>
-                                <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
-                            </div>
-                            <div class="fila">
-                                <label for="uVenta"> U. Venta </label>
-                                <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
-                                    <option value="uVenta1"> Unidad venta 1 </option>
-                                </select>
-                            </div>
                         </div>
+                        <div class="fila">
+                            <label for="Nombre">Nombre: </label>
+                            <input type="text" placeholder="Nombre" id="Nombre" name="Nombre" v-model="nombreInput">
+                        </div>
+                        <div class="fila">
+                            <label for="Descripcion"> Descripción: </label>
+                            <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
+                        </div>
+                    </div>
+                    <h3 class="SubtituloActivo"> Unidad </h3>
+                    <div class="miniContainer">
+                        <div class="fila">
+                            <label for="uVenta"> U. Venta </label>
+                            <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
+                                <option value="uVenta1"> Unidad venta 1 </option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="miniContainer btGuardarTodo" v-if="registroCompleto">
                         <button class="guardarTodo" @click="GuardarTodo">
                             <img src="@/assets/img/Save.svg" class="imgButton"> 
                             <span> Guardar producto </span> 
                         </button>
                     </div>
+                    <!-- BT AGREGAR -->
+<!--                     <div class="miniContainer">
+                        <div class="miniContainer btGuardarTodo">
+                             <button class="guardarTodo" @click="GuardarTodo">
+                                <img src="@/assets/img/Save.svg" class="imgButton"> 
+                                <span> Guardar producto </span> 
+                             </button>
+                        </div>
+                    </div> -->
                 </div>
                 <!-- Combos -->
                 <div class="imagen">
-                    <div class="contenedorImagen">
+                    <div class="imgContainer">
                         <img src="@/assets/img/imgEmpresa.svg" alt="Imagen del producto" class="imgProducto">
                     </div>
                     <input type="file" name="imagen" id="imagen" class="btAgregarImagen">
@@ -478,33 +502,29 @@ h3{
     color: #000;
     cursor: pointer;
 }
-.Subtitulo{
+.SubtituloActivo{
     font-weight:700;
-    background-color: rgb(247, 184, 67);
+    background-color: orange;
     border-radius: 0.5rem 0.5rem 0rem 0rem;
     border-right: 1px solid #000;
     border-left: 1px solid #000;
     border-top: 1px solid #000;
-    justify-content: center;
-    align-items: center;
     padding: 0rem 0.5rem;
     width: 12.5rem;
+    align-self: flex-start;
+    margin-bottom: -1px;
     z-index: 1;
 }
 .SubtituloInactivo{
-    height: 2rem;
-}
-.SubtituloActivo{
-    height: 2.5rem;
-    margin-bottom: -1px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 .capaActiva{
-    background-color: rgb(247, 184, 67);
-    border-radius: 0rem 0.5rem 0.5rem 0.5rem;
+    background-color: orange;
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
     border: 1px solid #000;
-    padding: 1rem;
-    padding-top: 2rem;
-    height: 33rem;
+    padding: 0.25rem;
+    padding-top: 0.75rem;
 }
 .formulario{
     display: flex;
@@ -538,7 +558,7 @@ h3{
     color: #000;
     border: none;
     border-radius: 0.3125rem;
-    padding-left: 0.5rem;
+    padding-left: 1rem;
 }
 .formulario select:focus {
     outline: none;
@@ -552,21 +572,18 @@ h3{
 .fila{
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 1rem;
     gap: 1rem;
+    /* justify-content: space-between; */
 }
 .fila label{
-    display: flex;
-    align-items: center;
     font-size: 1rem;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 500;
     color: #000;
     width: 6rem;
     text-align: left;
-    height: 2.5rem;
-    max-height: 2.5rem;
 }
 .miniContainer{
     width: 100%;
@@ -614,7 +631,6 @@ h3{
 }
 .filaCompleta label{
     width: 6rem;
-    margin-left: 1rem;
 }
 .filaCompleta select{
     flex-grow: 1;
@@ -669,20 +685,15 @@ td{
 }
 .uBaseCompleta{
     flex-grow: 1;
+    /* margin-right: 0rem !important; */
 }
 .espacioCompleto{
     width: 100%;
 }
-.contenedorImagen{
-    display: flex;
+.imgContainer{
     background-color: white;
     border: 1px solid #999;
     border-radius: 1rem;
-    justify-content: center;
-    align-items: center;
-    height: 36rem;
-    width: 36rem;
-    padding: 1rem;;
 }
 .btAgregarImagen{
     position: absolute;
@@ -690,10 +701,5 @@ td{
 }
 .conBoton{
     margin-right: 0.5rem;
-}
-.titulos{
-    display: flex;
-    width: 100%;
-    align-items: flex-end;
 }
 </style>

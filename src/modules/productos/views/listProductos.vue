@@ -80,7 +80,7 @@ watch(tipoProducto, (newValue, oldValue) => {
                         <option value="activo">Activos</option>
                         <option value="final">Productos Terminados</option>
                         <option value="proveedor">Productos de Terceros</option>
-                        <option value="subscripcion">Suscripciones</option>
+                        <option value="suscripcion">Suscripciones</option>
                         <option value="combo">Combos</option>
                     </select>
                     <btNuevoProducto :tipoProducto="tipoProducto" :idProducto="idProducto"/>
@@ -179,7 +179,7 @@ h2{
 .tablaContainer{
     width: 100%;
     margin: 0rem auto;
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
     max-height: 39.5rem;
 }
 table {
