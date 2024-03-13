@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
 const route = useRoute();
@@ -52,6 +52,10 @@ function obtenerRegistro(r){
     CantidadMaxima.value = r.StockMaximo;
     CantidadMinima.value = r.StockMinimo;
 }
+watch(() => Almacen.value, (newVal, oldVal) => {
+    Almacen.value = newVal;
+    Sucursal.value = 'Sucursal 1';
+});
 </script>
 
 <template>
@@ -76,9 +80,7 @@ function obtenerRegistro(r){
                         </div>
                         <div class="fila">
                             <label for="Sucursal"> Sucursal: </label>
-                            <select name="Sucursal" id="Sucursal" v-model="Sucursal">
-                                <option value="Sucursal1"> Sucursal 1 </option>
-                            </select>
+                            <input type="text" disabled v-model="Sucursal">
                         </div>
                         <div class="fila">
                             <label for="Seccion"> Sección: </label>
@@ -114,11 +116,11 @@ function obtenerRegistro(r){
                         </div>
                         <div class="fila">
                             <label for="CantidadMinima"> Cantidad Mínima: </label>
-                            <input type="text" placeholder="Cantidad Mínima" v-model="CantidadMinima">
+                            <input type="number" min="0" placeholder="Cantidad Mínima" v-model="CantidadMinima">
                         </div>
                         <div class="fila">
                             <label for="CantidadMaxima"> Cantidad Máxima: </label>
-                            <input type="text" placeholder="Cantidad Máxima" v-model="CantidadMaxima">
+                            <input type="number" min="0" placeholder="Cantidad Máxima" v-model="CantidadMaxima">
                         </div>
                         <button class="btGuardarTodo" @click="GuardarTodo">
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -336,5 +338,9 @@ td{
 .colNombre{
     width: 60%;
     text-align: start;
+}
+input:disabled{
+    background-color: #999;
+    color: #fff;
 }
 </style>
