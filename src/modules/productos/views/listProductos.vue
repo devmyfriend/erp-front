@@ -46,6 +46,7 @@ function cargarDatos(t){
                     ClaveProducto: producto.CodigoProducto,
                     TipoProducto: producto.TipoProductoId,
                     Nombre: producto.NombreProducto,
+                    Borrado: producto.Borrado || 0,
                     LineaId: producto.LineaId,
                 };
             });
