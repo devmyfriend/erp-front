@@ -1,5 +1,3 @@
-import listadoCodigoPostal from '@/modules/codigoPostal/views/listCP.vue'
-
 export default{
     name:'codigoPostal',
     path:'/cp',
@@ -9,7 +7,7 @@ export default{
         {
             path:'listado/',
             name: 'listadoCP',
-            component: listadoCodigoPostal,
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/codigoPostal/views/listCP.vue'),
         }
     ]
 }

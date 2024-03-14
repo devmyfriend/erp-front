@@ -1,5 +1,3 @@
-import listFormasPago from '@/modules/formasPago/views/listFormasPago.vue'
-
 export default{
     name:'formasPago',
     path:'/formasPago',
@@ -9,7 +7,7 @@ export default{
         {
             path:'listado/',
             name: 'listadoFormasPago',
-            component: listFormasPago,
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/formasPago/views/listFormasPago.vue'),
         }
     ]
 }

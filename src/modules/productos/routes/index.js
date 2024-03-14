@@ -1,11 +1,3 @@
-import listProductos from '@/modules/productos/views/listProductos.vue'
-import frmProductos from '@/modules/productos/views/frmProductos.vue'
-import almacenProductos from '@/modules/productos/views/almacenProductos.vue'
-import detalleCombo from '@/modules/productos/views/detalleCombo.vue'
-import politicasProductos from '@/modules/productos/views/politicasProductos.vue'
-import cantidadAlmacen from '@/modules/productos/views/cantidadAlmacen.vue'
-import proveedoresProductos from '@/modules/productos/views/proveedoresProductos.vue'
-
 export default{
     name:'productos',
     path:'/productos',
@@ -15,36 +7,36 @@ export default{
         {
             path: 'listado/:tipo?',
             name: 'listadoProductos',
-            component: listProductos,
+            component: () => import('@/modules/productos/views/listProductos.vue'),
         },
         {
             path: 'formulario/:tipo?&:id?',
             name: 'formularioProducto',
-            component: frmProductos,
+            component: () => import('@/modules/productos/views/frmProductos.vue'),
         },
         {
             path: 'almacen/:tipo?&:id?',
             name: 'almacenProducto',
-            component: almacenProductos,
+            component: () => import('@/modules/productos/views/almacenProductos.vue'),
         },
         {
             path: 'detalleCombo/:id?',
             name: 'detalleCombo',
-            component: detalleCombo,
+            component: () => import('@/modules/productos/views/detalleCombo.vue'),
         },
         {
             path: 'politicas/:id?',
             name: 'politicasProducto',
-            component: politicasProductos,
+            component: () => import('@/modules/productos/views/politicasProductos.vue'),
         },
         {
             path: 'cantidadAlmacen/:tipo?&:id?',
             name: 'cantidadAlmacen',
-            component: cantidadAlmacen,
+            component: () => import('@/modules/productos/views/cantidadAlmacen.vue'),
         },{
-            path: 'proveedores/:tipo?&:id?',
+            path: 'proveedoresProducto/:tipo?&:id?',
             name: 'proveedoresProducto',
-            component: proveedoresProductos,
+            component: () => import('@/modules/productos/views/proveedoresProductos.vue'),
         }
     ]
 }

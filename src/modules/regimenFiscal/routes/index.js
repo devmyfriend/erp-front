@@ -1,5 +1,3 @@
-import listadoRegimenes from '@/modules/regimenFiscal/views/listRegimen.vue'
-
 export default{
     name:'regimenFiscal',
     path:'/regimenFiscal',
@@ -9,7 +7,7 @@ export default{
         {
             path:'listado/',
             name: 'listadoRegimenFiscal',
-            component: listadoRegimenes,
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/regimenFiscal/views/listRegimen.vue'),
         }
     ]
 }

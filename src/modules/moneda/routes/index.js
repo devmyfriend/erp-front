@@ -1,5 +1,3 @@
-import listadoMonedas from '@/modules/moneda/views/listMonedas.vue'
-
 export default{
     name:'monedas',
     path:'/monedas',
@@ -9,7 +7,7 @@ export default{
         {
             path:'listado/',
             name: 'listadoMonedas',
-            component: listadoMonedas,
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/moneda/views/listMonedas.vue'),
         }
     ]
 }
