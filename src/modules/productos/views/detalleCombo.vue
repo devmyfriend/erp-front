@@ -136,21 +136,21 @@ watch(() => actual.value.Cantidad, (newValue, oldValue) => {
                             <buscadorProductos/>
                         </div>
                         <div class="inpProducto">
-                            <label class="lbFrm" for="Producto"> Producto: </label>
+                            <span class="lbFrm"> Producto: </span>
                             
                             <input class="inpNombre" type="text" disabled v-model="actual.Nombre" placeholder="Producto 123">
                         </div>
                         <div class="inpCantidad">
-                            <label class="lbFrm" for="Cantidad"> Cantidad: </label>
+                            <span class="lbFrm"> Cantidad: </span>
                             <input type="number" placeholder="Cantidad" min="1" v-model="actual.Cantidad">
                         </div>
                         <img src="@/assets/img/add.svg" alt="AgregarProducto" class="btAgregar" @click="AgregarProducto" v-if="!editando && actual.ID > 0">
                         <img src="@/assets/img/add.svg" alt="AgregarProducto" class="btAgregar" @click="editarProducto(actual)" v-if="editando && actual.ID != 0">
-                        <label class="lbError" v-if="error"> ¡ Ingresa el registro actual ! </label>
+                        <span class="lbError" v-if="error"> ¡ Ingresa el registro actual ! </span>
                     </div>
                     <div class="CostoTotal">
-                        <label class="lbFrm" for="CostoTotal"> Costo Total: </label>
-                        <label for="CostoTotal"> {{CostoTotal}} </label>
+                        <span class="lbFrm"> Costo Total: </span>
+                        <span> {{CostoTotal}} </span>
                     </div>
                 </div>
                 <div class="contenedorTabla">

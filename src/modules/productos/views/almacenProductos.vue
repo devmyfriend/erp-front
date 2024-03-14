@@ -74,17 +74,17 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                     <div class="formulario">
                         <div class="fila">
                             <label for="Almacen"> Almacén: </label>
-                            <select name="Almacen" id="Almacen" v-model="Almacen">
+                            <select id="Almacen" v-model="Almacen">
                                 <option value="Almacen1"> Almacén 1 </option>
                             </select>
                         </div>
                         <div class="fila">
                             <label for="Sucursal"> Sucursal: </label>
-                            <input type="text" disabled v-model="Sucursal">
+                            <input type="text" disabled v-model="Sucursal" id="Sucursal">
                         </div>
                         <div class="fila">
                             <label for="Seccion"> Sección: </label>
-                            <select v-if="!nSeccion" name="Seccion" id="Seccion" v-model="Seccion">
+                            <select v-if="!nSeccion" id="Seccion" v-model="Seccion">
                                 <option value="Seccion1"> Seccion 1 </option>
                             </select>
                             <input type="text" v-model="Seccion" placeholder="Nueva Sección" v-if="nSeccion">
@@ -116,11 +116,11 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                         </div>
                         <div class="fila">
                             <label for="CantidadMinima"> Cantidad Mínima: </label>
-                            <input type="number" min="0" placeholder="Cantidad Mínima" v-model="CantidadMinima">
+                            <input type="number" min="0" placeholder="Cantidad Mínima" id="CantidadMinima" v-model="CantidadMinima">
                         </div>
                         <div class="fila">
                             <label for="CantidadMaxima"> Cantidad Máxima: </label>
-                            <input type="number" min="0" placeholder="Cantidad Máxima" v-model="CantidadMaxima">
+                            <input type="number" min="0" placeholder="Cantidad Máxima" id="CantidadMaxima" v-model="CantidadMaxima">
                         </div>
                         <button class="btGuardarTodo" @click="GuardarTodo">
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -132,12 +132,12 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                 </div>
                 <div class="columna2">
                      <div class="Datos">
-                         <label class="datosAlmacenTitulo" for="Existencia"> Existencia: </label>
-                         <label class="datosAlmacenValor"  for="valorExistencia"> {{Existencia}}  </label>
-                         <label class="datosAlmacenTitulo" for="Costo"> Costo: </label>
-                         <label class="datosAlmacenValor"  for="valorCosto"> ${{Costo}} </label>
-                         <label class="datosAlmacenTitulo" for="UltimoPrecio">  Último Precio de Compra: </label>
-                         <label class="datosAlmacenValor"  for="valorUltimoPrecio">  ${{UltimoPrecio}} </label>
+                         <span class="datosAlmacenTitulo"> Existencia: </span>
+                         <span class="datosAlmacenValor"> {{Existencia}}  </span>
+                         <span class="datosAlmacenTitulo"> Costo: </span>
+                         <span class="datosAlmacenValor"> ${{Costo}} </span>
+                         <span class="datosAlmacenTitulo">  Último Precio de Compra: </span>
+                         <span class="datosAlmacenValor">  ${{UltimoPrecio}} </span>
                      </div>
                      <div class="tablaContainer">
                         <table>

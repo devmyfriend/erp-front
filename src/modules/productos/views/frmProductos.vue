@@ -213,7 +213,7 @@
 
 <template>
     <header>
-        <h1> Productos: {{idProducto}} - {{ tipoProducto }} </h1>
+        <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">
@@ -226,6 +226,7 @@
                     <div class="titulos">
                         <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales </h3>
                         <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 2, SubtituloInactivo: contenedorSeleccionado != 2}" @click="contenedorSeleccionado = 2"> Unidades </h3>
+                        <span> Costo: {{ Costo }}</span>
                     </div>
                     <div class="miniContainer capaActiva" v-if="contenedorSeleccionado == 1">
                         <div class="fila">
@@ -240,8 +241,8 @@
                                 <option value="suscripcion">Suscripciones</option>
                                 <option value="combo">Combos</option>
                             </select>
-                            <label for="ClaveProducto"> Código Producto: </label>
-                            <input type="text" placeholder="Código Producto" v-model="claveProducto">                           
+                            <label for="CodigoProducto"> Código Producto: </label>
+                            <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
                             <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar: </label>
                             <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0" v-model="deshabilitar" :checked="deshabilitar">
                         </div>

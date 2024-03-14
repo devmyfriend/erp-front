@@ -182,7 +182,7 @@
 
 <template>
     <header>
-        <h1> Productos: {{idProducto}} - {{ tipoProducto }} </h1>
+        <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">

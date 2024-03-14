@@ -76,7 +76,7 @@ watch(tipoProducto, (newValue, oldValue) => {
 
 <template>
     <header>
-        <h1> Productos: {{ idProducto }} - {{ tipoProducto }}</h1>
+        <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">
@@ -116,21 +116,21 @@ watch(tipoProducto, (newValue, oldValue) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="producto in ListadoProductos" :key="producto.ClaveProducto">
-                            <td class="colStart"> {{ producto.ClaveProducto }}</td>
+                        <tr v-for="(producto, index) in ListadoProductos" :key="index">
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.ClaveProducto }}</td>
                             
-                            <td> 
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
                                 {{ transfromarTipo(producto.TipoProducto) }}
                             </td>
                             
-                            <td class="colStart"> {{ producto.Nombre }}</td>
-                            <td> {{ producto.LineaId }}</td>
-                            <td> {{ (typeof producto.Borrado === 'number'
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.Nombre }}</td>
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" > {{ producto.LineaId }}</td>
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> {{ (typeof producto.Borrado === 'number'
                                 && (producto.Borrado === 0 || producto.Borrado === 1) 
                                 ? (producto.Borrado === 1 ? 'Si' : 'No') 
                                 : producto.Borrado) }} 
                             </td>
-                            <td> <img src="@/assets/img/edit.svg" alt="Editar" class="me-3"> <img src="@/assets/img/trash.svg" alt="Borrar"></td>
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> <img src="@/assets/img/edit.svg" alt="Editar" class="me-3"> <img src="@/assets/img/trash.svg" alt="Borrar"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -232,5 +232,9 @@ td{
 }
 .colStart{
     text-align: start;
+}
+.productoDeshabilitado{
+    background-color: #c9c9c9;
+    color: #fff;
 }
 </style>

@@ -25,13 +25,13 @@ const Almacen = ref(-1);
             <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
           </div>
         <div class="contenido">
-            <div class="frm">
+<!--             <div class="frm">
                 <label for="Almacen"> Almacén: </label>
                 <select name="Almacen" id="Almacen" v-model="Almacen">
                     <option value="-1" v-if="Almacen == -1"> Selecciona un almacén </option>
                     <option v-for="almacen in listadoAlmacenes" :value="almacen.id">{{ almacen.nombre }}</option>
                 </select>
-            </div>
+            </div> -->
             
             <div class="contenedorTabla">
                 <table>
@@ -106,6 +106,7 @@ select{
     width: 100%;
     height: 100%;
     overflow: auto;
+    margin-top: 1.5rem;
 }
 table {
   width: 100%;
