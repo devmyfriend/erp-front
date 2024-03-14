@@ -24,6 +24,7 @@
 
     const mSAT = ref(null);
     const capaConversiones = ref(false);
+    const Costo = ref(987.123);
     
     //Datos generales
     const tipoProducto = ref(route.params.tipo);
@@ -92,7 +93,7 @@
     });
 
     onMounted(() => {
-        if(idProducto.value != 0 && tipoProducto.value != ''){
+/*         if(idProducto.value != 0 && tipoProducto.value != ''){
             console.log('Los valores recibidos son: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
             store.buscarProducto(tipoProducto.value , idProducto.value).then(() => {
                 const producto = store.getProducto;
@@ -118,7 +119,7 @@
             });
         }else{
             console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
-        }
+        } */
     });
     
     function LimpiarCampos(){
@@ -224,9 +225,11 @@
             <div class="frm">
                 <div class="formulario" v-if="tipoProducto != 'combo'">
                     <div class="titulos">
-                        <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales </h3>
-                        <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 2, SubtituloInactivo: contenedorSeleccionado != 2}" @click="contenedorSeleccionado = 2"> Unidades </h3>
-                        <span> Costo: {{ Costo }}</span>
+                        <div class="cabeceras">
+                            <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales </h3>
+                            <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 2, SubtituloInactivo: contenedorSeleccionado != 2}" @click="contenedorSeleccionado = 2"> Unidades </h3>
+                        </div>
+                        <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
                     </div>
                     <div class="miniContainer capaActiva" v-if="contenedorSeleccionado == 1">
                         <div class="fila">
@@ -243,7 +246,8 @@
                             </select>
                             <label for="CodigoProducto"> Código Producto: </label>
                             <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
-                            <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar: </label>
+                            
+                            <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
                             <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0" v-model="deshabilitar" :checked="deshabilitar">
                         </div>
                         <div class="fila">
@@ -397,6 +401,8 @@
                 <div class="formulario" v-else>
                     <div class="titulos">
                         <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales</h3>
+                        <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
+
                     </div>
 
                     <div class="miniContainer capaActiva">
@@ -413,11 +419,11 @@
                                 <option value="combo">Combos</option>
                             </select>
 
-                            <label for="ClaveProducto"> Clave Producto </label>
-                            <input type="text" placeholder="ClaveProducto" v-model="claveProducto">
+                            <label for="CodigoProducto"> Código Producto: </label>
+                            <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto"> 
                             
-                            <label for="Deshabilitar"> Deshabilitar </label>
-                            <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
+                            <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
+                            <input type="checkbox" name="Deshabilitar" v-if="idProducto != 0" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
                             </div>
                             <div class="fila">
                                 <label for="Nombre">Nombre: </label>
@@ -534,8 +540,8 @@ h3{
     background-color: rgb(247, 184, 67);
     border-radius: 0rem 0.5rem 0.5rem 0.5rem;
     border: 1px solid #000;
-    padding: 1rem;
-    padding-top: 2rem;
+    padding: 0.75rem;
+    padding-top: 1.5rem;
     height: 33rem;
 }
 .formulario{
@@ -657,8 +663,9 @@ h3{
 }
 .cConversiones{
     width: 100%;
-    background-color: #99999919;
-    border: 1px solid #999999;
+    background-color: rgb(222, 151, 20);
+    border: 1px solid #000;
+    border-radius: 1rem;
     height: 20rem;
     overflow: hidden;
     display: flex;
@@ -724,8 +731,25 @@ td{
     margin-right: 0.5rem;
 }
 .titulos{
-    display: flex;
     width: 100%;
+}
+.cabeceras{
+width: 75%;
+}
+.titulos, .cabeceras{
+    display: flex;
     align-items: flex-end;
+}
+.spanCosto{
+    flex-grow: 1;
+    text-align: end;
+    font-size: 1.25rem;
+    color: #000;
+    padding-right: 0.5rem;
+    font-weight: 600;
+    align-self: center;
+}
+.spanCosto span{
+    font-weight: 400;
 }
 </style>
