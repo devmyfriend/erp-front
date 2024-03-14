@@ -7,6 +7,7 @@
         <router-link v-if="tipoProducto == 'combo'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: idProducto } }"> Agregar Productos </router-link>
         <router-link v-if="tipoProducto == 'suscripcion'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: idProducto } }"> Políticas </router-link>
         <router-link :class="{btActivo: btActivo === 6}" :to=" { name: 'cantidadAlmacen', params: { tipo: tipoProducto, id: idProducto } }"> Cantidad por Almacén </router-link>
+        <router-link :class="{btActivo: btActivo === 7}" :to=" { name: 'proveedoresProducto', params: { tipo: tipoProducto, id: idProducto } }"> Proveedores </router-link>
         </div>
         <div class="cerrar" v-if="btActivo != 1">
             <router-link 
@@ -85,7 +86,6 @@ a{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 1.5rem;
     background-color: none;
 }
 .cerrar a{
