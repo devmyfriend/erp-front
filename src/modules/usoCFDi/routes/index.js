@@ -1,3 +1,6 @@
+import listaddoCFDi from '@/modules/usoCFDi/views/listCFDi.vue'
+import formularioCFDi from '@/modules/usoCFDi/views/frmCFDi.vue'
+
 export default{
     name:'cfdi',
     path:'/cfdi',
@@ -7,11 +10,11 @@ export default{
         {
             path:'listado/',
             name: 'listadoCFDi',
-            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/usoCFDi/views/listCFDi.vue'),
+            component: listaddoCFDi,
         },{
             path: 'formulario',
             name: 'formularioCFDi',
-            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/usoCFDi/views/frmCFDi.vue')
+            component: formularioCFDi,
         }
     ]
 }

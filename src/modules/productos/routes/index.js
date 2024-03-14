@@ -1,3 +1,11 @@
+import listProductos from '@/modules/productos/views/listProductos.vue'
+import frmProductos from '@/modules/productos/views/frmProductos.vue'
+import almacenProductos from '@/modules/productos/views/almacenProductos.vue'
+import detalleCombo from '@/modules/productos/views/detalleCombo.vue'
+import politicasProductos from '@/modules/productos/views/politicasProductos.vue'
+import cantidadAlmacen from '@/modules/productos/views/cantidadAlmacen.vue'
+import proveedoresProductos from '@/modules/productos/views/proveedoresProductos.vue'
+
 export default{
     name:'productos',
     path:'/productos',
@@ -7,32 +15,36 @@ export default{
         {
             path: 'listado/:tipo?',
             name: 'listadoProductos',
-            component: () => import('@/modules/productos/views/listProductos.vue'),
+            component: listProductos,
         },
         {
             path: 'formulario/:tipo?&:id?',
             name: 'formularioProducto',
-            component: () => import('@/modules/productos/views/frmProductos.vue'),
+            component: frmProductos,
         },
         {
             path: 'almacen/:tipo?&:id?',
             name: 'almacenProducto',
-            component: () => import('@/modules/productos/views/almacenProductos.vue'),
+            component: almacenProductos,
         },
         {
             path: 'detalleCombo/:id?',
             name: 'detalleCombo',
-            component: () => import('@/modules/productos/views/detalleCombo.vue'),
+            component: detalleCombo,
         },
         {
             path: 'politicas/:id?',
             name: 'politicasProducto',
-            component: () => import('@/modules/productos/views/politicasProductos.vue'),
+            component: politicasProductos,
         },
         {
             path: 'cantidadAlmacen/:tipo?&:id?',
             name: 'cantidadAlmacen',
-            component: () => import('@/modules/productos/views/cantidadAlmacen.vue'),
+            component: cantidadAlmacen,
+        },{
+            path: 'proveedores/:tipo?&:id?',
+            name: 'proveedoresProducto',
+            component: proveedoresProductos,
         }
     ]
 }

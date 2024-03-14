@@ -1,3 +1,5 @@
+import listadoImpuestos from '@/modules/impuestos/views/listImpuestos.vue'
+
 export default{
     name:'impuestos',
     path:'/impuestos',
@@ -7,7 +9,7 @@ export default{
         {
             path:'listado/',
             name: 'listadoImpuestos',
-            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/impuestos/views/listImpuestos.vue'),
+            component: listadoImpuestos,
         }
     ]
 }

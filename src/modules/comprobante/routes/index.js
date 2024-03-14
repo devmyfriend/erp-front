@@ -1,3 +1,5 @@
+import listComprobante from '@/modules/comprobante/views/listComprobante.vue'
+
 export default{
     name:'comprobantes',
     path:'/comprobantes',
@@ -7,7 +9,7 @@ export default{
         {
             path:'listado/',
             name: 'listadoComprobantes',
-            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/comprobante/views/listComprobante.vue'),
+            component: listComprobante,
         }
     ]
 }

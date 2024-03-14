@@ -1,3 +1,6 @@
+import listadoEmpresas from '@/modules/empresas/views/listEmpresas.vue'
+import formularioEmpresas from '@/modules/empresas/views/empresa.vue'
+
 export default{
     name:'Empresas',
     path:'/empresas',
@@ -7,17 +10,17 @@ export default{
         {
             path:'listado',
             name: 'listado',
-            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/empresas/views/listEmpresas.vue')
+            component: listadoEmpresas,
         },{
             path: 'formulario',
             name: 'formulario',
-            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue'),
+            component: formularioEmpresas,
         },
         //prueba de modificacion de ruta para validar que se pueda hacer las actualizciones de empresa.
         {
             path: 'formulario/:id',
             name: 'frmeditar',
-            component: ()=> import(/* webpackChunkName: "formulario"*/ '@/modules/empresas/views/empresa.vue'),
+            component: formularioEmpresas,
         }
         //fin de prueba
     ]
