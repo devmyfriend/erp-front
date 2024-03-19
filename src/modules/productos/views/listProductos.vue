@@ -10,7 +10,7 @@ const { useProductos } = require('../store/productos.js')
 const store = useProductos();
 
 const btActivo = ref(1);
-const tipoProducto = ref(route.params.tipo);
+const tipoProducto = ref(route.params.tipo || 'pos');
 const idProducto = ref(0);
 const ListadoProductos = ref([]);
 
@@ -24,7 +24,7 @@ onMounted(() => {
 
 function cargarDatos(t){
     if(t === undefined){
-        store.cargarProductos().then(() =>{
+        store.cargarProductos('pos').then(() =>{
             ListadoProductos.value = store.getProductos;
             ListadoProductos.value = ListadoProductos.value.map(producto => {
                 return {
@@ -77,7 +77,7 @@ watch(tipoProducto, (newValue, oldValue) => {
 
 <template>
     <header>
-        <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
+        <h1> Productos {{ tipoProducto }} </h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">
@@ -104,7 +104,7 @@ watch(tipoProducto, (newValue, oldValue) => {
                     <btNuevoProducto :tipoProducto="tipoProducto" :idProducto="idProducto"/>
                 </div>
             </div>
-            <div class="tablaContainer">
+            <div class="tablaContainer animate__animated animate__fadeIn" >
                 <table>
                     <thead>
                         <tr>
@@ -126,10 +126,12 @@ watch(tipoProducto, (newValue, oldValue) => {
                             
                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.Nombre }}</td>
                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" > {{ producto.LineaId }}</td>
-                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> {{ (typeof producto.Borrado === 'number'
-                                && (producto.Borrado === 0 || producto.Borrado === 1) 
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> {{ (typeof producto.Borrado === 'number' && (producto.Borrado === 0 || producto.Borrado === 1) 
                                 ? (producto.Borrado === 1 ? 'Si' : 'No') 
-                                : producto.Borrado) }} 
+                                : ( typeof producto.Borrado === 'boolean' && (producto.Borrado === true || producto.Borrado === false) 
+                                    ? (producto.Borrado === true ? 'Si' : 'No') 
+                                    : producto.Borrado )) 
+                                }} 
                             </td>
                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> <img src="@/assets/img/edit.svg" alt="Editar" class="me-3"> <img src="@/assets/img/trash.svg" alt="Borrar"></td>
                         </tr>
@@ -142,17 +144,18 @@ watch(tipoProducto, (newValue, oldValue) => {
 
 <style scoped>  
 .contenedor {
-    background-color: #D9D9D9;
+    background-color: #fff;
     width: 100%;
     height: 51rem;
     overflow: hidden;
+    border-radius: 1rem;
 }
 header{
     margin-bottom: 1.5rem;
 }
 h1{
     text-align: start;
-    color: #000;
+    color: #fff;
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
@@ -193,6 +196,7 @@ h2{
     border-radius: 0.3125rem;
     padding-left: 1rem;
     margin-right: 0.5rem;
+    border: 1px solid #000;
 }
 .formulario select:focus {
     outline: none;
@@ -202,7 +206,6 @@ h2{
     font-weight: 600;
     color: #000;
     padding-right: 0.5rem;
-
 }
 .tablaContainer{
     width: 100%;
