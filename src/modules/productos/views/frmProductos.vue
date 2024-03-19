@@ -9,11 +9,12 @@
     
     const route = useRoute();
     
-    const idProducto = ref( parseInt(route.params.id) || 0);
+    const idProducto = ref( parseInt(route.params.id) || '0');
 
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
-    
+    const producto = ref();
+
     const listadoConversiones = ref([
         { unidadOrigen: 'Metro', unidadDestino: 'Pulgada', Factor: 39.3701 },
         { unidadOrigen: 'Kilogramo', unidadDestino: 'Libra', Factor: 2.20462 },
@@ -29,7 +30,7 @@
     
     //Datos generales
     const tipoProducto = ref(route.params.tipo);
-    const claveProducto = ref('');
+    const claveProducto = ref(idProducto.value != 0 ? idProducto.value : '');
     const deshabilitar = ref(false);
     const nombreInput = ref('');
     const descripcion = ref('');
@@ -94,35 +95,39 @@
     });
 
     onMounted(() => {
-/*         if(idProducto.value != 0 && tipoProducto.value != ''){
+        if(idProducto.value != 0 && tipoProducto.value != ''){
             console.log('Los valores recibidos son: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
-            store.buscarProducto(tipoProducto.value , idProducto.value).then(() => {
-                const producto = store.getProducto;
-                tipoProducto.value = producto.TipoProductoId;
-                claveProducto.value = producto.CodigoProducto;
-                deshabilitar.value = producto.Borrado;
-                nombreInput.value = producto.NombreProducto;
-                descripcion.value = producto.Descripcion;
-                uBase.value = producto.UnidadBase;
-                uCompra.value = producto.UnidadCompra;
-                uFiscal.value = producto.UnidadFiscal;
-                uVenta.value = producto.UnidadVenta;
-                claveProductoSAT.value = producto.ClaveProductoSAT;
-                claveImpuesto.value = producto.ClaveImpuestoCompuesto;
-                claveUnidadSAT.value = producto.ClaveUnidadSAT;
-                lineaProducto.value = producto.LineaId;
-                categoria1.value = producto.Categoria1Id;
-                familia.value = producto.FamiliaId;
-                categoria2.value = producto.Categoria2Id;
-                subfamilia.value = producto.SubFamiliaId;
-                fInicio.value = producto.FechaInicio;
-                fFin.value = producto.FechaFin;
+            store.buscarProducto(idProducto.value).then(() => {
+                tipoProducto.value = tipoProducto.value;
+                claveProducto.value = idProducto.value;
+                producto.value = store.getProducto;
+                console.log('Producto: ', JSON.stringify(producto.value));
+                
+                nombreInput.value = producto.value.NombreProducto || '';
+                descripcion.value = producto.value.DescripcionProducto || '';
+                deshabilitar.value = producto.value.Borrado || false;
+                uBase.value = producto.value.UnidadBase || '';
+                uCompra.value = producto.value.UnidadCompra || '';
+                uFiscal.value = producto.value.UnidadFiscal || '';
+                uVenta.value = producto.value.UnidadVenta || '';
+                claveProductoSAT.value = producto.value.ClaveProductoServicio || '';
+                claveImpuesto.value = producto.value.ImpuestoCompuestoId || '';
+                claveUnidadSAT.value = producto.value.ClaveUnidadSat || '';
+                lineaProducto.value = producto.value.LineaId || '';
+                categoria1.value = producto.value.CategoriaId_1 || '';
+                categoria2.value = producto.value.CategoriaId_2 || '';
+
+                familia.value = producto.value.familia || '';
+                subfamilia.value = producto.value.subfamilia || '';
+                
+                fInicio.value = producto.value.fInicio || '';
+                fFin.value = producto.value.fFin || '';
             });
         }else{
             console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
-        } */
+        }
     });
-    
+
     function LimpiarCampos(){
         tipoProducto.value = '';
         claveProducto.value = '';

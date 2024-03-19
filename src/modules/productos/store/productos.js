@@ -86,14 +86,35 @@ export const useProductos = defineStore('Productos',{
         },
         async buscarProducto(id){
             try{
-                if (tipo === undefined) {
-                    throw new Error("No se ha definido el tipo de producto");
-                }else{
-                    const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos/${id}`);
-                    if(datos.status === 200 && datos.statusText === "OK"){
-                        this.Producto = datos.data.response;
-                        return true;
-                    }
+                const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos/detalle/${id}`);
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.Producto = datos.data.response[0];
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
+        async borrarProducto(t, id){
+            try{
+                const p = {
+                    "CodigoProducto": id,
+                    "BorradoPor": 2,
+                };
+                const datos = await axios.delete(`http://lachosoft.cloud:7000/api/v1/productos/${t}`, {data: p});
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    Swal.fire({
+                        title: "Producto eliminado",
+                        text: `${datos.message}`,
+                        icon: "success",
+                    });
+                    return true;
                 }
             }catch (error){
                 console.log(error);
