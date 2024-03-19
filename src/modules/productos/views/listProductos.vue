@@ -3,20 +3,19 @@ import { ref, onMounted, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import buscadorProductos from '../components/buscadorProductos.vue';
 import btNuevoProducto from '../components/btNuevoProducto.vue';
-import { useRoute } from 'vue-router';
-import TablaInfinita from '@/shared/sTablaInfinita.vue';
+import { useRoute, useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
+
 const route = useRoute();
+const router = useRouter();
+
 const { useProductos } = require('../store/productos.js')
 const store = useProductos();
 
 const btActivo = ref(1);
 const tipoProducto = ref(route.params.tipo || 'pos');
-const idProducto = ref(0);
+const idProducto = ref('0');
 const ListadoProductos = ref([]);
-
-const encabezados = ref(['','Clave Producto', 'Tipo de Producto', 'Nombre', 'ID de Linea']);
-const paginado = ref(5);
-const acciones = ref(2);
 
 onMounted(() => {
     cargarDatos();
@@ -54,7 +53,6 @@ function cargarDatos(t){
     }
 }
 
-
 function transfromarTipo(tipoP){
   const t = {       /* Solve: Debería traer estos datos desde una consulta a ref_ComboBox */
     '2': 'Producto POS',
@@ -69,6 +67,30 @@ function transfromarTipo(tipoP){
   
   return t[tipoP] || tipoP;
 };
+
+function borrarProducto(t, id){
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            store.borrarProducto(t, id).then(() => {
+                cargarDatos(tipoProducto.value);
+            });
+        }
+    })
+}
+
+function editarProducto(p){
+    alert('fueron estafados: ' + JSON.stringify(p) );
+    idProducto.value = p.ClaveProducto;
+    router.push({ name: 'formularioProducto', params: { id: p.ClaveProducto, tipo: tipoProducto.value } });
+}
 
 watch(tipoProducto, (newValue, oldValue) => {
     cargarDatos(newValue);
@@ -133,7 +155,10 @@ watch(tipoProducto, (newValue, oldValue) => {
                                     : producto.Borrado )) 
                                 }} 
                             </td>
-                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> <img src="@/assets/img/edit.svg" alt="Editar" class="me-3"> <img src="@/assets/img/trash.svg" alt="Borrar"></td>
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
+                                <img src="@/assets/img/edit.svg" alt="Editar" class="btTabla" @click="editarProducto(producto)"> 
+                                <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(tipoProducto, producto.ClaveProducto)" v-if="producto.Borrado == 0">
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -240,5 +265,8 @@ td{
 .productoDeshabilitado{
     background-color: #c9c9c9;
     color: #fff;
+}
+.btTabla{
+    cursor: pointer;
 }
 </style>
