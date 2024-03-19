@@ -12,7 +12,49 @@ const lunes = ref(false), martes = ref(false), miercoles = ref(false), jueves = 
 const viernes = ref(false), sabado = ref(false), domingo = ref(false);
 const editando = ref(false);
 const registroEditado = ref(0);
-const test2 = ref(false);
+const nuevoRegistro = ref({
+    PoliticasMembresiaId: 0,
+    Descripcion: '',
+    TipoPeriodo: '',
+    ValorPeriodo: 0,
+    EsGrupal: false,
+    MinimoGrupal: 0,
+    MaximoGrupal: 0,
+    EsPremium: false
+});
+const listadoMembresias = ref([
+    {
+        PoliticasMembresiaId: 1,
+        Descripcion: 'Membresía 1',
+        TipoPeriodo: 'Días',
+        ValorPeriodo: 30,
+        EsGrupal: true,
+        MinimoGrupal: 2,
+        MaximoGrupal: 5,
+        EsPremium: true
+    },
+    {
+        PoliticasMembresiaId: 2,
+        Descripcion: 'Membresía 2',
+        TipoPeriodo: 'Días',
+        ValorPeriodo: 30,
+        EsGrupal: true,
+        MinimoGrupal: 2,
+        MaximoGrupal: 5,
+        EsPremium: true
+    },
+    {
+        PoliticasMembresiaId: 3,
+        Descripcion: 'Membresía 3',
+        TipoPeriodo: 'Días',
+        ValorPeriodo: 30,
+        EsGrupal: true,
+        MinimoGrupal: 2,
+        MaximoGrupal: 5,
+        EsPremium: true
+    }
+
+    ]);
 
 const listadoHorarios = ref([
     {ID:1, hInicio: '08:00', hFin: '09:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
@@ -25,7 +67,7 @@ const listadoHorarios = ref([
     {ID:8, hInicio: '15:00', hFin: '16:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
 ]);
 
-console.log('listadoHorarios: ', JSON.stringify(listadoHorarios.value));
+/* console.log('listadoHorarios: ', JSON.stringify(listadoHorarios.value)); */
 function AgregarHorario(){
     const body = {
         ID: listadoHorarios.value.length + 1,
@@ -111,6 +153,60 @@ const estadoFrm = computed(() => {
           </div>
         <div class="contenido">
         <h2> Políticas de membresía </h2>
+        <div class="formularioNuevo">
+            <input type="text" placeholder="Descripción" v-model="nuevoRegistro.Descripcion">
+            <input type="text" placeholder="Tipo de Periodo" v-model="nuevoRegistro.TipoPeriodo">
+            <input type="text" placeholder="Valor de Periodo" v-model="nuevoRegistro.ValorPeriodo">
+            <label for="EsGrupal"> Es Grupal: </label>
+            <input type="checkbox" name="EsGrupal" id="EsGrupal" v-model="nuevoRegistro.EsGrupal">
+            <input type="number" name="MinimoGrupal" id="MinimoGrupal" placeholder="MinimoGrupal" v-model="nuevoRegistro.MinimoGrupal"  min="1" v-if="nuevoRegistro.EsGrupal">
+            <input type="number" name="MaximoGrupal" id="MaximoGrupal" placeholder="MaximoGrupal" v-model="nuevoRegistro.MinimoGrupal" v-if="nuevoRegistro.EsGrupal">
+            <label for="EsPremium"> Es Premium: </label>
+            <input type="checkbox" name="EsPremium" id="EsPremium" v-model="nuevoRegistro.EsPremium">
+        </div>
+        <div class="contenedorTabla animate__animated animate__fadeIn mb-4">
+                <table>
+                    <thead>
+                        <tr>
+                            <th> ID </th>
+                            <th> Descripción </th>
+                            <th> Tipo de Periodo </th>
+                            <th> Valor de Periodo </th>
+                            <th> Es Grupal </th>
+                            <th> Minimo Grupal </th>
+                            <th> Maximo Grupal </th>
+                            <th> Es Premium </th>
+                            <th class="Acciones"> Acciones </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="membresia in listadoMembresias">
+                            <td class="Acciones"> {{membresia.PoliticasMembresiaId}} </td>
+                            <td class="Acciones"> {{membresia.Descripcion}} </td>
+                            <td class="Acciones"> {{membresia.TipoPeriodo}} </td>
+                            <td class="Acciones"> {{membresia.ValorPeriodo}} </td>
+                            <td class="Acciones"> {{membresia.EsGrupal}} </td>
+                            <td class="Acciones"> {{membresia.MinimoGrupal}} </td>
+                            <td class="Acciones"> {{membresia.MaximoGrupal}} </td>
+                            <td class="Acciones"> {{membresia.EsPremium}} </td>
+                            <td class="Acciones"> 
+                                <img 
+                                src="@/assets/img/edit.svg" 
+                                alt="tablaImg"
+                                class="tablaImg me-3"
+                                @click="activarEditado(horario)"
+                                >
+                                <img 
+                                src="@/assets/img/trash.svg" 
+                                alt="tablaImg"
+                                class="tablaImg"
+                                @click="EliminarHorario(horario)"
+                                >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
         <div class="contenedorContenido">
             <div class="formulario">
 
@@ -352,5 +448,14 @@ td{
 .Acciones{
     text-align: center;
     width: 11.625rem;
+}
+.formularioNuevo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.formularioNuevo input, label{
+    margin-right: 1rem;
 }
 </style>
