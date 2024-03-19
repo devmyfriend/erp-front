@@ -6,7 +6,7 @@
 <script setup>
 </script>
 
-<style>
+<style scoped>
 input {
     width: 29rem;
     height: 2.1875rem;

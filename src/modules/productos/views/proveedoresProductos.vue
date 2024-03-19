@@ -27,7 +27,7 @@ const listadoProveedores = ref([
             <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
           </div>
         <div class="contenido">
-            <div class="contenedorTabla">
+            <div class="contenedorTabla animate__animated animate__fadeIn">
                 <table>
                     <thead>
                         <tr>
@@ -49,7 +49,7 @@ const listadoProveedores = ref([
 
 <style scoped>
 .contenedor {
-    background-color: #D9D9D9;
+    background-color: #fff;
     width: 100%;
     height: 51rem;
 }
@@ -58,7 +58,7 @@ header{
 }
 h1{
     text-align: start;
-    color: #000;
+    color: #fff;
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;

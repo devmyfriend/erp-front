@@ -160,13 +160,13 @@ const estadoFrm = computed(() => {
                     <button @click="estadoFrm" class="btAgregar">
                         <svg class="btImg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11 0C4.92339 0 0 4.92339 0 11C0 17.0766 4.92339 22 11 22C17.0766 22 22 17.0766 22 11C22 4.92339 17.0766 0 11 0Z" fill="#fff"/>
-                            <path d="M17.433 9.03839H12.3504V3.37559C12.3504 2.68072 11.8447 2.11719 11.221 2.11719H10.0915C9.46784 2.11719 8.96205 2.68072 8.96205 3.37559V9.03839H3.87946C3.25579 9.03839 2.75 9.60192 2.75 10.2968V11.5552C2.75 12.2501 3.25579 12.8136 3.87946 12.8136H8.96205V18.4764C8.96205 19.1713 9.46784 19.7348 10.0915 19.7348H11.221C11.8447 19.7348 12.3504 19.1713 12.3504 18.4764V12.8136H17.433C18.0567 12.8136 18.5625 12.2501 18.5625 11.5552V10.2968C18.5625 9.60192 18.0567 9.03839 17.433 9.03839Z" fill="#999"/>
+                            <path d="M17.433 9.03839H12.3504V3.37559C12.3504 2.68072 11.8447 2.11719 11.221 2.11719H10.0915C9.46784 2.11719 8.96205 2.68072 8.96205 3.37559V9.03839H3.87946C3.25579 9.03839 2.75 9.60192 2.75 10.2968V11.5552C2.75 12.2501 3.25579 12.8136 3.87946 12.8136H8.96205V18.4764C8.96205 19.1713 9.46784 19.7348 10.0915 19.7348H11.221C11.8447 19.7348 12.3504 19.1713 12.3504 18.4764V12.8136H17.433C18.0567 12.8136 18.5625 12.2501 18.5625 11.5552V10.2968C18.5625 9.60192 18.0567 9.03839 17.433 9.03839Z" fill="#353535"/>
                         </svg>
                         <span clasS="btTxt"> Agregar </span>
                     </button>
                 </div>
             </div>
-            <div class="contenedorTabla">
+            <div class="contenedorTabla animate__animated animate__fadeIn">
                 <table>
                     <thead>
                         <tr>
@@ -220,7 +220,7 @@ const estadoFrm = computed(() => {
 @import '@/styles/checkbox.css';
 
 .contenedor {
-    background-color: #D9D9D9;
+    background-color: #fff;
     width: 100%;
     height: 51rem;
 }
@@ -229,7 +229,7 @@ header{
 }
 h1{
     text-align: start;
-    color: #000;
+    color: #fff;
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
@@ -267,7 +267,7 @@ h2{
 }
 input{
     color: #000;
-    border: none;
+    border: 1px solid #000;
     border-radius: 0.3125rem;
 }
 input[type="text"], input[type="time"]{
@@ -291,7 +291,7 @@ label{
     justify-content: center;
 }
 .btAgregar{
-    background-color: #999;
+    background-color: #353535;
     border-radius: 0.3125rem;
     border: none;
     display: flex;

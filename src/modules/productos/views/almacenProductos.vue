@@ -69,10 +69,11 @@ watch(() => Almacen.value, (newVal, oldVal) => {
         <div class="contenido">
             <h2> Productos por Almacén </h2>
             <div class="frm">
-                <div class="columna1">
+                <div class="columna1 animate__animated animate__fadeIn">
                     <h3> Formulario </h3>   
                     <div class="formulario">
-                        <div class="fila">
+                        <div class="contenidoFrm">
+                            <div class="fila">
                             <label for="Almacen"> Almacén: </label>
                             <select id="Almacen" v-model="Almacen">
                                 <option value="Almacen1"> Almacén 1 </option>
@@ -122,6 +123,7 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                             <label for="CantidadMaxima"> Cantidad Máxima: </label>
                             <input type="number" min="0" placeholder="Cantidad Máxima" id="CantidadMaxima" v-model="CantidadMaxima">
                         </div>
+                        </div>
                         <button class="btGuardarTodo" @click="GuardarTodo">
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
@@ -130,7 +132,7 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                         </button>
                     </div>
                 </div>
-                <div class="columna2">
+                <div class="columna2 animate__animated animate__fadeIn">
                      <div class="Datos">
                          <span class="datosAlmacenTitulo"> Existencia: </span>
                          <span class="datosAlmacenValor"> {{Existencia}}  </span>
@@ -169,7 +171,7 @@ watch(() => Almacen.value, (newVal, oldVal) => {
 
 <style scoped>
 .contenedor {
-    background-color: #D9D9D9;
+    background-color: #fff;
     width: 100%;
     height: 51rem;
 }
@@ -178,7 +180,7 @@ header{
 }
 h1{
     text-align: start;
-    color: #000;
+    color: #fff;
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
@@ -190,7 +192,7 @@ h1{
 .frm{
     display: grid;
     width: 100%;
-    grid-template-columns: 30% 65%;
+    grid-template-columns: 33% 62%;
     gap: 5%;
     justify-content: space-between;
     padding: 0rem 5rem;
@@ -198,6 +200,8 @@ h1{
 .formulario{
     width: 100%;
     height: 40rem;
+    display: flex;
+    flex-direction: column;
 }
 h2{
     text-align: start;
@@ -211,9 +215,11 @@ h2{
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    
+    background-color: #D9D9D9;
     height: 40rem;
     max-height: 40rem;
+    border: 1px solid #000;
+    border-radius: 0.5rem;
 }
 .columna2{
     display: flex;
@@ -226,6 +232,7 @@ h2{
 }
 h3{
     margin-bottom: 1.5rem;
+    margin-top: 1rem;
     font-weight: bold;
 }
 .Datos{
@@ -263,7 +270,7 @@ h3{
     padding: 0.25rem 0.5rem;
     font-size: 1rem;
     font-weight: lighter;
-    border: none;
+    border: 1px solid #000;
     border-radius: 0.25rem;
 }
 .fila img{
@@ -271,19 +278,20 @@ h3{
     width: 1.5rem;
 }
 .btGuardarTodo{
-    width: 100%;
+    width: 80%;
     height: 2.5rem;
     margin-top: 2rem;
-    background-color: #999999;
+    background-color: #353535;
     color: #fff;
     font-size: 1.25rem;
     font-weight: bold;
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    align-self: center;
 }
 .btGuardarTodo svg{
     margin-right: 0.5rem;
@@ -342,5 +350,8 @@ td{
 input:disabled{
     background-color: #999;
     color: #fff;
+}
+.contenidoFrm{
+    padding: 0rem 1rem;
 }
 </style>

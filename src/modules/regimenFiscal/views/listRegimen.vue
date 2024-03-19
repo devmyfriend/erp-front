@@ -154,7 +154,7 @@
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
 </script>
 
-<style>
+<style scoped>
     
     @import url('../../../styles/checkbox.css');
 

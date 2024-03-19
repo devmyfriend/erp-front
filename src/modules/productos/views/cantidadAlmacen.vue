@@ -33,7 +33,7 @@ const Almacen = ref(-1);
                 </select>
             </div> -->
             
-            <div class="contenedorTabla">
+            <div class="contenedorTabla animate__animated animate__fadeIn">
                 <table>
                     <thead>
                         <tr>
@@ -55,7 +55,7 @@ const Almacen = ref(-1);
 
 <style scoped>
 .contenedor {
-    background-color: #D9D9D9;
+    background-color: #fff;
     width: 100%;
     height: 51rem;
 }
@@ -64,7 +64,7 @@ header{
 }
 h1{
     text-align: start;
-    color: #000;
+    color: #fff;
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
@@ -75,10 +75,11 @@ h1{
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    background-color: #fff;
 }
 .btActivo{
-    background-color: #D9D9D9;
-    border: 2px solid #999999;
+    background-color: #fff;
+    border: 2px solid #000;
     border-bottom: none;
     border-right: none;
 }

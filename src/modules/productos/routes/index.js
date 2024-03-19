@@ -1,7 +1,8 @@
 export default{
     name:'productos',
     path:'/productos',
-    component: () => import('@/modules/empresas/layout/layout.vue'),
+/*     component: () => import('@/modules/empresas/layout/layout.vue'), */
+    component: () => import('@/shared/layoutGym.vue'),
     redirect: '/productos/listado/',
     children:[
         {

@@ -146,14 +146,14 @@ watch(() => actual.value.Cantidad, (newValue, oldValue) => {
                         </div>
                         <img src="@/assets/img/add.svg" alt="AgregarProducto" class="btAgregar" @click="AgregarProducto" v-if="!editando && actual.ID > 0">
                         <img src="@/assets/img/add.svg" alt="AgregarProducto" class="btAgregar" @click="editarProducto(actual)" v-if="editando && actual.ID != 0">
-                        <span class="lbError" v-if="error"> ¡ Ingresa el registro actual ! </span>
+                        <span class="lbError" v-if="error"> ¡No hay un registro! </span>
                     </div>
                     <div class="CostoTotal">
                         <span class="lbFrm"> Costo Total: </span>
                         <span> {{CostoTotal}} </span>
                     </div>
                 </div>
-                <div class="contenedorTabla">
+                <div class="contenedorTabla animate__animated animate__fadeIn">
                     <h3> Productos existentes </h3>
                     <table>
                         <thead>
@@ -181,66 +181,74 @@ watch(() => actual.value.Cantidad, (newValue, oldValue) => {
                         </tbody>
                     </table>
                 </div>
-
-                <div class="contenedorTabla">
-                    <h3> Productos agregados </h3>
-                    <table>
-                        <thead>
-                                <tr>
-                                    <th>ID</th>  
-                                    <th> Nombre </th>
-                                    <th> Cantidad </th>
-                                    <th> Costo </th>
-                                    <th> Cantidad Mínima </th>
-                                    <th> Cantidad Máxima </th>
-                                    <th> Sección </th>
-                                    <th> Anaquel </th>
-                                    <th> Nivel </th>
-                                    <th> Lugar </th>
-                                    <th> Último precio de compra </th>
-                                    <th class="Acciones"> Acciones </th>
+                <transition name="fade">
+                    <div class="contenedorTabla" v-if="productosAgregados.length ">
+                        <h3> Productos agregados </h3>
+                        <table>
+                            <thead>
+                                    <tr>
+                                        <th>ID</th>  
+                                        <th> Nombre </th>
+                                        <th> Cantidad </th>
+                                        <th> Costo </th>
+                                        <th> Cantidad Mínima </th>
+                                        <th> Cantidad Máxima </th>
+                                        <th> Sección </th>
+                                        <th> Anaquel </th>
+                                        <th> Nivel </th>
+                                        <th> Lugar </th>
+                                        <th> Último precio de compra </th>
+                                        <th class="Acciones"> Acciones </th>
+                                    </tr>
+                                </thead>
+                            <tbody>
+                                <tr v-for="productoAgregado in productosAgregados">
+                                    <td> {{productoAgregado.ID}} </td>
+                                    <td> {{productoAgregado.Nombre}} </td>
+                                    <td> {{productoAgregado.Cantidad}} </td>
+                                    <td> {{productoAgregado.Costo}} </td>
+                                    <td> {{productoAgregado['Stock Mínimo']}} </td>
+                                    <td> {{productoAgregado['Stock Máximo']}} </td>
+                                    <td> {{productoAgregado.Sección}} </td>
+                                    <td> {{productoAgregado.Anaquel}} </td>
+                                    <td> {{productoAgregado.Nivel}} </td>
+                                    <td> {{productoAgregado.Lugar}} </td>
+                                    <td> {{productoAgregado['Último precio de compra']}} </td>
+                                    
+                                    <td class="Acciones"> 
+                                        <img 
+                                        src="@/assets/img/edit.svg" 
+                                        alt="Editar"
+                                        @click="editando = true; presentarDatos(productoAgregado);"
+                                        class="btTabla me-2"
+                                        > 
+                                        <img 
+                                        src="@/assets/img/trash.svg" 
+                                        alt="Borrar"
+                                        @click="borrarProducto(productoAgregado)"
+                                        class="btTabla"
+                                        >
+                                    </td>
                                 </tr>
-                            </thead>
-                        <tbody>
-                            <tr v-for="productoAgregado in productosAgregados">
-                                <td> {{productoAgregado.ID}} </td>
-                                <td> {{productoAgregado.Nombre}} </td>
-                                <td> {{productoAgregado.Cantidad}} </td>
-                                <td> {{productoAgregado.Costo}} </td>
-                                <td> {{productoAgregado['Stock Mínimo']}} </td>
-                                <td> {{productoAgregado['Stock Máximo']}} </td>
-                                <td> {{productoAgregado.Sección}} </td>
-                                <td> {{productoAgregado.Anaquel}} </td>
-                                <td> {{productoAgregado.Nivel}} </td>
-                                <td> {{productoAgregado.Lugar}} </td>
-                                <td> {{productoAgregado['Último precio de compra']}} </td>
-                                
-                                <td class="Acciones"> 
-                                    <img 
-                                    src="@/assets/img/edit.svg" 
-                                    alt="Editar"
-                                    @click="editando = true; presentarDatos(productoAgregado);"
-                                    class="btTabla me-2"
-                                    > 
-                                    <img 
-                                    src="@/assets/img/trash.svg" 
-                                    alt="Borrar"
-                                    @click="borrarProducto(productoAgregado)"
-                                    class="btTabla"
-                                    >
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </transition>
             </div>
         </div>
     </div>
 </template>
 
-<style>
+<style scoped>
+.fade-enter-active {
+    animation: fadeIn .5s;
+}
+.fade-leave-active {
+    animation: fadeOut .25s;
+}
+
 .contenedor {
-    background-color: #D9D9D9;
+    background-color: #fff;
     width: 100%;
     height: 51rem;
 }
@@ -249,7 +257,7 @@ header{
 }
 h1{
     text-align: start;
-    color: #000;
+    color: #fff;
     font-size: 1.75rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
@@ -306,7 +314,7 @@ h1{
 input{
     padding: 0.5rem;
     height: 2rem;
-    border: none;
+    border: 1px solid #000;
     border-radius: 0.3125rem;
 }
 input:disabled{
