@@ -29,8 +29,8 @@ const props = defineProps({
         default: ''
     },
     idProducto: {
-        type: Number,
-        default: 0
+        type: String,
+        default: '0'
     },
     btActivo: {
         type: Number,

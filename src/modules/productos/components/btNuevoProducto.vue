@@ -11,8 +11,8 @@ const props = defineProps({
         required: true
     },
     idProducto: {
-        type: Number,
-        default: 0
+        type: String,
+        default: '0'
     }
 });
 </script>
