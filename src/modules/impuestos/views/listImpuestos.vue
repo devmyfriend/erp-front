@@ -122,7 +122,7 @@ function test() {
 }
 </script>
 
-<style>
+<style scoped>
     
     @import url('../../../styles/checkbox.css');
 

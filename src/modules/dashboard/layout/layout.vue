@@ -67,7 +67,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .body{
     margin: 0rem;
     padding: 0rem;

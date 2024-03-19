@@ -93,9 +93,7 @@ function test(){
 
 </script>
 
-<style>
-    
-
+<style scoped>
     .contenedor {
         background-color: #D9D9D9;
         width: 100%;

@@ -7,7 +7,7 @@
 <script setup>
 </script>
 
-<style>
+<style scoped>
 .btNuevo{
     width: 9.375rem;
     height: 2.1875rem;

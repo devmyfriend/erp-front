@@ -67,20 +67,28 @@ const btActivo = computed(() => {
 a{
     margin: 0rem;
     padding: 0rem;
-    border: 1px solid #999999;
+    border: 1px solid #000;
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
     padding: 0.25rem;
     width: 15rem;
     text-decoration: none;
     color: #fff;
-    background-color: #99999993;
+    background-color: #999;
+}
+a:first-child{
+    border-left: none;
+    border-bottom-left-radius: 0rem;
+}
+a:last-child{
+    border-right: 1px solid #000;
+    border-bottom-right-radius: 0rem;
 }
 .btActivo{
-    background-color: #D9D9D9;
-    color: #757474;
+    background-color: #fff;
+    color: #000;
     font-weight: bold;
-    border: 2px solid #999999;
-    border-bottom: none;
-    border-right: none;
+    border: none;
+    border-top: 1px solid #000;
 }
 .cerrar{
     display: flex;

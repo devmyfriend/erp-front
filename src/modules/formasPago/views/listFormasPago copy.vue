@@ -223,7 +223,7 @@ function agregarRegistro(opc){
 }
 </script>
 
-<style>
+<style scoped>
     h2{
         margin-top: 2rem;
         margin-bottom: 2rem;

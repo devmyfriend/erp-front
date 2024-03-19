@@ -71,9 +71,7 @@
 /* import tablaInfinita from '@/shared/tablaInfinita.vue' */
 </script>
 
-<style>
-    
-
+<style scoped>
     .contenedor {
         background-color: #D9D9D9;
         width: 100%;

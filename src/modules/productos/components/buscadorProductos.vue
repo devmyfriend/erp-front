@@ -38,6 +38,7 @@ input{
     border: none;
     border-radius: 0.3125rem;
     padding-left: 1rem;
+    border: 1px solid #000;
 }
 input:focus{
     outline: none;

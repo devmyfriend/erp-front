@@ -289,7 +289,7 @@ function limpiar(){
 }
 </script>
 
-<style>
+<style scoped>
     @import url('../../../styles/checkbox.css');
 
     .contenedor {
