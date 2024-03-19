@@ -9,7 +9,7 @@
     
     const route = useRoute();
     
-    const idProducto = ref( parseInt(route.params.id) || '0');
+    const idProducto = ref( route.params.id || '0');
 
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);

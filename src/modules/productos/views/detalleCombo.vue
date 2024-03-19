@@ -5,7 +5,7 @@ import buscadorProductos from '../components/buscadorProductos.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const idProducto = ref( parseInt(route.params.id) || 0);
+const idProducto = ref( route.params.id || '0');
 const tipoProducto = ref('combo');
 const btActivo = ref(4);
 

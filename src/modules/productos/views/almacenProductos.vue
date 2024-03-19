@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const idProducto = ref( parseInt(route.params.id) || 0);
+const idProducto = ref( route.params.id || '0');
 const tipoProducto = ref(route.params.tipo || '');
 const btActivo = ref(3);
 

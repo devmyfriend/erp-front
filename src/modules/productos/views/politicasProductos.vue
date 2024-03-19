@@ -4,7 +4,7 @@ import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const tipoProducto = ref('suscripcion');
-const idProducto = ref( parseInt(route.params.id) || 0);
+const idProducto = ref( route.params.id || '0');
 const btActivo = ref(5);
 
 const hInicio = ref(''), hFin = ref('');
