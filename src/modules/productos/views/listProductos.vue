@@ -126,7 +126,7 @@ watch(tipoProducto, (newValue, oldValue) => {
                     <btNuevoProducto :tipoProducto="tipoProducto" :idProducto="idProducto"/>
                 </div>
             </div>
-            <div class="tablaContainer animate__animated animate__fadeIn" >
+            <div class="tablaContainer animate__animated animate__fadeIn animate__fast" >
                 <table>
                     <thead>
                         <tr>

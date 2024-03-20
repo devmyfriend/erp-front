@@ -236,225 +236,44 @@
         </div>
         <div class="contenido">
             <h2> Formulario de Productos</h2>
-            <div class="frm animate__animated animate__fadeIn">
-                <div class="formulario " v-if="tipoProducto != 'combo'">
-                    <div class="titulos">
-                        <div class="cabeceras">
-                            <h3 class="Subtitulo" 
-                                :class="{SubtituloActivo: contenedorSeleccionado === 1, 
-                                        SubtituloInactivo: contenedorSeleccionado != 1 }" 
-                                @click="contenedorSeleccionado = 1">
-                                 Datos generales 
-                            </h3>
-                            <h3 class="Subtitulo" 
-                                :class="{SubtituloActivo: contenedorSeleccionado === 2, 
-                                        SubtituloInactivo: contenedorSeleccionado != 2 }" 
-                                        @click="contenedorSeleccionado = 2">
-                                         Unidades     
-                            </h3>
+            <div class="frm"> <!-- animate__animated animate__fadeIn -->
+                <transition-group name="capaConversiones">
+                    <div class="formulario " v-if="tipoProducto != 'combo'">
+                        <div class="titulos">
+                            <div class="cabeceras">
+                                <h3 class="Subtitulo" 
+                                    :class="{SubtituloActivo: contenedorSeleccionado === 1, 
+                                            SubtituloInactivo: contenedorSeleccionado != 1 }" 
+                                    @click="contenedorSeleccionado = 1">
+                                     Datos generales 
+                                </h3>
+                                <h3 class="Subtitulo" 
+                                    :class="{SubtituloActivo: contenedorSeleccionado === 2, 
+                                            SubtituloInactivo: contenedorSeleccionado != 2 }" 
+                                            @click="contenedorSeleccionado = 2">
+                                             Unidades     
+                                </h3>
+                            </div>
+                            <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
                         </div>
-                        <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
-                    </div>
-                    <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 1">
-                        <div class="fila">
-                            <label for="tipoProducto" class="labelTipo"> Tipo: </label>
-                            <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                                <option value="pos">Productos</option>
-                                <option value="servicio">Servicios</option>
-                                <option value="insumo">Insumos</option>
-                                <option value="activo">Activos</option>
-                                <option value="final">Productos Terminados</option>
-                                <option value="proveedor">Productos de Terceros</option>
-                                <option value="suscripcion">Suscripciones</option>
-                                <option value="combo">Combos</option>
-                            </select>
-                            <label for="CodigoProducto"> Código Producto: </label>
-                            <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
-                            
-                            <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
-                            <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0" v-model="deshabilitar" :checked="deshabilitar">
-                        </div>
-                        <div class="fila">
-                            <label for="Nombre">Nombre: </label>
-                            <input type="text" placeholder="Nombre" id="Nombre" name="Nombre" v-model="nombreInput">
-                        </div>
-                        <div class="fila">
-                            <label for="Descripcion"> Descripción: </label>
-                            <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
-                        </div>
-                        <div class="fila">
-                            <div class="filaCompleta">
-                                <label for="Linea"> Linea </label>
-                                <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
-                                    <option value="Linea">Linea</option>
+                        <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 1">
+                            <div class="fila">
+                                <label for="tipoProducto" class="labelTipo"> Tipo: </label>
+                                <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
+                                    <option value="pos">Productos</option>
+                                    <option value="servicio">Servicios</option>
+                                    <option value="insumo">Insumos</option>
+                                    <option value="activo">Activos</option>
+                                    <option value="final">Productos Terminados</option>
+                                    <option value="proveedor">Productos de Terceros</option>
+                                    <option value="suscripcion">Suscripciones</option>
+                                    <option value="combo">Combos</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <label for="Categoria1"> Categoria 1</label>
-                            <select name="Categoria1" id="Categoria1" v-model="categoria1" class="inpCompleto">
-                                <option value="Categoria"> Categoria </option>
-                            </select>
-
-                            <label for="Familia"> Familia </label>
-                            <select name="Familia" id="Familia" v-model="familia" class="inpCompleto">
-                                <option value="Familia"> Familia </option>
-                            </select>
-                        </div>
-                        <div class="fila">
-                            <label for="Categoria2"> Categoria 2</label>
-                            <select name="Categoria2" id="Categoria2" v-model="categoria2" class="inpCompleto">
-                                <option value="Categoria"> Categoria </option>
-                            </select>
-                            <label for="SubFamilia"> SubFamilia </label>
-                            <select name="SubFamilia" id="SubFamilia" v-model="subfamilia" class="inpCompleto">
-                                <option value="SubFamilia"> SubFamilia </option>
-                            </select>
-                        </div>
-                        <div class="fila" v-if="tipoProducto == 'suscripcion'">
-                            <label for="FechaInicio"> Fecha Inicio </label>
-                            <input class="inpCompleto" type="date" name="FechaInicio" id="FechaInicio" v-model="fInicio" min="2010-01-01" :max="fFin">
-
-                            <label for="FechaFin"> Fecha Fin </label>
-                            <input class="inpCompleto" type="date" name="FechaFin" id="FechaFin" v-model="fFin" :min="fInicio">
-                        </div>
-                    </div>
-                    <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 2">
-                    <transition name="capaGeneral">
-                            <div class="fila">
-                                <div class="columna" :class="{espacioCompleto: capaConversiones, capaConversiones: capaConversiones}">
-                                    <label for="uBase"> U. Base </label>
-                                    <select class="conBoton" name="uBase" id="uBase" v-model="uBase" :class="{ uBaseCompleta: capaConversiones, capaConversiones: capaConversiones}">
-                                        <option value="uBase1"> Unidad Base 1 </option>
-                                    </select>
-                                    <button class="minibutton" @click="mostrarCapa"> 
-                                        <img src="@/assets/img/Conversiones.svg" alt="Boton_Conversiones" class="miniImg" v-if="!capaConversiones">
-                                        <svg alt="Boton_Conversiones" class="miniImg capaConversiones" v-if="capaConversiones" width="36" height="34" viewBox="0 0 36 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <line y1="-1" x2="45.2542" y2="-1" transform="matrix(0.707117 -0.707097 0.707117 0.707097 2 34)" stroke="#fff" stroke-width="5"/>
-                                            <line y1="-1" x2="45.2542" y2="-1" transform="matrix(0.707117 0.707097 -0.707117 0.707097 2 2)" stroke="#fff" stroke-width="5"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="columna" v-if="!capaConversiones">
-                                    <label for="uCompra"> U. Compra </label>
-                                    <select name="uCompra" id="uCompra" v-model="uCompra" class="inpCompleto">
-                                        <option value="uCompra1"> Unidad Compra 1 </option>
-                                    </select>
-                                </div>
-                            </div>
-                    </transition>
-                        <!-- Capa de Conversiones --> 
-                        <transition name="capaConversiones" @after-leave="mostrarContenido">
-                            <div class="fila capaConversiones" v-if="capaConversiones">
-                                <div class="cConversiones">
-                                    <h4> Conversiones: </h4>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th> Unidad Origen </th>
-                                                <th> Unidad Destino </th>
-                                                <th> Factor Conversión </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for ="conversion in listadoConversiones">
-                                                <td class="colStart"> {{ conversion.unidadOrigen}} </td>
-                                                <td class="colStart"> {{ conversion.unidadDestino}} </td>
-                                                <td class="colStart"> {{ conversion.Factor}} </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </transition>
-                        <!-- Capa de Conversiones --> 
-                        <transition-group name="capaGeneral">
-                            <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
-                                <div class="columna">
-                                    <label for="uFiscal"> U. Fiscal </label>
-                                    <select name="uFiscal" id="uFiscal" v-model="uFiscal">
-                                        <option value="uFiscal"> Unidad Fiscal 1 </option>
-                                    </select>
-                                </div>
+                                <label for="CodigoProducto"> Código Producto: </label>
+                                <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
                                 
-                                <div class="columna">
-                                    <label for="uVenta"> U. Venta </label>
-                                    <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
-                                        <option value="uVenta1"> Unidad Venta 1 </option>
-                                    </select>
-                                </div>
-                                
-                            </div>
-                            <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
-                                <div class="columna">
-                                    <label for="ClaveProductoSAT"> C. Producto SAT</label>
-                                    <input class="conBoton" type="text" placeholder="Clave Producto SAT" v-model="claveProductoSAT">
-                                    <button class="minibutton" @click="mostrarM(2)"> 
-                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="columna">
-                                    <label for="Impuesto"> Impuesto Compuesto </label>
-                                    <input type="text" placeholder="Clave Impuesto Comp." class="inpCompleto conBoton" v-model="claveImpuesto">
-                                    <button class="minibutton" @click="mostrarM(3)">
-                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
-                                <div class="columna">
-                                    <label for="ClaveUnidad"> C. Unidad SAT </label>
-                                    <input class="conBoton" type="text" placeholder="Clave Unidad SAT" v-model="claveUnidadSAT">
-                                    <button class="minibutton" @click="mostrarM(4)"> 
-                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </transition-group>
-                    </div>
-                    <div class="miniContainer btGuardarTodo">
-                        <button class="guardarTodo" @click="GuardarTodo">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"  class="imgButton">
-                                <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
-                            </svg>
-                            <span> Guardar producto </span> 
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Combos -->
-                <div class="formulario" v-else>
-                    <div class="titulos">
-                        <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales</h3>
-                        <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
-
-                    </div>
-
-                    <div class="miniContainer capaActiva">
-                            <div class="fila">
-                            <label for="tipoProducto" class="labelTipo"> Tipo: </label>
-                            <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                                <option value="pos">Productos</option>
-                                <option value="servicio">Servicios</option>
-                                <option value="insumo">Insumos</option>
-                                <option value="activo">Activos</option>
-                                <option value="final">Productos Terminados</option>
-                                <option value="proveedor">Productos de Terceros</option>
-                                <option value="suscripcion">Suscripciones</option>
-                                <option value="combo">Combos</option>
-                            </select>
-
-                            <label for="CodigoProducto"> Código Producto: </label>
-                            <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto"> 
-                            
-                            <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
-                            <input type="checkbox" name="Deshabilitar" v-if="idProducto != 0" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
+                                <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
+                                <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0" v-model="deshabilitar" :checked="deshabilitar">
                             </div>
                             <div class="fila">
                                 <label for="Nombre">Nombre: </label>
@@ -465,29 +284,219 @@
                                 <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
                             </div>
                             <div class="fila">
-                                <label for="uVenta"> U. Venta </label>
-                                <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
-                                    <option value="uVenta1"> Unidad venta 1 </option>
+                                <div class="filaCompleta">
+                                    <label for="Linea"> Linea </label>
+                                    <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
+                                        <option value="Linea">Linea</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="fila">
+                                <label for="Categoria1"> Categoria 1</label>
+                                <select name="Categoria1" id="Categoria1" v-model="categoria1" class="inpCompleto">
+                                    <option value="Categoria"> Categoria </option>
+                                </select>
+    
+                                <label for="Familia"> Familia </label>
+                                <select name="Familia" id="Familia" v-model="familia" class="inpCompleto">
+                                    <option value="Familia"> Familia </option>
                                 </select>
                             </div>
+                            <div class="fila">
+                                <label for="Categoria2"> Categoria 2</label>
+                                <select name="Categoria2" id="Categoria2" v-model="categoria2" class="inpCompleto">
+                                    <option value="Categoria"> Categoria </option>
+                                </select>
+                                <label for="SubFamilia"> SubFamilia </label>
+                                <select name="SubFamilia" id="SubFamilia" v-model="subfamilia" class="inpCompleto">
+                                    <option value="SubFamilia"> SubFamilia </option>
+                                </select>
+                            </div>
+    
+                            <transition name="capaConversiones">
+                                <div class="fila" v-if="tipoProducto == 'suscripcion'">
+                                    <label for="FechaInicio"> Fecha Inicio </label>
+                                    <input class="inpCompleto" type="date" name="FechaInicio" id="FechaInicio" v-model="fInicio" min="2010-01-01" :max="fFin">
+    
+                                    <label for="FechaFin"> Fecha Fin </label>
+                                    <input class="inpCompleto" type="date" name="FechaFin" id="FechaFin" v-model="fFin" :min="fInicio">
+                                </div>
+                            </transition>
                         </div>
-                    <div class="miniContainer btGuardarTodo">
-                        <button class="guardarTodo" @click="GuardarTodo">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"  class="imgButton">
-                                <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
-                            </svg> 
-                            <span> Guardar producto </span> 
-                        </button>
+    
+                        <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 2">
+                        <transition name="capaGeneral">
+                                <div class="fila">
+                                    <div class="columna" :class="{espacioCompleto: capaConversiones, capaConversiones: capaConversiones}">
+                                        <label for="uBase"> U. Base </label>
+                                        <select class="conBoton" name="uBase" id="uBase" v-model="uBase" :class="{ uBaseCompleta: capaConversiones, capaConversiones: capaConversiones}">
+                                            <option value="uBase1"> Unidad Base 1 </option>
+                                        </select>
+                                        <button class="minibutton" @click="mostrarCapa"> 
+                                            <img src="@/assets/img/Conversiones.svg" alt="Boton_Conversiones" class="miniImg" v-if="!capaConversiones">
+                                            <svg alt="Boton_Conversiones" class="miniImg capaConversiones" v-if="capaConversiones" width="36" height="34" viewBox="0 0 36 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line y1="-1" x2="45.2542" y2="-1" transform="matrix(0.707117 -0.707097 0.707117 0.707097 2 34)" stroke="#fff" stroke-width="5"/>
+                                                <line y1="-1" x2="45.2542" y2="-1" transform="matrix(0.707117 0.707097 -0.707117 0.707097 2 2)" stroke="#fff" stroke-width="5"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="columna" v-if="!capaConversiones">
+                                        <label for="uCompra"> U. Compra </label>
+                                        <select name="uCompra" id="uCompra" v-model="uCompra" class="inpCompleto">
+                                            <option value="uCompra1"> Unidad Compra 1 </option>
+                                        </select>
+                                    </div>
+                                </div>
+                        </transition>
+                            <!-- Capa de Conversiones --> 
+                            <transition name="capaConversiones" @after-leave="mostrarContenido">
+                                <div class="fila capaConversiones" v-if="capaConversiones">
+                                    <div class="cConversiones">
+                                        <h4> Conversiones: </h4>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th> Unidad Origen </th>
+                                                    <th> Unidad Destino </th>
+                                                    <th> Factor Conversión </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for ="conversion in listadoConversiones">
+                                                    <td class="colStart"> {{ conversion.unidadOrigen}} </td>
+                                                    <td class="colStart"> {{ conversion.unidadDestino}} </td>
+                                                    <td class="colStart"> {{ conversion.Factor}} </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </transition>
+                            <!-- Capa de Conversiones --> 
+                            <transition-group name="capaGeneral">
+                                <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
+                                    <div class="columna">
+                                        <label for="uFiscal"> U. Fiscal </label>
+                                        <select name="uFiscal" id="uFiscal" v-model="uFiscal">
+                                            <option value="uFiscal"> Unidad Fiscal 1 </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="columna">
+                                        <label for="uVenta"> U. Venta </label>
+                                        <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
+                                            <option value="uVenta1"> Unidad Venta 1 </option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
+                                    <div class="columna">
+                                        <label for="ClaveProductoSAT"> C. Producto SAT</label>
+                                        <input class="conBoton" type="text" placeholder="Clave Producto SAT" v-model="claveProductoSAT">
+                                        <button class="minibutton" @click="mostrarM(2)"> 
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="columna">
+                                        <label for="Impuesto"> Impuesto Compuesto </label>
+                                        <input type="text" placeholder="Clave Impuesto Comp." class="inpCompleto conBoton" v-model="claveImpuesto">
+                                        <button class="minibutton" @click="mostrarM(3)">
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
+                                    <div class="columna">
+                                        <label for="ClaveUnidad"> C. Unidad SAT </label>
+                                        <input class="conBoton" type="text" placeholder="Clave Unidad SAT" v-model="claveUnidadSAT">
+                                        <button class="minibutton" @click="mostrarM(4)"> 
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </transition-group>
+                        </div>
+                        <div class="miniContainer btGuardarTodo">
+                            <button class="guardarTodo" @click="GuardarTodo">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"  class="imgButton">
+                                    <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
+                                </svg>
+                                <span> Guardar producto </span> 
+                            </button>
+                        </div>
+                    </div>
+                </transition-group>
+                    <!-- Combos -->
+                    
+                    <transition-group name="capaConversiones">
+                        <div class="formulario" v-if="tipoProducto == 'combo'">
+                            <div class="titulos">
+                                <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales</h3>
+                                <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
+        
+                            </div>
+        
+                            <div class="miniContainer capaActiva">
+                                    <div class="fila">
+                                    <label for="tipoProducto" class="labelTipo"> Tipo: </label>
+                                    <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
+                                        <option value="pos">Productos</option>
+                                        <option value="servicio">Servicios</option>
+                                        <option value="insumo">Insumos</option>
+                                        <option value="activo">Activos</option>
+                                        <option value="final">Productos Terminados</option>
+                                        <option value="proveedor">Productos de Terceros</option>
+                                        <option value="suscripcion">Suscripciones</option>
+                                        <option value="combo">Combos</option>
+                                    </select>
+        
+                                    <label for="CodigoProducto"> Código Producto: </label>
+                                    <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto"> 
+                                    
+                                    <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
+                                    <input type="checkbox" name="Deshabilitar" v-if="idProducto != 0" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
+                                    </div>
+                                    <div class="fila">
+                                        <label for="Nombre">Nombre: </label>
+                                        <input type="text" placeholder="Nombre" id="Nombre" name="Nombre" v-model="nombreInput">
+                                    </div>
+                                    <div class="fila">
+                                        <label for="Descripcion"> Descripción: </label>
+                                        <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
+                                    </div>
+                                    <div class="fila">
+                                        <label for="uVenta"> U. Venta </label>
+                                        <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
+                                            <option value="uVenta1"> Unidad venta 1 </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            <div class="miniContainer btGuardarTodo">
+                                <button class="guardarTodo" @click="GuardarTodo">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"  class="imgButton">
+                                        <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
+                                    </svg> 
+                                    <span> Guardar producto </span> 
+                                </button>
+                            </div>
+                        </div>
+                    </transition-group>
+                    <!-- Combos -->
+                    <div class="imagen">
+                        <div class="contenedorImagen">
+                            <img src="@/assets/img/imgEmpresa.svg" alt="Imagen del producto" class="imgProducto">
+                        </div>
+                        <input type="file" name="imagen" id="imagen" class="btAgregarImagen">
                     </div>
                 </div>
-                <!-- Combos -->
-                <div class="imagen">
-                    <div class="contenedorImagen">
-                        <img src="@/assets/img/imgEmpresa.svg" alt="Imagen del producto" class="imgProducto">
-                    </div>
-                    <input type="file" name="imagen" id="imagen" class="btAgregarImagen">
-                </div>
-            </div>
+            
         </div>
     </div>
     <mBuscar 
