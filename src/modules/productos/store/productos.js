@@ -124,6 +124,26 @@ export const useProductos = defineStore('Productos',{
                     icon: "error",
                 });
             }
+        },
+        async crearProducto(producto, tipo){
+            try{
+                const pet = await axios.post(`http://lachosoft.cloud:7000/api/v1/productos/${tipo}`, producto);
+                if(pet.status === 200 && pet.statusText === "OK"){
+                    Swal.fire({
+                        title: "Producto creado",
+                        text: `${pet.data.message}: ${pet.data.response[0].CodigoProducto}`,
+                        icon: "success",
+                    });
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
         }
     }
 });
