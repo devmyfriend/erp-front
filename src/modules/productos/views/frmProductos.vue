@@ -1,12 +1,13 @@
 <script setup>
     import { ref, computed, watch, onMounted } from 'vue';
-    import { useRoute } from 'vue-router';
+    import { useRoute, useRouter } from 'vue-router';
     import Ventanas from '../components/ventanas.vue';
     import Swal from 'sweetalert2';
     import mBuscar from '../components/modales/mBuscar.vue';
     const { useProductos } = require('../store/productos.js')
     const store = useProductos();
     
+    const router = useRouter();
     const route = useRoute();
     
     const idProducto = ref( route.params.id || '0');
@@ -152,41 +153,53 @@
 
     function GuardarTodo(){
         if(registroCompleto.value){
-            const body = {
-                claveProducto: claveProducto.value,
-                nombre: nombreInput.value,
-                descripcion: descripcion.value,
-                uBase: uBase.value,
-                uCompra: uCompra.value,
-                uFiscal: uFiscal.value,
-                uVenta: uVenta.value,
-                claveProductoSAT: claveProductoSAT.value,
-                claveImpuesto: claveImpuesto.value,
-                claveUnidadSAT: claveUnidadSAT.value,
-                lineaProducto: lineaProducto.value,
-                categoria1: categoria1.value,
-                familia: familia.value,
-                categoria2: categoria2.value,
-                subfamilia: subfamilia.value,
-                fInicio: fInicio.value,
-                fFin: fFin.value
+            let body = {
+                CodigoProducto: claveProducto.value,
+                NombreProducto: nombreInput.value,
+                DescripcionProducto: descripcion.value,
+                UnidadVenta: uVenta.value,
+                CreadoPor: 2,
             }
-            store.crearProducto(body, tipoProducto.value).then((res) => {
-            }).catch((err) => {
-            });
             
-            LimpiarCampos();
-            Swal.fire({
-                title: 'Registro completo',
-                text: 'El registro se ha completado correctamente',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
+            if(tipoProducto.value == 'combo'){
+                body = {
+                    ...body,
+                    UnidadBase: "1",
+                    UnidadCompra: "1",
+                    UnidadFiscal: "1",
+                    ClaveProductoServicio: "123123", /*  */
+                    ImpuestoCompuestoId: "1", /*  */
+                    ClaveUnidadSat  : "123",    /*  */
+                    LineaId: "1", /*  */
+                    CategoriaId_1: "Relax Ajax", /*  */
+                    CategoriaId_2: "Relax Ajax 2", /*  */
+                }
+            }else{
+                body = {
+                    ...body,
+                    UnidadCompra: uVenta.value,
+                    UnidadBase: uBase.value,
+                    UnidadFiscal: uFiscal.value,
+                    ClaveProductoServicio: claveProductoSAT.value,
+                    ImpuestoCompuestoId: claveImpuesto.value,
+                    ClaveUnidadSat: claveUnidadSAT.value,
+                    LineaId: lineaProducto.value,
+                    CategoriaId_1: categoria1.value,
+                    CategoriaId_2: categoria2.value,
+                }
+            }
+                
+            store.crearProducto(body, tipoProducto.value).then((res) => {
+                console.log('[CREAR] [Producto]: ' + JSON.stringify(body) + ' [Tipo]: ' + tipoProducto.value);
+                if(res){
+                    LimpiarCampos();
+                }
             });
         }else{
             Swal.fire({
-                title: 'Registro incompleto',
-                text: 'El registro no se ha completado correctamente',
-                icon: 'error',
+                title: '¡Atención!',
+                text: 'Favor de llenar todos los campos',
+                icon: 'warning',
                 confirmButtonText: 'Aceptar'
             });
         }
@@ -218,6 +231,9 @@
         capaVisible.value = false;
     }
 
+    function AgregarPolitica(){
+        router.push({ name: 'politicasProducto', params: { id: idProducto.value } });
+    }
     watch(tipoProducto, (newValue, oldValue) => {
         if(newValue != oldValue){
             LimpiarCampos();
@@ -287,7 +303,7 @@
                                 <div class="filaCompleta">
                                     <label for="Linea"> Linea </label>
                                     <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
-                                        <option value="Linea">Linea</option>
+                                        <option value="1"> Linea 1 </option>
                                     </select>
                                 </div>
                             </div>
@@ -315,11 +331,21 @@
     
                             <transition name="capaConversiones">
                                 <div class="fila" v-if="tipoProducto == 'suscripcion'">
-                                    <label for="FechaInicio"> Fecha Inicio </label>
-                                    <input class="inpCompleto" type="date" name="FechaInicio" id="FechaInicio" v-model="fInicio" min="2010-01-01" :max="fFin">
-    
-                                    <label for="FechaFin"> Fecha Fin </label>
-                                    <input class="inpCompleto" type="date" name="FechaFin" id="FechaFin" v-model="fFin" :min="fInicio">
+                                
+
+
+                                    <div class="fila columna espacioCompleto capaConversiones nogap">
+                                        <label for="PoliticasMembresia" class="PoliticasMembresia"> Política de memebresía </label>
+                                        <select class="conBoton uBaseCompleta capaConversiones" name="PoliticasMembresia" id="PoliticasMembresia" v-model="PoliticasMembresia">
+                                            <option value="1"> Política 1 </option>
+                                        </select>
+                                        <button class="minibutton" @click="AgregarPolitica">
+                                            <span class="btTxt"> Nuevo </span>
+                                        </button>
+                                    </div> 
+
+
+
                                 </div>
                             </transition>
                         </div>
@@ -330,7 +356,7 @@
                                     <div class="columna" :class="{espacioCompleto: capaConversiones, capaConversiones: capaConversiones}">
                                         <label for="uBase"> U. Base </label>
                                         <select class="conBoton" name="uBase" id="uBase" v-model="uBase" :class="{ uBaseCompleta: capaConversiones, capaConversiones: capaConversiones}">
-                                            <option value="uBase1"> Unidad Base 1 </option>
+                                            <option value="1"> Unidad Base 1 </option>
                                         </select>
                                         <button class="minibutton" @click="mostrarCapa"> 
                                             <img src="@/assets/img/Conversiones.svg" alt="Boton_Conversiones" class="miniImg" v-if="!capaConversiones">
@@ -339,16 +365,17 @@
                                                 <line y1="-1" x2="45.2542" y2="-1" transform="matrix(0.707117 0.707097 -0.707117 0.707097 2 2)" stroke="#fff" stroke-width="5"/>
                                             </svg>
                                         </button>
-                                    </div>
+                                    </div> 
+
                                     <div class="columna" v-if="!capaConversiones">
                                         <label for="uCompra"> U. Compra </label>
                                         <select name="uCompra" id="uCompra" v-model="uCompra" class="inpCompleto">
-                                            <option value="uCompra1"> Unidad Compra 1 </option>
+                                            <option value="1"> Unidad Compra 1 </option>
                                         </select>
                                     </div>
                                 </div>
                         </transition>
-                            <!-- Capa de Conversiones --> 
+                            <!-- InicioCapa de Conversiones --> 
                             <transition name="capaConversiones" @after-leave="mostrarContenido">
                                 <div class="fila capaConversiones" v-if="capaConversiones">
                                     <div class="cConversiones">
@@ -378,14 +405,14 @@
                                     <div class="columna">
                                         <label for="uFiscal"> U. Fiscal </label>
                                         <select name="uFiscal" id="uFiscal" v-model="uFiscal">
-                                            <option value="uFiscal"> Unidad Fiscal 1 </option>
+                                            <option value="1"> Unidad Fiscal 1 </option>
                                         </select>
                                     </div>
                                     
                                     <div class="columna">
                                         <label for="uVenta"> U. Venta </label>
                                         <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
-                                            <option value="uVenta1"> Unidad Venta 1 </option>
+                                            <option value="1"> Unidad Venta 1 </option>
                                         </select>
                                     </div>
                                     
@@ -433,8 +460,7 @@
                         </div>
                     </div>
                 </transition-group>
-                    <!-- Combos -->
-                    
+                    <!-- Inicio Combos -->
                     <transition-group name="capaConversiones">
                         <div class="formulario" v-if="tipoProducto == 'combo'">
                             <div class="titulos">
@@ -474,7 +500,7 @@
                                     <div class="fila">
                                         <label for="uVenta"> U. Venta </label>
                                         <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
-                                            <option value="uVenta1"> Unidad venta 1 </option>
+                                            <option value="1"> Unidad venta 1 </option>
                                         </select>
                                     </div>
                                 </div>
@@ -489,6 +515,7 @@
                         </div>
                     </transition-group>
                     <!-- Combos -->
+
                     <div class="imagen">
                         <div class="contenedorImagen">
                             <img src="@/assets/img/imgEmpresa.svg" alt="Imagen del producto" class="imgProducto">
@@ -669,6 +696,7 @@ h3{
     width: 5rem;
     border: none;
     border-radius: 0.3125rem;
+    color: white;
 }
 .guardarTodo{
     display: flex;
@@ -804,5 +832,17 @@ width: 75%;
 .SubtituloActivo{
     height: 2.5rem;
     margin-bottom: -1px;
+}
+.nogap{
+    gap: 0rem;
+}
+.PoliticasMembresia{
+    width: 7rem;
+    margin-right: 1rem;
+}
+.btTxt{
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
 }
 </style>
