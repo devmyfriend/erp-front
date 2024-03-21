@@ -2,6 +2,10 @@
 import { ref, computed } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
+
+const { useProductos } = require('../store/productos.js')
+const store = useProductos();
+
 const route = useRoute();
 const tipoProducto = ref('suscripcion');
 const idProducto = ref( route.params.id || '0');
@@ -12,19 +16,20 @@ const lunes = ref(false), martes = ref(false), miercoles = ref(false), jueves = 
 const viernes = ref(false), sabado = ref(false), domingo = ref(false);
 const editando = ref(false);
 const registroEditado = ref(0);
-const nuevoRegistro = ref({
-    PoliticasMembresiaId: 0,
+const nuevaPolitica = ref({
+    PoliticaMembreciaId: 0,
     Descripcion: '',
     TipoPeriodo: '',
     ValorPeriodo: 0,
     EsGrupal: false,
-    MinimoGrupal: 0,
-    MaximoGrupal: 0,
-    EsPremium: false
+    MinimoGrupal: 1,
+    MaximoGrupal: 2,
+    EsPremium: false,
+    CreadoPor: 2
 });
 const listadoMembresias = ref([
     {
-        PoliticasMembresiaId: 1,
+        PoliticaMembreciaId: 1,
         Descripcion: 'Membresía 1',
         TipoPeriodo: 'Días',
         ValorPeriodo: 30,
@@ -34,7 +39,7 @@ const listadoMembresias = ref([
         EsPremium: true
     },
     {
-        PoliticasMembresiaId: 2,
+        PoliticaMembreciaId: 2,
         Descripcion: 'Membresía 2',
         TipoPeriodo: 'Días',
         ValorPeriodo: 30,
@@ -44,7 +49,7 @@ const listadoMembresias = ref([
         EsPremium: true
     },
     {
-        PoliticasMembresiaId: 3,
+        PoliticaMembreciaId: 3,
         Descripcion: 'Membresía 3',
         TipoPeriodo: 'Días',
         ValorPeriodo: 30,
@@ -54,7 +59,7 @@ const listadoMembresias = ref([
         EsPremium: true
     }
 
-    ]);
+]);
 
 const listadoHorarios = ref([
     {ID:1, hInicio: '08:00', hFin: '09:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
@@ -67,8 +72,7 @@ const listadoHorarios = ref([
     {ID:8, hInicio: '15:00', hFin: '16:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
 ]);
 
-/* console.log('listadoHorarios: ', JSON.stringify(listadoHorarios.value)); */
-function AgregarHorario(){
+function agregarHorario(){
     const body = {
         ID: listadoHorarios.value.length + 1,
         hInicio: hInicio.value,
@@ -82,16 +86,16 @@ function AgregarHorario(){
         domingo: domingo.value ? 'Si' : 'No',
     }
     listadoHorarios.value.push(body);
-    LimpiarFormulario();
+    limpiarHorario();
     console.log('Agregado');
 }
 
-function EliminarHorario(registro){
+function eliminarHorario(registro){
     console.log('Eliminado registro: ', registro.ID);
     listadoHorarios.value = listadoHorarios.value.filter( item => item.ID !== registro.ID);
 }
 
-function activarEditado(registro){
+function editandoHorario(registro){
     hInicio.value = registro.hInicio;
     hFin.value = registro.hFin;
     lunes.value = registro.lunes === 'Si' ? true : false;
@@ -120,10 +124,10 @@ function editarHorario(){
     }
     const indexRegistro = listadoHorarios.value.findIndex( item => item.ID === registroEditado.value);
     listadoHorarios.value[indexRegistro] = {...listadoHorarios.value[indexRegistro], ...body};
-    LimpiarFormulario();
+    limpiarHorario();
 }
 
-function LimpiarFormulario(){
+function limpiarHorario(){
     hInicio.value = '';
     hFin.value = '';
     lunes.value = false;
@@ -137,9 +141,21 @@ function LimpiarFormulario(){
     registroEditado.value = 0;
 }
 
+function agregarPolitica(){
+    console.log('Agregando política: ' + JSON.stringify(nuevaPolitica.value) );
+    store.crearPoliticaMembresia(nuevaPolitica.value).then((res)=>
+    {
+        if(res){
+            console.log('Política agregada');
+        }else{
+            console.log('Error al agregar política: ', JSON.stringify(nuevaPolitica.value));
+        }
+    });
+}
+
 const estadoFrm = computed(() => {
    
-    return (editando.value ? editarHorario() : AgregarHorario());
+    return (editando.value ? editarHorario() : agregarHorario());
 });
 </script>
 
@@ -153,17 +169,30 @@ const estadoFrm = computed(() => {
           </div>
         <div class="contenido">
         <h2> Políticas de membresía </h2>
-        <div class="formularioNuevo">
-            <input type="text" placeholder="Descripción" v-model="nuevoRegistro.Descripcion">
-            <input type="text" placeholder="Tipo de Periodo" v-model="nuevoRegistro.TipoPeriodo">
-            <input type="text" placeholder="Valor de Periodo" v-model="nuevoRegistro.ValorPeriodo">
-            <label for="EsGrupal"> Es Grupal: </label>
-            <input type="checkbox" name="EsGrupal" id="EsGrupal" v-model="nuevoRegistro.EsGrupal">
-            <input type="number" name="MinimoGrupal" id="MinimoGrupal" placeholder="MinimoGrupal" v-model="nuevoRegistro.MinimoGrupal"  min="1" v-if="nuevoRegistro.EsGrupal">
-            <input type="number" name="MaximoGrupal" id="MaximoGrupal" placeholder="MaximoGrupal" v-model="nuevoRegistro.MinimoGrupal" v-if="nuevoRegistro.EsGrupal">
-            <label for="EsPremium"> Es Premium: </label>
-            <input type="checkbox" name="EsPremium" id="EsPremium" v-model="nuevoRegistro.EsPremium">
+        <div class="formulario">
+            <div class="mainFrm">
+                <input type="text" placeholder="Descripción" v-model="nuevaPolitica.Descripcion">
+                <input type="text" placeholder="Tipo de Periodo" v-model="nuevaPolitica.TipoPeriodo">
+                <input type="number" placeholder="Valor de Periodo" min="1" v-model="nuevaPolitica.ValorPeriodo">
+                <label for="EsGrupal"> Es Grupal: </label>
+                <input type="checkbox" name="EsGrupal" id="EsGrupal" v-model="nuevaPolitica.EsGrupal">
+                <input type="number" name="MinimoGrupal" id="MinimoGrupal" placeholder="MinimoGrupal" v-model="nuevaPolitica.MinimoGrupal"  min="1" v-if="nuevaPolitica.EsGrupal">
+                <input type="number" name="MaximoGrupal" id="MaximoGrupal" placeholder="MaximoGrupal" v-model="nuevaPolitica.MaximoGrupal" min="2" v-if="nuevaPolitica.EsGrupal">
+                <label for="EsPremium"> Es Premium: </label>
+                <input type="checkbox" name="EsPremium" id="EsPremium" v-model="nuevaPolitica.EsPremium">
+    
+            </div>
+            <div class="btFrm">
+                <button @click="agregarPolitica" class="btAgregar">
+                    <svg class="btImg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 0C4.92339 0 0 4.92339 0 11C0 17.0766 4.92339 22 11 22C17.0766 22 22 17.0766 22 11C22 4.92339 17.0766 0 11 0Z" fill="#fff"/>
+                        <path d="M17.433 9.03839H12.3504V3.37559C12.3504 2.68072 11.8447 2.11719 11.221 2.11719H10.0915C9.46784 2.11719 8.96205 2.68072 8.96205 3.37559V9.03839H3.87946C3.25579 9.03839 2.75 9.60192 2.75 10.2968V11.5552C2.75 12.2501 3.25579 12.8136 3.87946 12.8136H8.96205V18.4764C8.96205 19.1713 9.46784 19.7348 10.0915 19.7348H11.221C11.8447 19.7348 12.3504 19.1713 12.3504 18.4764V12.8136H17.433C18.0567 12.8136 18.5625 12.2501 18.5625 11.5552V10.2968C18.5625 9.60192 18.0567 9.03839 17.433 9.03839Z" fill="#353535"/>
+                    </svg>
+                    <span clasS="btTxt"> Agregar </span>
+                </button>
+            </div>
         </div>
+        
         <div class="contenedorTabla animate__animated animate__fadeIn mb-4">
                 <table>
                     <thead>
@@ -181,7 +210,7 @@ const estadoFrm = computed(() => {
                     </thead>
                     <tbody>
                         <tr v-for="membresia in listadoMembresias">
-                            <td class="Acciones"> {{membresia.PoliticasMembresiaId}} </td>
+                            <td class="Acciones"> {{membresia.PoliticaMembreciaId}} </td>
                             <td class="Acciones"> {{membresia.Descripcion}} </td>
                             <td class="Acciones"> {{membresia.TipoPeriodo}} </td>
                             <td class="Acciones"> {{membresia.ValorPeriodo}} </td>
@@ -194,13 +223,13 @@ const estadoFrm = computed(() => {
                                 src="@/assets/img/edit.svg" 
                                 alt="tablaImg"
                                 class="tablaImg me-3"
-                                @click="activarEditado(horario)"
+                                @click="editandoHorario(horario)"
                                 >
                                 <img 
                                 src="@/assets/img/trash.svg" 
                                 alt="tablaImg"
                                 class="tablaImg"
-                                @click="EliminarHorario(horario)"
+                                @click="eliminarHorario(horario)"
                                 >
                             </td>
                         </tr>
@@ -294,13 +323,13 @@ const estadoFrm = computed(() => {
                                 src="@/assets/img/edit.svg" 
                                 alt="tablaImg"
                                 class="tablaImg me-3"
-                                @click="activarEditado(horario)"
+                                @click="editandoHorario(horario)"
                                 >
                                 <img 
                                 src="@/assets/img/trash.svg" 
                                 alt="tablaImg"
                                 class="tablaImg"
-                                @click="EliminarHorario(horario)"
+                                @click="eliminarHorario(horario)"
                                 >
                             </td>
                         </tr>
@@ -456,6 +485,9 @@ td{
     margin-bottom: 1.5rem;
 }
 .formularioNuevo input, label{
+    margin-right: 1rem;
+}
+.mainFrm input{
     margin-right: 1rem;
 }
 </style>

@@ -192,6 +192,7 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
+        
         async crearPoliticaMembresia(politica){
             try{
                 const pet = await axios.post(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`, politica);
