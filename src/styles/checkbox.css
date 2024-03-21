@@ -24,6 +24,7 @@ input[type="checkbox"]::before {
 }
 input[type="checkbox"]:checked::before {
     content: '\2714';
+    overflow: hidden;
     color: #999999;
     font-size: 1.2rem;
     text-align: center;

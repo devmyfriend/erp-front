@@ -10,11 +10,13 @@
     const router = useRouter();
     const route = useRoute();
     
-    const idProducto = ref( route.params.id || '0');
+    const idProducto = ref( route.params.id || "0");
 
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
     const producto = ref();
+    const PoliticasMembresia = ref('');
+    const estadoOriginal = ref(false);
 
     const listadoConversiones = ref([
         { unidadOrigen: 'Metro', unidadDestino: 'Pulgada', Factor: 39.3701 },
@@ -69,15 +71,13 @@
     const familia = ref('');
     const categoria2 = ref('');
     const subfamilia = ref('');
-    const fInicio = ref('');
-    const fFin = ref('');
     const frmCategoriasCompleto = computed(() => {
         if (tipoProducto.value == 'combo') {
             return true;
         }else{
             if(lineaProducto.value != '' && categoria1.value != '' && familia.value != '' && categoria2.value != '' && subfamilia.value != ''){
                 if(tipoProducto.value == 'suscripcion'){
-                    return (fInicio.value != '' && fFin.value != '') ? true : false;
+                    return (PoliticasMembresia.value != '') ? true : false;
                 }else{
                     return true;
                 }
@@ -117,12 +117,12 @@
                 lineaProducto.value = producto.value.LineaId || '';
                 categoria1.value = producto.value.CategoriaId_1 || '';
                 categoria2.value = producto.value.CategoriaId_2 || '';
-
                 familia.value = producto.value.familia || '';
                 subfamilia.value = producto.value.subfamilia || '';
-                
-                fInicio.value = producto.value.fInicio || '';
-                fFin.value = producto.value.fFin || '';
+
+                if(deshabilitar.value == true){
+                    estadoOriginal.value = true;
+                }
             });
         }else{
             console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
@@ -147,61 +147,106 @@
         familia.value = '';
         categoria2.value = '';
         subfamilia.value = '';
-        fInicio.value = '';
-        fFin.value = '';
+    }
+
+    async function reactivarProducto(){
+        if(idProducto.value != "0" && estadoOriginal.value != deshabilitar.value ){
+            await store.reactivarProducto(idProducto.value).then((res) => {
+                if(res){
+                    console.log('[REACTIVADO] [Producto]: ' + idProducto.value + ' [Tipo]: ' + tipoProducto.value);
+                }else{
+                    console.log('[FALLO][REACTIVANDO] [Producto]: ' + idProducto.value + ' [Tipo]: ' + tipoProducto.value);
+                }
+            });
+        }
     }
 
     function GuardarTodo(){
-        if(registroCompleto.value){
-            let body = {
-                CodigoProducto: claveProducto.value,
-                NombreProducto: nombreInput.value,
-                DescripcionProducto: descripcion.value,
-                UnidadVenta: uVenta.value,
-                CreadoPor: 2,
-            }
-            
-            if(tipoProducto.value == 'combo'){
-                body = {
-                    ...body,
-                    UnidadBase: "1",
-                    UnidadCompra: "1",
-                    UnidadFiscal: "1",
-                    ClaveProductoServicio: "123123", /*  */
-                    ImpuestoCompuestoId: "1", /*  */
-                    ClaveUnidadSat  : "123",    /*  */
-                    LineaId: "1", /*  */
-                    CategoriaId_1: "Relax Ajax", /*  */
-                    CategoriaId_2: "Relax Ajax 2", /*  */
+        reactivarProducto();
+
+        if (registroCompleto.value) {
+            if (idProducto.value != 0) {
+                console.log('[Actualizando producto]: LíneaID: ' + typeof lineaProducto.value + ' - and value: ' + lineaProducto.value);
+                const body = {
+                    "CodigoProducto": claveProducto.value,
+                    "NombreProducto": nombreInput.value,
+                    "DescripcionProducto": descripcion.value,
+                    "UnidadVenta": uVenta.value,
+                    "UnidadBase": uBase.value || 1,
+                    "UnidadCompra": uCompra.value || 1,
+                    "UnidadFiscal": uFiscal.value || 1,
+                    "ClaveProductoServicio": claveProductoSAT.value || "123123",
+                    "ClaveUnidadSat": claveUnidadSAT.value || "123",
+                    "ImpuestoCompuestoId": claveImpuesto.value || 1,
+                    "LineaId": lineaProducto.value || "2",
+                    "CategoriaId_1": categoria1.value || "Categoría 1",
+                    "CategoriaId_2": categoria2.value || "Categoría 2",
+                    "ActualizadoPor": 2,
                 }
-            }else{
-                body = {
-                    ...body,
-                    UnidadCompra: uVenta.value,
-                    UnidadBase: uBase.value,
-                    UnidadFiscal: uFiscal.value,
-                    ClaveProductoServicio: claveProductoSAT.value,
-                    ImpuestoCompuestoId: claveImpuesto.value,
-                    ClaveUnidadSat: claveUnidadSAT.value,
-                    LineaId: lineaProducto.value,
-                    CategoriaId_1: categoria1.value,
-                    CategoriaId_2: categoria2.value,
-                }
-            }
                 
-            store.crearProducto(body, tipoProducto.value).then((res) => {
-                console.log('[CREAR] [Producto]: ' + JSON.stringify(body) + ' [Tipo]: ' + tipoProducto.value);
-                if(res){
-                    LimpiarCampos();
+                store.actualizarProducto(tipoProducto.value, body).then((res) => {
+                    console.log('[ACTUALIZAR] [Producto]: ' + JSON.stringify(body) + ' \n[Tipo]: ' + tipoProducto.value);
+                    if(res){
+                        LimpiarCampos();
+                    }
+                });
+            }else{ //Si Es un producto nuevo
+                console.log('[Creando producto]');
+
+                let body = {
+                    CodigoProducto: claveProducto.value,
+                    NombreProducto: nombreInput.value,
+                    DescripcionProducto: descripcion.value,
+                    UnidadVenta: uVenta.value,
+                    CreadoPor: 2,
                 }
-            });
-        }else{
-            Swal.fire({
-                title: '¡Atención!',
-                text: 'Favor de llenar todos los campos',
-                icon: 'warning',
-                confirmButtonText: 'Aceptar'
-            });
+                if(tipoProducto.value == 'combo'){
+                    body = {
+                        ...body,
+                        UnidadBase: "1",
+                        UnidadCompra: "1",
+                        UnidadFiscal: "1",
+                        ClaveProductoServicio: "123123",
+                        ImpuestoCompuestoId: "1",
+                        ClaveUnidadSat: "123",
+                        LineaId: "1",
+                        CategoriaId_1: "Relax Ajax",
+                        CategoriaId_2: "Relax Ajax 2",
+                    }
+                }else{
+                    body = {
+                        ...body,
+                        UnidadCompra: uVenta.value,
+                        UnidadBase: uBase.value,
+                        UnidadFiscal: uFiscal.value,
+                        ClaveProductoServicio: claveProductoSAT.value,
+                        ImpuestoCompuestoId: claveImpuesto.value,
+                        ClaveUnidadSat: claveUnidadSAT.value,
+                        LineaId: lineaProducto.value,
+                        CategoriaId_1: categoria1.value,
+                        CategoriaId_2: categoria2.value,
+                    }
+                }
+                    
+                store.crearProducto(body, tipoProducto.value).then((res) => {
+                    console.log('[CREAR] [Producto]: ' + JSON.stringify(body) + ' [Tipo]: ' + tipoProducto.value);
+                    if(res){
+                        LimpiarCampos();
+                    }
+                });
+            }
+        }
+        else{
+            if(idProducto.value != 0 && (estadoOriginal.value != deshabilitar)){
+                console.log('[Cambio de productos | Deshabilitar]');
+            }else{
+                Swal.fire({
+                    title: '¡Atención!',
+                    text: 'Favor de llenar todos los campos',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
         }
     }
 
@@ -234,6 +279,7 @@
     function AgregarPolitica(){
         router.push({ name: 'politicasProducto', params: { id: idProducto.value } });
     }
+
     watch(tipoProducto, (newValue, oldValue) => {
         if(newValue != oldValue){
             LimpiarCampos();
@@ -255,6 +301,7 @@
             <div class="frm"> <!-- animate__animated animate__fadeIn -->
                 <transition-group name="capaConversiones">
                     <div class="formulario " v-if="tipoProducto != 'combo'">
+
                         <div class="titulos">
                             <div class="cabeceras">
                                 <h3 class="Subtitulo" 
@@ -272,6 +319,7 @@
                             </div>
                             <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
                         </div>
+
                         <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 1">
                             <div class="fila">
                                 <label for="tipoProducto" class="labelTipo"> Tipo: </label>
@@ -288,8 +336,8 @@
                                 <label for="CodigoProducto"> Código Producto: </label>
                                 <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
                                 
-                                <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
-                                <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0" v-model="deshabilitar" :checked="deshabilitar">
+                                <label for="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true"> Deshabilitar </label>
+                                <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true" v-model="deshabilitar" :checked="deshabilitar">
                             </div>
                             <div class="fila">
                                 <label for="Nombre">Nombre: </label>
@@ -297,7 +345,7 @@
                             </div>
                             <div class="fila">
                                 <label for="Descripcion"> Descripción: </label>
-                                <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="150" v-model="descripcion"></textarea>
+                                <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="254" v-model="descripcion"></textarea>
                             </div>
                             <div class="fila">
                                 <div class="filaCompleta">
@@ -335,7 +383,7 @@
 
 
                                     <div class="fila columna espacioCompleto capaConversiones nogap">
-                                        <label for="PoliticasMembresia" class="PoliticasMembresia"> Política de memebresía </label>
+                                        <label for="PoliticasMembresia" class="PoliticasMembresia"> Política de membresía </label>
                                         <select class="conBoton uBaseCompleta capaConversiones" name="PoliticasMembresia" id="PoliticasMembresia" v-model="PoliticasMembresia">
                                             <option value="1"> Política 1 </option>
                                         </select>
@@ -450,6 +498,7 @@
                                 </div>
                             </transition-group>
                         </div>
+
                         <div class="miniContainer btGuardarTodo">
                             <button class="guardarTodo" @click="GuardarTodo">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"  class="imgButton">
@@ -458,6 +507,7 @@
                                 <span> Guardar producto </span> 
                             </button>
                         </div>
+
                     </div>
                 </transition-group>
                     <!-- Inicio Combos -->
@@ -483,11 +533,12 @@
                                         <option value="combo">Combos</option>
                                     </select>
         
+                                    
                                     <label for="CodigoProducto"> Código Producto: </label>
                                     <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto"> 
                                     
-                                    <label for="Deshabilitar" v-if="idProducto != 0"> Deshabilitar </label>
-                                    <input type="checkbox" name="Deshabilitar" v-if="idProducto != 0" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
+                                    <label for="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true"> Deshabilitar </label>
+                                    <input type="checkbox" name="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
                                     </div>
                                     <div class="fila">
                                         <label for="Nombre">Nombre: </label>
@@ -527,9 +578,9 @@
         </div>
     </div>
     <mBuscar 
-    v-if="mSAT != null"
-    :modo="mSAT"
-    @cerrarModal="mSAT=null "
+        v-if="mSAT != null"
+        :modo="mSAT"
+        @cerrarModal="mSAT=null"
     />
 </template>
 
@@ -726,10 +777,10 @@ h3{
 }
 .filaCompleta label{
     width: 6rem;
-    margin-left: 1rem;
 }
 .filaCompleta select{
     flex-grow: 1;
+    margin-left: 1rem;
 }
 .columna{
     width: 40.75rem;

@@ -87,7 +87,6 @@ function borrarProducto(t, id){
 }
 
 function editarProducto(p){
-    alert('fueron estafados: ' + JSON.stringify(p) );
     idProducto.value = p.ClaveProducto;
     router.push({ name: 'formularioProducto', params: { id: p.ClaveProducto, tipo: tipoProducto.value } });
 }
