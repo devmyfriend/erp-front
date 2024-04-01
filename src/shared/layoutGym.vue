@@ -32,7 +32,7 @@
                         <img src="@/assets/img/cfgIco.svg" alt="Empresa">
                         <p>MENU TEMPORAL</p>
                     </router-link>
-                    <router-link to="/" class="Empresas logout">
+                    <router-link to="/" class="logout">
                         <img src="@/assets/img/logoutIco.svg" alt="Empresa">
                         <p>Logout</p>
                     </router-link>
@@ -119,6 +119,8 @@
     .logout{
         position: absolute;
         bottom: 1.5rem;
+        max-width: max-content;
+        
     }
     .navegador{
         font-size: 2rem;
