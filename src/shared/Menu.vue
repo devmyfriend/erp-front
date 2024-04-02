@@ -16,6 +16,7 @@
     <h2> Productos </h2>
     <ul>
         <li> <router-link :to="{name: 'productos'}"> Productos </router-link> </li>
+        <li> <router-link :to="{name: 'unidades'}"> Unidades de Medida </router-link> </li>
     </ul>
 </template>
 
