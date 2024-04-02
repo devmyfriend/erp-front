@@ -6,6 +6,8 @@ export const useProductos = defineStore('Productos',{
     state: () => ({
         ListadoProductos: [],
         Producto: {},
+
+        ListadoMembresias: [],
     }),
     getters:{
         getProductos(state){
@@ -14,6 +16,9 @@ export const useProductos = defineStore('Productos',{
         getProducto(state){
             return state.Producto;
         },
+        getMembresias(state){
+            return state.ListadoMembresias;
+        }
     },
     actions:{
         async cargarProductos(tipo){
@@ -193,6 +198,26 @@ export const useProductos = defineStore('Productos',{
             }
         },
         
+
+
+
+        async cargarPoliticasMembresia(){
+            try{
+                const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`);
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoMembresias = datos.data.response;
+                    this.ListadoMembresias = this.ListadoMembresias.slice(0,5);
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
         async crearPoliticaMembresia(politica){
             try{
                 const pet = await axios.post(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`, politica);
@@ -212,6 +237,54 @@ export const useProductos = defineStore('Productos',{
                     icon: "error",
                 });
             }
-        }
+        },
+        async actualizarPoliticaMembresia(producto){
+            try{
+                console.log(JSON.stringify(producto));
+                const id = producto.PoliticasMembreciasId;
+                delete producto.PoliticasMembreciasId;
+                console.log(JSON.stringify(producto));
+                const datos = await axios.put(`http://lachosoft.cloud:7000/api/v1/politicasMembresia/${id}`, producto);
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    Swal.fire({
+                        title: `Politica actualizada`,
+                        text: `${datos.message} con id: ${id}`,
+                        icon: "success",
+                    });
+                    return true;
+                }
+            }catch(error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
+        async borrarPoliticaMembresia(id){
+            try{
+                const p = {
+                    "PoliticasMembreciasId": id,
+                    "BorradoPor": 2,
+                };
+                const datos = await axios.delete(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`, {data: p});
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    Swal.fire({
+                        title: "Politica eliminada",
+                        text: `${datos.message}`,
+                        icon: "success",
+                    });
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },        
     }
 });

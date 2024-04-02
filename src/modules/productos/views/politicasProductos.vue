@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
 
@@ -14,52 +14,30 @@ const btActivo = ref(5);
 const hInicio = ref(''), hFin = ref('');
 const lunes = ref(false), martes = ref(false), miercoles = ref(false), jueves = ref(false);
 const viernes = ref(false), sabado = ref(false), domingo = ref(false);
-const editando = ref(false);
+const editandoHorarios = ref(false);
+const editandoPoliticas = ref(false);
 const registroEditado = ref(0);
 const nuevaPolitica = ref({
-    PoliticaMembreciaId: 0,
+    PoliticasMembreciasId: 0,
     Descripcion: '',
     TipoPeriodo: '',
     ValorPeriodo: 0,
     EsGrupal: false,
     MinimoGrupal: 1,
     MaximoGrupal: 2,
-    EsPremium: false,
+    EsPremiun: false,
     CreadoPor: 2
 });
-const listadoMembresias = ref([
-    {
-        PoliticaMembreciaId: 1,
-        Descripcion: 'Membresía 1',
-        TipoPeriodo: 'Días',
-        ValorPeriodo: 30,
-        EsGrupal: true,
-        MinimoGrupal: 2,
-        MaximoGrupal: 5,
-        EsPremium: true
-    },
-    {
-        PoliticaMembreciaId: 2,
-        Descripcion: 'Membresía 2',
-        TipoPeriodo: 'Días',
-        ValorPeriodo: 30,
-        EsGrupal: true,
-        MinimoGrupal: 2,
-        MaximoGrupal: 5,
-        EsPremium: true
-    },
-    {
-        PoliticaMembreciaId: 3,
-        Descripcion: 'Membresía 3',
-        TipoPeriodo: 'Días',
-        ValorPeriodo: 30,
-        EsGrupal: true,
-        MinimoGrupal: 2,
-        MaximoGrupal: 5,
-        EsPremium: true
-    }
-
-]);
+const listadoMembresias = ref([{
+        PoliticasMembreciasId: 0,
+        Descripcion: '',
+        TipoPeriodo: '',
+        ValorPeriodo: 0,
+        EsGrupal: false,
+        MinimoGrupal: 0,
+        MaximoGrupal: 0,
+        EsPremiun: false
+}]);
 
 const listadoHorarios = ref([
     {ID:1, hInicio: '08:00', hFin: '09:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
@@ -71,6 +49,18 @@ const listadoHorarios = ref([
     {ID:7, hInicio: '14:00', hFin: '15:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
     {ID:8, hInicio: '15:00', hFin: '16:00', lunes: 'Si', martes: 'Si', miercoles: 'Si', jueves: 'Si', viernes: 'Si', sabado: 'Si', domingo: 'Si'},
 ]);
+
+onMounted(() => {
+    store.cargarPoliticasMembresia().then((res)=>
+    {
+        if(res){
+            console.log('Políticas cargadas ' + JSON.stringify(store.getMembresias));
+            listadoMembresias.value = store.getMembresias;
+        }
+    });
+}),
+
+
 
 function agregarHorario(){
     const body = {
@@ -105,9 +95,9 @@ function editandoHorario(registro){
     viernes.value = registro.viernes === 'Si' ? true : false;
     sabado.value = registro.sabado === 'Si' ? true : false;
     domingo.value = registro.domingo === 'Si' ? true : false;
-    editando.value = true;
+    editandoHorarios.value = true;
     registroEditado.value = registro.ID;
-    console.log('Activando edición: ', registro.ID);
+    editandoHorarios.value = true;
 }
 
 function editarHorario(){
@@ -127,19 +117,9 @@ function editarHorario(){
     limpiarHorario();
 }
 
-function limpiarHorario(){
-    hInicio.value = '';
-    hFin.value = '';
-    lunes.value = false;
-    martes.value = false;
-    miercoles.value = false;
-    jueves.value = false;
-    viernes.value = false;
-    sabado.value = false;
-    domingo.value = false;
-    editando.value = false;
-    registroEditado.value = 0;
-}
+
+
+
 
 function agregarPolitica(){
     console.log('Agregando política: ' + JSON.stringify(nuevaPolitica.value) );
@@ -153,10 +133,68 @@ function agregarPolitica(){
     });
 }
 
-const estadoFrm = computed(() => {
-   
-    return (editando.value ? editarHorario() : agregarHorario());
+function eliminarPolitica(p){
+    console.log('Eliminando política: ' + p.PoliticasMembreciasId);
+    store.borrarPoliticaMembresia(p.PoliticasMembreciasId).then((res)=>
+    {
+        if(res){
+            console.log('Política eliminada: ' + p.PoliticasMembreciasId);
+        }
+    });
+}
+
+function editandoPolitica(registro){
+    console.log('EditandoHorarios política: ');
+    nuevaPolitica.value = {...registro};
+    editandoPoliticas.value = true;
+}
+
+function editarPoliticas(){
+    nuevaPolitica.value = {
+        ...nuevaPolitica.value,
+        PoliticasMembreciasId: nuevaPolitica.value.PoliticasMembreciasId,
+        CreadoPor: 2
+    }
+
+    store.actualizarPoliticaMembresia(nuevaPolitica.value).then((res)=>
+    {
+        if(res){
+            console.log('Política editada');
+        }else{
+            console.log('Error al editar política: ', JSON.stringify(nuevaPolitica.value));
+        }
+    });
+}
+
+
+
+
+
+function limpiarHorario(){
+    hInicio.value = '';
+    hFin.value = '';
+    lunes.value = false;
+    martes.value = false;
+    miercoles.value = false;
+    jueves.value = false;
+    viernes.value = false;
+    sabado.value = false;
+    domingo.value = false;
+    editandoHorarios.value = false;
+    registroEditado.value = 0;
+    editandoHorarios.value = false;
+    editandoPoliticas.value = false;
+}
+
+
+const estadoFrmHorario = computed(() => { 
+   return (editandoHorarios.value ? editarHorario() : agregarHorario());
 });
+
+const estadoFrmPolitica = computed(() => { 
+    return (editandoPoliticas.value ? editarPoliticas() : agregarPolitica());
+ });
+
 </script>
 
 <template>
@@ -178,12 +216,12 @@ const estadoFrm = computed(() => {
                 <input type="checkbox" name="EsGrupal" id="EsGrupal" v-model="nuevaPolitica.EsGrupal">
                 <input type="number" name="MinimoGrupal" id="MinimoGrupal" placeholder="MinimoGrupal" v-model="nuevaPolitica.MinimoGrupal"  min="1" v-if="nuevaPolitica.EsGrupal">
                 <input type="number" name="MaximoGrupal" id="MaximoGrupal" placeholder="MaximoGrupal" v-model="nuevaPolitica.MaximoGrupal" min="2" v-if="nuevaPolitica.EsGrupal">
-                <label for="EsPremium"> Es Premium: </label>
-                <input type="checkbox" name="EsPremium" id="EsPremium" v-model="nuevaPolitica.EsPremium">
+                <label for="EsPremiun"> Es Premium: </label>
+                <input type="checkbox" name="EsPremiun" id="EsPremiun" v-model="nuevaPolitica.EsPremiun">
     
             </div>
             <div class="btFrm">
-                <button @click="agregarPolitica" class="btAgregar">
+                <button @click="estadoFrmPolitica" class="btAgregar">
                     <svg class="btImg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 0C4.92339 0 0 4.92339 0 11C0 17.0766 4.92339 22 11 22C17.0766 22 22 17.0766 22 11C22 4.92339 17.0766 0 11 0Z" fill="#fff"/>
                         <path d="M17.433 9.03839H12.3504V3.37559C12.3504 2.68072 11.8447 2.11719 11.221 2.11719H10.0915C9.46784 2.11719 8.96205 2.68072 8.96205 3.37559V9.03839H3.87946C3.25579 9.03839 2.75 9.60192 2.75 10.2968V11.5552C2.75 12.2501 3.25579 12.8136 3.87946 12.8136H8.96205V18.4764C8.96205 19.1713 9.46784 19.7348 10.0915 19.7348H11.221C11.8447 19.7348 12.3504 19.1713 12.3504 18.4764V12.8136H17.433C18.0567 12.8136 18.5625 12.2501 18.5625 11.5552V10.2968C18.5625 9.60192 18.0567 9.03839 17.433 9.03839Z" fill="#353535"/>
@@ -210,26 +248,26 @@ const estadoFrm = computed(() => {
                     </thead>
                     <tbody>
                         <tr v-for="membresia in listadoMembresias">
-                            <td class="Acciones"> {{membresia.PoliticaMembreciaId}} </td>
+                            <td class="Acciones"> {{membresia.PoliticasMembreciasId}} </td>
                             <td class="Acciones"> {{membresia.Descripcion}} </td>
                             <td class="Acciones"> {{membresia.TipoPeriodo}} </td>
                             <td class="Acciones"> {{membresia.ValorPeriodo}} </td>
                             <td class="Acciones"> {{membresia.EsGrupal}} </td>
                             <td class="Acciones"> {{membresia.MinimoGrupal}} </td>
                             <td class="Acciones"> {{membresia.MaximoGrupal}} </td>
-                            <td class="Acciones"> {{membresia.EsPremium}} </td>
+                            <td class="Acciones"> {{membresia.EsPremiun}} </td>
                             <td class="Acciones"> 
                                 <img 
                                 src="@/assets/img/edit.svg" 
                                 alt="tablaImg"
                                 class="tablaImg me-3"
-                                @click="editandoHorario(horario)"
+                                @click="editandoPolitica(membresia)"
                                 >
                                 <img 
                                 src="@/assets/img/trash.svg" 
                                 alt="tablaImg"
                                 class="tablaImg"
-                                @click="eliminarHorario(horario)"
+                                @click="eliminarPolitica(membresia)"
                                 >
                             </td>
                         </tr>
@@ -260,29 +298,71 @@ const estadoFrm = computed(() => {
                     >
     
                     <label for="lunes"> Lunes: </label>
-                    <input type="checkbox" name="lunes" id="lunes" v-model="lunes" :checked="lunes">
+                    <input 
+                        type="checkbox" 
+                        name="lunes" 
+                        id="lunes" 
+                        v-model="lunes" 
+                        :checked="lunes"
+                    >
 
                     <label for="martes"> Martes: </label>
-                    <input type="checkbox" name="martes" id="martes" v-model="martes" :checked="martes">
+                    <input 
+                        type="checkbox" 
+                        name="martes" 
+                        id="martes" 
+                        v-model="martes" 
+                        :checked="martes"
+                    >
     
                     <label for="miercoles"> Miércoles: </label>
-                    <input type="checkbox" name="miercoles" id="miercoles" v-model="miercoles" :checked="miercoles">
+                    <input 
+                        type="checkbox" 
+                        name="miercoles" 
+                        id="miercoles" 
+                        v-model="miercoles" 
+                        :checked="miercoles"
+                    >
     
                     <label for="jueves"> Jueves: </label>
-                    <input type="checkbox" name="jueves" id="jueves" v-model="jueves" :checked="jueves">
+                    <input 
+                        type="checkbox" 
+                        name="jueves" 
+                        id="jueves" 
+                        v-model="jueves" 
+                        :checked="jueves"
+                    >
     
                     <label for="viernes"> Viernes: </label>
-                    <input type="checkbox" name="viernes" id="viernes" v-model="viernes" :checked="viernes">
+                    <input 
+                        type="checkbox" 
+                        name="viernes" 
+                        id="viernes" 
+                        v-model="viernes" 
+                        :checked="viernes"
+                    >
     
                     <label for="sabado"> Sábado: </label>
-                    <input type="checkbox" name="sabado" id="sabado" v-model="sabado" :checked="sabado">
+                    <input 
+                        type="checkbox" 
+                        name="sabado" 
+                        id="sabado" 
+                        v-model="sabado" 
+                        :checked="sabado"
+                    >
     
                     <label for="domingo"> Domingo: </label>
-                    <input type="checkbox" name="domingo" id="domingo" v-model="domingo" :checked="domingo">
+                    <input 
+                        type="checkbox" 
+                        name="domingo" 
+                        id="domingo" 
+                        v-model="domingo" 
+                        :checked="domingo"
+                    >
                 </div>
 
                 <div class="btFrm">
-                    <button @click="estadoFrm" class="btAgregar">
+                    <button @click="estadoFrmHorario" class="btAgregar">
                         <svg class="btImg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11 0C4.92339 0 0 4.92339 0 11C0 17.0766 4.92339 22 11 22C17.0766 22 22 17.0766 22 11C22 4.92339 17.0766 0 11 0Z" fill="#fff"/>
                             <path d="M17.433 9.03839H12.3504V3.37559C12.3504 2.68072 11.8447 2.11719 11.221 2.11719H10.0915C9.46784 2.11719 8.96205 2.68072 8.96205 3.37559V9.03839H3.87946C3.25579 9.03839 2.75 9.60192 2.75 10.2968V11.5552C2.75 12.2501 3.25579 12.8136 3.87946 12.8136H8.96205V18.4764C8.96205 19.1713 9.46784 19.7348 10.0915 19.7348H11.221C11.8447 19.7348 12.3504 19.1713 12.3504 18.4764V12.8136H17.433C18.0567 12.8136 18.5625 12.2501 18.5625 11.5552V10.2968C18.5625 9.60192 18.0567 9.03839 17.433 9.03839Z" fill="#353535"/>
