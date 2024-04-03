@@ -160,22 +160,22 @@ function borrarUnidad(id){
                     <tr>
                         <th class="col-xs">ID de Unidad</th>
                         <th class="col-auto">Nombre</th>
-                        <th class="col-s">Status</th>
-                        <th class="col-xs">Acciones</th>
+<!--                         <th class="col-s">Status</th>
+                        <th class="col-xs">Acciones</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr :class="{filaDesactivada: !unidad.Activo}" v-for="(unidad, index) in ListadoUnidades" :key="index">
                         <td class="col-xs"> {{ unidad.ClaveUnidadSat }} </td>
                         <td class="col-auto col-start"> {{ unidad.NombreUnidadSat }} </td>
-                        <td class="col-s"> {{ unidad.Activo ? 'Activado' : 'Desactivado' }} </td>
+<!--                         <td class="col-s"> {{ unidad.Activo ? 'Activado' : 'Desactivado' }} </td>
                         <td class="col-xs"> 
                             <svg v-if="!unidad.Activo" alt="Editar" class="btTabla" @click="ActualizandoUnidad(unidad)" width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.9525 3.24673L19.3977 6.77085C19.5428 6.91932 19.5428 7.16155 19.3977 7.31002L11.056 15.8429L7.51155 16.2454C7.03794 16.3001 6.6369 15.8898 6.69037 15.4054L7.08377 11.7796L15.4254 3.24673C15.5706 3.09826 15.8074 3.09826 15.9525 3.24673ZM22.14 2.35202L20.2761 0.445399C19.6956 -0.148466 18.7522 -0.148466 18.1678 0.445399L16.8157 1.82848C16.6706 1.97695 16.6706 2.21918 16.8157 2.36765L20.2609 5.89178C20.406 6.04024 20.6428 6.04024 20.7879 5.89178L22.14 4.50869C22.7206 3.91092 22.7206 2.94589 22.14 2.35202ZM15.2421 13.5222V17.4995H3.01988V4.99707H11.797C11.9192 4.99707 12.0338 4.94628 12.1216 4.86032L13.6494 3.29752C13.9397 3.00059 13.7334 2.49658 13.3247 2.49658H2.40877C1.39662 2.49658 0.575439 3.33659 0.575439 4.37195V18.1246C0.575439 19.16 1.39662 20 2.40877 20H15.8532C16.8654 20 17.6865 19.16 17.6865 18.1246V11.9594C17.6865 11.5413 17.1938 11.3342 16.9036 11.6273L15.3758 13.1901C15.2918 13.2799 15.2421 13.3971 15.2421 13.5222Z" fill="#fff"/>
                             </svg>
                             <img v-else src="@/assets/img/edit.svg" alt="Editar" class="btTabla" @click="ActualizandoUnidad(unidad)"> 
                             <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarUnidad(unidad.ClaveUnidadSat)" v-if="unidad.Activo == true">
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -210,6 +210,7 @@ function borrarUnidad(id){
 
 .filaDesactivada td{
     background-color: #999;
+    display: none;          /* Ocultar fila desactivada */
 }
 .contenedorPadre {
     background-color: #fff;
