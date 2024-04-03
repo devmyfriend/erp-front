@@ -4,8 +4,8 @@
             <option value="Clave">Clave:</option>
             <option value="Nombre">Nombre:</option>
         </select>
-        <input type="text" placeholder="05" v-model="txtBusqueda" v-if="modoBusqueda=='Clave'" minlength="1" maxlength="3">
-        <input type="text" placeholder="Caja" v-model="txtBusqueda" v-if="modoBusqueda=='Nombre'" minlength="1">
+        <input type="text" placeholder="05" v-model="txtBusqueda" v-if="modoBusqueda=='Clave'" minlength="1" maxlength="3" @keyup.enter="buscar(txtBusqueda)">
+        <input type="text" placeholder="Caja" v-model="txtBusqueda" v-if="modoBusqueda=='Nombre'" minlength="1" @keyup.enter="buscar(txtBusqueda)">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
