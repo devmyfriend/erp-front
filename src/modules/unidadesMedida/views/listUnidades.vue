@@ -11,6 +11,7 @@ const modoFrm = ref(1);
 const infoPaginado= ref({pagTotales: 1, pagAct: 1, regTotales: 1});
 const ClaveUnidadSat = ref('');
 const NombreUnidadSat = ref('');
+const busquedaActiva = ref(false);
 
 store.cargarUnidades(infoPaginado.value.pagAct).then( () => {
     ListadoUnidades.value = store.getUnidades.items;
@@ -56,9 +57,11 @@ function esperarBusqueda(txt){
             infoPaginado.value.pagTotales = store.getUnidades.info.totalPages;
             infoPaginado.value.regTotales = store.getUnidades.info.totalItems;
             infoPaginado.value.pagAct = store.getUnidades.info.currentPage;
+            busquedaActiva.value = false;
         });
     }else{
         ListadoUnidades.value = store.getUnidades.response;
+        busquedaActiva.value = true;
     }
 }
 function frmUnidad(opc){
@@ -179,16 +182,18 @@ function borrarUnidad(id){
         </div>
 
         <transition-group name="general">
-            <span class="contadorPaginado" v-if="ListadoUnidades.length <= 10"> 
-                Página {{ infoPaginado.pagAct }} de {{ infoPaginado.pagTotales }}. Total registros: {{ infoPaginado.regTotales }}
-            </span>
+            <div class="paginado" v-if="!busquedaActiva">
+                <span class="contadorPaginado"> 
+                    Página {{ infoPaginado.pagAct }} de {{ infoPaginado.pagTotales }}. Total registros: {{ infoPaginado.regTotales }}
+                </span>
+                
+                <div class="botonesPaginado">
+                    <button @click="paginado(1)"> &lt;&lt; </button>
+                    <button @click="paginado(2)"> &lt; </button>
             
-            <div class="botonesPaginado" v-if="ListadoUnidades.length <= 10">
-                <button @click="paginado(1)"> &lt;&lt; </button>
-                <button @click="paginado(2)"> &lt; </button>
-        
-                <button @click="paginado(3)"> &gt; </button>
-                <button @click="paginado(4)"> &gt;&gt; </button>
+                    <button @click="paginado(3)"> &gt; </button>
+                    <button @click="paginado(4)"> &gt;&gt; </button>
+                </div>
             </div>
         </transition-group>
     </div>
