@@ -166,33 +166,51 @@ watch(() => props.pBusqueda, () => {
 }
 
 .tablaContainer {
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tablaContainer::-webkit-scrollbar {
+  display: none
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #000;
+  border: none;
 }
 
-td, th {
+/* td, th {
   border: 1px solid #000;
   padding: 0.25rem 0.5rem;
   margin: 0rem 0.25rem 0rem 0.25rem;
-}
+} */
 
 th {
-  background-color: #999999;
+  background-color: #353535;
   color: #fff;
   height: 1rem;
 }
 td{
-  background-color: #fff;
-  color: #999999;
+  background-color: #d9d9d9; /* Antes era #fff */
+  color: #000;
   height: 2rem;
-  padding: 0rem 0.5rem 0rem 0.5rem;
+  padding: 0.5rem;
 }
-
+td:not(:last-child){
+    border-right: 0.125rem solid #fff;
+}
+thead tr, tbody tr:not(:last-child){
+    border-bottom: 0.25rem solid #fff;
+}
+th:first-child, td:first-child{
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+th:last-child, td:last-child{
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
 button {
   margin-top: 1.25rem;
 }
