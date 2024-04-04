@@ -15,6 +15,7 @@ import formasPagoRouter from '@/modules/formasPago/routes/index'
 
 import productosRouter from '@/modules/productos/routes/index'
 import unidadesMedidaRouter from '@/modules/unidadesMedida/routes/index'
+import usuariosRouter from '@/modules/usuarios/routes/index'
 
 const routes = [
   {
@@ -75,8 +76,11 @@ const routes = [
     path: '/productos',
     ...productosRouter
   },{
-    path: '/usuarios',
+    path: '/unidades',
     ...unidadesMedidaRouter
+  },{
+    path: '/usuarios',
+    ...usuariosRouter
   }
  //fin de rutas de pruebas.
 ]
