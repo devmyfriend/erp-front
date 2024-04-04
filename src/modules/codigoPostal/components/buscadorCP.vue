@@ -32,7 +32,7 @@ function buscar() {
 </script>
 
 <style scoped>
-input, select{
+input{
     height: 2.1875rem;
     color: #000;
     border: 1px solid #D9D9D9;
@@ -41,20 +41,8 @@ input, select{
 }
 input{
     width: 29rem;
-    border-left: none;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
 }
-select{
-    width: 6rem;
-    border-right: none;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-}
-input:focus, select:focus{
+input:focus{
     outline: none;
 }
 input::placeholder{
