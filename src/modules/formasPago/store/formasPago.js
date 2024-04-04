@@ -34,9 +34,21 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
             }
         },
         
-        async buscarFormasPago(body) {
-        },
-        async buscarMetodosPago(body) {
+        async buscarFormasPago(txt) {
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/pagos/metodo/forma/${txt}`);
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoFormas = datos.data;
+                    return true;
+                }
+            }catch(error){
+                Swal.fire({
+                    title: "Error",
+                    text: "Error al buscar las formas de pago",
+                    icon: "error",
+                });
+                return false;
+            }
         },
 
         async agregarFormaPago(body) {
