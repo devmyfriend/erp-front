@@ -1,27 +1,37 @@
 <template>
     <div class="contenedor">
-        <input type="text" placeholder="77500" v-model="txtBusqueda" minlength="4" maxlength="5" @keyup.enter="buscar(txtBusqueda)">
+        <input type="number" placeholder="77500" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
 
 <script setup>
 import Swal from 'sweetalert2';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 const { useCodigosPostales } = require('../store/codigosPostales.js')
 const store = useCodigosPostales();
 
 const txtBusqueda = ref('');
+const txtLargo = computed(() => txtBusqueda.value.toString().length);
 
-function buscar() {
-    if (txtBusqueda.value === '') {
+function buscar(txt) {
+
+    if (txtBusqueda.value === '' || txtLargo.value == 0) {
         Swal.fire({
             icon: 'info',
-            title: 'Ingrese un valor para buscar',
+            title: 'Ingrese un CP para buscar',
             showConfirmButton: false,
             timer: 1000
         });
-    }else{
+    }else if(txtLargo.value < 4 || txtLargo.value > 5){
+        Swal.fire({
+            icon: 'info',
+            title: 'Ingrese un CP de entre 4 y 5 dígitos',
+            showConfirmButton: false,
+            timer: 1000
+        });
+    }
+    else{
         //store y swal.fire con el resultado
         store.buscarCodigosPostales(txtBusqueda.value).then(() => {
         });
@@ -57,5 +67,10 @@ img{
     display: flex;
     align-items: center;
     justify-content: left;
+}
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 </style>
