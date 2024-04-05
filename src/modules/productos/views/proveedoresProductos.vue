@@ -52,6 +52,8 @@ const listadoProveedores = ref([
     background-color: #fff;
     width: 100%;
     height: 51rem;
+    overflow: hidden;
+    border-radius: 1rem;
 }
 header{
     margin-bottom: 1.5rem;

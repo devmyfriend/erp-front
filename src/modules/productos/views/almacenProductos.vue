@@ -174,6 +174,8 @@ watch(() => Almacen.value, (newVal, oldVal) => {
     background-color: #fff;
     width: 100%;
     height: 51rem;
+    border-radius: 1rem;
+    overflow: hidden;
 }
 header{
     margin-bottom: 1.5rem;
