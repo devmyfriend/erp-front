@@ -28,15 +28,20 @@ function agregarRegistro(){
     })
 }
 function actualizarRegistro(){
-    store.editarComprobante({ ...nuevoRegistro.value }).then((res) => {
+    store.editarComprobante(nuevoRegistro.value).then((res) => {
         if(res){
             cargarDatos();
+            modo.value = 0;
+            showFrm.value = false;
+            limpiarFormulario();
         }
     })
 }
 function subirDatos(registro){
-    nuevoRegistro.ClaveTipoDeComprobante = registro.ClaveTipoDeComprobante;
-    nuevoRegistro.Descripcion = registro.Descripcion;
+    modo.value = 1;
+    showFrm.value = true;
+    nuevoRegistro.value.ClaveTipoDeComprobante = registro.ClaveTipoDeComprobante;
+    nuevoRegistro.value.Descripcion = registro.Descripcion;
 }
 function borrarRegistro(registro){
     store.borrarComprobante(registro.ClaveTipoDeComprobante).then((res) => {
@@ -63,7 +68,7 @@ cargarDatos();
                 <buscadorCP/>
             </div> -->
             <div class="formulario" v-if="showFrm">
-                <input type="text" class="inpClave" placeholder="Clave" v-model="nuevoRegistro.ClaveTipoDeComprobante" minlength="1" maxlength="1">
+                <input type="text" class="inpClave" placeholder="Clave" v-model="nuevoRegistro.ClaveTipoDeComprobante" minlength="1" maxlength="1" :disabled="modo==1">
                 <input type="text" class="inpNombre" placeholder="Nombre de Comprobante" v-model="nuevoRegistro.Descripcion" minlength="1">
                 <button class="btAgregar" @click="modo == 0 ? agregarRegistro() : actualizarRegistro()"> {{ modo == 0 ? 'Agregar' : 'Editar' }} </button>
             </div>

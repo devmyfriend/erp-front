@@ -63,7 +63,7 @@ export const useComprobantes = defineStore('comprobantes', {
         },
         async editarComprobante( comprobante ){
             try{
-                const datos = await axios.patch(`${ process.env.VUE_APP_PATH_API }v1/comprobante`, {data: comprobante});
+                const datos = await axios.patch(`${ process.env.VUE_APP_PATH_API }v1/comprobante`, comprobante);
 
                 if ( datos.status === 200 && datos.statusText === "OK" ){
                     Swal.fire({
