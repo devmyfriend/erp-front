@@ -43,7 +43,6 @@ function subirDatos(registro){
     showFrm.value = true;
 }
 function eliminarRegistro(registro){
-    alert('Clave a borar: ' + registro.ClaveMoneda)
     store.borrarMoneda({ClaveMoneda: registro.ClaveMoneda}).then((res) => {
         if (res) {
             cargarRegistros();
@@ -86,11 +85,13 @@ cargarRegistros();
                     @eBusqueda="esperarBusqueda"
                 />
             </div>
-            <div class="formulario" v-if="showFrm">
-                <input type="text" placeholder="Clave Moneda" class="inpClave" minlength="3" maxlength="3" v-model="nuevoRegistro.ClaveMoneda" :disabled="modo == 1">
-                <input type="text" placeholder="Nombre" class="inpNombre" minlength="1" v-model="nuevoRegistro.Descripcion">
-                <button class="btAgregar" @click="modo == 0 ? agregarRegistro() : actualizarRegistro()"> {{ modo == 0 ? 'Agregar' : 'Actualizar' }} </button>
-            </div>
+            <transition-group name="general">
+                <div class="formulario" v-if="showFrm">
+                    <input type="text" placeholder="Clave Moneda" class="inpClave" minlength="3" maxlength="3" v-model="nuevoRegistro.ClaveMoneda" :disabled="modo == 1">
+                    <input type="text" placeholder="Nombre" class="inpNombre" minlength="1" v-model="nuevoRegistro.Descripcion">
+                    <button class="btAgregar" @click="modo == 0 ? agregarRegistro() : actualizarRegistro()"> {{ modo == 0 ? 'Agregar' : 'Actualizar' }} </button>
+                </div>
+            </transition-group>
             <button class="btAgregar" @click="AgregarNuevoRegistro()"> {{ showFrm == true ? 'Cancelar' : 'Nuevo' }} </button>
 
         </div>
