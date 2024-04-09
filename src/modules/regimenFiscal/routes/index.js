@@ -1,7 +1,7 @@
 export default{
     name:'regimenFiscal',
     path:'/regimenFiscal',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/shared/layoutGym.vue'),
     redirect: '/regimenFiscal/listado/',
     children:[
         {

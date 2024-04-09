@@ -1,147 +1,92 @@
-<template lang="es">
-    <div class="contenedor">
-        <header>
-            <h1> Regimenes fiscales</h1>
-        </header>
-        <div class="contenido">
-            <div class="formulario">
-                <div class="fila">
-                    <input type="text" placeholder="Clave Regimen" class="ClaveRegimen">
-                    <input type="text" placeholder="Descripción del Regimen" class="NombreRegimen">
-                </div>
+<script setup>
+import { ref } from 'vue';
+import buscadorRegimenes from '../components/buscadorRegimenes.vue';
+import { useRegimenFiscal } from '../store/regimenesFiscales.js';
+import Swal from 'sweetalert2';
 
-                <div class="fila">
-                    <label for="PersonaMoral">Persona Moral</label>
-                    <input id="PersonaMoral" type="checkbox">
-                    <label for="PersonaFisica">Persona Fisica</label>
-                    <input id="PersonaFisica" type="checkbox">
-                    
-                    <label for="FechaInicio">Fecha de Inicio</label>
-                    <input type="date" id="FechaInicio" value="2024-01-26">
-                    <label for="FechaInicio">Fecha de Fin</label>
-                    <input type="date" id="FechaFin" value="2024-01-26">
-                    
-                    <img src="@/assets/img/plus.png" alt="AñadirComprobante" class="iconoAgregar">
-                </div>
+const store = useRegimenFiscal();
+const ListadoRegimenes = ref([
+    {
+        ClaveRegimenFiscal: '',
+        Descripcion: '',
+        Fisica: '',
+        Moral: '',
+        Activo: 0
+    }
+]);
+
+const example = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+
+store.cargarRegimenFiscal().then(() => {
+    ListadoRegimenes.value = store.getRegimenFiscal;
+});
+
+function esperarBusqueda(txt) {
+    if (txt === '') {
+        console.log('Buscando: ' + txt);
+        store.cargarRegimenFiscal().then(() => {
+            ListadoRegimenes.value = store.getRegimenFiscal;
+        });
+    } else {
+        console.log('Buscando: ' + txt);
+        store.buscarRegimenFiscal(txt).then((res) => {
+            if (res.length === 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No se encontraron resultados',
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            }else{
+                ListadoRegimenes.value = res;
+            }
+        });
+    }
+}
+</script>
+
+<template>
+    <header>
+        <h1> Regimenes fiscales </h1>
+    </header>
+    <div class="contenedorPadre">
+        <h2> Listado de regimenes fiscales </h2>
+        <div class="linea">
+            <div class="buscador">
+                <buscadorRegimenes
+                    @eBusqueda="esperarBusqueda"
+                />
             </div>
+        </div>
 
-            <table class="table-bordered">
+        <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
+            <table>
                 <thead>
                     <tr>
-                        <th>Clave Regimen Fiscal</th>
-                        <th>Descripción</th>
-                        <th>Fisica</th>
-                        <th>Moral</th>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
-                        <th>CFDi</th>
-                        <th>Acciones</th>
+                        <th class="col-xs col-start"> Clave </th>
+                        <th class="col-auto col-start"> Descripción </th>
+                        <th class="col-s"> Física </th>
+                        <th class="col-s"> Moral </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Personas Morales con Fines Lucrativos</td>
-                        <td></td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
+                    <tr v-for="(RegimenFiscal, index) in ListadoRegimenes" :key="index">
+                        <td class="col-xs col-start"> {{ RegimenFiscal.ClaveRegimenFiscal }} </td>
+                        <td class="col-auto col-start"> {{ RegimenFiscal.Descripcion }} </td>
+                        <td class="col-s"> 
+                            {{ typeof RegimenFiscal.Fisica === 'boolean' ? 
+                            (RegimenFiscal.Fisica ? 'Aplica' : 'No Aplica') : 
+                            (typeof RegimenFiscal.Fisica === 'number' && RegimenFiscal.Fisica === 1 ? 
+                            'Aplica' : (typeof RegimenFiscal.Fisica === 'number' && RegimenFiscal.Fisica === 0 ?
+                            'No Aplica' : RegimenFiscal.Fisica)) }} 
                         </td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>I05</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Sueldos y Salarios e Ingresos Asimilados a Salarios</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td></td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>N</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Arrendamiento</td>
-                        <td></td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>I03</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Régimen de Enajenación o Adquisición de Bienes</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td></td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>I02</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Demás ingresos</td>
-                        <td></td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>I01</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Residentes en el Extranjero sin Establecimiento Permanente en México</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td></td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>G03</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>Ingresos por Dividendos (socios y accionistas)</td>
-                        <td></td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>2024/01/26</td>
-                        <td>2025/01/26</td>
-                        <td>G02</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
+                        <td class="col-s"> 
+                            {{ typeof RegimenFiscal.Moral === 'boolean' ? 
+                            (RegimenFiscal.Moral ? 'Aplica' : 'No Aplica') :
+                            (typeof RegimenFiscal.Moral === 'number' && RegimenFiscal.Moral === 1 ?
+                            'Aplica' : (typeof RegimenFiscal.Moral === 'number' && RegimenFiscal.Moral === 0 ?
+                            'No Aplica' : RegimenFiscal.Moral)) }} 
                         </td>
                     </tr>
                 </tbody>
@@ -150,77 +95,133 @@
     </div>
 </template>
 
-<script setup>
-/* import tablaInfinita from '@/shared/tablaInfinita.vue' */
-</script>
-
 <style scoped>
-    
-    @import url('../../../styles/checkbox.css');
+.general-enter-active {
+    animation: fadeIn 0.75s;
+}
+.general-leave-active {
+    animation: fadeOut 0.25s;
+}
 
-    .contenedor {
-        background-color: #D9D9D9;
-        width: 100%;
-        height: 100%;
-    }
-    header {
-        width: 100%;
-        text-align: start;
-    }
-    .contenido{
-        width: auto;
-        margin: 1rem;
-    }
-    h1{
-        margin: 0;
-        padding-bottom: 1rem;
-        width: 100%;
-        background-color: white;
-    }
-    .formulario{
-        width: 100%;
-    }
-    .fila{
-        margin-bottom: 1rem;
-        display: flex;
-    }
-    label:first-child{
-        margin-right: 0.5rem;
-    }
-    label:not(:first-child), 
-    select{
-        font-size: 1rem;
-        margin: auto 0.5rem auto 1rem;
-        margin-right: 0.5rem;
-    }
-    .ClaveRegimen, .NombreRegimen, select, label, input[type="date"] {
-        color: #999999;
-        height: 2.1875rem;
-        border: none;
-        border-radius: 0.3125rem;
-        padding: 0.5rem;
-        font-size: 1rem;
-        outline: none;
-    }
-    .ClaveRegimen{
-        width: 32.5rem;
-    }
-    .NombreRegimen{
-        width: 43.625rem;
-        margin-left: 0.5rem;
-    }
-    input[type="date"]{
-        width: 20rem;
-    }
-    .iconoAgregar{
-    width: 1.375rem;
-    height: 1.375rem;
-    margin: auto;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    }
-    ::placeholder {
-        font-style: italic;
-        color: #bdbdbdda;
-    }
+
+.contenedorPadre {
+    background-color: #fff;
+    width: 100%;
+    height: 51rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+header{
+    margin-bottom: 1.5rem;
+}
+h1{
+    text-align: start;
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-transform: capitalize;
+}
+h2{
+    text-align: start;
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+
+}
+.linea{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.buscador{
+    width: 30%;
+}
+
+
+
+input, select{
+    height: 2.1875rem;
+    color: #000;
+    border: 1px solid #D9D9D9;
+    border-radius: 0.3125rem;
+    padding-left: 1rem;
+}
+input:disabled, select:disabled{
+    background-color: #d9d9d9;
+    color: #000;
+}
+
+
+
+.tablaContainer{
+    display: flex;
+    height: 31rem;
+    min-width: 31rem;
+    margin-top: 1.5rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.tablaContainer::-webkit-scrollbar {
+    display: none;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+    height: max-content;
+    max-height: 30.375rem;
+}
+th{
+    background-color: #353535;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    height: 3rem;
+    max-height: 3rem;
+}
+td{
+    background-color: #d9d9d9;
+    color: #000;
+    font-size: 1rem;
+    height: 2.5rem;
+    max-height: 2.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.col-xs{
+    width: 10rem;
+    max-width: 10rem;
+}
+.col-s{
+    width: 15rem;
+    max-width: 15rem;
+}
+.col-auto{
+    width: auto;
+}
+.col-start{
+    text-align: start;
+    word-break: break-all;
+    padding-left: 1rem;
+}
+td:not(:last-child){
+    border-right: 0.125rem solid #fff;
+}
+thead tr, tbody tr:not(:last-child){
+    border-bottom: 0.25rem solid #fff;
+}
+th:first-child, td:first-child{
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+th:last-child, td:last-child{
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
 </style>
