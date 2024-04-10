@@ -36,5 +36,22 @@ export const useRegimenFiscal = defineStore("RegimenFiscal", {
                     });
                 }
             },
+            async buscarRegimenesXCFDi( idRegimen ){
+                try{
+                    const datos = await axios.get(`${ruta_local}v1/catalogo/sat/cfdi`);
+    
+                    if (datos.status === 200 && datos.statusText === "OK" && datos.data.length > 0) {
+                        let respuesta = datos.data.filter( (item) => item.regimen.ClaveRegimenFiscal === idRegimen ).map( (item) => item.cfdi );
+                        return respuesta;
+                    }
+                }catch( error ){
+                    console.log("[Error]: " + error );
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se pudo cargar la información',
+                    });
+                }
+            },
         },
     });

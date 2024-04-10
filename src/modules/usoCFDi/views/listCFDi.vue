@@ -5,15 +5,7 @@ import { useCFDi } from '../store/CFDi.js';
 import Swal from 'sweetalert2';
 
 const store = useCFDi();
-const ListadoCFDi = ref([
-    {
-        ClaveUsoCFDI: '',
-        Descripcion: '',
-        Fisica: '',
-        Moral: '',
-        Activo: 0
-    }
-]);
+const ListadoCFDi = ref([{ ClaveUsoCFDI: '', Descripcion: '', Fisica: '', Moral: '', Activo: 0 }]);
 
 store.cargarCFDi().then(() => {
     ListadoCFDi.value = store.getCFDi;

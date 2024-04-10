@@ -4,6 +4,7 @@ import buscadorRegimenes from '../components/buscadorRegimenes.vue';
 import { useRegimenFiscal } from '../store/regimenesFiscales.js';
 import Swal from 'sweetalert2';
 
+
 const store = useRegimenFiscal();
 const ListadoRegimenes = ref([
     {
@@ -15,8 +16,7 @@ const ListadoRegimenes = ref([
     }
 ]);
 
-const example = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-
+const CFDiRegimen = ref([]);
 
 store.cargarRegimenFiscal().then(() => {
     ListadoRegimenes.value = store.getRegimenFiscal;
@@ -39,11 +39,47 @@ function esperarBusqueda(txt) {
                     timer: 1000
                 });
             }else{
-                ListadoRegimenes.value = res;
+                ListadoRegimenes.value = res; 
             }
         });
     }
 }
+
+
+function handlerTooltip(idRegimen) {
+    store.buscarRegimenesXCFDi(idRegimen).then((res) => {
+
+        res = res.flat().map((item) => {
+            return {
+                ClaveUsoCFDI: item.ClaveUsoCFDI,
+                Descripcion: item.Descripcion
+            };
+        });
+        
+        if(res.length === 0){
+            Swal.fire({
+                icon: 'info',
+                title: 'El regimen no esta ligado a ningún CFDi',
+                showConfirmButton: false,
+                timer: 2000
+            });
+            CFDiRegimen.value = [];
+        }else{
+            CFDiRegimen.value = res;
+            Swal.fire({
+                title: 'CFDi aplicables',
+                html: `<ul style="list-style: none;">
+                    ${CFDiRegimen.value.map((CFDi) => {
+                        return `<li style="text-align: start">${CFDi.ClaveUsoCFDI} - ${CFDi.Descripcion}</li>`;
+                    }).join('')}
+                </ul style="">`,
+                showConfirmButton: false
+            });
+        }
+
+    });
+}
+
 </script>
 
 <template>
@@ -54,12 +90,9 @@ function esperarBusqueda(txt) {
         <h2> Listado de regimenes fiscales </h2>
         <div class="linea">
             <div class="buscador">
-                <buscadorRegimenes
-                    @eBusqueda="esperarBusqueda"
-                />
+                <buscadorRegimenes @eBusqueda="esperarBusqueda" />
             </div>
         </div>
-
         <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
             <table>
                 <thead>
@@ -71,22 +104,24 @@ function esperarBusqueda(txt) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(RegimenFiscal, index) in ListadoRegimenes" :key="index">
+                    <tr v-for="(RegimenFiscal, index) in ListadoRegimenes" :key="index"
+                        @click="handlerTooltip(RegimenFiscal.ClaveRegimenFiscal)"
+                        v-tooltip="'Clickea para ver los CFDi aplicables'">
                         <td class="col-xs col-start"> {{ RegimenFiscal.ClaveRegimenFiscal }} </td>
                         <td class="col-auto col-start"> {{ RegimenFiscal.Descripcion }} </td>
-                        <td class="col-s"> 
-                            {{ typeof RegimenFiscal.Fisica === 'boolean' ? 
-                            (RegimenFiscal.Fisica ? 'Aplica' : 'No Aplica') : 
-                            (typeof RegimenFiscal.Fisica === 'number' && RegimenFiscal.Fisica === 1 ? 
+                        <td class="col-s">
+                            {{ typeof RegimenFiscal.Fisica === 'boolean' ?
+                            (RegimenFiscal.Fisica ? 'Aplica' : 'No Aplica') :
+                            (typeof RegimenFiscal.Fisica === 'number' && RegimenFiscal.Fisica === 1 ?
                             'Aplica' : (typeof RegimenFiscal.Fisica === 'number' && RegimenFiscal.Fisica === 0 ?
-                            'No Aplica' : RegimenFiscal.Fisica)) }} 
+                            'No Aplica' : RegimenFiscal.Fisica)) }}
                         </td>
-                        <td class="col-s"> 
-                            {{ typeof RegimenFiscal.Moral === 'boolean' ? 
+                        <td class="col-s">
+                            {{ typeof RegimenFiscal.Moral === 'boolean' ?
                             (RegimenFiscal.Moral ? 'Aplica' : 'No Aplica') :
                             (typeof RegimenFiscal.Moral === 'number' && RegimenFiscal.Moral === 1 ?
                             'Aplica' : (typeof RegimenFiscal.Moral === 'number' && RegimenFiscal.Moral === 0 ?
-                            'No Aplica' : RegimenFiscal.Moral)) }} 
+                            'No Aplica' : RegimenFiscal.Moral)) }}
                         </td>
                     </tr>
                 </tbody>
