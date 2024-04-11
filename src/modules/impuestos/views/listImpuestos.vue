@@ -7,7 +7,6 @@ const store = useImpuestos();
 
 const ListadoImpuestosSAT = ref([]);
 const ListadoImpuestosPropios = ref([]);
-const ListadoImpuestosCompuestos = ref([]);
 
 const nuevoRegistro = ref({
     NombreImpuesto: '', 
@@ -41,11 +40,6 @@ function cargarDatos(){
     store.cargarImpuestosPropios().then(() => {
         ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
         console.log('[Front] [Carga]: ' + ListadoImpuestosPropios.value);
-    });
-
-    store.cargarImpuestosCompuestos().then(() => {
-        ListadoImpuestosCompuestos.value = store.getListadoImpuestosCompuestos;
-        console.log('[Front] [Carga]: ' + ListadoImpuestosCompuestos.value);
     });
 }
 
