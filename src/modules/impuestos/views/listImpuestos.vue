@@ -1,197 +1,255 @@
-<template lang="es">
-    <div class="contenedor">
-        <header>
-            <h1> Tipos de impuesto</h1>
-        </header>
-        <div class="contenido">
-            <div class="formulario">
-                <div class="fila">
-                    <input type="text" placeholder="Clave Impuesto" class="ClaveImpuesto">
-                    <input type="text" placeholder="Descripción del impuesto" class="NombreImpuesto">
-                </div>
 
-                <div class="fila">
-                    <label for="Retención">Retención</label>
-                    <input name="Retención" type="checkbox">
-                    <label for="Traslado">Traslado</label>
-                    <input name="Traslado" type="checkbox">
-                    <label for="L/F">Local/Federal</label>
-                    <select name="L/F" class="LocalFederal" v-model="LocalFederal">
-                        <option v-if="!LocalFederalSelected" value=""></option>
-                        <option value="1">Federal</option>
-                        <option value="2">Local</option>
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import { useImpuestos } from '../store/impuestos.js'
+import Swal from 'sweetalert2'
+const store = useImpuestos();
+
+const ListadoImpuestosSAT = ref([]);
+const ListadoImpuestosPropios = ref([]);
+const ListadoImpuestosCompuestos = ref([]);
+
+const nuevoRegistro = ref({
+    NombreImpuesto: '', 
+    ClaveImpuesto: '', 
+    CreadoPor: 2
+})
+
+const ClavesImpuestos = computed (() => {
+    
+    return ListadoImpuestosSAT.value.map((impuesto) => {
+        return {
+            ClaveImpuesto: impuesto.ClaveImpuesto,
+            Nombre: impuesto.Nombre
+        }
+    });
+});
+
+const showFrm = ref(false);
+const modoFrm = ref(0);
+
+onMounted(() => {
+    cargarDatos();
+})
+
+function cargarDatos(){
+    store.cargarImpuestosSAT().then(() => {
+        ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
+        console.log('[Front] [Carga]: ' + ListadoImpuestosSAT.value);
+    });
+
+    store.cargarImpuestosPropios().then(() => {
+        ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
+        console.log('[Front] [Carga]: ' + ListadoImpuestosPropios.value);
+    });
+
+    store.cargarImpuestosCompuestos().then(() => {
+        ListadoImpuestosCompuestos.value = store.getListadoImpuestosCompuestos;
+        console.log('[Front] [Carga]: ' + ListadoImpuestosCompuestos.value);
+    });
+}
+
+function crearImpuestoPropio(){
+    nuevoRegistro.value.CreadoPor = 2;
+    store.crearImpuestoPropio(nuevoRegistro.value).then(() => {
+        cargarDatos();
+        limpiarFrm();
+    });
+}
+
+function subirDatos(impuesto){
+    nuevoRegistro.value= impuesto;
+    showFrm.value = true;
+    modoFrm.value = 1;
+}
+
+function actualizarImpuestoPropio(){
+    nuevoRegistro.value.ActualizadoPor = 2;
+    store.actualizarImpuestoPropio(nuevoRegistro.value).then(() => {
+        store.cargarImpuestosPropios().then(() => {
+            ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
+            console.log('[Front] [Carga]: ' + ListadoImpuestosPropios.value);
+            limpiarFrm();
+        });
+    });
+}
+
+function borrarImpuestoPropio(impuesto){
+    nuevoRegistro.value.BorradoPor = 2;
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            store.borrarImpuestoPropio(impuesto).then(() => {
+                cargarDatos();
+            });
+        }
+    });
+}
+
+function limpiarFrm(){
+    showFrm.value = !showFrm;
+    nuevoRegistro.value = {
+        NombreImpuesto: '', 
+        ClaveImpuesto: '', 
+        CreadoPor: 2
+    }
+    modoFrm.value = 0;
+}
+
+</script>
+
+<template>
+    <header>
+        <h1> Tipos de impuestos</h1>
+    </header>
+    <div class="contenedorPadre">
+        <h2> Listado tipos de impuestos</h2>
+        <div class="linea">
+            <transition-group name="general">
+                <div class="formulario" v-if="showFrm">
+                    <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro.cfgImpuestoId" v-show="modoFrm == 1" disabled>
+                    <input type="text" placeholder="Descripción del impuesto" class="inpNombre" v-model="nuevoRegistro.NombreImpuesto">
+                    <select name="L/F" class="inpNombre" v-model="nuevoRegistro.ClaveImpuesto">
+                        <option v-for="Clave in ClavesImpuestos" :value="Clave.ClaveImpuesto"> {{Clave.Nombre}} </option>
                     </select>
-                    <img src="@/assets/img/plus.png" alt="AñadirComprobante" class="iconoAgregar">
+                    <button class="btAgregar" alt="AñadirImpuesto" @click="modoFrm == 0 ? crearImpuestoPropio() : actualizarImpuestoPropio() "> {{ modoFrm == 0 ? 'Agregar' : 'Actualizar'}} </button>
                 </div>
-            </div>
+            </transition-group>
+            <button class="btAgregar" alt="NuevoImpuesto" @click=" showFrm ? limpiarFrm() : (showFrm = true)"> {{ showFrm ? 'Cancelar' : "Nuevo"}} </button>
+        </div>
             
-
-            <button @click="test"> test </button>
-            <table class="table-bordered">
+            <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
+            <table>
                 <thead>
                     <tr>
-                        <th>Clave Impuesto</th>
-                        <th>Descripción</th>
-                        <th>Retención</th>
-                        <th>Traslado</th>
-                        <th>Local o Federal</th>
-                        <th>Acciones</th>
+                        <th class="col-s">Clave Impuesto Propio</th>
+                        <th class="col-auto col-start">Descripción</th>
+                        <th class="col-s">Clave Impuesto SAT</th>
+                        <th class="col-xs">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>601</td>
-                        <td>ISR</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td></td>
-                        <td>Federal</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>603</td>
-                        <td>IVA</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>Federal</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>605</td>
-                        <td>IEPS</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>Federal</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
+                    <tr v-for="impuesto in ListadoImpuestosPropios" :key="impuesto.IdImpuesto">
+                        <td>{{ impuesto.cfgImpuestoId }}</td>
+                        <td class="">{{ impuesto.NombreImpuesto }}</td>
+                        <td>{{ impuesto.ClaveImpuesto }}</td>
+                        <td>
+                            <img src="@/assets/img/edit.svg" class="btTabla" alt="Editar" @click="subirDatos(impuesto)">
+                            <img src="@/assets/img/trash.svg" class="btTabla" alt="Eliminar" @click="borrarImpuestoPropio(impuesto.cfgImpuestoId)">
                         </td>
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 </template>
 
-<script setup>
-/* import tablaInfinita from '@/shared/tablaInfinita.vue' */
-import { ref, watch, onMounted } from 'vue'
-
-
-const { useImpuestos } = require('../store/impuestos.js')
-const store = useImpuestos();
-
-const ListadoImpuestos = ref([]);
-
-const LocalFederal = ref(0);
-const LocalFederalSelected = ref(false);
-watch(LocalFederal, (val) => {
-    if (val != 0) {
-        LocalFederalSelected.value = true;
-    }
-})
-
-onMounted(() => {
-    store.cargarImpuestos().then(() => {
-        ListadoImpuestos.value = store.getImpuestos;
-        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoImpuestos.value));
-    })
-})
-
-function test() {
-    store.buscarImpuestos().then(() => {
-        ListadoImpuestos.value = store.getImpuestos;
-        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoImpuestos.value));
-    })
-}
-</script>
-
 <style scoped>
-    
-    @import url('../../../styles/checkbox.css');
 
-    .contenedor {
-        background-color: #D9D9D9;
-        width: 100%;
-        height: 100%;
+    @import url('../../../styles/checkbox.css');
+    @import url('../../../styles/tablaListado.css');
+
+    .general-enter-active {
+        animation: fadeIn 0.75s;
     }
-    header {
-        width: 100%;
-        text-align: start;
+    .general-leave-active {
+        animation: fadeOut 0.25s;
     }
-    .contenido{
-        width: auto;
-        margin: 1rem;
+    
+    .filaDesactivada td{
+        background-color: #999;
+        display: none;          /* Ocultar fila desactivada */
+    }
+    .contenedorPadre {
+        background-color: #fff;
+        width: 100%;
+        height: 51rem;
+        overflow: hidden;
+        border-radius: 1rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    header{
+        margin-bottom: 1.5rem;
     }
     h1{
-        margin: 0;
-        padding-bottom: 1rem;
+        text-align: start;
+        color: #fff;
+        font-size: 1.75rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        text-transform: capitalize;
+    }
+    h2{
+        text-align: start;
+        color: #000;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+    
+    }
+    .btTabla{
+        cursor: pointer;
+    }
+    .linea{  
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         width: 100%;
-        background-color: white;
+    }
+    .linea *:not(:last-child) {
+        margin-right: 1rem;
+    }
+    .buscador{
+        flex: 0 0 auto;
+    }
+    .btAgregar{
+        background-color: #353535;
+        border: none;
+        color: #fff;
+        border-radius: 0.5rem;
+        height: 2.1875rem;
+        width: 10rem;
+        font-weight: bold;
+        letter-spacing: 0.25rem;
     }
     .formulario{
-        width: 100%;
-    }
-    .fila{
         display: flex;
-        margin-bottom: 1rem;
+        flex: 1;
+        justify-content: flex-start;
+        align-items: center;
     }
-    label{
-        color: #999999;
-    }
-    label:first-child{
-        color: #999999;
-        margin-right: 0.5rem;
-    }
-    label:not(:first-child), 
-    select{
-        font-size: 1rem;
-        margin: auto 0.5rem auto 1rem;
-        margin-right: 0.5rem;
-    }
-    .LocalFederal{
-        width: 12.6875rem;
-    }
-    .ClaveImpuesto, .NombreImpuesto, select, label {
+    .inpClave, .inpNombre{
         height: 2.1875rem;
-        border: none;
+        color: #000;
+        border: 1px solid #D9D9D9;
         border-radius: 0.3125rem;
-        padding: 0.5rem;
-        font-size: 1rem;
+        padding-left: 1rem;
+    }
+    .inpNombre{
+        width: 35rem;
+    }
+    .inpClave{
+        width: 10rem;
+    }
+    .inpNombre:focus, .inpClave:focus{
         outline: none;
     }
-    .ClaveImpuesto{
-        width: 32.5rem;
+    .labelNombre{
+        font-size: 1rem;
+        font-weight: bold;
+        letter-spacing: 0.125rem;
     }
-    .NombreImpuesto{
-        width: 43.625rem;
-        margin-left: 0.5rem;
-    }
-    .iconoAgregar{
-    width: 1.375rem;
-    height: 1.375rem;
-    margin: auto;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    }
-    ::placeholder {
-        font-style: italic;
-        color: #bdbdbdda;
+    input:disabled{
+        background-color: #d9d9d9;
+        color: #000;
     }
 </style>
