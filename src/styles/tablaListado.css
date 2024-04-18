@@ -34,6 +34,10 @@ td{
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
+.col-xxs{
+    width: 5rem;
+    max-width: 5rem;
+}
 .col-xs{
     width: 10rem;
     max-width: 10rem;
