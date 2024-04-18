@@ -8,6 +8,11 @@ export default{
             path:'listado/',
             name: 'listadoImpuestos',
             component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/impuestos/views/listImpuestos.vue'),
+        },
+        {
+            path: 'listadoCompuestos/',
+            name: 'listadoImpuestosCompuestos',
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/impuestos/views/listImpuestosCompuestos.vue'),
         }
     ]
 }

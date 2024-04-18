@@ -34,12 +34,10 @@ onMounted(() => {
 function cargarDatos(){
     store.cargarImpuestosSAT().then(() => {
         ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
-        console.log('[Front] [Carga]: ' + ListadoImpuestosSAT.value);
     });
 
     store.cargarImpuestosPropios().then(() => {
         ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
-        console.log('[Front] [Carga]: ' + ListadoImpuestosPropios.value);
     });
 }
 
@@ -62,7 +60,6 @@ function actualizarImpuestoPropio(){
     store.actualizarImpuestoPropio(nuevoRegistro.value).then(() => {
         store.cargarImpuestosPropios().then(() => {
             ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
-            console.log('[Front] [Carga]: ' + ListadoImpuestosPropios.value);
             limpiarFrm();
         });
     });
@@ -97,14 +94,24 @@ function limpiarFrm(){
     modoFrm.value = 0;
 }
 
+function getNombre(clave){
+    let nombre = '';
+    ListadoImpuestosSAT.value.forEach((impuesto) => {
+        if(impuesto.ClaveImpuesto == clave){
+            nombre = impuesto.Nombre;
+        }
+    });
+    return nombre;
+}
+
 </script>
 
 <template>
     <header>
-        <h1> Tipos de impuestos</h1>
+        <h1> Impuestos</h1>
     </header>
     <div class="contenedorPadre">
-        <h2> Listado tipos de impuestos</h2>
+        <h2> Listado de impuestos propios </h2>
         <div class="linea">
             <transition-group name="general">
                 <div class="formulario" v-if="showFrm">
@@ -125,15 +132,15 @@ function limpiarFrm(){
                     <tr>
                         <th class="col-s">Clave Impuesto Propio</th>
                         <th class="col-auto col-start">Descripción</th>
-                        <th class="col-s">Clave Impuesto SAT</th>
+                        <th class="col-s col-start">Clave Impuesto SAT</th>
                         <th class="col-xs">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="impuesto in ListadoImpuestosPropios" :key="impuesto.IdImpuesto">
                         <td>{{ impuesto.cfgImpuestoId }}</td>
-                        <td class="">{{ impuesto.NombreImpuesto }}</td>
-                        <td>{{ impuesto.ClaveImpuesto }}</td>
+                        <td class="col-start">{{ impuesto.NombreImpuesto }}</td>
+                        <td class="col-start">{{ getNombre(impuesto.ClaveImpuesto) }}</td>
                         <td>
                             <img src="@/assets/img/edit.svg" class="btTabla" alt="Editar" @click="subirDatos(impuesto)">
                             <img src="@/assets/img/trash.svg" class="btTabla" alt="Eliminar" @click="borrarImpuestoPropio(impuesto.cfgImpuestoId)">
@@ -164,7 +171,7 @@ function limpiarFrm(){
     .contenedorPadre {
         background-color: #fff;
         width: 100%;
-        height: 51rem;
+        min-height: calc(100vh - 11rem);
         overflow: hidden;
         border-radius: 1rem;
         padding: 1rem;

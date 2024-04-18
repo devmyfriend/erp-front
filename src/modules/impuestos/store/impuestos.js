@@ -171,7 +171,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
         },
         async borrarImpuestoCompuesto(impuesto){
             try {
-                const response = await axios.delete(`${ruta_local}v1/impuestos/compuestos/${impuesto.ImpuestoCompuestoId}`);
+                const response = await axios.delete(`${ruta_local}v1/impuestos/compuestos/${impuesto}`);
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({
