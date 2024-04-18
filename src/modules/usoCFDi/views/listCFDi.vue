@@ -96,7 +96,7 @@ function esperarBusqueda(txt) {
 .contenedorPadre {
     background-color: #fff;
     width: 100%;
-    height: 51rem;
+    min-height: calc(100vh - 11rem);
     overflow: hidden;
     border-radius: 1rem;
     padding: 1rem;
