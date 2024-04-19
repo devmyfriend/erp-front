@@ -35,7 +35,7 @@
               @click="activarAcciones(2, item)">
             </td>
           </tr>
-          <tr v-if="registrosFinales.length >= paginado" @click="tablaContainer.scrollTop = 0"> <td :colspan="cantidadCols + 1" style="cursor: pointer;"> Regresar al inicio </td> </tr>
+          <tr v-if="registrosFinales.length >= paginado" @click="tablaContainer.scrollTop = 0" :class="{td1: index % 2 == 0, td2: index % 2 != 0}"> <td :colspan="cantidadCols + 1" style="cursor: pointer;"> Regresar al inicio </td> </tr>
         </tbody>
       </table>
     </div>
@@ -166,6 +166,7 @@ watch(() => props.pBusqueda, () => {
 
 .tablaInfinita {
   text-align: start;
+  width: 100%;
 }
 
 .tablaContainer {
@@ -192,7 +193,7 @@ table {
 th {
   background-color: #353535;
   color: #fff;
-  height: 1rem;
+  height: 1.5rem;
 }
 td{
   color: #000;
@@ -228,7 +229,7 @@ th, .Acciones{
   text-align: center;
 }
 .small{
-  height: 1rem;
+  height: 1.5rem;
   width: 1rem;
   margin: 0rem !important;
 }

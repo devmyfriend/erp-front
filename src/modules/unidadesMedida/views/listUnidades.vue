@@ -165,7 +165,7 @@ function borrarUnidad(id){
                     </tr>
                 </thead>
                 <tbody>
-                    <tr :class="{filaDesactivada: !unidad.Activo}" v-for="(unidad, index) in ListadoUnidades" :key="index">
+                    <tr :class="{filaDesactivada: !unidad.Activo, td1: index % 2 == 0, td2: index % 2 != 0}" v-for="(unidad, index) in ListadoUnidades" :key="index">
                         <td class="col-xs"> {{ unidad.ClaveUnidadSat }} </td>
                         <td class="col-auto col-start"> {{ unidad.NombreUnidadSat }} </td>
 <!--                         <td class="col-s"> {{ unidad.Activo ? 'Activado' : 'Desactivado' }} </td>
@@ -207,6 +207,8 @@ function borrarUnidad(id){
 .general-leave-active {
     animation: fadeOut 0.25s;
 }
+
+@import url('../../../styles/tablaListado.css');
 
 .filaDesactivada td{
     background-color: #999;
@@ -296,6 +298,7 @@ h2{
     display: flex;
     height: 31rem;
     min-width: 31rem;
+    flex-grow: 0;
     margin-top: 1.5rem;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -320,7 +323,6 @@ th{
     max-height: 3rem;
 }
 td{
-    background-color: #d9d9d9;
     color: #000;
     font-size: 1rem;
     height: 2.5rem;
