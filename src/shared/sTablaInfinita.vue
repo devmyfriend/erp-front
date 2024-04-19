@@ -9,8 +9,8 @@
           </tr>
         </thead>
         <tbody ref="contenidoREF">
-          <tr v-if="registrosFinales.length >= paginado" @click="IrAlFinal"> <td :colspan="cantidadCols + 1" style="cursor: pointer;"> Regresar hasta el final</td></tr>
-          <tr v-for="(item, index) in registrosFinales" :key="index">
+          <tr v-if="registrosFinales.length >= paginado" @click="IrAlFinal" :class="{td1: index % 2 == 0, td2: index % 2 != 0}"> <td :colspan="cantidadCols + 1" style="cursor: pointer;" > Regresar hasta el final</td></tr>
+          <tr v-for="(item, index) in registrosFinales" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
             <template v-for="(value, key, columna) in item">
               <!-- <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td> -->
               <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">
@@ -161,6 +161,9 @@ watch(() => props.pBusqueda, () => {
 </script>
 
 <style scoped>
+
+@import url('../styles/tablaListado.css');
+
 .tablaInfinita {
   text-align: start;
 }
@@ -192,7 +195,6 @@ th {
   height: 1rem;
 }
 td{
-  background-color: #d9d9d9; /* Antes era #fff */
   color: #000;
   height: 2rem;
   padding: 0.5rem;

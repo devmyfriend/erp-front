@@ -60,7 +60,7 @@ function esperarBusqueda(txt) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(cfdi, index) in ListadoCFDi" :key="index">
+                    <tr v-for="(cfdi, index) in ListadoCFDi" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
                         <td class="col-xs col-start"> {{ cfdi.ClaveUsoCFDI }} </td>
                         <td class="col-auto col-start"> {{ cfdi.Descripcion }} </td>
                         <td class="col-s"> 
@@ -92,11 +92,13 @@ function esperarBusqueda(txt) {
     animation: fadeOut 0.25s;
 }
 
+@import url('../../../styles/tablaListado.css');
 
 .contenedorPadre {
     background-color: #fff;
     width: 100%;
     min-height: calc(100vh - 11rem);
+    max-height: calc(100vh - 11rem);
     overflow: hidden;
     border-radius: 1rem;
     padding: 1rem;
@@ -149,8 +151,8 @@ input:disabled, select:disabled{
 
 .tablaContainer{
     display: flex;
-    height: 31rem;
-    min-width: 31rem;
+/*     height: 31rem;
+    min-width: 31rem; */
     margin-top: 1.5rem;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -175,7 +177,6 @@ th{
     max-height: 3rem;
 }
 td{
-    background-color: #d9d9d9;
     color: #000;
     font-size: 1rem;
     height: 2.5rem;

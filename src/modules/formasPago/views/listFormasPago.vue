@@ -201,6 +201,7 @@
         editandoMetodos.value = false;
     }
 </script>
+
 <template>
     <header>
         <h1>Métodos y Formas de Pago</h1>
@@ -304,7 +305,7 @@
     animation: fadeOut 0.25s;
 }
 
-
+@import url('../../../styles/tablaListado.css');
 
 .filaDesactivada td{
     background-color: #999;
@@ -409,62 +410,6 @@ input[type="checkbox"]{
     height: 15rem;
     min-width: 15rem;
 }
-/* .tablaContainer::-webkit-scrollbar {
-    display: none;
-}
-table{
-    width: 100%;
-    border-collapse: collapse;
-    border: none;
-    max-height: 100%;
-}
-th{
-    background-color: #353535;
-    color: #fff;
-    font-weight: bold;
-    font-size: 1rem;
-    height: 3rem;
-    max-height: 3rem;
-}
-td{
-    background-color: #d9d9d9;
-    color: #000;
-    font-size: 1rem;
-    height: 2.5rem;
-    max-height: 2.5rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-.col-xs{
-    width: 10rem;
-    max-width: 10rem;
-}
-.col-s{
-    width: 15rem;
-    max-width: 15rem;
-}
-.col-auto{
-    width: auto;
-}
-.col-start{
-    text-align: start;
-    word-break: break-all;
-    padding-left: 1rem;
-}
-td:not(:last-child){
-    border-right: 0.125rem solid #fff;
-}
-thead tr, tbody tr:not(:last-child){
-    border-bottom: 0.25rem solid #fff;
-}
-th:first-child, td:first-child{
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
-}
-th:last-child, td:last-child{
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-} */
 input:disabled{
     background-color: #d9d9d9;
     color: #000;

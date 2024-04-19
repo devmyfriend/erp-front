@@ -36,7 +36,7 @@ store.cargarCodigosPostales().then(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(cp, index) in ListadoCP" :key="index">
+                    <tr v-for="(cp, index) in ListadoCP" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
                         <td class="col-xs"> {{ cp.pais }} </td>
                         <td class="col-xs"> {{ cp.codigo_postal }} </td>
                         <td class="col-xs"> {{ cp.estado }} </td>
@@ -57,6 +57,8 @@ store.cargarCodigosPostales().then(() => {
     animation: fadeOut 0.25s;
 }
 
+@import url('../../../styles/tablaListado.css');
+
 .filaDesactivada td{
     background-color: #999;
     display: none;          /* Ocultar fila desactivada */
@@ -65,6 +67,7 @@ store.cargarCodigosPostales().then(() => {
     background-color: #fff;
     width: 100%;
     min-height: calc(100vh - 11rem);
+    max-height: calc(100vh - 11rem);
     overflow: hidden;
     border-radius: 1rem;
     padding: 1rem;
@@ -143,8 +146,8 @@ h2{
 }
 .tablaContainer{
     display: flex;
-    height: 31rem;
-    min-width: 31rem;
+/*     height: 31rem;
+    min-width: 31rem; */
     margin-top: 1.5rem;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -169,7 +172,6 @@ th{
     max-height: 3rem;
 }
 td{
-    background-color: #d9d9d9;
     color: #000;
     font-size: 1rem;
     height: 2.5rem;

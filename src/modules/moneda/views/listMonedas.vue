@@ -106,7 +106,7 @@ cargarRegistros();
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(registro, index) in ListadoMonedas" :key="index">
+                    <tr v-for="(registro, index) in ListadoMonedas" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
                         <td class="col-s"> {{ registro.ClaveMoneda }} </td>
                         <td class="col-auto col-start"> {{ registro.Descripcion }} </td>
                         <td class="col-xs">                            
@@ -121,6 +121,8 @@ cargarRegistros();
 </template>
 
 <style scoped>
+@import url('../../../styles/tablaListado.css');
+
 .general-enter-active {
     animation: fadeIn 0.75s;
 }
@@ -136,6 +138,7 @@ cargarRegistros();
     background-color: #fff;
     width: 100%;
     min-height: calc(100vh - 11rem);
+    max-height: calc(100vh - 11rem);
     overflow: hidden;
     border-radius: 1rem;
     padding: 1rem;
@@ -219,8 +222,8 @@ h2{
 }
 .tablaContainer{
     display: flex;
-    height: 31rem;
-    min-width: 31rem;
+/*     height: 31rem;
+    min-width: 31rem; */
     margin-top: 1.5rem;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -245,7 +248,6 @@ th{
     max-height: 3rem;
 }
 td{
-    background-color: #d9d9d9;
     color: #000;
     font-size: 1rem;
     height: 2.5rem;
