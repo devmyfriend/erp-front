@@ -13,6 +13,11 @@ export default{
             path: 'listadoCompuestos/',
             name: 'listadoImpuestosCompuestos',
             component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/impuestos/views/listImpuestosCompuestos.vue'),
+        },
+        {
+            path: 'listadoPropios/',
+            name: 'listadoImpuestosPropios',
+            component: ()=> import(/* webpackChunkName: "listado"*/ '@/modules/impuestos/views/listImpuestosPropios.vue'),
         }
     ]
 }

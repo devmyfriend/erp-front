@@ -136,7 +136,7 @@ function limpiarFrm2(){
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(impuesto, index) in ListadoImpuestosCompuestos" :key="index">
+                    <tr v-for="(impuesto, index) in ListadoImpuestosCompuestos" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
                         <td>{{ impuesto.ImpuestoCompuestoId }}</td>
                         <td class="col-start">{{ impuesto.Nombre }}</td>
                         <td>{{ impuesto.Predeterminado == true ? 'Si' : 'No' }}</td>
@@ -149,7 +149,7 @@ function limpiarFrm2(){
             </table>
         </div>
 
-        <div class="linea">
+<!--         <div class="linea">
             <transition-group name="general">
                 <div class="formulario" v-if="showFrm2" :key="'form2'">
                     <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro2.ImpuestoCompuestoId" v-show="modoFrm2 == 1" disabled>
@@ -204,7 +204,7 @@ function limpiarFrm2(){
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -324,7 +324,8 @@ function limpiarFrm2(){
         color: #000;
     }
     .tablaContainer{
-        height: 16rem;
+        /* height: 16rem; */
+        flex-grow: 1;
     }
     .line2{
         padding-left: 0.25rem;

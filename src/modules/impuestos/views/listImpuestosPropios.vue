@@ -6,12 +6,23 @@ import Swal from 'sweetalert2'
 const store = useImpuestos();
 
 const ListadoImpuestosSAT = ref([]);
+const ListadoImpuestosPropios = ref([]);
 
 const nuevoRegistro = ref({
     NombreImpuesto: '', 
     ClaveImpuesto: '', 
     CreadoPor: 2
 })
+
+const ClavesImpuestos = computed (() => {
+    
+    return ListadoImpuestosSAT.value.map((impuesto) => {
+        return {
+            ClaveImpuesto: impuesto.ClaveImpuesto,
+            Nombre: impuesto.Nombre
+        }
+    });
+});
 
 const showFrm = ref(false);
 const modoFrm = ref(0);
@@ -24,17 +35,84 @@ function cargarDatos(){
     store.cargarImpuestosSAT().then(() => {
         ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
     });
+
+    store.cargarImpuestosPropios().then(() => {
+        ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
+    });
+}
+
+function crearImpuestoPropio(){
+    nuevoRegistro.value.CreadoPor = 2;
+    store.crearImpuestoPropio(nuevoRegistro.value).then(() => {
+        cargarDatos();
+        limpiarFrm();
+    });
+}
+
+function subirDatos(impuesto){
+    nuevoRegistro.value= impuesto;
+    showFrm.value = true;
+    modoFrm.value = 1;
+}
+
+function actualizarImpuestoPropio(){
+    nuevoRegistro.value.ActualizadoPor = 2;
+    store.actualizarImpuestoPropio(nuevoRegistro.value).then(() => {
+        store.cargarImpuestosPropios().then(() => {
+            ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
+            limpiarFrm();
+        });
+    });
+}
+
+function borrarImpuestoPropio(impuesto){
+    nuevoRegistro.value.BorradoPor = 2;
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            store.borrarImpuestoPropio(impuesto).then(() => {
+                cargarDatos();
+            });
+        }
+    });
+}
+
+function limpiarFrm(){
+    showFrm.value = !showFrm;
+    nuevoRegistro.value = {
+        NombreImpuesto: '', 
+        ClaveImpuesto: '', 
+        CreadoPor: 2
+    }
+    modoFrm.value = 0;
+}
+
+function getNombre(clave){
+    let nombre = '';
+    ListadoImpuestosSAT.value.forEach((impuesto) => {
+        if(impuesto.ClaveImpuesto == clave){
+            nombre = impuesto.Nombre;
+        }
+    });
+    return nombre;
 }
 
 </script>
 
 <template>
     <header>
-        <h1> Impuestos SAT</h1>
+        <h1> Impuestos</h1>
     </header>
     <div class="contenedorPadre">
-        <h2> Listado de impuestos SAT </h2>
-        <!-- <div class="linea">
+        <h2> Listado de impuestos propios </h2>
+        <div class="linea">
             <transition-group name="general">
                 <div class="formulario" v-if="showFrm">
                     <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro.cfgImpuestoId" v-show="modoFrm == 1" disabled>
@@ -46,20 +124,27 @@ function cargarDatos(){
                 </div>
             </transition-group>
             <button class="btAgregar" alt="NuevoImpuesto" @click=" showFrm ? limpiarFrm() : (showFrm = true)"> {{ showFrm ? 'Cancelar' : "Nuevo"}} </button>
-        </div> -->
+        </div>
             
-        <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
+            <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
             <table>
                 <thead>
                     <tr>
-                        <th class="col-s">Clave Impuesto SAT</th>
+                        <th class="col-s">Clave Impuesto Propio</th>
                         <th class="col-auto col-start">Descripción</th>
+                        <th class="col-s col-start">Clave Impuesto SAT</th>
+                        <th class="col-xs">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(impuesto, index) in ListadoImpuestosSAT" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
-                        <td>{{ impuesto.ClaveImpuesto }} y {{ index }}</td>
-                        <td class="col-start">{{ impuesto.Nombre }}</td>
+                    <tr v-for="(impuesto, index) in ListadoImpuestosPropios" :key="impuesto.IdImpuesto" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
+                        <td>{{ impuesto.cfgImpuestoId }}</td>
+                        <td class="col-start">{{ impuesto.NombreImpuesto }}</td>
+                        <td class="col-start">{{ getNombre(impuesto.ClaveImpuesto) }}</td>
+                        <td>
+                            <img src="@/assets/img/edit.svg" class="btTabla" alt="Editar" @click="subirDatos(impuesto)">
+                            <img src="@/assets/img/trash.svg" class="btTabla" alt="Eliminar" @click="borrarImpuestoPropio(impuesto.cfgImpuestoId)">
+                        </td>
                     </tr>
                 </tbody>
             </table>
