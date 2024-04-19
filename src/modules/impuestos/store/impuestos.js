@@ -18,7 +18,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
     actions:{
         async cargarImpuestosSAT(){
             try {
-                const response = await axios.get(`${ruta_local}v1/impuestos/SAT`);
+                const response = await axios.get(`${ruta_local}v1/impuestos`);
                 this.ListadoImpuestosSAT = response.data;
             } catch (error) {
                 console.error(error);
