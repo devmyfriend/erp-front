@@ -30,7 +30,7 @@ function cargarDatos(){
 
 <template>
     <header>
-        <h1> Impuestos SAT</h1>
+        <h1> Impuestos </h1>
     </header>
     <div class="contenedorPadre">
         <h2> Listado de impuestos SAT </h2>
