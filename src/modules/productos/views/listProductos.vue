@@ -138,7 +138,7 @@ watch(tipoProducto, (newValue, oldValue) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(producto, index) in ListadoProductos" :key="index">
+                        <tr v-for="(producto, index) in ListadoProductos" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.ClaveProducto }}</td>
                             
                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
@@ -166,7 +166,8 @@ watch(tipoProducto, (newValue, oldValue) => {
     </div>
 </template>
 
-<style scoped>  
+<style scoped>
+@import url('../../../styles/tablaListado.css');
 .contenedor {
     background-color: #fff;
     width: 100%;
@@ -237,7 +238,7 @@ h2{
     margin-top: 1.75rem;
     max-height: 39.5rem;
 }
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #000;
@@ -257,7 +258,7 @@ td{
   color: #999999;
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
-}
+} */
 .colStart{
     text-align: start;
 }
