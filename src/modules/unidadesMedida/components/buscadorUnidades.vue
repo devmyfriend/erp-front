@@ -1,11 +1,11 @@
 <template>
     <div class="contenedor">
         <select name="tipoBusqueda" id="tipoBusqueda" v-model="modoBusqueda">
-            <option value="Clave">Clave:</option>
-            <option value="Nombre">Nombre:</option>
+            <option value="1">Clave:</option>
+            <option value="2">Nombre:</option>
         </select>
-        <input type="text" placeholder="05" v-model="txtBusqueda" v-if="modoBusqueda=='Clave'" minlength="1" maxlength="3" @keyup.enter="buscar(txtBusqueda)">
-        <input type="text" placeholder="Caja" v-model="txtBusqueda" v-if="modoBusqueda=='Nombre'" minlength="1" @keyup.enter="buscar(txtBusqueda)">
+        <input type="text" placeholder="05" v-model="txtBusqueda" v-if="modoBusqueda==1" minlength="1" maxlength="3" @keyup.enter="buscar(txtBusqueda)">
+        <input type="text" placeholder="Caja" v-model="txtBusqueda" v-if="modoBusqueda==2" minlength="1" @keyup.enter="buscar(txtBusqueda)">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
@@ -18,7 +18,7 @@ const { useUnidades } = require('../store/unidades.js')
 const store = useUnidades();
 
 const txtBusqueda = ref('');
-const modoBusqueda = ref('Clave');
+const modoBusqueda = ref('1');
 
 function buscar() {
     if (txtBusqueda.value === '') {
@@ -31,7 +31,7 @@ function buscar() {
                 if(res.response.length === 0){
                     Swal.fire({
                         icon: 'info',
-                        title: 'No se encontraron resultados',
+                        title: 'No se encontraron registros',
                         showConfirmButton: false,
                         timer: 1000
                     });

@@ -14,8 +14,7 @@ export const useUnidades = defineStore('Unidades',{
     actions: {
         async cargarUnidades(pagina) {
             try {
-                /* const response = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/unidades/${pagina}`); */
-                const response = await axios.get(`${ruta_local}v1/unidades/${pagina}`);
+                const response = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/${pagina}`);
 
                 if (response.status === 200 && response.statusText === "OK"){
                     this.ListadoUnidades = response.data;
@@ -75,10 +74,21 @@ export const useUnidades = defineStore('Unidades',{
         async buscarUnidades(txt, opc) {
             try {
                 /* const response = await axios.get(`${ process.env.VUE_APP_PATH_API }v1/unidades/buscar/${id}`); */
-                if(opc === undefined){
-                    opc = 'Clave';
+                let response = '';
+
+                if(opc === undefined || opc === '1'){
+                    response = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/buscar/${txt}`);
+                    if(response.data.length === 0){
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'No se encontraron registros',
+                            showConfirmButton: false,
+                            timer: 1500
+                    })
+                    }
+                }else{
+                    response = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/buscar/nombre/${txt}`); 
                 }
-                const response = await axios.get(`${ruta_local}v1/unidades/${opc}/${txt}`); 
 
                 if (response.status === 200 && response.statusText === "OK"){
                     this.ListadoUnidades = response.data;
@@ -86,12 +96,21 @@ export const useUnidades = defineStore('Unidades',{
                 }
             } catch (error) {
                 console.log(error);
-                Swal.fire({
-                    icon: 'error',
-                    title: `[Error]: ${error.response.data.errors}`,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron registros',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: `[Error]: ${error.response.data.message}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
                 this.cargarUnidades(1);
             }
         },
