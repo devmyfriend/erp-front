@@ -87,6 +87,7 @@ function cargarDatos(){
         background-color: #fff;
         width: 100%;
         min-height: calc(100vh - 11rem);
+        max-height: calc(100vh - 11rem);
         overflow: hidden;
         border-radius: 1rem;
         padding: 1rem;

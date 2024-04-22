@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useImpuestos } from '../store/impuestos.js'
@@ -118,6 +117,7 @@ function getNombre(clave){
                     <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro.cfgImpuestoId" v-show="modoFrm == 1" disabled>
                     <input type="text" placeholder="Descripción del impuesto" class="inpNombre" v-model="nuevoRegistro.NombreImpuesto">
                     <select name="L/F" class="inpNombre" v-model="nuevoRegistro.ClaveImpuesto">
+                        <option value="007"> aaaaaaaaa </option>
                         <option v-for="Clave in ClavesImpuestos" :value="Clave.ClaveImpuesto"> {{Clave.Nombre}} </option>
                     </select>
                     <button class="btAgregar" alt="AñadirImpuesto" @click="modoFrm == 0 ? crearImpuestoPropio() : actualizarImpuestoPropio() "> {{ modoFrm == 0 ? 'Agregar' : 'Actualizar'}} </button>
@@ -172,6 +172,7 @@ function getNombre(clave){
         background-color: #fff;
         width: 100%;
         min-height: calc(100vh - 11rem);
+        max-height: calc(100vh - 11rem);
         overflow: hidden;
         border-radius: 1rem;
         padding: 1rem;
