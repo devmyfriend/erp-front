@@ -56,31 +56,6 @@ export const useImpuestos = defineStore( 'Impuestos',{
             }
         },
 
-        async buscarImpuestoSAT(nombre){
-            try{
-                const response = await axios.post(`${ruta_local}v1/impuestos/buscar`, { Nombre: nombre});
-                this.ListadoImpuestosSAT = response.data.data;
-                return true;
-            }catch(error){
-
-                if(error.response.status === 404){
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'No se encontraron impuestos SAT con ese nombre',
-                        text: error.response.data.message
-                    })
-                }
-                else{
-                    console.error(error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: error.message,
-                        text: error
-                    })
-                }
-            }
-        },
-
         async crearImpuestoPropio(impuesto){
             try {
                 const response = await axios.post(`${ruta_local}v1/impuestos/propios`, impuesto);
@@ -121,6 +96,79 @@ export const useImpuestos = defineStore( 'Impuestos',{
                     title: error.message,
                     text: error
                 })
+            }
+        },
+
+        async buscarImpuestoCompuestos(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/compuestos/buscar`, { Nombre: nombre});
+                this.ListadoImpuestosCompuestos = response.data.data;
+                return true;
+            }catch(error){
+
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos compuestos con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
+            }
+        },
+        async buscarImpuestoSAT(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/buscar`, { Nombre: nombre});
+                this.ListadoImpuestosSAT = response.data.data;
+                return true;
+            }catch(error){
+
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos SAT con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
+            }
+        },
+        async buscarImpuestoPropios(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/propios/buscar`, { NombreImpuesto: nombre });
+                this.ListadoImpuestosPropios = response.data.response;
+                return true;
+            }catch(error){
+
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos propios con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
             }
         },
 

@@ -12,6 +12,7 @@ const nuevoRegistro1 = ref({
     Predeterminado: false, 
     CreadoPor: 2
 })
+
 const nuevoRegistro2 = ref({
     ClaveImpuesto: '',
     Nombre: '', 
@@ -89,7 +90,7 @@ function limpiarFrm1(){
     showFrm1.value = !showFrm1;
     nuevoRegistro1.value = {
         Nombre: '', 
-        ClaveImpuesto: '', 
+        Predeterminado: false, 
         CreadoPor: 2
     }
     modoFrm1.value = 0;

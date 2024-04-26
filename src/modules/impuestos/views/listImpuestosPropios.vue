@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useImpuestos } from '../store/impuestos.js'
+import buscadorImpuestoPropio from  '../components/buscadorImpuestoPropio.vue';
 import Swal from 'sweetalert2'
 const store = useImpuestos();
 
@@ -65,7 +66,6 @@ function actualizarImpuestoPropio(){
 }
 
 function borrarImpuestoPropio(impuesto){
-    nuevoRegistro.value.BorradoPor = 2;
     Swal.fire({
         title: '¿Estás seguro?',
         text: "¡No podrás revertir esto!",
@@ -76,7 +76,11 @@ function borrarImpuestoPropio(impuesto){
         confirmButtonText: 'Sí, borrarlo!'
     }).then((result) => {
         if (result.isConfirmed) {
-            store.borrarImpuestoPropio(impuesto).then(() => {
+            const request = {
+                cfgImpuestoId: parseInt(impuesto),
+                ActualizadoPor: 2
+            }
+            store.borrarImpuestoPropio(request).then(() => {
                 cargarDatos();
             });
         }
@@ -103,6 +107,13 @@ function getNombre(clave){
     return nombre;
 }
 
+function esperarBusqueda(txt){
+    if (txt) {
+        ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
+    }else{
+        cargarDatos();
+    }
+}
 </script>
 
 <template>
@@ -112,12 +123,15 @@ function getNombre(clave){
     <div class="contenedorPadre">
         <h2> Listado de impuestos propios </h2>
         <div class="linea">
+            <div class="buscador">
+                <buscadorImpuestoPropio @eBusqueda="esperarBusqueda" />
+            </div>
             <transition-group name="general">
                 <div class="formulario" v-if="showFrm">
                     <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro.cfgImpuestoId" v-show="modoFrm == 1" disabled>
                     <input type="text" placeholder="Descripción del impuesto" class="inpNombre" v-model="nuevoRegistro.NombreImpuesto">
                     <select name="L/F" class="inpNombre" v-model="nuevoRegistro.ClaveImpuesto">
-                        <option value="007"> aaaaaaaaa </option>
+                        <option value="7"> aaaaaaaaa </option>
                         <option v-for="Clave in ClavesImpuestos" :value="Clave.ClaveImpuesto"> {{Clave.Nombre}} </option>
                     </select>
                     <button class="btAgregar" alt="AñadirImpuesto" @click="modoFrm == 0 ? crearImpuestoPropio() : actualizarImpuestoPropio() "> {{ modoFrm == 0 ? 'Agregar' : 'Actualizar'}} </button>
@@ -211,7 +225,9 @@ function getNombre(clave){
         margin-right: 1rem;
     }
     .buscador{
-        flex: 0 0 auto;
+        display: flex;
+        flex-grow: 1;
+        align-items: flex-start;
     }
     .btAgregar{
         background-color: #353535;
@@ -237,7 +253,7 @@ function getNombre(clave){
         padding-left: 1rem;
     }
     .inpNombre{
-        width: 35rem;
+        width: 25rem;
     }
     .inpClave{
         width: 10rem;
