@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useImpuestos } from '../store/impuestos.js'
+import buscadorImpuestoPropio from '../components/buscadorImpuestoCompuesto.vue';
 import Swal from 'sweetalert2'
 const store = useImpuestos();
 
@@ -105,6 +106,13 @@ function limpiarFrm2(){
     modoFrm2.value = 0;
 }
 
+function esperarBusqueda(txt){
+    if (txt) {
+        ListadoImpuestosCompuestos.value = store.getListadoImpuestosCompuestos;
+    }else{
+        cargarDatos();
+    }
+}
 </script>
 
 <template>
@@ -114,6 +122,9 @@ function limpiarFrm2(){
     <div class="contenedorPadre">
         <h2> Listado de impuestos compuestos </h2>
         <div class="linea">
+            <div class="buscador">
+                <buscadorImpuestoPropio @eBusqueda="esperarBusqueda" />
+            </div>
             <transition-group name="general">
                 <div class="formulario" v-if="showFrm1">
                     <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro1.ImpuestoCompuestoId" v-show="modoFrm1 == 1" disabled>
@@ -276,7 +287,9 @@ function limpiarFrm2(){
         margin-top: 0.75rem;
     }
     .buscador{
-        flex: 0 0 auto;
+        display: flex;
+        flex-grow: 1;
+        align-items: flex-start;
     }
     .btAgregar{
         background-color: #353535;
