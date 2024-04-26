@@ -56,7 +56,30 @@ export const useImpuestos = defineStore( 'Impuestos',{
             }
         },
 
+        async buscarImpuestoSAT(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/buscar`, { Nombre: nombre});
+                this.ListadoImpuestosSAT = response.data.data;
+                return true;
+            }catch(error){
 
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos SAT con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
+            }
+        },
 
         async crearImpuestoPropio(impuesto){
             try {
@@ -150,7 +173,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
 
         async borrarImpuestoPropio(impuesto){
             try {
-                const response = await axios.delete(`${ruta_local}v1/impuestos/propios/${impuesto}`);
+                const response = await axios.delete(`${ruta_local}v1/impuestos/propios/borrar`, {data: impuesto});
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({

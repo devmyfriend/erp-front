@@ -2,7 +2,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useImpuestos } from '../store/impuestos.js'
+import buscadorImpuesto from '../components/buscadorImpuesto.vue';
 import Swal from 'sweetalert2'
+
 const store = useImpuestos();
 
 const ListadoImpuestosSAT = ref([]);
@@ -26,6 +28,14 @@ function cargarDatos(){
     });
 }
 
+function esperarBusqueda(txt){
+    if (txt) {
+        ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
+    }else{
+        cargarDatos();
+    }
+}
+
 </script>
 
 <template>
@@ -34,6 +44,9 @@ function cargarDatos(){
     </header>
     <div class="contenedorPadre">
         <h2> Listado de impuestos SAT </h2>
+        <div class="linea">
+            <buscadorImpuesto @eBusqueda="esperarBusqueda" />
+        </div>
         <!-- <div class="linea">
             <transition-group name="general">
                 <div class="formulario" v-if="showFrm">
@@ -58,7 +71,7 @@ function cargarDatos(){
                 </thead>
                 <tbody>
                     <tr v-for="(impuesto, index) in ListadoImpuestosSAT" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
-                        <td>{{ impuesto.ClaveImpuesto }} y {{ index }}</td>
+                        <td>{{ impuesto.ClaveImpuesto }}</td>
                         <td class="col-start">{{ impuesto.Nombre }}</td>
                     </tr>
                 </tbody>
@@ -118,7 +131,7 @@ function cargarDatos(){
     }
     .linea{  
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
     }
