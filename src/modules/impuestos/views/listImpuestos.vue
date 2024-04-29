@@ -46,7 +46,7 @@ function esperarBusqueda(txt){
         <h2> Listado de impuestos SAT </h2>
         <div class="linea">
             <buscadorImpuesto @eBusqueda="esperarBusqueda" />
-        </div>
+        </div>  
         <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
             <table>
                 <thead>

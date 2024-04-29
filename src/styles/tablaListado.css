@@ -25,6 +25,10 @@ th{
     font-size: 1rem;
     /* height: 3rem; */
     max-height: 3rem;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 td{
     color: #000;
@@ -32,6 +36,10 @@ td{
     height: 2.5rem;
     max-height: 2.5rem;
     padding: 0.5rem;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .td1{
     background-color: #e5e5e5;

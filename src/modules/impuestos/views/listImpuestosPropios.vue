@@ -127,16 +127,16 @@ function esperarBusqueda(txt){
                     <tr>
                         <th class="col-s">Clave Impuesto Propio</th>
                         <th class="col-auto col-start">Descripción</th>
-                        <th class="col-s col-start">Clave Impuesto SAT</th>
+                        <th class="col-s col-start">Impuesto SAT</th>
                         <th class="col-xs">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(impuesto, index) in ListadoImpuestosPropios" :key="impuesto.IdImpuesto" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
-                        <td>{{ impuesto.cfgImpuestoId }}</td>
-                        <td class="col-start">{{ impuesto.NombreImpuesto }}</td>
-                        <td class="col-start">{{ impuesto.NombreSAT }}</td>
-                        <td>
+                        <td class="col-s">{{ impuesto.cfgImpuestoId }}</td>
+                        <td class="col-auto col-start">{{ impuesto.NombreImpuesto }}</td>
+                        <td class="col-s col-start">{{ impuesto.NombreSAT }}</td>
+                        <td class="col-xs">
                             <img src="@/assets/img/edit.svg" class="btTabla" alt="Editar" @click="subirDatos(impuesto)">
                             <img src="@/assets/img/trash.svg" class="btTabla" alt="Eliminar" @click="borrarImpuestoPropio(impuesto.cfgImpuestoId)">
                         </td>
