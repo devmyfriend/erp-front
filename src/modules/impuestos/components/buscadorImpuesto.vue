@@ -12,15 +12,15 @@ const emit = defineEmits('eBusqueda');
 const store = useImpuestos();
 const txtBusqueda = ref('');
 
-function buscar() {
+function buscar(texto) {
     if (txtBusqueda.value === '') {
         store.cargarImpuestosSAT().then(() => {
             emit('eBusqueda');
         });   
     } else {
-        store.buscarImpuestoSAT(txtBusqueda.value).then((res) => {
+        store.buscarImpuestoSAT(texto).then((res) => {
             if(res) {
-                emit ('eBusqueda', txtBusqueda.value);
+                emit ('eBusqueda', texto);
             } else {
                 emit ('eBusqueda');
             }

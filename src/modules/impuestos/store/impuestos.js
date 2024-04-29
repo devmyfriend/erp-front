@@ -29,6 +29,20 @@ export const useImpuestos = defineStore( 'Impuestos',{
                 })
             }
         },
+        async cargarImpuestosSATCompletos(){
+            try{
+                const data = await axios.get(`${ruta_local}v1/impuestos/all`);
+                this.ListadoImpuestosSAT = data.data;
+
+            }catch(error){
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
         async cargarImpuestosPropios(){
             try {
                 const response = await axios.get(`${ruta_local}v1/impuestos/propios`);
@@ -58,7 +72,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
 
         async crearImpuestoPropio(impuesto){
             try {
-                const response = await axios.post(`${ruta_local}v1/impuestos/propios`, impuesto);
+                const response = await axios.post(`${ruta_local}v1/impuestos/propios/crear`, impuesto);
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({
@@ -79,7 +93,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
         },
         async crearImpuestoCompuesto(impuesto){
             try {
-                const response = await axios.post(`${ruta_local}v1/impuestos/compuestos`, impuesto);
+                const response = await axios.post(`${ruta_local}v1/impuestos/compuestos/crear`, impuesto);
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({
@@ -174,7 +188,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
 
         async actualizarImpuestoPropio(impuesto){
             try {
-                const response = await axios.put(`${ruta_local}v1/impuestos/propios`, impuesto);
+                const response = await axios.put(`${ruta_local}v1/impuestos/propios/editar`, impuesto);
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({
@@ -195,7 +209,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
         },
         async actualizarImpuestoCompuesto(impuesto){
             try {
-                const response = await axios.put(`${ruta_local}v1/impuestos/compuestos`, impuesto);
+                const response = await axios.put(`${ruta_local}v1/impuestos/compuestos/editar`, impuesto);
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({
@@ -217,7 +231,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
 
         async borrarImpuestoPropio(impuesto){
             try {
-                const response = await axios.delete(`${ruta_local}v1/impuestos/propios/borrar`, {data: impuesto});
+                const response = await axios.delete(`${ruta_local}v1/impuestos/propios/desactivar`, {data: impuesto});
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({
@@ -238,7 +252,7 @@ export const useImpuestos = defineStore( 'Impuestos',{
         },
         async borrarImpuestoCompuesto(impuesto){
             try {
-                const response = await axios.delete(`${ruta_local}v1/impuestos/compuestos/${impuesto}`);
+                const response = await axios.delete(`${ruta_local}v1/impuestos/compuestos/desactivar`, {data: impuesto});
 
                 if(response.status === 200 && response.statusText === 'OK'){
                     Swal.fire({

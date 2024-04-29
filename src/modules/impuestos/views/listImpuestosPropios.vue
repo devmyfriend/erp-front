@@ -14,16 +14,6 @@ const nuevoRegistro = ref({
     CreadoPor: 2
 })
 
-const ClavesImpuestos = computed (() => {
-    
-    return ListadoImpuestosSAT.value.map((impuesto) => {
-        return {
-            ClaveImpuesto: impuesto.ClaveImpuesto,
-            Nombre: impuesto.Nombre
-        }
-    });
-});
-
 const showFrm = ref(false);
 const modoFrm = ref(0);
 
@@ -32,7 +22,7 @@ onMounted(() => {
 })
 
 function cargarDatos(){
-    store.cargarImpuestosSAT().then(() => {
+    store.cargarImpuestosSATCompletos().then(() => {
         ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
     });
 
@@ -50,7 +40,9 @@ function crearImpuestoPropio(){
 }
 
 function subirDatos(impuesto){
-    nuevoRegistro.value= impuesto;
+    nuevoRegistro.value.cfgImpuestoId = impuesto.cfgImpuestoId;
+    nuevoRegistro.value.NombreImpuesto = impuesto.NombreImpuesto;
+    nuevoRegistro.value.ClaveImpuesto = impuesto.ClaveImpuesto;
     showFrm.value = true;
     modoFrm.value = 1;
 }
@@ -97,16 +89,6 @@ function limpiarFrm(){
     modoFrm.value = 0;
 }
 
-function getNombre(clave){
-    let nombre = '';
-    ListadoImpuestosSAT.value.forEach((impuesto) => {
-        if(impuesto.ClaveImpuesto == clave){
-            nombre = impuesto.Nombre;
-        }
-    });
-    return nombre;
-}
-
 function esperarBusqueda(txt){
     if (txt) {
         ListadoImpuestosPropios.value = store.getListadoImpuestosPropios;
@@ -130,9 +112,8 @@ function esperarBusqueda(txt){
                 <div class="formulario" v-if="showFrm">
                     <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro.cfgImpuestoId" v-show="modoFrm == 1" disabled>
                     <input type="text" placeholder="Descripción del impuesto" class="inpNombre" v-model="nuevoRegistro.NombreImpuesto">
-                    <select name="L/F" class="inpNombre" v-model="nuevoRegistro.ClaveImpuesto">
-                        <option value="7"> aaaaaaaaa </option>
-                        <option v-for="Clave in ClavesImpuestos" :value="Clave.ClaveImpuesto"> {{Clave.Nombre}} </option>
+                    <select name="L/F" class="selectNombre" v-model="nuevoRegistro.ClaveImpuesto">
+                        <option v-for="Clave in ListadoImpuestosSAT" :value="Clave.ClaveImpuesto"> {{Clave.Nombre}} </option>
                     </select>
                     <button class="btAgregar" alt="AñadirImpuesto" @click="modoFrm == 0 ? crearImpuestoPropio() : actualizarImpuestoPropio() "> {{ modoFrm == 0 ? 'Agregar' : 'Actualizar'}} </button>
                 </div>
@@ -154,7 +135,7 @@ function esperarBusqueda(txt){
                     <tr v-for="(impuesto, index) in ListadoImpuestosPropios" :key="impuesto.IdImpuesto" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
                         <td>{{ impuesto.cfgImpuestoId }}</td>
                         <td class="col-start">{{ impuesto.NombreImpuesto }}</td>
-                        <td class="col-start">{{ getNombre(impuesto.ClaveImpuesto) }}</td>
+                        <td class="col-start">{{ impuesto.NombreSAT }}</td>
                         <td>
                             <img src="@/assets/img/edit.svg" class="btTabla" alt="Editar" @click="subirDatos(impuesto)">
                             <img src="@/assets/img/trash.svg" class="btTabla" alt="Eliminar" @click="borrarImpuestoPropio(impuesto.cfgImpuestoId)">
@@ -215,6 +196,10 @@ function esperarBusqueda(txt){
     .btTabla{
         cursor: pointer;
     }
+    th{
+        padding: 0.25rem;
+        height: 2.75rem;
+    }
     .linea{  
         display: flex;
         justify-content: flex-end;
@@ -245,15 +230,23 @@ function esperarBusqueda(txt){
         justify-content: flex-start;
         align-items: center;
     }
-    .inpClave, .inpNombre{
+    .inpClave, .inpNombre, .selectNombre{
         height: 2.1875rem;
         color: #000;
         border: 1px solid #D9D9D9;
         border-radius: 0.3125rem;
         padding-left: 1rem;
+        outline: none;
     }
     .inpNombre{
         width: 25rem;
+    }
+    .selectNombre{
+        width: 20rem;
+        overflow: hidden;
+        word-break: break-all;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .inpClave{
         width: 10rem;

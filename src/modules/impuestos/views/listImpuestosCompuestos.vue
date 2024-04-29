@@ -49,7 +49,9 @@ function crearImpuestoCompuesto(){
 }
 
 function subirDatos1(impuesto){
-    nuevoRegistro1.value= impuesto;
+    nuevoRegistro1.value.ImpuestoCompuestoId = impuesto.ImpuestoCompuestoId;
+    nuevoRegistro1.value.Nombre = impuesto.Nombre;
+    nuevoRegistro1.value.Predeterminado = impuesto.Predeterminado;
     showFrm1.value = true;
     modoFrm1.value = 1;
 }
@@ -80,7 +82,11 @@ function borrarImpuestoCompuesto(impuesto){
         confirmButtonText: 'Sí, borrarlo!'
     }).then((result) => {
         if (result.isConfirmed) {
-            store.borrarImpuestoCompuesto(impuesto).then(() => {
+            const registro = {
+                ImpuestoCompuestoId: impuesto,
+                BorradoPor: 2
+            }
+            store.borrarImpuestoCompuesto(registro).then(() => {
                 cargarDatos();
             });
         }
