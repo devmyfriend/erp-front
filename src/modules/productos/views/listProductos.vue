@@ -259,6 +259,12 @@ td{
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
 } */
+
+th{
+    padding: 0.25rem;
+    height: 2.75rem;
+}
+
 .colStart{
     text-align: start;
 }

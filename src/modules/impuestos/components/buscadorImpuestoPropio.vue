@@ -32,7 +32,7 @@ function buscar(texto) {
 
 <style scoped>
 input{
-    width: 29rem;
+    width: 20rem;
     height: 2.1875rem;
     border: 1px solid #d9d9d9;
     border-radius: 0.3125rem;

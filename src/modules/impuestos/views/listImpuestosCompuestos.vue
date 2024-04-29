@@ -268,6 +268,10 @@ function esperarBusqueda(txt){
     .btTabla{
         cursor: pointer;
     }
+    th{
+        padding: 0.25rem;
+        height: 2.75rem;
+    }
     .linea2{  
         display: flex;
         justify-content: space-between;

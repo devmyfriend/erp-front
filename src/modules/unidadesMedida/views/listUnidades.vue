@@ -165,7 +165,7 @@ function borrarUnidad(id){
                     </tr>
                 </thead>
                 <tbody>
-                    <tr :class="{filaDesactivada: !unidad.Activo, td1: index % 2 == 0, td2: index % 2 != 0}" v-for="(unidad, index) in ListadoUnidades" :key="index">
+                    <tr :class="{filaDesactivada: !unidad.Activo, td1: index % 2 == 0, td2: index % 2 != 0}" v-for="(unidad, index) in ListadoUnidades" :key="unidad.ClaveUnidadSat">
                         <td class="col-xs"> {{ unidad.ClaveUnidadSat }} </td>
                         <td class="col-auto col-start"> {{ unidad.NombreUnidadSat }} </td>
 <!--                         <td class="col-s"> {{ unidad.Activo ? 'Activado' : 'Desactivado' }} </td>
@@ -212,7 +212,8 @@ function borrarUnidad(id){
 
 .filaDesactivada td{
     background-color: #999;
-    display: none;          /* Ocultar fila desactivada */
+    color: #fff;
+    /* display: none; */          /* Ocultar fila desactivada */
 }
 .contenedorPadre {
     background-color: #fff;
