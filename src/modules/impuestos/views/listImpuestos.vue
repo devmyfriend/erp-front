@@ -47,20 +47,6 @@ function esperarBusqueda(txt){
         <div class="linea">
             <buscadorImpuesto @eBusqueda="esperarBusqueda" />
         </div>
-        <!-- <div class="linea">
-            <transition-group name="general">
-                <div class="formulario" v-if="showFrm">
-                    <input type="text" placeholder="Clave impuesto" class="inpClave" v-model="nuevoRegistro.cfgImpuestoId" v-show="modoFrm == 1" disabled>
-                    <input type="text" placeholder="Descripción del impuesto" class="inpNombre" v-model="nuevoRegistro.NombreImpuesto">
-                    <select name="L/F" class="inpNombre" v-model="nuevoRegistro.ClaveImpuesto">
-                        <option v-for="Clave in ClavesImpuestos" :value="Clave.ClaveImpuesto"> {{Clave.Nombre}} </option>
-                    </select>
-                    <button class="btAgregar" alt="AñadirImpuesto" @click="modoFrm == 0 ? crearImpuestoPropio() : actualizarImpuestoPropio() "> {{ modoFrm == 0 ? 'Agregar' : 'Actualizar'}} </button>
-                </div>
-            </transition-group>
-            <button class="btAgregar" alt="NuevoImpuesto" @click=" showFrm ? limpiarFrm() : (showFrm = true)"> {{ showFrm ? 'Cancelar' : "Nuevo"}} </button>
-        </div> -->
-            
         <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
             <table>
                 <thead>
