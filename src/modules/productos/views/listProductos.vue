@@ -23,18 +23,9 @@ onMounted(() => {
 
 function cargarDatos(t){
     if(t === undefined){
-        store.cargarProductos('pos').then(() =>{
+        store.cargarProductos().then(() =>{
             ListadoProductos.value = store.getProductos;
-            ListadoProductos.value = ListadoProductos.value.map(producto => {
-                return {
-                    void: '',
-                    ClaveProducto: producto.CodigoProducto,
-                    TipoProducto: producto.TipoProductoId,
-                    Nombre: producto.NombreProducto,
-                    Borrado: producto.Borrado || 0,
-                    LineaId: producto.LineaId,
-                };
-            });
+            console.log('Listado: \n' + JSON.stringify(ListadoProductos.value[0]));
         })
     }else{
         store.cargarProductos(t).then(() =>{
@@ -129,17 +120,36 @@ watch(tipoProducto, (newValue, oldValue) => {
                 <table>
                     <thead>
                         <tr>
-                            <th>Clave Producto</th>
-                            <th>Tipo de Producto</th>
+                            <th>Producto Id</th>
+                            <th>Código de Producto</th>
+                            <th>Tipo de Producto Id</th>
                             <th>Nombre</th>
                             <th>ID de Linea</th>
-                            <th>Borrado</th>
+                            <th>Creado En</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(producto, index) in ListadoProductos" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
-                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.ClaveProducto }}</td>
+                            <td class="col-xxs">
+                                {{ producto.ProductoId }}
+                            </td>
+                            <td class="col-xs">
+                                {{ producto.CodigoProducto }}
+                            </td>
+                            <td class="col-xxs">
+                                {{ producto.TipoProductoId }}
+                            </td>
+                            <td class="col-auto">
+                                {{ producto.NombreProducto }}
+                            </td>
+                            <td class="col-xxs">
+                                {{ producto.LineaId }}
+                            </td>
+                            <td class="col-s">
+                                {{ producto.CreadoEn }}
+                            </td>
+<!--                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.ClaveProducto }}</td>
                             
                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
                                 {{ transfromarTipo(producto.TipoProducto) }}
@@ -153,8 +163,8 @@ watch(tipoProducto, (newValue, oldValue) => {
                                     ? (producto.Borrado === true ? 'Si' : 'No') 
                                     : producto.Borrado )) 
                                 }} 
-                            </td>
-                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
+                            </td> -->
+                            <td class="col-xs" :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
                                 <img src="@/assets/img/edit.svg" alt="Editar" class="btTabla" @click="editarProducto(producto)"> 
                                 <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(tipoProducto, producto.ClaveProducto)" v-if="producto.Borrado == 0">
                             </td>

@@ -32,7 +32,8 @@
     const Costo = ref(987.123);
     
     //Datos generales
-    const tipoProducto = ref(route.params.tipo);
+    /* const tipoProducto = ref(route.params.tipo); */
+    const tipoProducto = ref(1);
     const claveProducto = ref(idProducto.value != 0 ? idProducto.value : '');
     const deshabilitar = ref(false);
     const nombreInput = ref('');
@@ -71,7 +72,17 @@
     const familia = ref('');
     const categoria2 = ref('');
     const subfamilia = ref('');
-    const frmCategoriasCompleto = computed(() => {
+
+    const Serie = ref(false);
+
+    /* TO DO */
+    /* Pasar a lógica implciita con tipo de producto */
+    const Venta = true;
+    const Insumo = true;
+    /*  */
+    const Puntos = ref(0)
+    
+/*     const frmCategoriasCompleto = computed(() => {
         if (tipoProducto.value == 'combo') {
             return true;
         }else{
@@ -85,15 +96,15 @@
                 return false;
             }
         }
-    });
+    }); */
 
-    const registroCompleto = computed(() => {
+/*     const registroCompleto = computed(() => {
         if(frmGeneralCompleto.value && frmUnidadesCompleto.value && frmCategoriasCompleto.value){
             return true;
         }else{
             return false;
         }
-    });
+    }); */
 
     onMounted(() => {
         if(idProducto.value != 0 && tipoProducto.value != ''){
@@ -161,7 +172,7 @@
         }
     }
 
-    function GuardarTodo(){
+/*     function GuardarTodo(){
         reactivarProducto();
 
         if (registroCompleto.value) {
@@ -248,6 +259,32 @@
                 });
             }
         }
+    } */
+
+    function GuardarTodo(){
+        const producto = {
+            "CodigoProducto": claveProducto.value,
+            "NombreProducto": nombreInput.value,
+            "DescripcionProducto": descripcion.value,
+            "ClaveProductoServicio": claveProductoSAT.value,
+            "ClaveUnidadSat": claveUnidadSAT.value,
+            "LineaId": lineaProducto.value,
+            "TipoProductoId": 1,
+            "Puntos": Puntos.value,
+            "Serie": Serie.value,
+            "Venta": true,
+            "Insumo": true,
+            "CreadoPor": 2
+        }
+
+        alert('Producto: \n' + JSON.stringify(producto));
+
+        store.crearProducto(producto).then((res) => {
+            console.log('[FRONT] [CREAR] [Producto]: ' + JSON.stringify(producto) + ' [Tipo]: ' + tipoProducto.value);
+            if(res){
+                LimpiarCampos();
+            }
+        });
     }
 
     function mostrarM(opc){
@@ -324,14 +361,14 @@
                             <div class="fila">
                                 <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                                 <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                                    <option value="pos">Productos</option>
-                                    <option value="servicio">Servicios</option>
-                                    <option value="insumo">Insumos</option>
-                                    <option value="activo">Activos</option>
-                                    <option value="final">Productos Terminados</option>
-                                    <option value="proveedor">Productos de Terceros</option>
-                                    <option value="suscripcion">Suscripciones</option>
-                                    <option value="combo">Combos</option>
+                                    <option value="1">Productos</option>
+                                    <option value="2">Servicios</option>
+                                    <option value="3">Insumos</option>
+                                    <option value="4">Activos</option>
+                                    <option value="5">Productos Terminados</option>
+                                    <option value="6">Productos de Terceros</option>
+                                    <option value="7">Suscripciones</option>
+                                    <option value="8">Combos</option>
                                 </select>
                                 <label for="CodigoProducto"> Código Producto: </label>
                                 <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
@@ -348,14 +385,20 @@
                                 <textarea name="Descripcion" id="Descripcion" rows="3" maxlength="254" v-model="descripcion"></textarea>
                             </div>
                             <div class="fila">
-                                <div class="filaCompleta">
-                                    <label for="Linea"> Linea </label>
-                                    <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
-                                        <option value="1"> Linea 1 </option>
-                                    </select>
-                                </div>
+                                <label for="Serie"> No. de Serie: </label>
+                                <input type="checkbox" name="Serie" id="Serie" class="ms-3" v-model="Serie" :checked="Serie">
+                                
+                                <label for="Puntos"> Puntos PB: </label>
+                                <input class="inpPuntos" type="number" name="Puntos" placeholder="22" v-model="Puntos">
+
                             </div>
                             <div class="fila">
+                                <label for="Linea"> Linea </label>
+                                <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
+                                    <option value="1"> Linea 1 </option>
+                                </select>
+                            </div>
+<!--                             <div class="fila">
                                 <label for="Categoria1"> Categoria 1</label>
                                 <select name="Categoria1" id="Categoria1" v-model="categoria1" class="inpCompleto">
                                     <option value="Categoria"> Categoria </option>
@@ -365,8 +408,8 @@
                                 <select name="Familia" id="Familia" v-model="familia" class="inpCompleto">
                                     <option value="Familia"> Familia </option>
                                 </select>
-                            </div>
-                            <div class="fila">
+                            </div> -->
+<!--                             <div class="fila">
                                 <label for="Categoria2"> Categoria 2</label>
                                 <select name="Categoria2" id="Categoria2" v-model="categoria2" class="inpCompleto">
                                     <option value="Categoria"> Categoria </option>
@@ -375,7 +418,7 @@
                                 <select name="SubFamilia" id="SubFamilia" v-model="subfamilia" class="inpCompleto">
                                     <option value="SubFamilia"> SubFamilia </option>
                                 </select>
-                            </div>
+                            </div> -->
     
                             <transition name="capaConversiones">
                                 <div class="fila" v-if="tipoProducto == 'suscripcion'">
@@ -399,12 +442,18 @@
                         </div>
     
                         <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 2">
-                        <transition name="capaGeneral">
+                         <transition name="capaGeneral">
                                 <div class="fila">
                                     <div class="columna" :class="{espacioCompleto: capaConversiones, capaConversiones: capaConversiones}">
                                         <label for="uBase"> U. Base </label>
                                         <select class="conBoton" name="uBase" id="uBase" v-model="uBase" :class="{ uBaseCompleta: capaConversiones, capaConversiones: capaConversiones}">
-                                            <option value="1"> Unidad Base 1 </option>
+                                            <option value="11"> Metro </option>
+                                            <option value="13"> Pieza </option>
+                                            <option value="14"> Caja de 30pz </option>
+                                            <option value="15"> Bolsa </option>
+                                            <option value="16"> Paquete </option>
+                                            <option value="17"> Litro </option>
+                                            <option value="18"> Gramo </option>
                                         </select>
                                         <button class="minibutton" @click="mostrarCapa"> 
                                             <img src="@/assets/img/Conversiones.svg" alt="Boton_Conversiones" class="miniImg" v-if="!capaConversiones">
@@ -418,7 +467,13 @@
                                     <div class="columna" v-if="!capaConversiones">
                                         <label for="uCompra"> U. Compra </label>
                                         <select name="uCompra" id="uCompra" v-model="uCompra" class="inpCompleto">
-                                            <option value="1"> Unidad Compra 1 </option>
+                                            <option value="11"> Metro </option>
+                                            <option value="13"> Pieza </option>
+                                            <option value="14"> Caja de 30pz </option>
+                                            <option value="15"> Bolsa </option>
+                                            <option value="16"> Paquete </option>
+                                            <option value="17"> Litro </option>
+                                            <option value="18"> Gramo </option>
                                         </select>
                                     </div>
                                 </div>
@@ -446,21 +501,33 @@
                                         </table>
                                     </div>
                                 </div>
-                            </transition>
-                            <!-- Capa de Conversiones --> 
-                            <transition-group name="capaGeneral">
+                            </transition> 
+                            <!-- Capa de Conversiones -->
+                             <transition-group name="capaGeneral">
                                 <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
                                     <div class="columna">
                                         <label for="uFiscal"> U. Fiscal </label>
                                         <select name="uFiscal" id="uFiscal" v-model="uFiscal">
-                                            <option value="1"> Unidad Fiscal 1 </option>
+                                            <option value="11"> Metro </option>
+                                            <option value="13"> Pieza </option>
+                                            <option value="14"> Caja de 30pz </option>
+                                            <option value="15"> Bolsa </option>
+                                            <option value="16"> Paquete </option>
+                                            <option value="17"> Litro </option>
+                                            <option value="18"> Gramo </option>
                                         </select>
                                     </div>
                                     
                                     <div class="columna">
                                         <label for="uVenta"> U. Venta </label>
                                         <select name="uVenta" id="uVenta" v-model="uVenta" class="inpCompleto">
-                                            <option value="1"> Unidad Venta 1 </option>
+                                            <option value="11"> Metro </option>
+                                            <option value="13"> Pieza </option>
+                                            <option value="14"> Caja de 30pz </option>
+                                            <option value="15"> Bolsa </option>
+                                            <option value="16"> Paquete </option>
+                                            <option value="17"> Litro </option>
+                                            <option value="18"> Gramo </option>
                                         </select>
                                     </div>
                                     
@@ -485,6 +552,7 @@
                                         </button>
                                     </div>
                                 </div>
+
                                 <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
                                     <div class="columna">
                                         <label for="ClaveUnidad"> C. Unidad SAT </label>
@@ -692,16 +760,20 @@ h3{
     height: 35rem;
     width: 35rem;
 }
-.formulario select, .formulario input[type="text"], .formulario input[type="date"], .formulario textarea{
+.formulario select, .formulario input[type="text"], .formulario input[type="number"], .formulario input[type="date"], .formulario textarea{
     width: 12.5rem;
     height: 2.1875rem;
     color: #000;
     border: none;
     border-radius: 0.3125rem;
     padding-left: 0.5rem;
+    outline: none;
 }
 .formulario select:focus {
     outline: none;
+}
+.inpPuntos{
+    flex-grow: 1;
 }
 .labelTipo{
     font-size: 1rem;

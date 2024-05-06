@@ -21,7 +21,7 @@ export const useProductos = defineStore('Productos',{
         }
     },
     actions:{
-        async cargarProductos(tipo){
+/*         async cargarProductos(tipo){
             try{
                 if (tipo === undefined) {
                     const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos`);
@@ -47,48 +47,6 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
-/*         async crearProducto(producto, tipo){
-            try{
-                let body = {
-                    "CodigoProducto": "",
-                    "NombreProducto": "",
-                    "DescripcionProducto": "",
-                    "UnidadBase": 0,
-                    "UnidadCompra": 0,
-                    "UnidadVenta": 0,
-                    "UnidadFiscal": 0,
-                    "ClaveProductoServicio": "",
-                    "ClaveUnidadSat": "",
-                    "ImpuestoCompuestoId": 0,
-                    "LineaId": 0,
-                    "CategoriaId_1": "",
-                    "CategoriaId_2": "",
-                    "CreadoPor": 1
-                };
-
-                for (var clave in producto) {
-                    if (producto.hasOwnProperty(clave)) {
-                      body[clave] = producto[clave];
-                    }
-                }                
-                const datos = await axios.post(`http://lachosoft.cloud:7000/api/v1/${tipo}`, body);
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    Swal.fire({
-                        title: "Producto creado",
-                        text: `${datos.message}: ${datos.response.CodigoProducto}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        }, */
         async crearProducto(producto, tipo){
             try{
                 const pet = await axios.post(`http://lachosoft.cloud:7000/api/v1/productos/${tipo}`, producto);
@@ -285,6 +243,47 @@ export const useProductos = defineStore('Productos',{
                     icon: "error",
                 });
             }
-        },        
+        },   */      
+
+
+        async cargarProductos(){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoProductos = datos.data.response;
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
+
+        async crearProducto(producto){
+            try{
+                const data = await axios.post(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/crear`, producto);
+
+                if(data.status === 200 && data.statusText === "OK"){
+                    Swal.fire({
+                        title: "Producto creado",
+                        text: `${data.data.message}: ${data.data.response[0].CodigoProducto}`,
+                        icon: "success",
+                    });
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        }
     }
 });
