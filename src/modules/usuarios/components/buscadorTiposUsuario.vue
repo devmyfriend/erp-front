@@ -1,26 +1,10 @@
 <script setup>
-import { ref } from 'vue';
-const emit = defineEmits('eBusqueda');
-const { useUsuarios } = require('../store/usuarios.js')
-const store = useUsuarios();
 
-const txtBusqueda = ref('');
-
-function buscar(texto) {
-    if (texto === '') {
-        emit('eBusqueda');
-    }else{
-/*         store.buscarMoneda(txtBusqueda.value).then(() => {
-            emit ('eBusqueda', txtBusqueda.value);
-        }); */
-        emit ('eBusqueda', texto);
-    }
-}
 </script>
 
 <template>
     <div class="contenedor">
-        <input type="text" placeholder="Nombre Usuario" @keyup.enter="buscar(txtBusqueda)" v-model="txtBusqueda">
+        <input type="text" placeholder="Gerente" @keyup.enter="buscar(txtBusqueda)">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
