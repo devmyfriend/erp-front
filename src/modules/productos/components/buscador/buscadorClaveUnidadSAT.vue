@@ -21,7 +21,7 @@ function buscar() {
 
 <style scoped>
 input{
-    width: 29rem;
+    flex-grow: 1;
     height: 2.1875rem;
     color: #CBCBCB;
     border: 1px solid #D9D9D9;

@@ -2,21 +2,20 @@
     import { ref, computed, watch, onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
     import Ventanas from '../components/ventanas.vue';
-    import Swal from 'sweetalert2';
-    import mBuscar from '../components/modales/mBuscar.vue';
+    import {Modal} from 'bootstrap';
+
     const { useProductos } = require('../store/productos.js')
     const store = useProductos();
-    
     const router = useRouter();
     const route = useRoute();
     
     const idProducto = ref( route.params.id || "0");
-
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
     const producto = ref();
     const PoliticasMembresia = ref('');
     const estadoOriginal = ref(false);
+    const modo = ref(0);
 
     const listadoConversiones = ref([
         { unidadOrigen: 'Metro', unidadDestino: 'Pulgada', Factor: 39.3701 },
@@ -24,9 +23,13 @@
         { unidadOrigen: 'Litro', unidadDestino: 'Galón', Factor: 0.264172 },
         { unidadOrigen: 'Grado Celsius', unidadDestino: 'Grado Fahrenheit', Factor: 33.8 },
         { unidadOrigen: 'Metro cuadrado', unidadDestino: 'Pie cuadrado', Factor: 10.7639 }
-    ]) 
+    ]);
+
     
-    const mSAT = ref(null);
+    const listadoClaveProductoSAT = ref([]);
+    const listadoClaveUnidadSAT = ref([]);
+    const registros = ref([]);
+    
     const capaConversiones = ref(false);
     const capaVisible = ref(true);
     const Costo = ref(987.123);
@@ -47,10 +50,10 @@
     });
 
     //Unidades
-    const uBase = ref('');
-    const uCompra = ref('');
-    const uFiscal = ref('');
-    const uVenta = ref('');
+    const uBase = ref('11');
+    const uCompra = ref('13');
+    const uFiscal = ref('14');
+    const uVenta = ref('15');
     const claveProductoSAT = ref('');
     const claveImpuesto = ref('');
     const claveUnidadSAT = ref('');
@@ -81,6 +84,9 @@
     const Insumo = true;
     /*  */
     const Puntos = ref(0)
+
+    const ModalUnidades = ref(null);
+    const mUnidades = ref(false);
     
 /*     const frmCategoriasCompleto = computed(() => {
         if (tipoProducto.value == 'combo') {
@@ -107,6 +113,8 @@
     }); */
 
     onMounted(() => {
+        mUnidades.value = new Modal(ModalUnidades.value);
+
         if(idProducto.value != 0 && tipoProducto.value != ''){
             console.log('Los valores recibidos son: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
             store.buscarProducto(idProducto.value).then(() => {
@@ -138,6 +146,14 @@
         }else{
             console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
         }
+
+        store.cargarClavesUnidades(1).then(() => {
+            listadoClaveUnidadSAT.value = store.getClavesUnidades.items;
+        });
+        store.cargarClavesProductos(1).then(() => {
+            listadoClaveProductoSAT.value = store.getClavesProductos;
+        });
+        
     });
 
     function LimpiarCampos(){
@@ -171,96 +187,7 @@
             });
         }
     }
-
-/*     function GuardarTodo(){
-        reactivarProducto();
-
-        if (registroCompleto.value) {
-            if (idProducto.value != 0) {
-                console.log('[Actualizando producto]: LíneaID: ' + typeof lineaProducto.value + ' - and value: ' + lineaProducto.value);
-                const body = {
-                    "CodigoProducto": claveProducto.value,
-                    "NombreProducto": nombreInput.value,
-                    "DescripcionProducto": descripcion.value,
-                    "UnidadVenta": uVenta.value,
-                    "UnidadBase": uBase.value || 1,
-                    "UnidadCompra": uCompra.value || 1,
-                    "UnidadFiscal": uFiscal.value || 1,
-                    "ClaveProductoServicio": claveProductoSAT.value || "123123",
-                    "ClaveUnidadSat": claveUnidadSAT.value || "123",
-                    "ImpuestoCompuestoId": claveImpuesto.value || 1,
-                    "LineaId": lineaProducto.value || "2",
-                    "CategoriaId_1": categoria1.value || "Categoría 1",
-                    "CategoriaId_2": categoria2.value || "Categoría 2",
-                    "ActualizadoPor": 2,
-                }
-                
-                store.actualizarProducto(tipoProducto.value, body).then((res) => {
-                    console.log('[ACTUALIZAR] [Producto]: ' + JSON.stringify(body) + ' \n[Tipo]: ' + tipoProducto.value);
-                    if(res){
-                        LimpiarCampos();
-                    }
-                });
-            }else{ //Si Es un producto nuevo
-                console.log('[Creando producto]');
-
-                let body = {
-                    CodigoProducto: claveProducto.value,
-                    NombreProducto: nombreInput.value,
-                    DescripcionProducto: descripcion.value,
-                    UnidadVenta: uVenta.value,
-                    CreadoPor: 2,
-                }
-                if(tipoProducto.value == 'combo'){
-                    body = {
-                        ...body,
-                        UnidadBase: "1",
-                        UnidadCompra: "1",
-                        UnidadFiscal: "1",
-                        ClaveProductoServicio: "123123",
-                        ImpuestoCompuestoId: "1",
-                        ClaveUnidadSat: "123",
-                        LineaId: "1",
-                        CategoriaId_1: "Relax Ajax",
-                        CategoriaId_2: "Relax Ajax 2",
-                    }
-                }else{
-                    body = {
-                        ...body,
-                        UnidadCompra: uVenta.value,
-                        UnidadBase: uBase.value,
-                        UnidadFiscal: uFiscal.value,
-                        ClaveProductoServicio: claveProductoSAT.value,
-                        ImpuestoCompuestoId: claveImpuesto.value,
-                        ClaveUnidadSat: claveUnidadSAT.value,
-                        LineaId: lineaProducto.value,
-                        CategoriaId_1: categoria1.value,
-                        CategoriaId_2: categoria2.value,
-                    }
-                }
-                    
-                store.crearProducto(body, tipoProducto.value).then((res) => {
-                    console.log('[CREAR] [Producto]: ' + JSON.stringify(body) + ' [Tipo]: ' + tipoProducto.value);
-                    if(res){
-                        LimpiarCampos();
-                    }
-                });
-            }
-        }
-        else{
-            if(idProducto.value != 0 && (estadoOriginal.value != deshabilitar)){
-                console.log('[Cambio de productos | Deshabilitar]');
-            }else{
-                Swal.fire({
-                    title: '¡Atención!',
-                    text: 'Favor de llenar todos los campos',
-                    icon: 'warning',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        }
-    } */
-
+    
     function GuardarTodo(){
         const producto = {
             "CodigoProducto": claveProducto.value,
@@ -288,18 +215,17 @@
     }
 
     function mostrarM(opc){
-        switch(opc){
-            case 1:
-                alert('Convertir unidades - Desplegar capa')
-                break;
+        mUnidades.value.show();
+        modo.value = opc;
+        switch (opc) {
             case 2:
-                mSAT.value = 'Clave Producto SAT';
-                break;
-            case 3:
-                mSAT.value = 'Clave Impuesto';
+                listadoClaveProductoSAT.value;
                 break;
             case 4:
-                mSAT.value = 'Clave Unidad SAT';
+                listadoClaveUnidadSAT.value;
+                break;
+            default:
+                registros.value = [];
                 break;
         }
     }
@@ -315,6 +241,20 @@
 
     function AgregarPolitica(){
         router.push({ name: 'politicasProducto', params: { id: idProducto.value } });
+    }
+
+    function bajarRegistro(modo, registro){ 
+        switch (modo) {
+            case 2:
+                claveProductoSAT.value = registro;
+                break;
+            case 4:
+                claveUnidadSAT.value = registro;
+                break;
+            default:
+                break;
+            }
+            mUnidades.value.hide()
     }
 
     watch(tipoProducto, (newValue, oldValue) => {
@@ -386,7 +326,7 @@
                             </div>
                             <div class="fila">
                                 <label for="Serie"> No. de Serie: </label>
-                                <input type="checkbox" name="Serie" id="Serie" class="ms-3" v-model="Serie" :checked="Serie">
+                                <input type="checkbox" name="Serie" id="Serie" v-model="Serie" :checked="Serie">
                                 
                                 <label for="Puntos"> Puntos PB: </label>
                                 <input class="inpPuntos" type="number" name="Puntos" placeholder="22" v-model="Puntos">
@@ -397,6 +337,11 @@
                                 <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
                                     <option value="1"> Linea 1 </option>
                                 </select>
+                                <button class="minibutton" @click="mostrarM(1)"> 
+                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
+                                    </svg>
+                                </button>
                             </div>
 <!--                             <div class="fila">
                                 <label for="Categoria1"> Categoria 1</label>
@@ -645,11 +590,55 @@
             
         </div>
     </div>
-    <mBuscar 
+<!--     <mBuscar 
         v-if="mSAT != null"
         :modo="mSAT"
         @cerrarModal="mSAT=null"
-    />
+    /> -->
+
+    <div class="modal fade modal-lg" id="mUnidades" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="ModalUnidades" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mUnidades"> Buscador </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row formulario">
+                        <!-- Contenido  -->
+<!--                         <buscadorLinea v-if="modo == 1"/>
+                        <buscadorClaveProductoSAT v-if="modo == 2" />
+                        <buscadorClaveUnidadSAT v-if="modo == 3" />
+                        <buscadorImpuestos v-if="modo == 4" /> -->
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="Producto in listadoClaveProductoSAT" v-if="modo == 2" @click="bajarRegistro(2, Producto.ClaveProductoServicio)">
+                                    <td>{{ Producto.ClaveProductoServicio }}</td>
+                                    <td>{{ Producto.Descripcion }}</td>
+                                </tr>
+
+                                <tr v-for="Unidad in listadoClaveUnidadSAT" v-if="modo == 4" @click="bajarRegistro(4, Unidad.ClaveUnidadSat)">
+                                    <td>{{ Unidad.ClaveUnidadSat }}</td>
+                                    <td>{{ Unidad.NombreUnidadSat }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="Cerrar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style scoped>

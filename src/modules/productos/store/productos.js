@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 export const useProductos = defineStore('Productos',{
     state: () => ({
         ListadoProductos: [],
+        ListadoClavesUnidades: [],
+        ListadoClavesProductos: [],
         Producto: {},
 
         ListadoMembresias: [],
@@ -18,7 +20,14 @@ export const useProductos = defineStore('Productos',{
         },
         getMembresias(state){
             return state.ListadoMembresias;
-        }
+        },
+
+        getClavesUnidades(state){
+            return state.ListadoClavesUnidades;
+        },
+        getClavesProductos(state){
+            return state.ListadoClavesProductos;
+        },
     },
     actions:{
 /*         async cargarProductos(tipo){
@@ -284,6 +293,44 @@ export const useProductos = defineStore('Productos',{
                     icon: "error",
                 });
             }
-        }
+        },
+
+
+
+        async cargarClavesUnidades(pagina){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/${pagina}`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoClavesUnidades = datos.data;
+                    return true;
+                }
+
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
+        async cargarClavesProductos(pagina){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/productos/servicio/palabra/${pagina}`);
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoClavesProductos = datos.data.response;
+                    return true;
+                }
+
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
     }
 });

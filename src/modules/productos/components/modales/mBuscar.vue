@@ -9,14 +9,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <h4 class="mb-4">{{ modo }}</h4>
-                            </div>
-                        </div>  
                         <div class="row formulario">
                         <!-- Contenido  -->
-                        <buscadorClaveSAT v-if="modo == 'Clave Producto SAT'" />
+                        <buscadorClaveProductoSAT v-if="modo == 'Clave Producto SAT'" />
                         <buscadorClaveUnidadSAT v-if="modo == 'Clave Unidad SAT'" />
                         <buscadorImpuestos v-if="modo == 'Clave Impuesto'" />
 
@@ -48,8 +43,7 @@
 <script setup>
     import {Modal} from 'bootstrap'
     import { ref, onMounted } from 'vue'
-    import buscadorClaveSAT from '@/modules/productos/components/buscador/buscadorClaveSAT.vue'
-    import tablaInfinita from '@/shared/sTablaInfinita.vue'
+    import buscadorClaveProductoSAT from '@/modules/productos/components/buscador/buscadorClaveProductoSAT.vue'
     import buscadorClaveUnidadSAT from '@/modules/productos/components/buscador/buscadorClaveUnidadSAT.vue'
     import buscadorImpuestos from '@/modules/productos/components/buscador/buscadorImpuestos.vue'
     
