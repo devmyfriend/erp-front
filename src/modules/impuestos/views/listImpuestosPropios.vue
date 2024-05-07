@@ -237,6 +237,7 @@ function esperarBusqueda(txt){
         border-radius: 0.3125rem;
         padding-left: 1rem;
         outline: none;
+        background-color: #fff;
     }
     .inpNombre{
         width: 25rem;
