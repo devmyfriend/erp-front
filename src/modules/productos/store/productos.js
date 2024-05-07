@@ -305,10 +305,12 @@ export const useProductos = defineStore('Productos',{
                     return true;
                 }
             }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
+                const { response } = error.request;
+                const msg = JSON.parse(response);
+                console.log(msg.errors);
+                 Swal.fire({
+                    title: `${msg.status}`,
+                    text: `${msg.errors[1]}`,
                     icon: "error",
                 });
             }

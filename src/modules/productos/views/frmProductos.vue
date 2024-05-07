@@ -160,7 +160,7 @@
     });
 
     function LimpiarCampos(){
-        tipoProducto.value = '';
+/*         tipoProducto.value = '';
         claveProducto.value = '';
         deshabilitar.value = false;
         nombreInput.value = '';
@@ -176,7 +176,7 @@
         categoria1.value = '';
         familia.value = '';
         categoria2.value = '';
-        subfamilia.value = '';
+        subfamilia.value = ''; */
     }
 
     async function reactivarProducto(){
@@ -632,12 +632,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="Producto in listadoClaveProductoSAT" v-if="modo == 2" @click="bajarRegistro(2, Producto.ClaveProductoServicio)">
+                                <tr v-for="Producto in listadoClaveProductoSAT" v-if="modo == 2" @click="bajarRegistro(2, Producto.ClaveProductoServicio)" class="microTable-tr">
                                     <td>{{ Producto.ClaveProductoServicio }}</td>
                                     <td>{{ Producto.Descripcion }}</td>
                                 </tr>
 
-                                <tr v-for="Unidad in listadoClaveUnidadSAT" v-if="modo == 4" @click="bajarRegistro(4, Unidad.ClaveUnidadSat)">
+                                <tr v-for="Unidad in listadoClaveUnidadSAT" v-if="modo == 4" @click="bajarRegistro(4, Unidad.ClaveUnidadSat)" class="microTable-tr">
                                     <td>{{ Unidad.ClaveUnidadSat }}</td>
                                     <td>{{ Unidad.NombreUnidadSat }}</td>
                                 </tr>
@@ -770,6 +770,7 @@ h3{
     border-radius: 0.3125rem;
     padding-left: 0.5rem;
     outline: none;
+    background-color: #fff;
 }
 .formulario select:focus {
     outline: none;
@@ -830,6 +831,13 @@ h3{
 }
 .inpGrow{
     flex-grow: 1;
+}
+.microTable-tr:hover{
+    cursor: pointer;
+    background-color: #d9d9d9;
+    td{
+        background-color: transparent;
+    }
 }
 .guardarTodo{
     display: flex;
@@ -892,23 +900,36 @@ h4{
 table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #000;
 }
 td, th {
-  border: 1px solid #000;
   padding: 0.25rem 0.5rem;
   margin: 0rem 0.25rem 0rem 0.25rem;
 }
 th {
-  background-color: #999999;
+  background-color: #353535;
   color: #fff;
   height: 1rem;
 }
 td{
-  background-color: #fff;
-  color: #999999;
+  background-color: #e5e5e5;
+  color: #353535;
   height: 2rem;
   padding: 0rem 0.5rem 0rem 0.5rem;
+}
+
+td:not(:last-child){
+    border-right: 0.125rem solid #fff;
+}
+thead tr, tbody tr:not(:last-child){
+    border-bottom: 0.25rem solid #fff;
+}
+th:first-child, td:first-child{
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+th:last-child, td:last-child{
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 .colStart{
     text-align: start;
