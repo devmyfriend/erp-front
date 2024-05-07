@@ -196,18 +196,14 @@
             "ClaveProductoServicio": claveProductoSAT.value,
             "ClaveUnidadSat": claveUnidadSAT.value,
             "LineaId": lineaProducto.value,
-            "TipoProductoId": 1,
+            "TipoProductoId": tipoProducto.value,
             "Puntos": Puntos.value,
             "Serie": Serie.value,
             "Venta": true,
             "Insumo": true,
             "CreadoPor": 2
         }
-
-        alert('Producto: \n' + JSON.stringify(producto));
-
         store.crearProducto(producto).then((res) => {
-            console.log('[FRONT] [CREAR] [Producto]: ' + JSON.stringify(producto) + ' [Tipo]: ' + tipoProducto.value);
             if(res){
                 LimpiarCampos();
             }
@@ -301,17 +297,25 @@
                             <div class="fila">
                                 <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                                 <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                                    <option value="1">Productos</option>
+<!--                                     <option value="1">Productos</option>
                                     <option value="2">Servicios</option>
                                     <option value="3">Insumos</option>
                                     <option value="4">Activos</option>
                                     <option value="5">Productos Terminados</option>
                                     <option value="6">Productos de Terceros</option>
                                     <option value="7">Suscripciones</option>
-                                    <option value="8">Combos</option>
+                                    <option value="8">Combos</option> -->
+                                    <option value="1"> Limpieza (editado) </option>
+                                    <option value="2"> Limpieza </option>
+                                    <option value="3"> Terminado </option>
+                                    <option value="4"> ter </option>
+                                    <option value="5"> estoesunaprueba </option>
                                 </select>
-                                <label for="CodigoProducto"> Código Producto: </label>
-                                <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">                           
+                                
+                                <div class="divGrow">
+                                    <label for="CodigoProducto"> Código Producto: </label>
+                                    <input class="inpGrow" id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">
+                                </div>
                                 
                                 <label for="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true"> Deshabilitar </label>
                                 <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true" v-model="deshabilitar" :checked="deshabilitar">
@@ -335,7 +339,11 @@
                             <div class="fila">
                                 <label for="Linea"> Linea </label>
                                 <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
-                                    <option value="1"> Linea 1 </option>
+                                    <option value="4"> Linea blanca (4) </option>
+                                    <option value="5"> Linea azul (5) </option>
+                                    <option value="6"> Linea roja (6) </option>
+                                    <option value="7"> Linea verde (7) </option>
+                                    <option value="8"> Linea purpura (8) </option>
                                 </select>
                                 <button class="minibutton" @click="mostrarM(1)"> 
                                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -489,7 +497,7 @@
                                     </div>
                                     <div class="columna">
                                         <label for="Impuesto"> Impuesto Compuesto </label>
-                                        <input type="text" placeholder="Clave Impuesto Comp." class="inpCompleto conBoton" v-model="claveImpuesto">
+                                        <input type="text" placeholder="Clave Impuesto Comp. 10" class="inpCompleto conBoton" v-model="claveImpuesto">
                                         <button class="minibutton" @click="mostrarM(3)">
                                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
@@ -809,6 +817,14 @@ h3{
     border: none;
     border-radius: 0.3125rem;
     color: white;
+}
+.divGrow{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+.inpGrow{
+    flex-grow: 1;
 }
 .guardarTodo{
     display: flex;

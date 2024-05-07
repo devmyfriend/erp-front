@@ -121,9 +121,9 @@ watch(tipoProducto, (newValue, oldValue) => {
                     <thead>
                         <tr>
                             <th>Producto Id</th>
-                            <th>Código de Producto</th>
-                            <th>Tipo de Producto Id</th>
-                            <th>Nombre</th>
+                            <th class="col-start">Código de Producto</th>
+                            <th>Tipo Producto Id</th>
+                            <th class="col-start">Nombre</th>
                             <th>ID de Linea</th>
                             <th>Creado En</th>
                             <th>Acciones</th>
@@ -134,13 +134,13 @@ watch(tipoProducto, (newValue, oldValue) => {
                             <td class="col-xxs">
                                 {{ producto.ProductoId }}
                             </td>
-                            <td class="col-xs">
+                            <td class="col-s col-start">
                                 {{ producto.CodigoProducto }}
                             </td>
                             <td class="col-xxs">
                                 {{ producto.TipoProductoId }}
                             </td>
-                            <td class="col-auto">
+                            <td class="col-auto col-start">
                                 {{ producto.NombreProducto }}
                             </td>
                             <td class="col-xxs">

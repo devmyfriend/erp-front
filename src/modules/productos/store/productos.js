@@ -279,8 +279,8 @@ export const useProductos = defineStore('Productos',{
 
                 if(data.status === 200 && data.statusText === "OK"){
                     Swal.fire({
-                        title: "Producto creado",
-                        text: `${data.data.message}: ${data.data.response[0].CodigoProducto}`,
+                        title: `${data.data.message}:`,
+                        text:  `Producto con ID: ${data.data.ProductoId}`,
                         icon: "success",
                     });
                     return true;
