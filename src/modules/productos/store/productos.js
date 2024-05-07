@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 export const useProductos = defineStore('Productos',{
     state: () => ({
         ListadoProductos: [],
+        ListadoTiposProducto: [],
         ListadoClavesUnidades: [],
         ListadoClavesProductos: [],
         Producto: {},
@@ -21,7 +22,9 @@ export const useProductos = defineStore('Productos',{
         getMembresias(state){
             return state.ListadoMembresias;
         },
-
+        getTiposProducto(state){
+            return state.ListadoTiposProducto;
+        },
         getClavesUnidades(state){
             return state.ListadoClavesUnidades;
         },
@@ -255,6 +258,23 @@ export const useProductos = defineStore('Productos',{
         },   */      
 
 
+        async cargarTiposProducto(){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/tipo`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoTiposProducto = datos.data.response;
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
         async cargarProductos(){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos`);
@@ -272,7 +292,6 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
-
         async crearProducto(producto){
             try{
                 const data = await axios.post(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/crear`, producto);

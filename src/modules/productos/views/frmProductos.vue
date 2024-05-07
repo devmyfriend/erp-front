@@ -25,7 +25,7 @@
         { unidadOrigen: 'Metro cuadrado', unidadDestino: 'Pie cuadrado', Factor: 10.7639 }
     ]);
 
-    
+    const listadoTiposProducto = ref([]);
     const listadoClaveProductoSAT = ref([]);
     const listadoClaveUnidadSAT = ref([]);
     const registros = ref([]);
@@ -147,6 +147,9 @@
             console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
         }
 
+        store.cargarTiposProducto().then(() => {
+            listadoTiposProducto.value = store.getTiposProducto;
+        });
         store.cargarClavesUnidades(1).then(() => {
             listadoClaveUnidadSAT.value = store.getClavesUnidades.items;
         });
@@ -257,6 +260,7 @@
         if(newValue != oldValue){
             LimpiarCampos();
             tipoProducto.value = newValue;
+            console.log('El tipo de producto ha cambiado a: ' + newValue);
         }
     });
 </script>
@@ -305,11 +309,12 @@
                                     <option value="6">Productos de Terceros</option>
                                     <option value="7">Suscripciones</option>
                                     <option value="8">Combos</option> -->
-                                    <option value="1"> Limpieza (editado) </option>
+                                    <option v-for="Tipo in listadoTiposProducto" :value="Tipo.TipoProductoId"> {{ Tipo.NombreTipoProducto }} </option>
+<!--                                     <option value="1"> Limpieza (editado) </option>
                                     <option value="2"> Limpieza </option>
                                     <option value="3"> Terminado </option>
                                     <option value="4"> ter </option>
-                                    <option value="5"> estoesunaprueba </option>
+                                    <option value="5"> estoesunaprueba </option> -->
                                 </select>
                                 
                                 <div class="divGrow">

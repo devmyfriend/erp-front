@@ -25,8 +25,8 @@ import { ref, computed } from 'vue';
 
 const props = defineProps({ 
     tipoProducto: {
-        type: String,
-        default: ''
+        type: Number,
+        default: 0
     },
     idProducto: {
         type: String,
