@@ -1,20 +1,31 @@
 <template>
-    <div class="contenedor">
-        <input type="text" placeholder="Clave Unidad SAT">
+    <div class="mainContainer">
+        <input type="text" placeholder="Clave Unidad SAT" @keyup.enter="buscar(txtBusqueda)" v-model="txtBusqueda">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
 
 <script setup>
-import { Swal } from 'sweetalert2/dist/sweetalert2';
 import { ref } from 'vue';
 const emit = defineEmits('eBusqueda');
+import { useProductos } from '../../store/productos';
+const store = useProductos();
 
 const txtBusqueda = ref('');
 
-function buscar() {
-    if (txtBusqueda.value === '') { 
+function buscar(texto) {
+    if (texto === '') {
+        store.cargarClavesUnidades(1).then(() => {
+            emit('eBusqueda');
+        });
     }else{
+        store.buscarClavesUnidades(texto).then((res) => {
+            if (res) {
+                emit('eBusqueda', texto);
+            }else{
+                emit('eBusqueda');
+            }
+        });
     }
 }
 </script>
@@ -39,7 +50,7 @@ img{
     height: 1.375rem;
     margin-left: 1rem;
 }
-.contenedor{
+.mainContainer{
     display: flex;
     align-items: center;
     justify-content: left;

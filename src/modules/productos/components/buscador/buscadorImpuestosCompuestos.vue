@@ -1,6 +1,6 @@
 <template>
-    <div class="contenedor">
-        <input type="text" placeholder="Clave Impuestos">
+    <div class="mainContainer">
+        <input type="text" placeholder="Clave Impuestos" @keyup.enter="buscar(txtBusqueda)" v-model="txtBusqueda">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
@@ -38,7 +38,7 @@ img{
     height: 1.375rem;
     margin-left: 1rem;
 }
-.contenedor{
+.mainContainer{
     display: flex;
     align-items: center;
     justify-content: left;

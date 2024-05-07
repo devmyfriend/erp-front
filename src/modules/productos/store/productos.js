@@ -310,7 +310,7 @@ export const useProductos = defineStore('Productos',{
                 console.log(msg.errors);
                  Swal.fire({
                     title: `${msg.status}`,
-                    text: `${msg.errors[1]}`,
+                    text: msg.errors[0] === 'Invalid value' ? `${msg.errors[1]}` : `${msg.errors[0]}`,
                     icon: "error",
                 });
             }
@@ -336,6 +336,24 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
+        async buscarClavesUnidades(palabra){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/buscar/nombre/${palabra}`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoClavesUnidades = datos.data;
+                    return true;
+                }
+
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }   
+        },
         async cargarClavesProductos(pagina){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/productos/servicio/palabra/${pagina}`);
@@ -351,6 +369,33 @@ export const useProductos = defineStore('Productos',{
                     text: JSON.stringify(error.message),
                     icon: "error",
                 });
+            }
+        },
+        async buscarClavesProductos(palabra){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/productos/servicio/buscar/descripcion/${palabra}`);
+
+                if(datos.data.response.length === 0){
+                    Swal.fire({
+                        title: "No se encontraron resultados",
+                        text: "Intente con otra palabra",
+                        icon: "info",
+                    });
+                    return false;
+                }
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoClavesProductos = datos.data.response;
+                    return true;
+                }
+
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });                
             }
         },
     }

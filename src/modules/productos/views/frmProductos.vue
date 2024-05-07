@@ -2,7 +2,11 @@
     import { ref, computed, watch, onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
     import Ventanas from '../components/ventanas.vue';
-    import {Modal} from 'bootstrap';
+    import { Modal } from 'bootstrap';
+    import buscadorClaveUnidadSAT from '../components/buscador/buscadorClaveUnidadSAT.vue';
+    import buscadorClaveProductoSAT from '../components/buscador/buscadorClaveProductoSAT.vue';
+    import buscadorImpuestosCompuestos from '../components/buscador/buscadorImpuestosCompuestos.vue';  
+    import Swal from 'sweetalert2';
 
     const { useProductos } = require('../store/productos.js')
     const store = useProductos();
@@ -254,6 +258,23 @@
                 break;
             }
             mUnidades.value.hide()
+    }
+
+    function esperarBusqueda(texto){
+        if (modo.value == 2) {
+            listadoClaveProductoSAT.value = store.getClavesProductos;
+        }else if(modo.value == 3){
+            Swal.fire({
+                title: 'Buscando',
+                text: 'Buscando la clave de unidad',
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+        }else if(modo.value == 4){
+            listadoClaveUnidadSAT.value = store.getClavesUnidades.response;
+            console.log('repuesta: ' + JSON.stringify(listadoClaveUnidadSAT.value));
+        }
     }
 
     watch(tipoProducto, (newValue, oldValue) => {
@@ -620,29 +641,37 @@
                     <div class="container">
                         <div class="row formulario">
                         <!-- Contenido  -->
-<!--                         <buscadorLinea v-if="modo == 1"/>
-                        <buscadorClaveProductoSAT v-if="modo == 2" />
-                        <buscadorClaveUnidadSAT v-if="modo == 3" />
-                        <buscadorImpuestos v-if="modo == 4" /> -->
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="Producto in listadoClaveProductoSAT" v-if="modo == 2" @click="bajarRegistro(2, Producto.ClaveProductoServicio)" class="microTable-tr">
-                                    <td>{{ Producto.ClaveProductoServicio }}</td>
-                                    <td>{{ Producto.Descripcion }}</td>
-                                </tr>
+                        <!-- <buscadorLinea v-if="modo == 1"/> -->
+                        <div class="buscador">
+                            <buscadorClaveProductoSAT v-if="modo == 2" @eBusqueda="esperarBusqueda"/>
+                            <buscadorImpuestosCompuestos v-if="modo == 3" @eBusqueda="esperarBusqueda"/>
+                            <buscadorClaveUnidadSAT v-if="modo == 4" @eBusqueda="esperarBusqueda"/>
+                        </div>
 
-                                <tr v-for="Unidad in listadoClaveUnidadSAT" v-if="modo == 4" @click="bajarRegistro(4, Unidad.ClaveUnidadSat)" class="microTable-tr">
-                                    <td>{{ Unidad.ClaveUnidadSat }}</td>
-                                    <td>{{ Unidad.NombreUnidadSat }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                        <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    <tr v-for="Producto in listadoClaveProductoSAT" v-if="modo == 2" @click="bajarRegistro(2, Producto.ClaveProductoServicio)" class="microTable-tr">
+                                        <td>{{ Producto.ClaveProductoServicio }}</td>
+                                        <td>{{ Producto.Descripcion }}</td>
+                                    </tr>
+    
+                                    <tr v-for="Unidad in listadoClaveUnidadSAT" v-if="modo == 4" @click="bajarRegistro(4, Unidad.ClaveUnidadSat)" class="microTable-tr">
+                                        <td>{{ Unidad.ClaveUnidadSat }}</td>
+                                        <td>{{ Unidad.NombreUnidadSat }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                         </div>
                     </div>
                 </div>
@@ -998,5 +1027,27 @@ width: 75%;
     font-size: 1rem;
     font-weight: 600;
     color: #fff;
+}
+.buscador{
+    height: 2rem;
+    max-height: 3rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0 0 0 0;
+}
+
+.tablaContainer{
+    width: 100%;
+    margin: 0rem auto;
+    max-height: 30rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.tablaContainer::-webkit-scrollbar {
+    width: 0.5rem;
+}
+.tablaContainer::-moz-scrollbar{
+    display: none;
 }
 </style>
