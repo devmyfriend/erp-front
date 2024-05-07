@@ -29,20 +29,6 @@ export const useImpuestos = defineStore( 'Impuestos',{
                 })
             }
         },
-        async cargarImpuestosSATCompletos(){
-            try{
-                const data = await axios.get(`${ruta_local}v1/impuestos/all`);
-                this.ListadoImpuestosSAT = data.data;
-
-            }catch(error){
-                console.error(error);
-                Swal.fire({
-                    icon: 'error',
-                    title: error.message,
-                    text: error
-                })
-            }
-        },
         async cargarImpuestosPropios(){
             try {
                 const response = await axios.get(`${ruta_local}v1/impuestos/propios`);

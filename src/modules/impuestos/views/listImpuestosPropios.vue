@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useImpuestos } from '../store/impuestos.js'
 import buscadorImpuestoPropio from  '../components/buscadorImpuestoPropio.vue';
@@ -22,7 +22,7 @@ onMounted(() => {
 })
 
 function cargarDatos(){
-    store.cargarImpuestosSATCompletos().then(() => {
+    store.cargarImpuestosSAT().then(() => {
         ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
     });
 
@@ -70,7 +70,7 @@ function borrarImpuestoPropio(impuesto){
         if (result.isConfirmed) {
             const request = {
                 cfgImpuestoId: parseInt(impuesto),
-                ActualizadoPor: 2
+                BorradoPor: 2
             }
             store.borrarImpuestoPropio(request).then(() => {
                 cargarDatos();
