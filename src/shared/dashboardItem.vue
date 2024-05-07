@@ -64,11 +64,16 @@ h3{
     overflow-y: scroll;
     scrollbar-width: 0%;
     text-align: justify;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .textContainer::-webkit-scrollbar{
     width: 0%;
     height: 0%;
+}
+.textContainer::-moz-scrollbar {
+    display: none;
 }
 
 span{
