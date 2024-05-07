@@ -14,6 +14,7 @@ const titulos = ref([
   'C.F.D.i.',
   'Unidades de Medida',
   'Productos',
+  'Usuarios',
 ]);
 
 const rutas = ref([
@@ -28,6 +29,7 @@ const rutas = ref([
   { name: 'cfdi' },
   { name: 'unidades' },
   { name: 'productos' },
+  { name: 'usuarios' },
 ]);
 
 const body = ref([
@@ -42,6 +44,7 @@ const body = ref([
     'Listado y busqueda de los CFDi provenientes del SAT.',
     'Apartado para el manejo de unidades de medida, creación, lectura, busqueda, edición y eliminación de unidades de medida.',
     'Módulo CRUD de productos, vinculación de almacenes, manejo de combos y de suscripciones.',
+    'Módulo de CRUD de usuarios, asignación de roles y permisos.'
 ]);
 
 const footer = ref([]);

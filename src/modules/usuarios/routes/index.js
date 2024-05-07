@@ -3,7 +3,7 @@ export default{
     path:'/usuarios',
 /*     component: () => import('@/modules/empresas/layout/layout.vue'), */
     component: () => import('@/shared/layoutGym.vue'),
-    redirect: '/usuarios/listado/',
+    redirect: '/usuarios/listado/1&',
     children:[
         {
             path: 'listado/:ventana&:tipo?',

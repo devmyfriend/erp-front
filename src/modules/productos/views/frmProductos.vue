@@ -5,7 +5,7 @@
     import { Modal } from 'bootstrap';
     import buscadorClaveUnidadSAT from '../components/buscador/buscadorClaveUnidadSAT.vue';
     import buscadorClaveProductoSAT from '../components/buscador/buscadorClaveProductoSAT.vue';
-    import buscadorImpuestosCompuestos from '../components/buscador/buscadorImpuestosCompuestos.vue';  
+    import buscadorImpuestosCompuestos from '../../impuestos/components/buscadorImpuestoCompuesto.vue';  
     import Swal from 'sweetalert2';
 
     const { useProductos } = require('../store/productos.js')
@@ -1033,7 +1033,8 @@ width: 75%;
     max-height: 3rem;
     width: 100%;
     margin-bottom: 1.5rem;
-    padding: 0 0 0 0;
+    padding: 0 1 0 1;
+
 }
 
 .tablaContainer{
