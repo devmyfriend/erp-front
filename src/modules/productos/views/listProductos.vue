@@ -24,7 +24,7 @@ onMounted(() => {
 
 function cargarDatos(){
     store.cargarProductos().then(() =>{
-        ListadoProductos.value = store.getProductos;
+        ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
         console.log('El primer registro es: ' + JSON.stringify(ListadoProductos.value[0]));
     });
 
