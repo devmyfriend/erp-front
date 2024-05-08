@@ -286,7 +286,7 @@ function esperarBusqueda(txt){
     }
     .linea{  
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         width: 100%;
     }
@@ -298,8 +298,10 @@ function esperarBusqueda(txt){
     }
     .buscador{
         display: flex;
-        flex-grow: 1;
-        align-items: flex-start;
+        /* flex-grow: 1; */
+        width: 20rem;
+        /* align-items: flex-start; */
+        /* margin-right: auto; */
     }
     .btAgregar{
         background-color: #353535;

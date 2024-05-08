@@ -1,5 +1,5 @@
 <template>
-    <div class="buscadorEmpresa">
+    <div class="buscador">
         <input type="text" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)" placeholder="Compuesto 7">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
@@ -32,6 +32,7 @@ function buscar(texto) {
 
 <style scoped>
 input{
+    flex-grow: 1;
     width: 20rem;
     height: 2.1875rem;
     border: 1px solid #d9d9d9;
@@ -48,5 +49,11 @@ img{
     cursor: pointer;
     height: 1.375rem;
     margin-left: 1rem;
+}
+.buscador{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
 }
 </style>
