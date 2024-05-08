@@ -2,12 +2,12 @@
     <div class="ventanas">
         <div class="capas">
         <router-link :class="{btActivo: btActivo === 1}" :to=" { name: 'listadoProductos', params: { tipo: tipoProducto}}"> Listado </router-link>
-        <router-link :class="{btActivo: btActivo === 2}" :to=" { name: 'formularioProducto', params: { tipo: tipoProducto, id: idProducto}}"> Formulario </router-link>
-        <router-link v-if="tipoProducto != 'servicio' && tipoProducto !='suscripcion'" :class="{btActivo: btActivo === 3}" :to=" { name: 'almacenProducto', params: { tipo: tipoProducto, id: idProducto } }"> Productos por Almacén </router-link>
-        <router-link v-if="tipoProducto == 'combo'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: idProducto } }"> Agregar Productos </router-link>
-        <router-link v-if="tipoProducto == 'suscripcion'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: idProducto } }"> Políticas </router-link>
-        <router-link :class="{btActivo: btActivo === 6}" :to=" { name: 'cantidadAlmacen', params: { tipo: tipoProducto, id: idProducto } }"> Cantidad por Almacén </router-link>
-        <router-link :class="{btActivo: btActivo === 7}" :to=" { name: 'proveedoresProducto', params: { tipo: tipoProducto, id: idProducto } }"> Proveedores </router-link>
+        <router-link :class="{btActivo: btActivo === 2}" :to=" { name: 'formularioProducto', params: { tipo: tipoProducto, id: codigoProducto}}"> Formulario </router-link>
+        <router-link v-if="tipoProducto != 'servicio' && tipoProducto !='suscripcion'" :class="{btActivo: btActivo === 3}" :to=" { name: 'almacenProducto', params: { tipo: tipoProducto, id: codigoProducto } }"> Productos por Almacén </router-link>
+        <router-link v-if="tipoProducto == 'combo'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: codigoProducto } }"> Agregar Productos </router-link>
+        <router-link v-if="tipoProducto == 'suscripcion'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: codigoProducto } }"> Políticas </router-link>
+        <router-link :class="{btActivo: btActivo === 6}" :to=" { name: 'cantidadAlmacen', params: { tipo: tipoProducto, id: codigoProducto } }"> Cantidad por Almacén </router-link>
+        <router-link :class="{btActivo: btActivo === 7}" :to=" { name: 'proveedoresProducto', params: { tipo: tipoProducto, id: codigoProducto } }"> Proveedores </router-link>
         </div>
         <div class="cerrar" v-if="btActivo != 1">
             <router-link 
@@ -28,9 +28,9 @@ const props = defineProps({
         type: Number,
         default: 0
     },
-    idProducto: {
-        type: String,
-        default: '0'
+    codigoProducto: {
+        type: Number,
+        default: 0
     },
     btActivo: {
         type: Number,
@@ -41,8 +41,8 @@ const props = defineProps({
 const tipoProducto = computed(() => {
     return props.tipoProducto ? props.tipoProducto : '';
 });
-const idProducto = computed(() => {
-    return props.idProducto ? props.idProducto : 0;
+const codigoProducto = computed(() => {
+    return props.codigoProducto ? props.codigoProducto : 0;
 });
 const btActivo = computed(() => {
     return props.btActivo ? props.btActivo : 0;

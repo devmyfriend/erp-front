@@ -1,20 +1,20 @@
 <template>
     <div>
-        <router-link :to="{name: 'formularioProducto', params: {tipo: tipoProducto, id: idProducto} }" class="btNuevo">Nuevo Producto</router-link>
+        <router-link :to="{name: 'formularioProducto', params: {tipo: tipoProducto} }" class="btNuevo" @click="test">Nuevo Producto</router-link>
     </div>
 </template>
 
 <script setup>
 const props = defineProps({
     tipoProducto: {
-        type: String,
+        type: Number,
         required: true
-    },
-    idProducto: {
-        type: String,
-        default: '0'
     }
 });
+
+const test = () => {
+    console.log('test: ' + props.tipoProducto);
+}
 </script>
 
 <style scoped>

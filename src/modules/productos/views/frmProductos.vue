@@ -8,8 +8,10 @@
     import buscadorImpuestosCompuestos from '../../impuestos/components/buscadorImpuestoCompuesto.vue';  
     import Swal from 'sweetalert2';
 
-    const { useProductos } = require('../store/productos.js')
+    import { useProductos } from '../store/productos.js'
+    import { useImpuestos } from '@/modules/impuestos/store/impuestos.js'    
     const store = useProductos();
+    const storeImpuestos = useImpuestos();
     const router = useRouter();
     const route = useRoute();
     
@@ -32,11 +34,12 @@
     const listadoTiposProducto = ref([]);
     const listadoClaveProductoSAT = ref([]);
     const listadoClaveUnidadSAT = ref([]);
+    const listadoImpuestosCompuestos = ref([]);
     const registros = ref([]);
     
     const capaConversiones = ref(false);
     const capaVisible = ref(true);
-    const Costo = ref(987.123);
+    const Costo = ref(0);
     
     //Datos generales
     /* const tipoProducto = ref(route.params.tipo); */
@@ -120,12 +123,10 @@
         mUnidades.value = new Modal(ModalUnidades.value);
 
         if(idProducto.value != 0 && tipoProducto.value != ''){
-            console.log('Los valores recibidos son: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
             store.buscarProducto(idProducto.value).then(() => {
                 tipoProducto.value = tipoProducto.value;
                 claveProducto.value = idProducto.value;
                 producto.value = store.getProducto;
-                console.log('Producto: ', JSON.stringify(producto.value));
                 
                 nombreInput.value = producto.value.NombreProducto || '';
                 descripcion.value = producto.value.DescripcionProducto || '';
@@ -147,8 +148,6 @@
                     estadoOriginal.value = true;
                 }
             });
-        }else{
-            console.log('No se recibieron valores: [ID]: ' + idProducto.value + ' - [Tipo]: ' + tipoProducto.value);
         }
 
         store.cargarTiposProducto().then(() => {
@@ -159,6 +158,9 @@
         });
         store.cargarClavesProductos(1).then(() => {
             listadoClaveProductoSAT.value = store.getClavesProductos;
+        });
+        storeImpuestos.cargarImpuestosCompuestos().then(() => {
+            listadoImpuestosCompuestos.value = storeImpuestos.getListadoImpuestosCompuestos;
         });
         
     });
@@ -251,6 +253,9 @@
             case 2:
                 claveProductoSAT.value = registro;
                 break;
+            case 3:
+                claveImpuesto.value = registro;
+                break;
             case 4:
                 claveUnidadSAT.value = registro;
                 break;
@@ -264,16 +269,9 @@
         if (modo.value == 2) {
             listadoClaveProductoSAT.value = store.getClavesProductos;
         }else if(modo.value == 3){
-            Swal.fire({
-                title: 'Buscando',
-                text: 'Buscando la clave de unidad',
-                icon: 'info',
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
+            listadoImpuestosCompuestos.value = storeImpuestos.getListadoImpuestosCompuestos;
         }else if(modo.value == 4){
             listadoClaveUnidadSAT.value = store.getClavesUnidades.response;
-            console.log('repuesta: ' + JSON.stringify(listadoClaveUnidadSAT.value));
         }
     }
 
@@ -281,7 +279,6 @@
         if(newValue != oldValue){
             LimpiarCampos();
             tipoProducto.value = newValue;
-            console.log('El tipo de producto ha cambiado a: ' + newValue);
         }
     });
 </script>
@@ -667,6 +664,11 @@
                                     <tr v-for="Unidad in listadoClaveUnidadSAT" v-if="modo == 4" @click="bajarRegistro(4, Unidad.ClaveUnidadSat)" class="microTable-tr">
                                         <td>{{ Unidad.ClaveUnidadSat }}</td>
                                         <td>{{ Unidad.NombreUnidadSat }}</td>
+                                    </tr>
+
+                                    <tr v-for="Impuesto in listadoImpuestosCompuestos" v-if="modo == 3" @click="bajarRegistro(3, Impuesto.ImpuestoCompuestoId)" class="microTable-tr">
+                                        <td>{{ Impuesto.ImpuestoCompuestoId }}</td>
+                                        <td>{{ Impuesto.Nombre }}</td>
                                     </tr>
                                 </tbody>
                             </table>

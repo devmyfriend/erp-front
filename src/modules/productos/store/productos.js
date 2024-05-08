@@ -275,6 +275,23 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
+        async buscarProducto(clave){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/detalle/${clave}`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.Producto = datos.data.response[0];
+                    return true;
+                }
+            }catch(error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
         async cargarProductos(){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos`);

@@ -13,35 +13,25 @@ const { useProductos } = require('../store/productos.js')
 const store = useProductos();
 
 const btActivo = ref(1);
-const tipoProducto = ref(route.params.tipo || 'pos');
-const idProducto = ref('0');
+const tipoProducto = ref(parseInt(route.params.tipo) || 1);
+const codigoProducto = ref(0);
 const ListadoProductos = ref([]);
+const ListadoTiposProducto = ref([]);
 
 onMounted(() => {
     cargarDatos();
 });
 
-function cargarDatos(t){
-    if(t === undefined){
-        store.cargarProductos().then(() =>{
-            ListadoProductos.value = store.getProductos;
-            console.log('Listado: \n' + JSON.stringify(ListadoProductos.value[0]));
-        })
-    }else{
-        store.cargarProductos(t).then(() =>{
-            ListadoProductos.value = store.getProductos;
-            ListadoProductos.value = ListadoProductos.value.map(producto => {
-                return {
-                    void: '',
-                    ClaveProducto: producto.CodigoProducto,
-                    TipoProducto: producto.TipoProductoId,
-                    Nombre: producto.NombreProducto,
-                    Borrado: producto.Borrado || 0,
-                    LineaId: producto.LineaId,
-                };
-            });
-        })
-    }
+function cargarDatos(){
+    store.cargarProductos().then(() =>{
+        ListadoProductos.value = store.getProductos;
+        console.log('El primer registro es: ' + JSON.stringify(ListadoProductos.value[0]));
+    });
+
+    store.cargarTiposProducto().then(() => {
+        ListadoTiposProducto.value = store.getTiposProducto;
+    });
+
 }
 
 function transfromarTipo(tipoP){
@@ -71,19 +61,28 @@ function borrarProducto(t, id){
     }).then((result) => {
         if (result.isConfirmed) {
             store.borrarProducto(t, id).then(() => {
-                cargarDatos(tipoProducto.value);
+                cargarDatos();
             });
         }
     })
 }
 
 function editarProducto(p){
-    idProducto.value = p.ClaveProducto;
-    router.push({ name: 'formularioProducto', params: { id: p.ClaveProducto, tipo: tipoProducto.value } });
+    codigoProducto.value = p.CodigoProducto;
+    router.push({ name: 'formularioProducto', params: { id: codigoProducto.value, tipo: tipoProducto.value } });
 }
 
-watch(tipoProducto, (newValue, oldValue) => {
-    cargarDatos(newValue);
+watch (tipoProducto, (newValue, oldValue) => {
+    ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == newValue);
+
+    if (ListadoProductos.value.length == 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'No hay productos',
+                text: 'No hay productos de este tipo'
+            });
+            tipoProducto.value = oldValue;
+        }
 });
 </script>
 
@@ -93,7 +92,7 @@ watch(tipoProducto, (newValue, oldValue) => {
     </header>
     <div class="contenedor">
         <div class="ventanas">
-            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
+            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :codigoProducto="codigoProducto"/>
         </div>
         <div class="contenido">
             <h2> Listado de Productos</h2>
@@ -104,16 +103,9 @@ watch(tipoProducto, (newValue, oldValue) => {
                 <div class="formulario">
                     <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                     <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                        <option value="pos">Productos</option>
-                        <option value="servicio">Servicios</option>
-                        <option value="insumo">Insumos</option>
-                        <option value="activo">Activos</option>
-                        <option value="final">Productos Terminados</option>
-                        <option value="proveedor">Productos de Terceros</option>
-                        <option value="suscripcion">Suscripciones</option>
-                        <option value="combo">Combos</option>
+                        <option v-for="Tipo in ListadoTiposProducto" :value="Tipo.TipoProductoId"> {{ Tipo.NombreTipoProducto }}</option>
                     </select>
-                    <btNuevoProducto :tipoProducto="tipoProducto" :idProducto="idProducto"/>
+                    <btNuevoProducto :tipoProducto="tipoProducto"/>
                 </div>
             </div>
             <div class="tablaContainer animate__animated animate__fadeIn animate__fast" >
