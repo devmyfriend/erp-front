@@ -1,31 +1,261 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import Swal from "sweetalert2";
+
+const ruta_local = 'http://localhost:3000/api/';
 
 export const useImpuestos = defineStore( 'Impuestos',{
-    state: ()=>({
-        ListaImpuestos: [],
+    state: () => ({
+        ListadoImpuestosSAT: [],
+        ListadoImpuestosPropios: [],
+        ListadoImpuestosCompuestos: [],
     }),
     getters:{
-        getImpuestos( state ){
-            return state.ListaImpuestos;
-        }
+        getListadoImpuestosSAT: (state) => state.ListadoImpuestosSAT,
+        getListadoImpuestosPropios: (state) => state.ListadoImpuestosPropios,
+        getListadoImpuestosCompuestos: (state) => state.ListadoImpuestosCompuestos,
     },
     actions:{
-        async cargarImpuestos(){
-            try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/impuestos`);
-                console.log( '[Back] [Carga]: \n' + JSON.stringify( datos.data ) );
-                this.ListaImpuestos = datos.data;
-            }catch( error ){
-                console.log("[Error]: " + error );
+        async cargarImpuestosSAT(){
+            try {
+                const response = await axios.get(`${ruta_local}v1/impuestos`);
+                this.ListadoImpuestosSAT = response.data;
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
             }
         },
-        async buscarImpuestos( id ){
-            try{
-                console.log('ok buscarImpuestos');
-            } catch( error ){
-                console.log("[Error]: " + error );
+        async cargarImpuestosPropios(){
+            try {
+                const response = await axios.get(`${ruta_local}v1/impuestos/propios`);
+                this.ListadoImpuestosPropios = response.data;
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
             }
-        }
+        },
+        async cargarImpuestosCompuestos(){
+            try {
+                const response = await axios.get(`${ruta_local}v1/impuestos/compuestos`);
+                this.ListadoImpuestosCompuestos = response.data;
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
+
+        async crearImpuestoPropio(impuesto){
+            try {
+                const response = await axios.post(`${ruta_local}v1/impuestos/propios/crear`, impuesto);
+
+                if(response.status === 200 && response.statusText === 'OK'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Impuesto creado correctamente',
+                        text: response.data.message
+                    })
+                    return true;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
+        async crearImpuestoCompuesto(impuesto){
+            try {
+                const response = await axios.post(`${ruta_local}v1/impuestos/compuestos/crear`, impuesto);
+
+                if(response.status === 200 && response.statusText === 'OK'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Impuesto creado correctamente',
+                        text: response.data.message
+                    })
+                    return true;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
+
+        async buscarImpuestoSAT(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/buscar`, { Nombre: nombre});
+                this.ListadoImpuestosSAT = response.data.data;
+                return true;
+            }catch(error){
+
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos SAT con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
+            }
+        },
+        async buscarImpuestoPropios(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/propios/buscar`, { NombreImpuesto: nombre });
+                this.ListadoImpuestosPropios = response.data.response;
+                return true;
+            }catch(error){
+
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos propios con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
+            }
+        },
+        async buscarImpuestoCompuestos(nombre){
+            try{
+                const response = await axios.post(`${ruta_local}v1/impuestos/compuestos/buscar`, { Nombre: nombre});
+                this.ListadoImpuestosCompuestos = response.data.data;
+                return true;
+            }catch(error){
+
+                if(error.response.status === 404){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No se encontraron impuestos compuestos con ese nombre',
+                        text: error.response.data.message
+                    })
+                }
+                else{
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        text: error
+                    })
+                }
+            }
+        },
+
+        async actualizarImpuestoPropio(impuesto){
+            try {
+                const response = await axios.put(`${ruta_local}v1/impuestos/propios/editar`, impuesto);
+
+                if(response.status === 200 && response.statusText === 'OK'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Impuesto actualizado correctamente',
+                        text: response.data.message
+                    })
+                    return true;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
+        async actualizarImpuestoCompuesto(impuesto){
+            try {
+                const response = await axios.put(`${ruta_local}v1/impuestos/compuestos/editar`, impuesto);
+
+                if(response.status === 200 && response.statusText === 'OK'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Impuesto actualizado correctamente',
+                        text: response.data.message
+                    })
+                    return true;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
+
+        async borrarImpuestoPropio(impuesto){
+            try {
+                const response = await axios.delete(`${ruta_local}v1/impuestos/propios/desactivar`, {data: impuesto});
+
+                if(response.status === 200 && response.statusText === 'OK'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Impuesto eliminado correctamente',
+                        text: response.data.message
+                    })
+                    return true;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
+        async borrarImpuestoCompuesto(impuesto){
+            try {
+                const response = await axios.delete(`${ruta_local}v1/impuestos/compuestos/desactivar`, {data: impuesto});
+
+                if(response.status === 200 && response.statusText === 'OK'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Impuesto eliminado correctamente',
+                        text: response.data.message
+                    })
+                    return true;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    text: error
+                })
+            }
+        },
     }
 });

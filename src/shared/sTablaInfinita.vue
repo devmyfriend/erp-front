@@ -1,47 +1,3 @@
-<template>
-  <div class="tablaInfinita">
-    <div class="tablaContainer" ref="tablaContainer" @scroll="esperarScroll" :style="{ height: heightTabla + 'px' }">
-      <table>
-        <thead>
-          <tr>
-            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%' }" :class="{ small: isSmall }">{{ header }}</th>
-            <th v-if="props.acciones != 0" :style="{ width: '10%' }" :class="{ small: isSmall }"> Acciones</th>
-          </tr>
-        </thead>
-        <tbody ref="contenidoREF">
-          <tr v-if="registrosFinales.length >= paginado" @click="IrAlFinal"> <td :colspan="cantidadCols + 1" style="cursor: pointer;"> Regresar hasta el final</td></tr>
-          <tr v-for="(item, index) in registrosFinales" :key="index">
-            <template v-for="(value, key, columna) in item">
-              <!-- <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td> -->
-              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">
-                {{ typeof value === 'boolean' ? (value ? 'Si' : 'No') : 
-                  (typeof value === 'number' && (value === 0 || value === 1) ? 
-                    (value === 1 ? 'Si' : 'No') : value) }}
-              </td>
-            </template>
-            <td v-if="props.acciones != 0" class="accionesTabla">
-              <img 
-              src="../assets/img/edit.svg"
-              alt="Editar"
-              class="Acciones me-2"
-              :class="{ small: isSmall }"
-              @click="activarAcciones(1, item)"> 
-              <img 
-              src="../assets/img/trash.svg"
-              alt="Eliminar"
-              class="Acciones ms-2"
-              :class="{ small: isSmall }"
-              v-if="props.acciones == 2"
-              @click="activarAcciones(2, item)">
-            </td>
-          </tr>
-          <tr v-if="registrosFinales.length >= paginado" @click="tablaContainer.scrollTop = 0"> <td :colspan="cantidadCols + 1" style="cursor: pointer;"> Regresar al inicio </td> </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 
@@ -160,41 +116,106 @@ watch(() => props.pBusqueda, () => {
 });
 </script>
 
+<template>
+  <div class="tablaInfinita">
+    <div class="tablaContainer" ref="tablaContainer" @scroll="esperarScroll" :style="{ height: heightTabla + 'px' }">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%' }" :class="{ small: isSmall }">{{ header }}</th>
+            <th v-if="props.acciones != 0" :style="{ width: '10%' }" :class="{ small: isSmall }"> Acciones</th>
+          </tr>
+        </thead>
+        <tbody ref="contenidoREF">
+          <tr v-if="registrosFinales.length >= paginado" @click="IrAlFinal" :class="{td1: index % 2 == 0, td2: index % 2 != 0}"> <td :colspan="cantidadCols + 1" style="cursor: pointer;" > Regresar hasta el final</td></tr>
+          <tr v-for="(item, index) in registrosFinales" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
+            <template v-for="(value, key, columna) in item">
+              <!-- <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">{{ value }}</td> -->
+              <td v-if="columna >= 1" :key="key" :style="{ width: columnasWidth + '%' }">
+                {{ typeof value === 'boolean' ? (value ? 'Si' : 'No') : 
+                  (typeof value === 'number' && (value === 0 || value === 1) ? 
+                    (value === 1 ? 'Si' : 'No') : value) }}
+              </td>
+            </template>
+            <td v-if="props.acciones != 0" class="accionesTabla">
+              <img 
+              src="../assets/img/edit.svg"
+              alt="Editar"
+              class="Acciones me-2"
+              :class="{ small: isSmall }"
+              @click="activarAcciones(1, item)"> 
+              <img 
+              src="../assets/img/trash.svg"
+              alt="Eliminar"
+              class="Acciones ms-2"
+              :class="{ small: isSmall }"
+              v-if="props.acciones == 2"
+              @click="activarAcciones(2, item)">
+            </td>
+          </tr>
+          <tr v-if="registrosFinales.length >= paginado" @click="tablaContainer.scrollTop = 0" :class="{td1: index % 2 == 0, td2: index % 2 != 0}"> <td :colspan="cantidadCols + 1" style="cursor: pointer;"> Regresar al inicio </td> </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
 <style scoped>
+
+@import url('../styles/tablaListado.css');
+
 .tablaInfinita {
   text-align: start;
+  width: 100%;
 }
 
 .tablaContainer {
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tablaContainer::-webkit-scrollbar {
+  display: none
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #000;
+  border: none;
 }
 
-td, th {
+/* td, th {
   border: 1px solid #000;
   padding: 0.25rem 0.5rem;
   margin: 0rem 0.25rem 0rem 0.25rem;
-}
+} */
 
 th {
-  background-color: #999999;
+  background-color: #353535;
   color: #fff;
-  height: 1rem;
+  padding: 0.25rem;
 }
 td{
-  background-color: #fff;
-  color: #999999;
+  color: #000;
   height: 2rem;
-  padding: 0rem 0.5rem 0rem 0.5rem;
+  padding: 0.5rem;
 }
-
+td:not(:last-child){
+    border-right: 0.125rem solid #fff;
+}
+thead tr, tbody tr:not(:last-child){
+    border-bottom: 0.25rem solid #fff;
+}
+th:first-child, td:first-child{
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+th:last-child, td:last-child{
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
 button {
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 .Acciones {
   height: 1rem;
@@ -208,8 +229,8 @@ th, .Acciones{
   text-align: center;
 }
 .small{
-  height: 1rem;
+  height: 1.5rem;
   width: 1rem;
-  margin: 0px !important;
+  margin: 0rem !important;
 }
 </style>

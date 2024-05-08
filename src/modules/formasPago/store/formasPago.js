@@ -28,15 +28,27 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al cargar las formas y métodos de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
         },
         
-        async buscarFormasPago(body) {
-        },
-        async buscarMetodosPago(body) {
+        async buscarFormasPago(txt) {
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/pagos/metodo/forma/${txt}`);
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoFormas = datos.data;
+                    return true;
+                }
+            }catch(error){
+                Swal.fire({
+                    title: "Error",
+                    text: error.message,
+                    icon: "error",
+                });
+                return false;
+            }
         },
 
         async agregarFormaPago(body) {
@@ -51,10 +63,10 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                     return true;
                 }
             }catch(error){
-                console.log(error);
+                console.log('No entiendo pór que sigue saliendo: \n' + error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al agregar la forma de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -74,7 +86,7 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al agregar el método de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -95,7 +107,7 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al editar la forma de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -115,7 +127,7 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al editar el método de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -136,7 +148,7 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al eliminar la forma de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -156,10 +168,11 @@ export const useFormasMetodosPago = defineStore('FormasMetodos', {
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al eliminar el método de pago",
+                    text: error.message,
                     icon: "error",
                 });
             }
         }
+
     }
 });

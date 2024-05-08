@@ -60,21 +60,21 @@
       }
   h1{
     padding: 4rem 0;
-    font-size: 50px;
+    font-size: 3.125rem;
     color: #458D78;
     font-family:'Times New Roman', Times, serif;
   }
   h2{
       color: #fff;
-      font-size: 24px;
-      padding-top: 24px;
+      font-size: 1.5rem;
+      padding-top: 1.5rem;
   }
   .login {
       text-align: center;
-      padding: 16px auto;
+      padding: 1rem auto;
       background-color: rgba(255, 255, 255, 0.4); 
-      width: 486.6px; 
-      height: 476.6px;
+      width: 30.4rem; 
+      height: 29.8rem;
   }
   .userIcon{
       width: 20%;
@@ -82,7 +82,7 @@
       display: block;
   }
   .form-group {
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
     justify-content: center;
     display: flex;
     flex-direction: column;
@@ -90,24 +90,24 @@
   }
   .msjFallo{
       color: red;
-      font-size: 12px;
-      margin: 8px auto;
+      font-size: 0.75rem;
+      margin: 0.5rem auto;
   }
   
   input[type="email"],
   input[type="password"] {
     width: 75%;
-    padding: 8px;
-    border-radius: 5px;
+    padding: 0.5rem;
+    border-radius: 0.3125rem;
   }
   
   button {
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     background-color: #1D6042;
     font-size: 0.875rem;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     cursor: pointer;
   }
   
@@ -116,8 +116,8 @@
   }
   .recPassw a {
       color: #000;
-      font-size: 12px;
-      margin-top: 16px;
+      font-size: 0.75rem;
+      margin-top: 1rem;
       text-decoration: none;
   }
   </style>

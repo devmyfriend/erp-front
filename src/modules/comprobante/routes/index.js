@@ -1,7 +1,7 @@
 export default{
     name:'comprobantes',
     path:'/comprobantes',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/shared/layoutGym.vue'),
     redirect: '/comprobantes/listado/',
     children:[
         {

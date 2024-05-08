@@ -279,8 +279,6 @@ select {
 
 .noextintSucursal {
     width: 8.991rem;
-    // margin-left: 8px;
-    // margin-right: 8px;
 }
 
 .grupoField {

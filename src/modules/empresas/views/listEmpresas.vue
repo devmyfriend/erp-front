@@ -93,7 +93,7 @@ async function ajustarListado(){
 }
 </script>
 
-<style>
+<style scoped>
 h1 {
   text-align: start;
   color: #000;

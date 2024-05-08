@@ -23,7 +23,7 @@ export const useMonedas = defineStore('Moneda',{
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al cargar las monedas",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -40,7 +40,7 @@ export const useMonedas = defineStore('Moneda',{
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al buscar la moneda",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -52,7 +52,7 @@ export const useMonedas = defineStore('Moneda',{
                 if(datos.status === 200 && datos.statusText === "OK"){
                     Swal.fire({
                         title: "Éxito",
-                        text: "Moneda agregada correctamente",
+                        text: datos.data.message,
                         icon: "success",
                     });
                     return true;
@@ -61,7 +61,7 @@ export const useMonedas = defineStore('Moneda',{
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al agregar la moneda",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -73,7 +73,7 @@ export const useMonedas = defineStore('Moneda',{
                 if(datos.status === 200 && datos.statusText === "OK"){
                     Swal.fire({
                         title: "Éxito",
-                        text: "Moneda editada correctamente",
+                        text: datos.data.message,
                         icon: "success",
                     });
                     return true;
@@ -82,7 +82,7 @@ export const useMonedas = defineStore('Moneda',{
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al editar la moneda",
+                    text: error.message,
                     icon: "error",
                 });
             }
@@ -94,7 +94,7 @@ export const useMonedas = defineStore('Moneda',{
                 if(datos.status === 200 && datos.statusText === "OK"){
                     Swal.fire({
                         title: "Éxito",
-                        text: "Moneda eliminada correctamente",
+                        text: datos.data.message,
                         icon: "success",
                     });
                     return true;
@@ -103,7 +103,7 @@ export const useMonedas = defineStore('Moneda',{
                 console.log(error);
                 Swal.fire({
                     title: "Error",
-                    text: "Error al eliminar la moneda",
+                    text: error.message,
                     icon: "error",
                 });
             }

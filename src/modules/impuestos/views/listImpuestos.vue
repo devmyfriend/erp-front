@@ -1,197 +1,175 @@
-<template lang="es">
-    <div class="contenedor">
-        <header>
-            <h1> Tipos de impuesto</h1>
-        </header>
-        <div class="contenido">
-            <div class="formulario">
-                <div class="fila">
-                    <input type="text" placeholder="Clave Impuesto" class="ClaveImpuesto">
-                    <input type="text" placeholder="Descripción del impuesto" class="NombreImpuesto">
-                </div>
 
-                <div class="fila">
-                    <label for="Retención">Retención</label>
-                    <input name="Retención" type="checkbox">
-                    <label for="Traslado">Traslado</label>
-                    <input name="Traslado" type="checkbox">
-                    <label for="L/F">Local/Federal</label>
-                    <select name="L/F" class="LocalFederal" v-model="LocalFederal">
-                        <option v-if="!LocalFederalSelected" value=""></option>
-                        <option value="1">Federal</option>
-                        <option value="2">Local</option>
-                    </select>
-                    <img src="@/assets/img/plus.png" alt="AñadirComprobante" class="iconoAgregar">
-                </div>
-            </div>
-            
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import { useImpuestos } from '../store/impuestos.js'
+import buscadorImpuesto from '../components/buscadorImpuesto.vue';
+import Swal from 'sweetalert2'
 
-            <button @click="test"> test </button>
-            <table class="table-bordered">
+const store = useImpuestos();
+
+const ListadoImpuestosSAT = ref([]);
+
+const nuevoRegistro = ref({
+    NombreImpuesto: '', 
+    ClaveImpuesto: '', 
+    CreadoPor: 2
+})
+
+const showFrm = ref(false);
+const modoFrm = ref(0);
+
+onMounted(() => {
+    cargarDatos();
+})
+
+function cargarDatos(){
+    store.cargarImpuestosSAT().then(() => {
+        ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
+    });
+}
+
+function esperarBusqueda(txt){
+    if (txt) {
+        ListadoImpuestosSAT.value = store.getListadoImpuestosSAT;
+    }else{
+        cargarDatos();
+    }
+}
+
+</script>
+
+<template>
+    <header>
+        <h1> Impuestos </h1>
+    </header>
+    <div class="contenedorPadre">
+        <h2> Listado de impuestos SAT </h2>
+        <div class="linea">
+            <buscadorImpuesto @eBusqueda="esperarBusqueda" />
+        </div>  
+        <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
+            <table>
                 <thead>
                     <tr>
-                        <th>Clave Impuesto</th>
-                        <th>Descripción</th>
-                        <th>Retención</th>
-                        <th>Traslado</th>
-                        <th>Local o Federal</th>
-                        <th>Acciones</th>
+                        <th class="col-s">Clave Impuesto SAT</th>
+                        <th class="col-auto col-start">Descripción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>601</td>
-                        <td>ISR</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td></td>
-                        <td>Federal</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>603</td>
-                        <td>IVA</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>Federal</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>605</td>
-                        <td>IEPS</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/check.svg" alt="Checkmark"></a>
-                        </td>
-                        <td>Federal</td>
-                        <td class="Acciones">
-                            <a class="mx-2" href="#"><img src="@/assets/img/edit.svg" alt="Editar"></a>
-                            <a class="mx-2" href="#"><img src="@/assets/img/trash.svg" alt="Borrar"></a>
-                        </td>
+                    <tr v-for="(impuesto, index) in ListadoImpuestosSAT" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
+                        <td>{{ impuesto.ClaveImpuesto }}</td>
+                        <td class="col-start">{{ impuesto.Nombre }}</td>
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 </template>
 
-<script setup>
-/* import tablaInfinita from '@/shared/tablaInfinita.vue' */
-import { ref, watch, onMounted } from 'vue'
+<style scoped>
 
-
-const { useImpuestos } = require('../store/impuestos.js')
-const store = useImpuestos();
-
-const ListadoImpuestos = ref([]);
-
-const LocalFederal = ref(0);
-const LocalFederalSelected = ref(false);
-watch(LocalFederal, (val) => {
-    if (val != 0) {
-        LocalFederalSelected.value = true;
-    }
-})
-
-onMounted(() => {
-    store.cargarImpuestos().then(() => {
-        ListadoImpuestos.value = store.getImpuestos;
-        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoImpuestos.value));
-    })
-})
-
-function test() {
-    store.buscarImpuestos().then(() => {
-        ListadoImpuestos.value = store.getImpuestos;
-        console.log('[Front] [Carga]: ' + JSON.stringify(ListadoImpuestos.value));
-    })
-}
-</script>
-
-<style>
-    
     @import url('../../../styles/checkbox.css');
+    @import url('../../../styles/tablaListado.css');
 
-    .contenedor {
-        background-color: #D9D9D9;
-        width: 100%;
-        height: 100%;
+    .general-enter-active {
+        animation: fadeIn 0.75s;
     }
-    header {
-        width: 100%;
-        text-align: start;
+    .general-leave-active {
+        animation: fadeOut 0.25s;
     }
-    .contenido{
-        width: auto;
-        margin: 1rem;
+    
+    .filaDesactivada td{
+        background-color: #999;
+        display: none;          /* Ocultar fila desactivada */
+    }
+    .contenedorPadre {
+        background-color: #fff;
+        width: 100%;
+        min-height: calc(100vh - 11rem);
+        max-height: calc(100vh - 11rem);
+        overflow: hidden;
+        border-radius: 1rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    header{
+        margin-bottom: 1.5rem;
     }
     h1{
-        margin: 0;
-        padding-bottom: 1rem;
+        text-align: start;
+        color: #fff;
+        font-size: 1.75rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        text-transform: capitalize;
+    }
+    h2{
+        text-align: start;
+        color: #000;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+    
+    }
+    .btTabla{
+        cursor: pointer;
+    }
+    th{
+        padding: 0.25rem;
+        height: 2.75rem;
+    }
+    .linea{  
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         width: 100%;
-        background-color: white;
+    }
+    .linea *:not(:last-child) {
+        margin-right: 1rem;
+    }
+    .buscador{
+        flex: 0 0 auto;
+    }
+    .btAgregar{
+        background-color: #353535;
+        border: none;
+        color: #fff;
+        border-radius: 0.5rem;
+        height: 2.1875rem;
+        width: 10rem;
+        font-weight: bold;
+        letter-spacing: 0.25rem;
     }
     .formulario{
-        width: 100%;
-    }
-    .fila{
         display: flex;
-        margin-bottom: 1rem;
+        flex: 1;
+        justify-content: flex-start;
+        align-items: center;
     }
-    label{
-        color: #999999;
-    }
-    label:first-child{
-        color: #999999;
-        margin-right: 0.5rem;
-    }
-    label:not(:first-child), 
-    select{
-        font-size: 1rem;
-        margin: auto 0.5rem auto 1rem;
-        margin-right: 0.5rem;
-    }
-    .LocalFederal{
-        width: 12.6875rem;
-    }
-    .ClaveImpuesto, .NombreImpuesto, select, label {
+    .inpClave, .inpNombre{
         height: 2.1875rem;
-        border: none;
-        border-radius: 5px;
-        padding: 0.5rem;
-        font-size: 1rem;
+        color: #000;
+        border: 1px solid #D9D9D9;
+        border-radius: 0.3125rem;
+        padding-left: 1rem;
+    }
+    .inpNombre{
+        width: 35rem;
+    }
+    .inpClave{
+        width: 10rem;
+    }
+    .inpNombre:focus, .inpClave:focus{
         outline: none;
     }
-    .ClaveImpuesto{
-        width: 32.5rem;
+    .labelNombre{
+        font-size: 1rem;
+        font-weight: bold;
+        letter-spacing: 0.125rem;
     }
-    .NombreImpuesto{
-        width: 43.625rem;
-        margin-left: 0.5rem;
-    }
-    .iconoAgregar{
-    width: 1.375rem;
-    height: 1.375rem;
-    margin: auto;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    }
-    ::placeholder {
-        font-style: italic;
-        color: #bdbdbdda;
+    input:disabled{
+        background-color: #d9d9d9;
+        color: #000;
     }
 </style>

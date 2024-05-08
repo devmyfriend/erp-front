@@ -1,7 +1,7 @@
 export default{
     name:'formasPago',
     path:'/formasPago',
-    component: () => import(/* webpackChunkName: "layout"*/ '@/modules/empresas/layout/layout.vue'),
+    component: () => import(/* webpackChunkName: "layout"*/ '@/shared/layoutGym.vue'),
     redirect: '/formasPago/listado/',
     children:[
         {

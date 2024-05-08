@@ -1,5 +1,5 @@
 <template>
-    <div class="buscador">
+    <div class="main">
         <input type="text" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)" placeholder="Peso Argentino">
         <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
     </div>
@@ -8,35 +8,32 @@
 <script setup>
 import { ref } from 'vue';
 const emit = defineEmits('eBusqueda');
-const { useEmpresas } = require('@/modules/empresas/store/empresas.js')
-const store = useEmpresas();
+const { useMonedas } = require('../store/moneda.js')
+const store = useMonedas();
 
 const txtBusqueda = ref('');
 
 function buscar() {
     if (txtBusqueda.value === '') {
-        store.cargarEmpresas().then(() => {
-            emit('eBusqueda');
-        });    
+        emit('eBusqueda');
     }else{
-        store.busquedaEmpresas(txtBusqueda.value).then(() => {
-            emit ('eBusqueda');
+        store.buscarMoneda(txtBusqueda.value).then(() => {
+            emit ('eBusqueda', txtBusqueda.value);
         });
     }
 }
 </script>
 
 <style scoped>
-.buscador{
+.main{
     display: flex;
-    margin-bottom: 1rem;
     align-items: center;
+    width: 100%;
 }
 input{
-    width: 41rem;
+    width: 29rem;
     height: 2.1875rem;
-    color: #CBCBCB;
-    border: none;
+    border: 1px solid #d9d9d9;
     border-radius: 0.3125rem;
     padding-left: 1rem;
 }
@@ -49,6 +46,6 @@ input::placeholder{
 img{
     cursor: pointer;
     height: 1.375rem;
-    margin-left: 0.5rem;
+    margin-left: 1rem;
 }
 </style>

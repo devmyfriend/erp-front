@@ -13,6 +13,10 @@ import impuestosRouter from '@/modules/impuestos/routes/index'
 import regimenRouter from '@/modules/regimenFiscal/routes/index'
 import formasPagoRouter from '@/modules/formasPago/routes/index'
 
+import productosRouter from '@/modules/productos/routes/index'
+import unidadesMedidaRouter from '@/modules/unidadesMedida/routes/index'
+import usuariosRouter from '@/modules/usuarios/routes/index'
+
 const routes = [
   {
     path: '/',
@@ -68,6 +72,16 @@ const routes = [
     path: '/formasPago',
     ...formasPagoRouter
   },
+  {
+    path: '/productos',
+    ...productosRouter
+  },{
+    path: '/unidades',
+    ...unidadesMedidaRouter
+  },{
+    path: '/usuarios',
+    ...usuariosRouter
+  }
  //fin de rutas de pruebas.
 ]
 

@@ -1,5 +1,8 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import Swal from 'sweetalert2';
+
+const ruta_local = 'http://localhost:3000/api/';
 
 export const useCFDi = defineStore( 'CFDi',{
     state: ()=>({
@@ -13,21 +16,22 @@ export const useCFDi = defineStore( 'CFDi',{
     actions:{
         async cargarCFDi(){
             try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/catalogo/sat/cfdi/lista`);
-                console.log( '[Back] [Carga]: \n' + JSON.stringify( datos.data ) );
+                const datos = await axios.get(`${ruta_local}v1/catalogo/sat/cfdi/lista`);
                 this.ListaCFDi = datos.data;
             }catch( error ){
                 console.log("[Error]: " + error );
             }
         },
-        async buscarCFDi( id ){
+        async buscarCFDi( Descripcion ){
             try{
-/*                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/catalogo/sat/cfdi/lista`);
-                console.log( '[Back] [Busqueda]: \n' + JSON.stringify( datos.data ) );
-                this.ListaCFDi = datos.data; */
-                console.log('ok buscarCFDi');
+                return this.ListaCFDi.filter( cfdi => cfdi.Descripcion.toLowerCase().includes( Descripcion.toLowerCase() ) );
             }catch( error ){
                 console.log("[Error]: " + error );
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar la información',
+                });
             }
         },
         
