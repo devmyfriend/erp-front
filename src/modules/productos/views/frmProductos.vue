@@ -42,8 +42,7 @@
     const Costo = ref(0);
     
     //Datos generales
-    /* const tipoProducto = ref(route.params.tipo); */
-    const tipoProducto = ref(1);
+    const tipoProducto = ref( (route.params.tipo && route.params.tipo != 0) ? parseInt(route.params.tipo) : 1);
     const claveProducto = ref(idProducto.value != 0 ? idProducto.value : '');
     const deshabilitar = ref(false);
     const nombreInput = ref('');
@@ -123,7 +122,7 @@
         mUnidades.value = new Modal(ModalUnidades.value);
 
         if(idProducto.value != 0 && tipoProducto.value != ''){
-            store.buscarProducto(idProducto.value).then(() => {
+            store.obtenerProducto(idProducto.value).then(() => {
                 tipoProducto.value = tipoProducto.value;
                 claveProducto.value = idProducto.value;
                 producto.value = store.getProducto;
@@ -312,7 +311,7 @@
                                              Unidades     
                                 </h3>
                             </div>
-                            <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
+                            <span class="spanCosto" v-if="idProducto != 0 && Costo != 0"> Costo: $<span>{{ Costo }}</span></span>
                         </div>
 
                         <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 1">

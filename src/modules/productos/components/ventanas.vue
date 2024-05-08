@@ -1,8 +1,8 @@
 <template>
     <div class="ventanas">
         <div class="capas">
-        <router-link :class="{btActivo: btActivo === 1}" :to=" { name: 'listadoProductos', params: { tipo: tipoProducto}}"> Listado </router-link>
-        <router-link :class="{btActivo: btActivo === 2}" :to=" { name: 'formularioProducto', params: { tipo: tipoProducto, id: codigoProducto}}"> Formulario </router-link>
+        <router-link :class="{btActivo: btActivo === 1}" :to=" { name: 'listadoProductos', params: { tipo: props.tipoProducto}}"> Listado </router-link>
+        <router-link :class="{btActivo: btActivo === 2}" :to=" { name: 'formularioProducto', params: { tipo: props.tipoProducto, id: codigoProducto}}"> Formulario </router-link>
         <router-link v-if="tipoProducto != 'servicio' && tipoProducto !='suscripcion'" :class="{btActivo: btActivo === 3}" :to=" { name: 'almacenProducto', params: { tipo: tipoProducto, id: codigoProducto } }"> Productos por Almacén </router-link>
         <router-link v-if="tipoProducto == 'combo'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: codigoProducto } }"> Agregar Productos </router-link>
         <router-link v-if="tipoProducto == 'suscripcion'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: codigoProducto } }"> Políticas </router-link>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({ 
     tipoProducto: {
@@ -39,7 +39,7 @@ const props = defineProps({
 })
 
 const tipoProducto = computed(() => {
-    return props.tipoProducto ? props.tipoProducto : '';
+    return props.tipoProducto ? props.tipoProducto : 0;
 });
 const codigoProducto = computed(() => {
     return props.codigoProducto ? props.codigoProducto : 0;

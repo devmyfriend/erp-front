@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
-import buscadorProductos from '../components/buscadorProductos.vue';
+import buscadorProductos from '../components/buscador/buscadorProductos.vue';
 import btNuevoProducto from '../components/btNuevoProducto.vue';
 import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
@@ -13,7 +13,7 @@ const { useProductos } = require('../store/productos.js')
 const store = useProductos();
 
 const btActivo = ref(1);
-const tipoProducto = ref(parseInt(route.params.tipo) || 1);
+const tipoProducto = ref(parseInt(route.params.tipo) || 0);
 const codigoProducto = ref(0);
 const ListadoProductos = ref([]);
 const ListadoTiposProducto = ref([]);
@@ -24,8 +24,14 @@ onMounted(() => {
 
 function cargarDatos(){
     store.cargarProductos().then(() =>{
-        ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
-        console.log('El primer registro es: ' + JSON.stringify(ListadoProductos.value[0]));
+        if (tipoProducto.value == 0) {
+            ListadoProductos.value = store.getProductos;
+        }else{
+            ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
+            if (ListadoProductos.value.length == 0) {
+                tipoProducto.value = 0;
+            }
+        }
     });
 
     store.cargarTiposProducto().then(() => {
@@ -33,21 +39,6 @@ function cargarDatos(){
     });
 
 }
-
-function transfromarTipo(tipoP){
-  const t = {       /* Solve: Debería traer estos datos desde una consulta a ref_ComboBox */
-    '2': 'Producto POS',
-    '3': 'Servicios',
-    '4': 'Insumos',
-    '5': 'Activos',
-    '6': 'Terminados',
-    '7': 'Terceros',
-    '8': 'Suscripciones',
-    '9': 'Combos'
-  };
-  
-  return t[tipoP] || tipoP;
-};
 
 function borrarProducto(t, id){
     Swal.fire({
@@ -69,20 +60,44 @@ function borrarProducto(t, id){
 
 function editarProducto(p){
     codigoProducto.value = p.CodigoProducto;
+    tipoProducto.value = p.TipoProductoId;
     router.push({ name: 'formularioProducto', params: { id: codigoProducto.value, tipo: tipoProducto.value } });
 }
 
-watch (tipoProducto, (newValue, oldValue) => {
-    ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == newValue);
+function esperarBusqueda(texto){
+    if (texto === '') {
+        store.cargarProductos().then(() => {
+            if (tipoProducto.value == 0) {
+                ListadoProductos.value = store.getProductos;
+            }else{
+                ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
+                if (ListadoProductos.value.length == 0) {
+                    tipoProducto.value = 0;
+                }
+            }
+        });    
+    }else{
+        store.buscarProductos(texto).then(() => {
+            ListadoProductos.value = store.getProductos;
+        });
+    }
+}
 
-    if (ListadoProductos.value.length == 0) {
-            Swal.fire({
-                icon: 'info',
-                title: 'No hay productos',
-                text: 'No hay productos de este tipo'
-            });
-            tipoProducto.value = oldValue;
-        }
+watch (tipoProducto, (newValue, oldValue) => {
+    if (newValue == 0) {
+        ListadoProductos.value = store.getProductos;
+    }else{
+        ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == newValue);
+    
+        if (ListadoProductos.value.length == 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No hay productos',
+                    text: 'No hay productos de este tipo'
+                });
+                tipoProducto.value = 0;
+            }
+    }
 });
 </script>
 
@@ -98,11 +113,12 @@ watch (tipoProducto, (newValue, oldValue) => {
             <h2> Listado de Productos</h2>
             <div class="frm">
                 <div>
-                    <buscadorProductos/>
+                    <buscadorProductos @eBusqueda="esperarBusqueda"/>
                 </div>
                 <div class="formulario">
                     <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                     <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
+                        <option value="0">Todos</option>
                         <option v-for="Tipo in ListadoTiposProducto" :value="Tipo.TipoProductoId"> {{ Tipo.NombreTipoProducto }}</option>
                     </select>
                     <btNuevoProducto :tipoProducto="tipoProducto"/>

@@ -275,7 +275,7 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
-        async buscarProducto(clave){
+        async obtenerProducto(clave){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/detalle/${clave}`);
 
@@ -324,10 +324,43 @@ export const useProductos = defineStore('Productos',{
             }catch (error){
                 const { response } = error.request;
                 const msg = JSON.parse(response);
-                console.log(msg.errors);
+                /* console.log(msg.errors ? msg.errors : msg.error); */
+                console.log(error);
                  Swal.fire({
-                    title: `${msg.status}`,
-                    text: msg.errors[0] === 'Invalid value' ? `${msg.errors[1]}` : `${msg.errors[0]}`,
+                    title: msg.status ? `${msg.status}` : `Error`,
+                    text: msg.error ? msg.error : msg.errors[0] === 'Invalid value' ? `${msg.errors[1]}` : `${msg.errors[0]}`,
+                    icon: "error",
+                });
+            }
+        },
+        async buscarProductos(nombre){
+            try{
+/*                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/buscar/${nombre}`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoProductos = datos.data.response;
+                    return true;
+                } */
+                this.ListadoProductos = this.ListadoProductos.filter((producto) => {
+                    return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "");
+                });
+
+                if(this.ListadoProductos.length === 0){
+                    Swal.fire({
+                        title: "No se encontraron resultados",
+                        text: "Intente con otra palabra",
+                        icon: "info",
+                    });
+                    return false;
+                }
+                return true;
+
+
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
                     icon: "error",
                 });
             }

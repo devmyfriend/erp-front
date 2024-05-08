@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import ventanas from '../components/ventanas.vue'
-import buscadorProductos from '../components/buscadorProductos.vue';
+import buscadorProductos from '../components/buscador/buscadorProductos.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

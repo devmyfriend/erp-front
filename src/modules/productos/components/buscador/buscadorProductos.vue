@@ -1,31 +1,53 @@
 <template>
-    <div class="contenedor">
-        <input type="text" placeholder="Clave Impuestos">
-        <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="iconoBuscador" @click="buscar(txtBusqueda)">
+    <div class="buscador">
+        <input type="text" v-model="txtBusqueda" @keyup.enter="buscar(txtBusqueda)" placeholder="Coca-Cola 600ml">
+        <img src="@/assets/img/buscador.svg" alt="Icono de buscador" class="IconoBuscador" @click="buscar(txtBusqueda)">
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 const emit = defineEmits('eBusqueda');
+const { useProductos } = require('@/modules/productos/store/productos.js')
+const store = useProductos();
 
 const txtBusqueda = ref('');
 
-function buscar() {
-    if (txtBusqueda.value === '') { 
+function buscar(texto) {
+    if (texto === undefined) {
+        store.cargarProductos().then(() => {
+            emit('eBusqueda');
+        });    
     }else{
+        store.buscarProductos(texto).then((res) => {
+            if (res) {
+                console.log('Regresó el resultado de la búsqueda');
+            }else{
+                store.cargarProductos().then(() => {
+                    emit('eBusqueda');
+                });
+                console.log('No regresó el resultado de la búsqueda');
+            }
+
+            emit ('eBusqueda', texto);
+        });
     }
 }
 </script>
 
 <style scoped>
+.buscador{
+    display: flex;
+    align-items: center;
+}
 input{
-    width: 29rem;
+    width: 31rem;
     height: 2.1875rem;
     color: #CBCBCB;
-    border: 1px solid #D9D9D9;
+    border: none;
     border-radius: 0.3125rem;
     padding-left: 1rem;
+    border: 1px solid #000;
 }
 input:focus{
     outline: none;
@@ -36,12 +58,10 @@ input::placeholder{
 img{
     cursor: pointer;
     height: 1.375rem;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
 }
-.contenedor{
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    margin-bottom: 1.5rem;
+.IconoBuscador{
+    cursor: pointer;
+    margin-left: 1rem;
 }
 </style>
