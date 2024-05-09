@@ -12,24 +12,30 @@ const { useProductos } = require('@/modules/productos/store/productos.js')
 const store = useProductos();
 
 const txtBusqueda = ref('');
+const props = defineProps({
+    tipoProducto: {
+        type: Number,
+        default: 0
+    }
+});
 
 function buscar(texto) {
-    if (texto === undefined) {
-        store.cargarProductos().then(() => {
-            emit('eBusqueda');
-        });    
-    }else{
-        store.buscarProductos(texto).then((res) => {
+    if (texto.length != 0) { 
+        store.buscarProductos(texto, props.tipoProducto).then((res) => {
             if (res) {
-                console.log('Regresó el resultado de la búsqueda');
+                emit ('eBusqueda', texto);
+                console.log('[Buscador] con texto');
             }else{
                 store.cargarProductos().then(() => {
                     emit('eBusqueda');
+                    console.log('[Buscador] sin resultados');
                 });
-                console.log('No regresó el resultado de la búsqueda');
             }
-
-            emit ('eBusqueda', texto);
+        });
+    }else{
+        store.cargarProductos().then(() => {
+            emit('eBusqueda');
+            console.log('[Buscador] sin texto');
         });
     }
 }

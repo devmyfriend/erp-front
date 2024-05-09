@@ -270,7 +270,15 @@
         }else if(modo.value == 3){
             listadoImpuestosCompuestos.value = storeImpuestos.getListadoImpuestosCompuestos;
         }else if(modo.value == 4){
-            listadoClaveUnidadSAT.value = store.getClavesUnidades.response;
+            if(texto == undefined){
+                store.cargarClavesUnidades(1).then(() => {
+                    listadoClaveUnidadSAT.value = store.getClavesUnidades.items;
+                });
+            }else{
+                store.buscarClavesUnidades(texto).then(() => {
+                    listadoClaveUnidadSAT.value = store.getClavesUnidades.response;
+                });
+            }
         }
     }
 

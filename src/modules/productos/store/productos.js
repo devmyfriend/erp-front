@@ -333,7 +333,7 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
-        async buscarProductos(nombre){
+        async buscarProductos(nombre, tipo){
             try{
 /*                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/buscar/${nombre}`);
 
@@ -342,7 +342,14 @@ export const useProductos = defineStore('Productos',{
                     return true;
                 } */
                 this.ListadoProductos = this.ListadoProductos.filter((producto) => {
-                    return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "");
+                    /* return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "") */;
+                    if(tipo === 0){
+                        return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "");
+                    }
+                    else{
+                        return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "") && producto.TipoProductoId === tipo;
+                    }
+                    /* producto.TipoProductoId === tipo; */
                 });
 
                 if(this.ListadoProductos.length === 0){
@@ -356,6 +363,31 @@ export const useProductos = defineStore('Productos',{
                 return true;
 
 
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
+        async borrarProducto(id){
+            try{
+                const payload = {
+                    "ProductoId": id,
+                    "BorradoPor": 2,
+                };
+                const datos = await axios.delete(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/borrar`, {data: payload});
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    Swal.fire({
+                        title: `${datos.data.message}`,
+                        text: `Producto con ID: ${id} desactivado correctamente`,
+                        icon: "success",
+                    });
+                    return true;
+                }
             }catch (error){
                 console.log(error);
                 Swal.fire({
@@ -397,10 +429,11 @@ export const useProductos = defineStore('Productos',{
 
             }catch (error){
                 console.log(error);
+                const { response } = error.request;
                 Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
+                    title: `${response.message ? response.message : "Error"}`,
+                    text: 'No se encontraron resultados',
+                    icon: "info",
                 });
             }   
         },

@@ -23,7 +23,7 @@ onMounted(() => {
 });
 
 function cargarDatos(){
-    store.cargarProductos().then(() =>{
+    store.cargarProductos().then(() =>{ 
         if (tipoProducto.value == 0) {
             ListadoProductos.value = store.getProductos;
         }else{
@@ -31,6 +31,7 @@ function cargarDatos(){
             if (ListadoProductos.value.length == 0) {
                 tipoProducto.value = 0;
             }
+            console.log(JSON.stringify(ListadoProductos.value[0 ]));
         }
     });
 
@@ -40,7 +41,7 @@ function cargarDatos(){
 
 }
 
-function borrarProducto(t, id){
+function borrarProducto(id){
     Swal.fire({
         title: '¿Estás seguro?',
         text: "¡No podrás revertir esto!",
@@ -51,8 +52,10 @@ function borrarProducto(t, id){
         confirmButtonText: 'Sí, borrarlo!'
     }).then((result) => {
         if (result.isConfirmed) {
-            store.borrarProducto(t, id).then(() => {
-                cargarDatos();
+            store.borrarProducto(id).then((res) => {
+                if(res){
+                    cargarDatos();
+                }
             });
         }
     })
@@ -65,29 +68,32 @@ function editarProducto(p){
 }
 
 function esperarBusqueda(texto){
-    if (texto === '') {
+    if (texto === undefined) {
         store.cargarProductos().then(() => {
             if (tipoProducto.value == 0) {
                 ListadoProductos.value = store.getProductos;
+                console.log('Cargar generales');
             }else{
                 ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
                 if (ListadoProductos.value.length == 0) {
                     tipoProducto.value = 0;
+                    console.log('Cargar generales por falta de resultados');
+                }else{
+                    console.log('Cargar por tipo');
                 }
             }
         });    
     }else{
-        store.buscarProductos(texto).then(() => {
-            ListadoProductos.value = store.getProductos;
-        });
+        ListadoProductos.value = store.getProductos;
     }
 }
 
 watch (tipoProducto, (newValue, oldValue) => {
     if (newValue == 0) {
-        ListadoProductos.value = store.getProductos;
+        cargarDatos();
     }else{
-        ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == newValue);
+        tipoProducto.value = newValue;
+        cargarDatos();
     
         if (ListadoProductos.value.length == 0) {
                 Swal.fire({
@@ -113,7 +119,7 @@ watch (tipoProducto, (newValue, oldValue) => {
             <h2> Listado de Productos</h2>
             <div class="frm">
                 <div>
-                    <buscadorProductos @eBusqueda="esperarBusqueda"/>
+                    <buscadorProductos @eBusqueda="esperarBusqueda" :tipoProducto="tipoProducto"/>
                 </div>
                 <div class="formulario">
                     <label for="tipoProducto" class="labelTipo"> Tipo: </label>
@@ -172,9 +178,10 @@ watch (tipoProducto, (newValue, oldValue) => {
                                     : producto.Borrado )) 
                                 }} 
                             </td> -->
-                            <td class="col-xs" :class="{ productoDeshabilitado: (producto.Borrado == 1) }"> 
+                            <td class="col-xs" :class="{ productoDeshabilitado: (producto.Borrado == 1) }">
                                 <img src="@/assets/img/edit.svg" alt="Editar" class="btTabla" @click="editarProducto(producto)"> 
-                                <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(tipoProducto, producto.ClaveProducto)" v-if="producto.Borrado == 0">
+                                <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(producto.ProductoId)">
+                                <!-- <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(tipoProducto, producto.ClaveProducto)" v-if="producto.Borrado == 0"> -->
                             </td>
                         </tr>
                     </tbody>
