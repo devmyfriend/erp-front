@@ -138,9 +138,9 @@
         width: auto;
         height: auto;
         max-width: 100%;
-        height: 40.5rem;
-        max-height: 40.5rem;
-        min-height: 40.5rem;
+        height: calc(100vh - 3.825);
+        max-height: calc(100vh - 3.825);
+        min-height: calc(100vh - 3.825);
     }
     .iconUsr{
         cursor: pointer;
