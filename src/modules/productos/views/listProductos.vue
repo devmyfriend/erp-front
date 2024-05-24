@@ -9,12 +9,20 @@ import Swal from 'sweetalert2';
 const route = useRoute();
 const router = useRouter();
 
+const props = defineProps({ 
+    nombreTipo: {
+        type: String,
+        default: ''
+    }
+})
+
 const { useProductos } = require('../store/productos.js')
 const store = useProductos();
 
 const btActivo = ref(1);
-const tipoProducto = ref(parseInt(route.params.tipo) || 0);
-const codigoProducto = ref(0);
+const tipoProducto = ref(route.params.tipo || 'Todos');
+const nombreTipo = ref(props.nombreTipo || '');
+const codigoProducto = ref('');
 const ListadoProductos = ref([]);
 const ListadoTiposProducto = ref([]);
 
@@ -24,14 +32,13 @@ onMounted(() => {
 
 function cargarDatos(){
     store.cargarProductos().then(() =>{ 
-        if (tipoProducto.value == 0) {
+        if (tipoProducto.value == 'Todos') {
             ListadoProductos.value = store.getProductos;
         }else{
-            ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
+            ListadoProductos.value = store.getProductos.filter(producto => producto.NombreTipoProducto == tipoProducto.value);
             if (ListadoProductos.value.length == 0) {
-                tipoProducto.value = 0;
+                tipoProducto.value = 'Todos';
             }
-            console.log(JSON.stringify(ListadoProductos.value[0 ]));
         }
     });
 
@@ -63,26 +70,27 @@ function borrarProducto(id){
 
 function editarProducto(p){
     codigoProducto.value = p.CodigoProducto;
-    tipoProducto.value = p.TipoProductoId;
+    tipoProducto.value = p.NombreTipoProducto;
     router.push({ name: 'formularioProducto', params: { id: codigoProducto.value, tipo: tipoProducto.value } });
 }
 
 function esperarBusqueda(texto){
     if (texto === undefined) {
-        store.cargarProductos().then(() => {
-            if (tipoProducto.value == 0) {
-                ListadoProductos.value = store.getProductos;
-                console.log('Cargar generales');
-            }else{
-                ListadoProductos.value = store.getProductos.filter(producto => producto.TipoProductoId == tipoProducto.value);
+        if(tipoProducto.value == 'Todos'){
+            cargarDatos();
+        }else{
+            store.cargarProductos().then(() => {
+                ListadoProductos.value = store.getProductos.filter(producto => producto.NombreTipoProducto == tipoProducto.value);
                 if (ListadoProductos.value.length == 0) {
-                    tipoProducto.value = 0;
-                    console.log('Cargar generales por falta de resultados');
-                }else{
-                    console.log('Cargar por tipo');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No hay productos',
+                        text: 'No hay productos de este tipo'
+                    });
+                    tipoProducto.value = 'Todos';
                 }
-            }
-        });    
+            });
+        }
     }else{
         ListadoProductos.value = store.getProductos;
     }
@@ -101,7 +109,7 @@ watch (tipoProducto, (newValue, oldValue) => {
                     title: 'No hay productos',
                     text: 'No hay productos de este tipo'
                 });
-                tipoProducto.value = 0;
+                tipoProducto.value = 'Todos';
             }
     }
 });
@@ -109,14 +117,14 @@ watch (tipoProducto, (newValue, oldValue) => {
 
 <template>
     <header>
-        <h1> Productos {{ tipoProducto }} </h1>
+        <h1> Productos{{ tipoProducto != 'Productos' ? `: ${tipoProducto}` : '' }} </h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">
-            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :codigoProducto="codigoProducto"/>
+            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :codigoProducto="codigoProducto" :nombreTipo="nombreTipo"/>
         </div>
         <div class="contenido">
-            <h2> Listado de Productos</h2>
+            <h2> Listado de Productos </h2>
             <div class="frm">
                 <div>
                     <buscadorProductos @eBusqueda="esperarBusqueda" :tipoProducto="tipoProducto"/>
@@ -124,8 +132,8 @@ watch (tipoProducto, (newValue, oldValue) => {
                 <div class="formulario">
                     <label for="tipoProducto" class="labelTipo"> Tipo: </label>
                     <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-                        <option value="0">Todos</option>
-                        <option v-for="Tipo in ListadoTiposProducto" :value="Tipo.TipoProductoId"> {{ Tipo.NombreTipoProducto }}</option>
+                        <option value="Todos">Todos</option>
+                        <option v-for="Tipo in ListadoTiposProducto" :value="Tipo.NombreTipoProducto"> {{ Tipo.NombreTipoProducto }}</option>
                     </select>
                     <btNuevoProducto :tipoProducto="tipoProducto"/>
                 </div>
@@ -136,32 +144,28 @@ watch (tipoProducto, (newValue, oldValue) => {
                         <tr>
                             <th>Producto Id</th>
                             <th class="col-start">Código de Producto</th>
-                            <th>Tipo Producto Id</th>
                             <th class="col-start">Nombre</th>
-                            <th>ID de Linea</th>
-                            <th>Creado En</th>
+                            <th>Tipo Producto</th>
+                            <th>Línea</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(producto, index) in ListadoProductos" :key="index" :class="{td1: index % 2 == 0, td2: index % 2 != 0}">
-                            <td class="col-xxs">
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="col-xs">
                                 {{ producto.ProductoId }}
                             </td>
-                            <td class="col-s col-start">
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="col-s col-start">
                                 {{ producto.CodigoProducto }}
                             </td>
-                            <td class="col-xxs">
-                                {{ producto.TipoProductoId }}
-                            </td>
-                            <td class="col-auto col-start">
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="col-auto col-start">
                                 {{ producto.NombreProducto }}
                             </td>
-                            <td class="col-xxs">
-                                {{ producto.LineaId }}
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="col-xxs">
+                                {{ producto.NombreTipoProducto }}
                             </td>
-                            <td class="col-s">
-                                {{ producto.CreadoEn }}
+                            <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="col-s">
+                                {{ producto.NombreLinea }}
                             </td>
 <!--                             <td :class="{ productoDeshabilitado: (producto.Borrado == 1) }" class="colStart"> {{ producto.ClaveProducto }}</td>
                             
@@ -180,8 +184,7 @@ watch (tipoProducto, (newValue, oldValue) => {
                             </td> -->
                             <td class="col-xs" :class="{ productoDeshabilitado: (producto.Borrado == 1) }">
                                 <img src="@/assets/img/edit.svg" alt="Editar" class="btTabla" @click="editarProducto(producto)"> 
-                                <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(producto.ProductoId)">
-                                <!-- <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(tipoProducto, producto.ClaveProducto)" v-if="producto.Borrado == 0"> -->
+                                <img src="@/assets/img/trash.svg" alt="Borrar" class="btTabla" @click="borrarProducto(tipoProducto, producto.ClaveProducto)" v-if="producto.Borrado == 0">
                             </td>
                         </tr>
                     </tbody>
@@ -263,28 +266,6 @@ h2{
     margin-top: 1.75rem;
     max-height: 39.5rem;
 }
-/* table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #000;
-}
-td, th {
-  border: 1px solid #000;
-  padding: 0.25rem 0.5rem;
-  margin: 0rem 0.25rem 0rem 0.25rem;
-}
-th {
-  background-color: #999999;
-  color: #fff;
-  height: 1rem;
-}
-td{
-  background-color: #fff;
-  color: #999999;
-  height: 2rem;
-  padding: 0rem 0.5rem 0rem 0.5rem;
-} */
-
 th{
     padding: 0.25rem;
     height: 2.75rem;
@@ -295,9 +276,12 @@ th{
 }
 .productoDeshabilitado{
     background-color: #c9c9c9;
-    color: #fff;
+    color: #000;
 }
 .btTabla{
     cursor: pointer;
+}
+input, select{
+    background-color: #fff;
 }
 </style>

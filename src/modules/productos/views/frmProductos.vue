@@ -14,8 +14,14 @@
     const storeImpuestos = useImpuestos();
     const router = useRouter();
     const route = useRoute();
+    const props = defineProps({
+        nombreTipo:{
+            type: String,
+            default: ''
+        }
+    });
     
-    const idProducto = ref( route.params.id || "0");
+    const idProducto = ref( route.params.id || '');
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
     const producto = ref();
@@ -42,8 +48,9 @@
     const Costo = ref(0);
     
     //Datos generales
-    const tipoProducto = ref( (route.params.tipo && route.params.tipo != 0) ? parseInt(route.params.tipo) : 1);
-    const claveProducto = ref(idProducto.value != 0 ? idProducto.value : '');
+    const tipoProducto = ref( route.params.tipo );
+    const tipoProductoId = ref( 0 );
+    const claveProducto = ref(idProducto.value != '' ? idProducto.value : '');
     const deshabilitar = ref(false);
     const nombreInput = ref('');
     const descripcion = ref('');
@@ -120,13 +127,15 @@
 
     onMounted(() => {
         mUnidades.value = new Modal(ModalUnidades.value);
-
         if(idProducto.value != 0 && tipoProducto.value != ''){
             store.obtenerProducto(idProducto.value).then(() => {
-                tipoProducto.value = tipoProducto.value;
+
                 claveProducto.value = idProducto.value;
                 producto.value = store.getProducto;
-                
+                Serie.value = producto.value.Serie || false;
+                Puntos.value = producto.value.Puntos || 0;
+                tipoProductoId.value = producto.value.TipoProductoId;
+
                 nombreInput.value = producto.value.NombreProducto || '';
                 descripcion.value = producto.value.DescripcionProducto || '';
                 deshabilitar.value = producto.value.Borrado || false;
@@ -150,7 +159,9 @@
         }
 
         store.cargarTiposProducto().then(() => {
-            listadoTiposProducto.value = store.getTiposProducto;
+            listadoTiposProducto.value = store.getTiposProducto;    
+            const productoEncontrado = listadoTiposProducto.value.find(tipo => tipo.NombreTipoProducto.toLowerCase() === tipoProducto.value.toLowerCase());
+            tipoProductoId.value = productoEncontrado ? productoEncontrado.TipoProductoId : 1;
         });
         store.cargarClavesUnidades(1).then(() => {
             listadoClaveUnidadSAT.value = store.getClavesUnidades.items;
@@ -204,7 +215,7 @@
             "ClaveProductoServicio": claveProductoSAT.value,
             "ClaveUnidadSat": claveUnidadSAT.value,
             "LineaId": lineaProducto.value,
-            "TipoProductoId": tipoProducto.value,
+            "TipoProductoId": tipoProductoId.value,
             "Puntos": Puntos.value,
             "Serie": Serie.value,
             "Venta": true,
@@ -267,8 +278,6 @@
     function esperarBusqueda(texto){
         if (modo.value == 2) {
             listadoClaveProductoSAT.value = store.getClavesProductos;
-        }else if(modo.value == 3){
-            listadoImpuestosCompuestos.value = storeImpuestos.getListadoImpuestosCompuestos;
         }else if(modo.value == 4){
             if(texto == undefined){
                 store.cargarClavesUnidades(1).then(() => {
@@ -282,21 +291,21 @@
         }
     }
 
-    watch(tipoProducto, (newValue, oldValue) => {
+    watch(tipoProductoId, (newValue, oldValue) => {
         if(newValue != oldValue){
             LimpiarCampos();
-            tipoProducto.value = newValue;
+            tipoProductoId.value = newValue;
         }
     });
 </script>
 
 <template>
     <header>
-        <h1> Productos: {{ idProducto }} - {{ tipoProducto }} </h1>
+        <h1> Productos </h1>
     </header>
     <div class="contenedor">
         <div class="ventanas">
-            <Ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
+            <Ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto" :nombreTipo="nombreTipo"/>
         </div>
         <div class="contenido">
             <h2> Formulario de Productos</h2>
@@ -325,21 +334,8 @@
                         <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 1">
                             <div class="fila">
                                 <label for="tipoProducto" class="labelTipo"> Tipo: </label>
-                                <select name="tipoProducto" id="tipoProducto" v-model="tipoProducto">
-<!--                                     <option value="1">Productos</option>
-                                    <option value="2">Servicios</option>
-                                    <option value="3">Insumos</option>
-                                    <option value="4">Activos</option>
-                                    <option value="5">Productos Terminados</option>
-                                    <option value="6">Productos de Terceros</option>
-                                    <option value="7">Suscripciones</option>
-                                    <option value="8">Combos</option> -->
+                                <select name="tipoProducto" id="tipoProducto" v-model="tipoProductoId">
                                     <option v-for="Tipo in listadoTiposProducto" :value="Tipo.TipoProductoId"> {{ Tipo.NombreTipoProducto }} </option>
-<!--                                     <option value="1"> Limpieza (editado) </option>
-                                    <option value="2"> Limpieza </option>
-                                    <option value="3"> Terminado </option>
-                                    <option value="4"> ter </option>
-                                    <option value="5"> estoesunaprueba </option> -->
                                 </select>
                                 
                                 <div class="divGrow">
@@ -526,9 +522,9 @@
                                         </button>
                                     </div>
                                     <div class="columna">
-                                        <label for="Impuesto"> Impuesto Compuesto </label>
-                                        <input type="text" placeholder="Clave Impuesto Comp. 10" class="inpCompleto conBoton" v-model="claveImpuesto">
-                                        <button class="minibutton" @click="mostrarM(3)">
+                                        <label for="ClaveUnidad"> C. Unidad SAT </label>
+                                        <input class="conBoton" type="text" placeholder="Clave Unidad SAT" v-model="claveUnidadSAT">
+                                        <button class="minibutton" @click="mostrarM(4)"> 
                                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
                                             </svg>
@@ -537,10 +533,11 @@
                                 </div>
 
                                 <div class="fila" v-if="!capaConversiones" :style="{ visibility: capaVisible ? 'visible' : 'hidden' }">
+
                                     <div class="columna">
-                                        <label for="ClaveUnidad"> C. Unidad SAT </label>
-                                        <input class="conBoton" type="text" placeholder="Clave Unidad SAT" v-model="claveUnidadSAT">
-                                        <button class="minibutton" @click="mostrarM(4)"> 
+                                        <label for="Impuesto"> Impuesto Compuesto </label>
+                                        <input type="text" placeholder="Clave Impuesto Comp. 10" class="conBoton" v-model="claveImpuesto">
+                                        <button class="minibutton" @click="mostrarM(3)">
                                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M21.7008 19.0204L17.4165 14.7368C17.2231 14.5435 16.961 14.4361 16.686 14.4361H15.9855C17.1716 12.9194 17.8763 11.0118 17.8763 8.93663C17.8763 4 13.8756 0 8.93815 0C4.00068 0 0 4 0 8.93663C0 13.8733 4.00068 17.8733 8.93815 17.8733C11.0137 17.8733 12.9216 17.1686 14.4386 15.9828V16.6831C14.4386 16.9581 14.546 17.2202 14.7394 17.4135L19.0237 21.6971C19.4276 22.101 20.0808 22.101 20.4804 21.6971L21.6965 20.4812C22.1004 20.0773 22.1004 19.4243 21.7008 19.0204ZM8.93815 14.4361C5.90004 14.4361 3.43775 11.9785 3.43775 8.93663C3.43775 5.89903 5.89574 3.43716 8.93815 3.43716C11.9763 3.43716 14.4386 5.89474 14.4386 8.93663C14.4386 11.9742 11.9806 14.4361 8.93815 14.4361Z" fill="#fff"/>
                                             </svg>
