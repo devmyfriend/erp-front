@@ -23,7 +23,6 @@ th{
     color: #fff;
     font-weight: bold;
     font-size: 1rem;
-    /* height: 3rem; */
     max-height: 3rem;
     overflow: hidden;
     word-break: break-all;
@@ -40,27 +39,28 @@ td{
     word-break: break-all;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-.td1{
-    background-color: #e5e5e5;
-}
-.td2{
-    background-color: #ececec;
+    background-color: #e5e5e5; 
 }
 .col-xxs{
-    width: 5rem;
-    max-width: 5rem;
+    width: 6rem !important;
+    max-width: 6rem !important;
+    min-width: 6rem !important;
 }
 .col-xs{
-    width: 10rem;
-    max-width: 10rem;
+    width: 10rem !important;
+    max-width: 10rem !important;
+    min-width: 10rem !important;
+    padding-left: 1rem;
 }
 .col-s{
-    width: 15rem;
-    max-width: 15rem;
+    padding-left: 1rem;
+    width: 15rem !important;
+    max-width: 15rem !important;
+    min-width: 15rem !important;
 }
 .col-auto{
-    width: auto;
+    padding-left: 1rem;
+    max-width: 40rem;
 }
 .col-start{
     text-align: start;
@@ -80,4 +80,13 @@ th:first-child, td:first-child{
 th:last-child, td:last-child{
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
+}
+.Acciones{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.IcoFrm{
+    cursor: pointer;
 }

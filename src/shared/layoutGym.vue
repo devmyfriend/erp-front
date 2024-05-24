@@ -130,7 +130,8 @@
         border-bottom: 1px solid #F16136;
     }
     .contenedor{
-        width: 100%;
+        flex-grow: 1;
+        width: 95%;
         background-color: #353535;
     }
     .contenedor-Contenido{
