@@ -123,7 +123,7 @@ watch(() => props.pBusqueda, () => {
         <thead>
           <tr>
             <th v-for="(header, index) in encabezados.slice(1)" :key="index" :style="{ width: columnasWidth + '%' }" :class="{ small: isSmall }">{{ header }}</th>
-            <th v-if="props.acciones != 0" :style="{ width: '10%' }" :class="{ small: isSmall }"> Acciones</th>
+            <th v-if="props.acciones != 0" :style="{ width: '10%' }" :class="{ small: isSmall }"> Acciones </th>
           </tr>
         </thead>
         <tbody ref="contenidoREF">
@@ -141,13 +141,13 @@ watch(() => props.pBusqueda, () => {
               <img 
               src="../assets/img/edit.svg"
               alt="Editar"
-              class="Acciones me-2"
+              class="AccionesTabla me-2"
               :class="{ small: isSmall }"
               @click="activarAcciones(1, item)"> 
               <img 
               src="../assets/img/trash.svg"
               alt="Eliminar"
-              class="Acciones ms-2"
+              class="AccionesTabla ms-2"
               :class="{ small: isSmall }"
               v-if="props.acciones == 2"
               @click="activarAcciones(2, item)">
@@ -217,11 +217,11 @@ th:last-child, td:last-child{
 button {
   margin-top: 1.25rem;
 }
-.Acciones {
+.AccionesTabla {
   height: 1rem;
   cursor: pointer;
 }
-th, .Acciones{
+th, .AccionesTabla{
   text-align: center;
 }
 .accionesTabla{

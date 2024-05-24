@@ -7,7 +7,7 @@
 <script setup>
 const props = defineProps({
     tipoProducto: {
-        type: Number,
+        type: String,
         required: true
     }
 });

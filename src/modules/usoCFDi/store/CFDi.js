@@ -2,7 +2,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 import Swal from 'sweetalert2';
 
-const ruta_local = 'http://localhost:3000/api/';
+const VUE_APP_PATH_API_PRODUCTS = 'http://localhost:3000/api/';
 
 export const useCFDi = defineStore( 'CFDi',{
     state: ()=>({
@@ -16,7 +16,7 @@ export const useCFDi = defineStore( 'CFDi',{
     actions:{
         async cargarCFDi(){
             try{
-                const datos = await axios.get(`${ruta_local}v1/catalogo/sat/cfdi/lista`);
+                const datos = await axios.get(`${VUE_APP_PATH_API_PRODUCTS}v1/catalogo/sat/cfdi/lista`);
                 this.ListaCFDi = datos.data;
             }catch( error ){
                 console.log("[Error]: " + error );

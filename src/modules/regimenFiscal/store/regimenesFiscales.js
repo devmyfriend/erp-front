@@ -2,7 +2,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 import Swal from "sweetalert2";
 
-const ruta_local = 'http://localhost:3000/api/';
+const VUE_APP_PATH_API_PRODUCTS = 'http://localhost:3000/api/';
 
 export const useRegimenFiscal = defineStore("RegimenFiscal", {
     state: () => ({
@@ -16,7 +16,7 @@ export const useRegimenFiscal = defineStore("RegimenFiscal", {
     actions: {
             async cargarRegimenFiscal() {
                 try {
-                    const datos = await axios.get(`${ruta_local}v1/catalogo/sat/regimenfiscal/lista`);
+                    const datos = await axios.get(`${VUE_APP_PATH_API_PRODUCTS}v1/catalogo/sat/regimenfiscal/lista`);
                     this.ListaRegimenFiscal = datos.data;
                 } catch (error) {
                     console.log("[Error]: " + error);
@@ -38,7 +38,7 @@ export const useRegimenFiscal = defineStore("RegimenFiscal", {
             },
             async buscarRegimenesXCFDi( idRegimen ){
                 try{
-                    const datos = await axios.get(`${ruta_local}v1/catalogo/sat/cfdi`);
+                    const datos = await axios.get(`${VUE_APP_PATH_API_PRODUCTS}v1/catalogo/sat/cfdi`);
     
                     if (datos.status === 200 && datos.statusText === "OK" && datos.data.length > 0) {
                         let respuesta = datos.data.filter( (item) => item.regimen.ClaveRegimenFiscal === idRegimen ).map( (item) => item.cfdi );

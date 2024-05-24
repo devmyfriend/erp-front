@@ -1,10 +1,22 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import ventanas from '../components/ventanas.vue'
 import { useRoute } from 'vue-router';
+import { useAlmacenes } from '@/modules/almacen/store/almacen';
+import Swal from 'sweetalert2';
+
+const storeAlmacen = useAlmacenes();
+const props = defineProps({
+    nombreTipo: {
+        type: String,
+        default: ''
+    }
+});
+const nombreTipo = ref(props.nombreTipo || '');
+
 const route = useRoute();
 const idProducto = ref( route.params.id || '0');
-const tipoProducto = ref(route.params.tipo || '');
+const tipoProducto = ref(route.params.tipo || 'Todos');
 const btActivo = ref(3);
 
 const registros = ref([
@@ -27,9 +39,25 @@ const registros = ref([
         UltimoPrecio: 29.99
     }
 ]);
+const registro = ref({
+    Almacen: null,
+    Sucursal: null,
+});
+const listadoAlmacenes = ref([]);
+const obtenerRegistro = (registro) => {
+    Swal.fire({
+        title: 'Detalles del almacén',
+        html: `
+            <p> Nombre del almacén: ${registro.Nombre} </p>
+            <p> Stock Mínimo: ${registro.StockMinimo} </p>
+            <p> Stock Máximo: ${registro.StockMaximo} </p>
+            <p> Último precio de compra: $${registro.UltimoPrecio} </p>
+        `,
+        confirmButtonText: 'Cerrar'
+    });
+}
 
-const Almacen = ref('');
-const Sucursal = ref('');
+
 const Seccion = ref('');
 const Anaquel = ref('');
 const Nivel = ref('');
@@ -46,15 +74,15 @@ const nAnaquel= ref(false);
 const nNivel = ref(false);
 const nLugar = ref(false);
 
-function obtenerRegistro(r){
-    console.log( JSON.stringify(r) );
-    Almacen.value = r.Nombre;
-    CantidadMaxima.value = r.StockMaximo;
-    CantidadMinima.value = r.StockMinimo;
-}
-watch(() => Almacen.value, (newVal, oldVal) => {
-    Almacen.value = newVal;
-    Sucursal.value = 'Sucursal 1';
+
+onMounted(() => {
+    storeAlmacen.cargarAlmacenes().then(() => {
+        listadoAlmacenes.value = storeAlmacen.getAlmacenes;    
+    });
+});
+
+watch(() => registro.value.Almacen, (newVal, oldVal) => {
+    registro.value.Sucursal = listadoAlmacenes.value.find(almacen => almacen.AlmacenId == newVal).SucursalId;
 });
 </script>
 
@@ -64,7 +92,7 @@ watch(() => Almacen.value, (newVal, oldVal) => {
     </header>
     <div class="contenedor">
         <div class="ventanas">
-            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto"/>
+            <ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto" :nombreTipo="nombreTipo"/>
         </div>
         <div class="contenido">
             <h2> Productos por Almacén </h2>
@@ -74,14 +102,14 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                     <div class="formulario">
                         <div class="contenidoFrm">
                             <div class="fila">
-                            <label for="Almacen"> Almacén: </label>
-                            <select id="Almacen" v-model="Almacen">
-                                <option value="Almacen1"> Almacén 1 </option>
+                            <label for="Almacen" @click="test"> Almacén: </label>
+                            <select id="Almacen" v-model="registro.Almacen">
+                                <option v-for="Almacen in listadoAlmacenes" :value="Almacen.AlmacenId"> {{Almacen.NombreAlmacen}} </option>
                             </select>
                         </div>
                         <div class="fila">
-                            <label for="Sucursal"> Sucursal: </label>
-                            <input type="text" disabled v-model="Sucursal" id="Sucursal">
+                            <label for="Sucursal" @click="test"> Sucursal: </label>
+                            <input type="text" disabled v-model="registro.Sucursal" id="Sucursal">
                         </div>
                         <div class="fila">
                             <label for="Seccion"> Sección: </label>
@@ -154,11 +182,11 @@ watch(() => Almacen.value, (newVal, oldVal) => {
                             </thead>
                             <tbody>
                                 <tr v-for="registro in registros">
-                                    <td class="colNombre"> {{     registro.Nombre       }} </td>
-                                    <td class="td2"> {{     registro.StockMinimo  }} </td>
-                                    <td class="td2"> {{     registro.StockMaximo  }} </td>
-                                    <td class="td3"> {{     registro.UltimoPrecio }} </td>
-                                    <td class="td3"> <img class="btTabla" @click="obtenerRegistro(registro)" src="@/assets/img/details.svg" alt="Detalles"> </td>
+                                    <td class="col-auto"> {{ registro.Nombre }} </td>
+                                    <td class="col-xs"> {{ registro.StockMinimo }} </td>
+                                    <td class="col-xs"> {{ registro.StockMaximo }} </td>
+                                    <td class="col-xs"> {{ registro.UltimoPrecio }} </td>
+                                    <td class="col-xxs"> <img class="btTabla" @click="obtenerRegistro(registro)" src="@/assets/img/details.svg" alt="Detalles"> </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -170,6 +198,8 @@ watch(() => Almacen.value, (newVal, oldVal) => {
 </template>
 
 <style scoped>
+@import url('../../../styles/tablaListado.css');
+
 .contenedor {
     background-color: #fff;
     width: 100%;
@@ -238,19 +268,24 @@ h3{
     font-weight: bold;
 }
 .Datos{
+    display: flex;
+    flex-direction: row;
     width: 100%;
     height: 2rem;
-    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: flex-start;
 }
 .datosAlmacenTitulo{
     font-size: 1.25rem;
     font-weight: bold;
+}
+.datosAlmacenTitulo:not(:first-child){
     margin-left: 1.5rem;
 }
 .datosAlmacenValor{
-    font-size: 1.25rem;
+    font-size: 1.25rem; 
     font-weight: lighter;
-    margin-left: 0.25rem;
+    margin-left: 0.5rem;
 }
 .fila{
     display: flex;
@@ -279,6 +314,9 @@ h3{
     margin-left: 0.5rem;
     width: 1.5rem;
 }
+
+
+
 .btGuardarTodo{
     width: 80%;
     height: 2.5rem;
@@ -311,44 +349,16 @@ h3{
     width: 1.5rem;
     cursor: pointer;
 }
-
 .tablaContainer{
     width: 100%;
     height: 100%;
     overflow: auto;
 }
+th{
+    padding: 0.25rem 0.5rem;
+}
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #000;
-}
-td, th {
-  border: 1px solid #000;
-  padding: 0.25rem 0.5rem;
-  margin: 0rem 0.25rem 0rem 0.25rem;
-}
-th {
-  background-color: #999999;
-  color: #fff;
-  padding: 0.25rem;
-}
-td{
-  background-color: #fff;
-  color: #999999;
-  height: 2rem;
-  padding: 0rem 0.5rem 0rem 0.5rem;
-}
-.td2{
-    width: 7.5%;
-}
-.td3{
-    width: 15%;
-}
-.colNombre{
-    width: 60%;
-    text-align: start;
-}
+
 input:disabled{
     background-color: #999;
     color: #fff;

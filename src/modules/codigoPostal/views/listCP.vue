@@ -24,7 +24,7 @@ store.cargarCodigosPostales().then(() => {
             </div>                                
         </div>
 
-        <div class="tablaContainer animate__animated animate__fadeIn animate__fast" >
+        <div class="tablaContainer animate__animated animate__fadeIn animate__fast">
             <table>
                 <thead>
                     <tr>

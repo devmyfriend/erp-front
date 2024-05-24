@@ -15,6 +15,9 @@ const titulos = ref([
   'Unidades de Medida',
   'Productos',
   'Usuarios',
+  'Membresias',
+  'Activos',
+  'Almacenes',
 ]);
 
 const rutas = ref([
@@ -30,6 +33,9 @@ const rutas = ref([
   { name: 'unidades' },
   { name: 'productos' },
   { name: 'usuarios' },
+  { name: 'membresias' },
+  { name: 'activos' },
+  { name: 'almacenes' },
 ]);
 
 const body = ref([
@@ -44,7 +50,10 @@ const body = ref([
     'Listado y busqueda de los CFDi provenientes del SAT.',
     'Apartado para el manejo de unidades de medida, creación, lectura, busqueda, edición y eliminación de unidades de medida.',
     'Módulo CRUD de productos, vinculación de almacenes, manejo de combos y de suscripciones.',
-    'Módulo de CRUD de usuarios, asignación de roles y permisos.'
+    'Módulo de CRUD de usuarios, asignación de roles y permisos.',
+    'Módulo de CRUD de membresias para las suscripciones de los usuarios.',
+    'Activos de la empresa, se pueden buscar, crear, editar o eliminar activos.',
+    'Módulo de CRUD de almacenes, se pueden buscar, crear, editar o eliminar almacenes.',
 ]);
 
 const footer = ref([]);
@@ -86,7 +95,7 @@ const itemContent = titulos.value.map((titulo, index) => ({
     border: 1px solid #353535;
 }
 .containerItems{
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -98,5 +107,7 @@ const itemContent = titulos.value.map((titulo, index) => ({
 h1{
     letter-spacing: 0.5rem;
     font-weight: 600;
+    font-size: 2rem;
+    margin: 0.5rem auto 0.5rem auto;
 }
 </style>

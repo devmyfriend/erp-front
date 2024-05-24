@@ -40,7 +40,7 @@ const footerLink = ref( props.footerLink || 'Menu')
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 17.5rem;
+    height: 16rem;
     width: 20rem;
     background-color: #232323;
     border-radius: 1rem;

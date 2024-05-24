@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import Swal from "sweetalert2";
-const ruta_local = 'http://localhost:3000/api/';
+const VUE_APP_PATH_API_PRODUCTS = 'http://localhost:3000/api/';
 export const useUnidades = defineStore('Unidades',{
     state: () => ({
         ListadoUnidades: [],

@@ -33,265 +33,6 @@ export const useProductos = defineStore('Productos',{
         },
     },
     actions:{
-/*         async cargarProductos(tipo){
-            try{
-                if (tipo === undefined) {
-                    const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos`);
-                    if(datos.status === 200 && datos.statusText === "OK"){
-                        this.ListadoProductos = datos.data.response;
-                        this.ListadoProductos = this.ListadoProductos.slice(0,15);
-                        return true;
-                    }                    
-                }else{
-                    const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos/${tipo}`);
-                    if(datos.status === 200 && datos.statusText === "OK"){
-                        this.ListadoProductos = datos.data.response;
-                        this.ListadoProductos = this.ListadoProductos.slice(0,15);
-                        return true;
-                    }
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async crearProducto(producto, tipo){
-            try{
-                const pet = await axios.post(`http://lachosoft.cloud:7000/api/v1/productos/${tipo}`, producto);
-                if(pet.status === 200 && pet.statusText === "OK"){
-                    Swal.fire({
-                        title: "Producto creado",
-                        text: `${pet.data.message}: ${pet.data.response[0].CodigoProducto}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async buscarProducto(id){
-            try{
-                const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/productos/detalle/${id}`);
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    this.Producto = datos.data.response[0];
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async borrarProducto(t, id){
-            try{
-                const p = {
-                    "CodigoProducto": id,
-                    "BorradoPor": 2,
-                };
-                const datos = await axios.delete(`http://lachosoft.cloud:7000/api/v1/productos/${t}`, {data: p});
-
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    Swal.fire({
-                        title: "Producto eliminado",
-                        text: `${datos.message}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async reactivarProducto(id){
-            try{
-                const p = {
-                    "CodigoProducto": id,
-                    "ActualizadoPor": 2
-                }
-                const datos = await axios.put(`http://lachosoft.cloud:7000/api/v1/productos/activar`, p);
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    Swal.fire({
-                        title: `${datos.data.message}`,
-                        text: `Clave producto: ${id}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async actualizarProducto(t, producto){
-            try{
-                const id = producto.CodigoProducto;
-                const datos = await axios.put(`http://lachosoft.cloud:7000/api/v1/productos/${t}/${id}`, producto);
-
-
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    Swal.fire({
-                        title: `Producto actualizado`,
-                        text: `${datos.data.message} con id: ${id}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        
-
-
-
-        async cargarPoliticasMembresia(){
-            try{
-                const datos = await axios.get(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`);
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    this.ListadoMembresias = datos.data.response;
-                    this.ListadoMembresias = this.ListadoMembresias.slice(0,5);
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async crearPoliticaMembresia(politica){
-            try{
-                const pet = await axios.post(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`, politica);
-                if(pet.status === 200 && pet.statusText === "OK"){
-                    Swal.fire({
-                        title: "Politica creada",
-                        text: `${pet.data.message}: ${pet.data.response[0].PoliticasMembreciasId}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async actualizarPoliticaMembresia(producto){
-            try{
-                console.log(JSON.stringify(producto));
-                const id = producto.PoliticasMembreciasId;
-                delete producto.PoliticasMembreciasId;
-                console.log(JSON.stringify(producto));
-                const datos = await axios.put(`http://lachosoft.cloud:7000/api/v1/politicasMembresia/${id}`, producto);
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    Swal.fire({
-                        title: `Politica actualizada`,
-                        text: `${datos.message} con id: ${id}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch(error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async borrarPoliticaMembresia(id){
-            try{
-                const p = {
-                    "PoliticasMembreciasId": id,
-                    "BorradoPor": 2,
-                };
-                const datos = await axios.delete(`http://lachosoft.cloud:7000/api/v1/politicasMembresia`, {data: p});
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    Swal.fire({
-                        title: "Politica eliminada",
-                        text: `${datos.message}`,
-                        icon: "success",
-                    });
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },   */      
-
-
-        async cargarTiposProducto(){
-            try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/tipo`);
-
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    this.ListadoTiposProducto = datos.data.response;
-                    return true;
-                }
-            }catch (error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
-        async buscarProducto(clave){
-            try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/detalle/${clave}`);
-
-                if(datos.status === 200 && datos.statusText === "OK"){
-                    this.Producto = datos.data.response[0];
-                    return true;
-                }
-            }catch(error){
-                console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
-            }
-        },
         async cargarProductos(){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos`);
@@ -309,32 +50,23 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
-        async crearProducto(producto){
+        async cargarTiposProducto(){
             try{
-                const data = await axios.post(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/crear`, producto);
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/tipo`);
 
-                if(data.status === 200 && data.statusText === "OK"){
-                    Swal.fire({
-                        title: `${data.data.message}:`,
-                        text:  `Producto con ID: ${data.data.ProductoId}`,
-                        icon: "success",
-                    });
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoTiposProducto = datos.data.response;
                     return true;
                 }
             }catch (error){
-                const { response } = error.request;
-                const msg = JSON.parse(response);
-                console.log(msg.errors);
-                 Swal.fire({
-                    title: `${msg.status}`,
-                    text: msg.errors[0] === 'Invalid value' ? `${msg.errors[1]}` : `${msg.errors[0]}`,
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
                     icon: "error",
                 });
             }
         },
-
-
-
         async cargarClavesUnidades(pagina){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/${pagina}`);
@@ -353,12 +85,11 @@ export const useProductos = defineStore('Productos',{
                 });
             }
         },
-        async buscarClavesUnidades(palabra){
+        async cargarClavesProductos(pagina){
             try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/buscar/nombre/${palabra}`);
-
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/productos/servicio/palabra/${pagina}`);
                 if(datos.status === 200 && datos.statusText === "OK"){
-                    this.ListadoClavesUnidades = datos.data;
+                    this.ListadoClavesProductos = datos.data.response;
                     return true;
                 }
 
@@ -369,16 +100,97 @@ export const useProductos = defineStore('Productos',{
                     text: JSON.stringify(error.message),
                     icon: "error",
                 });
-            }   
+            }
         },
-        async cargarClavesProductos(pagina){
+
+        async obtenerProducto(clave){
             try{
-                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/productos/servicio/palabra/${pagina}`);
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/detalle/${clave}`);
+
                 if(datos.status === 200 && datos.statusText === "OK"){
-                    this.ListadoClavesProductos = datos.data.response;
+                    this.Producto = datos.data.response[0];
                     return true;
                 }
+            }catch(error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        },
 
+        async crearProducto(producto){
+            try{
+                const data = await axios.post(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/crear`, producto);
+
+                if(data.status === 200 && data.statusText === "OK"){
+                    Swal.fire({
+                        title: `${data.data.message}:`,
+                        text:  `Producto con ID: ${data.data.ProductoId}`,
+                        icon: "success",
+                    });
+                    return true;
+                }
+            }catch (error){
+                const { response } = error.request;
+                const msg = JSON.parse(response);
+                /* console.log(msg.errors ? msg.errors : msg.error); */
+                console.log(error);
+                 Swal.fire({
+                    title: msg.status ? `${msg.status}` : `Error`,
+                    text: msg.error ? msg.error : msg.errors[0] === 'Invalid value' ? `${msg.errors[1]}` : `${msg.errors[0]}`,
+                    icon: "error",
+                });
+            }
+        },
+
+/*         async buscarProductos(nombre, tipo){
+            try{
+                this.ListadoProductos = this.ListadoProductos.filter((producto) => {
+                    if(tipo === 'Todos'){
+                        return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "");
+                    }
+                    else{
+                        return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "") && producto.NombreTipoProducto.toLowerCase() === tipo.toLowerCase();
+                    }
+                });
+
+                if(this.ListadoProductos.length === 0){
+                    Swal.fire({
+                        title: "No se encontraron resultados",
+                        text: "Intente con otra palabra",
+                        icon: "info",
+                    });
+                    return false;
+                }
+                return true;
+
+
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
+            }
+        }, */
+        async buscarProductos(nombre, tipo){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/buscar/${nombre}`);
+                
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    if (tipo === 'Todos'){
+                        this.ListadoProductos = datos.data.response;
+                        console.log('El tipo es: ', tipo);
+                    }else{
+                        console.log('Filtrando por tipo ' + tipo + '...');
+                        this.ListadoProductos = datos.data.response.filter((producto) => producto.NombreTipoProducto.toLowerCase() === tipo.toLowerCase());
+                    }
+                    return true;
+                }
             }catch (error){
                 console.log(error);
                 Swal.fire({
@@ -413,6 +225,51 @@ export const useProductos = defineStore('Productos',{
                     text: JSON.stringify(error.message),
                     icon: "error",
                 });                
+            }
+        },
+        async buscarClavesUnidades(palabra){
+            try{
+                const datos = await axios.get(`${process.env.VUE_APP_PATH_API}v1/unidades/buscar/nombre/${palabra}`);
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    this.ListadoClavesUnidades = datos.data;
+                    return true;
+                }
+
+            }catch (error){
+                console.log(error);
+                const { response } = error.request;
+                Swal.fire({
+                    title: `${response.message ? response.message : "Error"}`,
+                    text: 'No se encontraron resultados',
+                    icon: "info",
+                });
+            }   
+        },
+
+        async borrarProducto(id){
+            try{
+                const payload = {
+                    "ProductoId": id,
+                    "BorradoPor": 2,
+                };
+                const datos = await axios.delete(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/borrar`, {data: payload});
+
+                if(datos.status === 200 && datos.statusText === "OK"){
+                    Swal.fire({
+                        title: `${datos.data.message}`,
+                        text: `Producto con ID: ${id} desactivado correctamente`,
+                        icon: "success",
+                    });
+                    return true;
+                }
+            }catch (error){
+                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: JSON.stringify(error.message),
+                    icon: "error",
+                });
             }
         },
     }
