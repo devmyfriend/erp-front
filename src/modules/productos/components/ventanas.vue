@@ -3,9 +3,9 @@
         <div class="capas">
         <router-link :class="{btActivo: btActivo === 1}" :to=" { name: 'listadoProductos', params: { tipo: props.tipoProducto}}"> Listado </router-link>
         <router-link :class="{btActivo: btActivo === 2}" :to=" { name: 'formularioProducto', params: { tipo: props.tipoProducto, id: codigoProducto}}"> Formulario </router-link>
-        <router-link v-if="tipoProducto != 'servicio' && tipoProducto !='suscripcion'" :class="{btActivo: btActivo === 3}" :to=" { name: 'almacenProducto', params: { tipo: tipoProducto, id: codigoProducto } }"> Productos por Almacén </router-link>
-        <router-link v-if="tipoProducto == 'combo'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: codigoProducto } }"> Agregar Productos </router-link>
-        <router-link v-if="tipoProducto == 'suscripcion'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: codigoProducto } }"> Políticas </router-link>
+        <router-link v-if="nombreTipo != 'Servicios' && tipoProducto !='suscripcion'" :class="{btActivo: btActivo === 3}" :to=" { name: 'almacenProducto', params: { tipo: tipoProducto, id: codigoProducto } }"> Productos por Almacén </router-link>
+        <router-link v-if="nombreTipo == 'Combos'" :class="{btActivo: btActivo === 4}" :to=" { name: 'detalleCombo', params: { id: codigoProducto } }"> Agregar Productos </router-link>
+        <router-link v-if="nombreTipo == 'Suscripciones'" :class="{btActivo: btActivo === 5}" :to=" { name: 'politicasProducto', params: { id: codigoProducto } }"> Políticas </router-link>
         <router-link :class="{btActivo: btActivo === 6}" :to=" { name: 'cantidadAlmacen', params: { tipo: tipoProducto, id: codigoProducto } }"> Cantidad por Almacén </router-link>
         <router-link :class="{btActivo: btActivo === 7}" :to=" { name: 'proveedoresProducto', params: { tipo: tipoProducto, id: codigoProducto } }"> Proveedores </router-link>
         </div>
@@ -25,17 +25,21 @@ import { computed } from 'vue';
 
 const props = defineProps({ 
     tipoProducto: {
-        type: Number,
-        default: 0
+        type: String,
+        default: 'Todos'
     },
     codigoProducto: {
-        type: Number,
-        default: 0
+        type: String,
+        default: ''
     },
     btActivo: {
         type: Number,
         default: 1
     },
+        nombreTipo: {
+            type: String,
+            default: ''
+    }
 })
 
 const tipoProducto = computed(() => {

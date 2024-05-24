@@ -39,11 +39,6 @@ if (res) {
 }
 
 function crearUsuario(){
-/*     nuevoRegistro.value.CreadoPor = 2;
-    store.crearImpuestoPropio(nuevoRegistro.value).then(() => {
-        cargarDatos();
-        limpiarFrm();
-    }); */
     Swal.fire({
         title: 'Creando impuesto propio',
     })
@@ -294,7 +289,7 @@ function esperarBusqueda(txt){
         flex-grow: 1;
         justify-content:space-between;
         align-items: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
     .inpClave, .inpNombre, .inpApellido{
         height: 2.1875rem;

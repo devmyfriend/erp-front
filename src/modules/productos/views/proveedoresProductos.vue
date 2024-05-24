@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const idProducto = ref( route.params.id || '0');
-const tipoProducto = ref(route.params.tipo || '');
+const tipoProducto = ref(route.params.tipo || 'Todos');
 const btActivo = ref(7);
 
 const listadoProveedores = ref([

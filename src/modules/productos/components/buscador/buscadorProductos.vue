@@ -7,6 +7,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import Swal from 'sweetalert2';
 const emit = defineEmits('eBusqueda');
 const { useProductos } = require('@/modules/productos/store/productos.js')
 const store = useProductos();
@@ -14,8 +15,8 @@ const store = useProductos();
 const txtBusqueda = ref('');
 const props = defineProps({
     tipoProducto: {
-        type: Number,
-        default: 0
+        type: String,
+        default: 'Todos'
     }
 });
 
@@ -23,20 +24,19 @@ function buscar(texto) {
     if (texto.length != 0) { 
         store.buscarProductos(texto, props.tipoProducto).then((res) => {
             if (res) {
-                emit ('eBusqueda', texto);
-                console.log('[Buscador] con texto');
+                console.log('La respuesta obtenida es: ' + res);
+                emit('eBusqueda', texto);
             }else{
-                store.cargarProductos().then(() => {
-                    emit('eBusqueda');
-                    console.log('[Buscador] sin resultados');
+                Swal.fire({
+                    title: 'No se encontraron resultados',
+                    icon: 'info',
+                    confirmButtonText: 'Aceptar'
                 });
+                emit('eBusqueda');
             }
         });
     }else{
-        store.cargarProductos().then(() => {
-            emit('eBusqueda');
-            console.log('[Buscador] sin texto');
-        });
+        emit('eBusqueda');
     }
 }
 </script>

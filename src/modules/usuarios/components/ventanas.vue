@@ -14,8 +14,6 @@ const props = defineProps({
     },
 })
 
-
-console.log('valorVentana: ' + props.valorVentana);
 </script>
 
 <template>
