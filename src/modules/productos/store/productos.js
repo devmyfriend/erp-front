@@ -136,7 +136,6 @@ export const useProductos = defineStore('Productos',{
             }catch (error){
                 const { response } = error.request;
                 const msg = JSON.parse(response);
-                /* console.log(msg.errors ? msg.errors : msg.error); */
                 console.log(error);
                  Swal.fire({
                     title: msg.status ? `${msg.status}` : `Error`,
@@ -146,37 +145,31 @@ export const useProductos = defineStore('Productos',{
             }
         },
 
-/*         async buscarProductos(nombre, tipo){
+        async actualizarProducto(producto){
             try{
-                this.ListadoProductos = this.ListadoProductos.filter((producto) => {
-                    if(tipo === 'Todos'){
-                        return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "");
-                    }
-                    else{
-                        return producto.NombreProducto.toLowerCase().includes(nombre ? nombre.toLowerCase() : "") && producto.NombreTipoProducto.toLowerCase() === tipo.toLowerCase();
-                    }
-                });
+                const data = await axios.put(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/editar/${producto.ProductoId}`, producto);
 
-                if(this.ListadoProductos.length === 0){
+                if(data.status === 200 && data.statusText === "OK"){
                     Swal.fire({
-                        title: "No se encontraron resultados",
-                        text: "Intente con otra palabra",
-                        icon: "info",
+                        title: `${data.data.message}:`,
+                        text:  `Producto con ID: ${producto.ProductoId}`,
+                        icon: "success",
                     });
-                    return false;
+                    return true;
                 }
-                return true;
-
 
             }catch (error){
+                const { response } = error.request;
+                const msg = JSON.parse(response);
                 console.log(error);
-                Swal.fire({
-                    title: "Error",
-                    text: JSON.stringify(error.message),
-                    icon: "error",
-                });
+                    Swal.fire({
+                        title: msg.status ? `${msg.status}` : `Error`,
+                        text: msg.error ? msg.error : msg.errors[0] === 'Invalid value' ? `${msg.errors[1]}` : `${msg.errors[0]}`,
+                        icon: "error",
+                    });
             }
-        }, */
+        },
+
         async buscarProductos(nombre, tipo){
             try{
                 const datos = await axios.get(`${process.env.VUE_APP_PATH_API_PRODUCTS}v1/productos/buscar/${nombre}`);

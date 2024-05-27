@@ -21,7 +21,8 @@
         }
     });
     
-    const idProducto = ref( route.params.id || '');
+    const claveProducto = ref( route.params.id || '');
+    const ProductoId = ref(0);
     const btActivo = ref(2);
     const contenedorSeleccionado = ref(1);
     const producto = ref();
@@ -50,7 +51,6 @@
     //Datos generales
     const tipoProducto = ref( route.params.tipo );
     const tipoProductoId = ref( 0 );
-    const claveProducto = ref(idProducto.value != '' ? idProducto.value : '');
     const deshabilitar = ref(false);
     const nombreInput = ref('');
     const descripcion = ref('');
@@ -127,26 +127,31 @@
 
     onMounted(() => {
         mUnidades.value = new Modal(ModalUnidades.value);
-        if(idProducto.value != 0 && tipoProducto.value != ''){
-            store.obtenerProducto(idProducto.value).then(() => {
-
-                claveProducto.value = idProducto.value;
+        if(claveProducto.value != 0 && tipoProducto.value != ''){
+            store.obtenerProducto(claveProducto.value).then(() => {
                 producto.value = store.getProducto;
+                ProductoId.value = producto.value.ProductoId;
+
+                claveProducto.value = claveProducto.value;
                 Serie.value = producto.value.Serie || false;
                 Puntos.value = producto.value.Puntos || 0;
                 tipoProductoId.value = producto.value.TipoProductoId;
 
                 nombreInput.value = producto.value.NombreProducto || '';
                 descripcion.value = producto.value.DescripcionProducto || '';
-                deshabilitar.value = producto.value.Borrado || false;
+
+                deshabilitar.value = (producto.value.Borrado ? true : false) || false;
+                
                 uBase.value = producto.value.UnidadBase || '';
                 uCompra.value = producto.value.UnidadCompra || '';
                 uFiscal.value = producto.value.UnidadFiscal || '';
                 uVenta.value = producto.value.UnidadVenta || '';
+                
                 claveProductoSAT.value = producto.value.ClaveProductoServicio || '';
                 claveImpuesto.value = producto.value.ImpuestoCompuestoId || '';
                 claveUnidadSAT.value = producto.value.ClaveUnidadSat || '';
                 lineaProducto.value = producto.value.LineaId || '';
+                
                 categoria1.value = producto.value.CategoriaId_1 || '';
                 categoria2.value = producto.value.CategoriaId_2 || '';
                 familia.value = producto.value.familia || '';
@@ -196,12 +201,12 @@
     }
 
     async function reactivarProducto(){
-        if(idProducto.value != "0" && estadoOriginal.value != deshabilitar.value ){
-            await store.reactivarProducto(idProducto.value).then((res) => {
+        if(claveProducto.value != "0" && estadoOriginal.value != deshabilitar.value ){
+            await store.reactivarProducto(claveProducto.value).then((res) => {
                 if(res){
-                    console.log('[REACTIVADO] [Producto]: ' + idProducto.value + ' [Tipo]: ' + tipoProducto.value);
+                    console.log('[REACTIVADO] [Producto]: ' + claveProducto.value + ' [Tipo]: ' + tipoProducto.value);
                 }else{
-                    console.log('[FALLO][REACTIVANDO] [Producto]: ' + idProducto.value + ' [Tipo]: ' + tipoProducto.value);
+                    console.log('[FALLO][REACTIVANDO] [Producto]: ' + claveProducto.value + ' [Tipo]: ' + tipoProducto.value);
                 }
             });
         }
@@ -254,10 +259,28 @@
         capaVisible.value = false;
     }
 
-    function AgregarPolitica(){
-        router.push({ name: 'politicasProducto', params: { id: idProducto.value } });
+    function ActualizarProducto (){
+        const producto = {
+            "ProductoId": ProductoId.value,
+            "CodigoProducto": claveProducto.value,
+            "NombreProducto": nombreInput.value,
+            "DescripcionProducto": descripcion.value,
+            "ClaveProductoServicio": claveProductoSAT.value,
+            "ClaveUnidadSat": claveUnidadSAT.value,
+            "LineaId": lineaProducto.value,
+            "TipoProductoId": tipoProductoId.value,
+            "Puntos": Puntos.value,
+            "Serie": Serie.value,
+            "Venta": true,
+            "Insumo": true,
+            "ActualizadoPor": 2
+        }
+        store.actualizarProducto(producto).then((res) => {
+            if(res){
+                router.push({ name: 'listadoProductos' });
+            }
+        });
     }
-
     function bajarRegistro(modo, registro){ 
         switch (modo) {
             case 2:
@@ -305,11 +328,11 @@
     </header>
     <div class="contenedor">
         <div class="ventanas">
-            <Ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :idProducto="idProducto" :nombreTipo="nombreTipo"/>
+            <Ventanas :tipoProducto="tipoProducto" :btActivo="btActivo" :claveProducto="claveProducto" :nombreTipo="nombreTipo"/>
         </div>
         <div class="contenido">
-            <h2> Formulario de Productos</h2>
-            <div class="frm"> <!-- animate__animated animate__fadeIn -->
+            <h2> {{ ProductoId != 0 ? 'Modificando producto: ' + nombreInput : 'Nuevo producto producto'}}</h2>
+            <div class="frm">
                 <transition-group name="capaConversiones">
                     <div class="formulario " v-if="tipoProducto != 'combo'">
 
@@ -328,7 +351,7 @@
                                              Unidades     
                                 </h3>
                             </div>
-                            <span class="spanCosto" v-if="idProducto != 0 && Costo != 0"> Costo: $<span>{{ Costo }}</span></span>
+                            <span class="spanCosto" v-if="claveProducto != 0 && Costo != 0"> Costo: $<span>{{ Costo }}</span></span>
                         </div>
 
                         <div class="miniContainer capaActiva animate__animated animate__fadeIn" v-if="contenedorSeleccionado == 1">
@@ -343,8 +366,8 @@
                                     <input class="inpGrow" id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto">
                                 </div>
                                 
-                                <label for="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true"> Deshabilitar </label>
-                                <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true" v-model="deshabilitar" :checked="deshabilitar">
+                                <label for="Deshabilitar" v-if="claveProducto != 0 && estadoOriginal == true"> Deshabilitado: </label>
+                                <input type="checkbox" name="Deshabilitar" id="Deshabilitar" v-if="claveProducto != 0 && estadoOriginal == true" v-model="deshabilitar" :checked="deshabilitar == 1">
                             </div>
                             <div class="fila">
                                 <label for="Nombre">Nombre: </label>
@@ -358,12 +381,12 @@
                                 <label for="Serie"> No. de Serie: </label>
                                 <input type="checkbox" name="Serie" id="Serie" v-model="Serie" :checked="Serie">
                                 
-                                <label for="Puntos"> Puntos PB: </label>
-                                <input class="inpPuntos" type="number" name="Puntos" placeholder="22" v-model="Puntos">
+                                <label for="Puntos"> Puntos: </label>
+                                <input class="inpGrow" type="number" name="Puntos" placeholder="22" v-model="Puntos">
 
                             </div>
                             <div class="fila">
-                                <label for="Linea"> Linea </label>
+                                <label for="Linea"> Linea: </label>
                                 <select class="inpCompleto" name="Linea" id="Linea" v-model="lineaProducto">
                                     <option value="4"> Linea blanca (4) </option>
                                     <option value="5"> Linea azul (5) </option>
@@ -548,11 +571,11 @@
                         </div>
 
                         <div class="miniContainer btGuardarTodo">
-                            <button class="guardarTodo" @click="GuardarTodo">
+                            <button class="guardarTodo" @click=" ProductoId ? ActualizarProducto() : GuardarTodo()">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"  class="imgButton">
                                     <path d="M30.9958 6.99579L25.0042 1.00421C24.3612 0.361231 23.4892 4.75483e-06 22.5799 0H3.42857C1.535 0 0 1.535 0 3.42857V28.5714C0 30.465 1.535 32 3.42857 32H28.5714C30.465 32 32 30.465 32 28.5714V9.42014C32 8.51083 31.6388 7.63876 30.9958 6.99579ZM16 27.4286C13.4753 27.4286 11.4286 25.3819 11.4286 22.8571C11.4286 20.3324 13.4753 18.2857 16 18.2857C18.5247 18.2857 20.5714 20.3324 20.5714 22.8571C20.5714 25.3819 18.5247 27.4286 16 27.4286ZM22.8571 5.67714V12.8571C22.8571 13.3305 22.4734 13.7143 22 13.7143H5.42857C4.95521 13.7143 4.57143 13.3305 4.57143 12.8571V5.42857C4.57143 4.95521 4.95521 4.57143 5.42857 4.57143H21.7514C21.9788 4.57143 22.1968 4.66171 22.3575 4.8225L22.6061 5.07107C22.6857 5.15065 22.7488 5.24514 22.7919 5.34913C22.835 5.45312 22.8572 5.56458 22.8571 5.67714Z" fill="#fff"/>
                                 </svg>
-                                <span> Guardar producto </span> 
+                                <span> {{ ProductoId ? 'Actualizar Producto' : 'Guardar producto' }} </span> 
                             </button>
                         </div>
 
@@ -563,8 +586,6 @@
                         <div class="formulario" v-if="tipoProducto == 'combo'">
                             <div class="titulos">
                                 <h3 class="Subtitulo" :class="{SubtituloActivo: contenedorSeleccionado === 1, SubtituloInactivo: contenedorSeleccionado != 1}" @click="contenedorSeleccionado = 1"> Datos generales</h3>
-                                <span class="spanCosto" v-if="idProducto != 0"> Costo: $<span>{{ Costo }}</span></span>
-        
                             </div>
         
                             <div class="miniContainer capaActiva">
@@ -585,8 +606,8 @@
                                     <label for="CodigoProducto"> Código Producto: </label>
                                     <input id="CodigoProducto" type="text" placeholder="Código Producto" v-model="claveProducto"> 
                                     
-                                    <label for="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true"> Deshabilitar </label>
-                                    <input type="checkbox" name="Deshabilitar" v-if="idProducto != 0 && estadoOriginal == true" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
+                                    <label for="Deshabilitar" v-if="claveProducto != 0 && estadoOriginal == true"> Deshabilitar </label>
+                                    <input type="checkbox" name="Deshabilitar" v-if="claveProducto != 0 && estadoOriginal == true" id="Deshabilitar" v-model="deshabilitar" :checked="deshabilitar">
                                     </div>
                                     <div class="fila">
                                         <label for="Nombre">Nombre: </label>
@@ -809,9 +830,6 @@ h3{
 }
 .formulario select:focus {
     outline: none;
-}
-.inpPuntos{
-    flex-grow: 1;
 }
 .labelTipo{
     font-size: 1rem;
